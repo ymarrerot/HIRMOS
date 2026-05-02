@@ -1,0 +1,7 @@
+id: your-extension-id
+version: 1.0.0
+requires_core: ">=1.0.0 <2.0.0"
+types:
+  - runnable
+summary: Describe what this extension does.
+entry: index.md

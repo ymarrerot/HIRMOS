@@ -1,0 +1,13 @@
+id: hello-world
+version: 1.0.0
+requires_core: ">=1.0.0 <2.0.0"
+types:
+  - runnable
+summary: Prints a hello world message.
+entry: index.md
+exposes_hooks:
+  - name: hello-world.after-main-output
+    phase: after-main-output
+    summary: Runs after the hello-world main output is produced.
+    effects:
+      - add-output-formatting

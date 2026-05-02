@@ -1,0 +1,10 @@
+spec_version: 1
+kind: stack
+id: nextjs-typescript
+summary: Stack package for Next.js + TypeScript application projects.
+surfaces:
+  overview: STACK_OVERVIEW.md
+  engineering_standards: ENGINEERING_STACK_STANDARDS.md
+  commands: STACK_COMMANDS.md
+  architecture_guidance: STACK_ARCHITECTURE_GUIDANCE.md
+  execution_rules: EXECUTION_STACK_RULES.md

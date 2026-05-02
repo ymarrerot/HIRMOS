@@ -1,0 +1,10 @@
+id: pretty-output
+version: 1.0.0
+requires_core: ">=1.0.0 <2.0.0"
+types:
+  - hook
+summary: Adds pretty formatting behavior to hello-world.
+hooks:
+  - target: hello-world.after-main-output
+    file: hooks/hello-world.after-main-output.md
+    priority: 10
