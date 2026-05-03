@@ -34,15 +34,15 @@ There are three different extension contexts in HIRMOS:
 ## Most common extensions by SDLC stage
 
 ### Design and planning work
-- [system-design-agent](https://hirmos.dev/product/system-design-agent/) — turns requirements into governed design, architecture, and phase artifacts before implementation begins
-- [presentation-design](https://hirmos.dev/product/presentation-design/) — normalizes presentation constraints and design-pack signals before or during broader design work
-- [prototype-ingestion](https://hirmos.dev/product/prototype-ingestion/) — turns raw prototype evidence into governed prototype artifacts before broader design continues
+- [system-design-agent](https://hirmos.dev/marketplace/system-design-agent/) — turns requirements into governed design, architecture, and phase artifacts before implementation begins
+- [presentation-design](https://hirmos.dev/marketplace/presentation-design/) — normalizes presentation constraints and design-pack signals before or during broader design work
+- [prototype-ingestion](https://hirmos.dev/marketplace/prototype-ingestion/) — turns raw prototype evidence into governed prototype artifacts before broader design continues
 
 ### Implementation work
-- [implementation-agent](https://hirmos.dev/product/implementation-agent/) — turns approved design into governed implementation prompts, execution, and verification
+- [implementation-agent](https://hirmos.dev/marketplace/implementation-agent/) — turns approved design into governed implementation prompts, execution, and verification
 
 ### External communication and handoff
-- [solution-brief](https://hirmos.dev/product/solution-brief/) — turns trusted internal planning artifacts into a concise outward-facing brief
+- [solution-brief](https://hirmos.dev/marketplace/solution-brief/) — turns trusted internal planning artifacts into a concise outward-facing brief
 
 ### Demo and support extensions
 - [hello-world](./hello-world/README.md) — smallest runnable example for understanding the command model
@@ -52,10 +52,10 @@ There are three different extension contexts in HIRMOS:
 
 A common official path across major SDLC stages looks like this:
 
-1. Start with [system-design-agent](https://hirmos.dev/product/system-design-agent/) when you need governed requirements analysis and design.
-2. Add [prototype-ingestion](https://hirmos.dev/product/prototype-ingestion/) or [presentation-design](https://hirmos.dev/product/presentation-design/) when prototype or presentation inputs materially shape design.
-3. Continue to [implementation-agent](https://hirmos.dev/product/implementation-agent/) when approved design is ready for governed build work.
-4. Use [solution-brief](https://hirmos.dev/product/solution-brief/) when you need a concise external summary grounded in trusted upstream artifacts.
+1. Start with [system-design-agent](https://hirmos.dev/marketplace/system-design-agent/) when you need governed requirements analysis and design.
+2. Add [prototype-ingestion](https://hirmos.dev/marketplace/prototype-ingestion/) or [presentation-design](https://hirmos.dev/marketplace/presentation-design/) when prototype or presentation inputs materially shape design.
+3. Continue to [implementation-agent](https://hirmos.dev/marketplace/implementation-agent/) when approved design is ready for governed build work.
+4. Use [solution-brief](https://hirmos.dev/marketplace/solution-brief/) when you need a concise external summary grounded in trusted upstream artifacts.
 
 ## Go next
 
