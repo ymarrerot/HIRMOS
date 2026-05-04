@@ -4,7 +4,7 @@
 
 ## Bootstrap reminder
 
-Before using the framework, bootstrap the core through `HIRMOS_CORE.md`.
+Before using the framework, bootstrap the core through `_hirmos/HIRMOS_CORE.md`.
 
 ## Structure
 

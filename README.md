@@ -105,11 +105,16 @@ The core provides the shared operating model, while extensions add specialized w
 Yes. You can build private extensions for your own organization or projects, and community extensions can later be shared or sold through the HIRMOS Marketplace.
 
 **Does this README replace my project README?**  
-No. This is the GitHub landing page for the framework; your project keeps its own README.
+No. This is the GitHub landing page for the framework; your project keeps its own README. Install HIRMOS from a generated release package, not by copying the entire GitHub checkout into your project.
 
 ---
 
 ## What do you want to do next?
+
+### I want to install the framework in a project
+Use a generated HIRMOS Core release package. Do not copy the full GitHub repository checkout into a project, because the repository also contains GitHub collaboration metadata and maintainer automation that are not part of a normal project install.
+
+A normal install preserves your project root files and adds the drop-in `_hirmos/` folder beside them. Then initialize HIRMOS by prompting your AI tool with: `Read and follow the instructions on _hirmos/HIRMOS_CORE.md`.
 
 ### I want to use the framework
 - Follow the [Getting started guide](./_hirmos/docs/getting-started/README.md) for the canonical low-cognitive-load onboarding path. For first use, stay on that guide instead of mixing it with the broader docs lanes too early.
@@ -142,3 +147,14 @@ Most official and community extensions are discovered through the marketplace:
 - Best practices: [Extension best practices](./_hirmos/docs/extensions/best-practices.md)
 
 For install-surface navigation after your first successful use, see [_hirmos/README.md](./_hirmos/README.md). For canonical folder definitions, see [Top-level folder definitions](./_hirmos/core/authority/framework/top-level-folder-definitions.md).
+
+
+## Contributing
+
+Public Core contributions are welcome through GitHub issues and pull requests. Small documentation fixes can go straight to a PR. Core behavior, bootstrap, command protocol, hook, packaging, or extension-contract changes should start as a proposal issue first.
+
+HIRMOS Core is intentionally small. Contributions that move extension-specific behavior into Core will usually be declined or redirected into an extension proposal.
+
+## License
+
+HIRMOS Core is licensed under the Apache License 2.0. Marketplace extensions, private extensions, and third-party extensions may be distributed under their own licenses unless otherwise stated.

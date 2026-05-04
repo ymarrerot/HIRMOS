@@ -4,20 +4,20 @@ This is the canonical low-cognitive-load onboarding path for a first-time HIRMOS
 
 If you only remember one thing from this page, remember this:
 
-> To run HIRMOS, tell your LLM of choice: `Read and follow the instructions in HIRMOS_CORE.md`.
+> Initialize HIRMOS by prompting your AI tool with: `Read and follow the instructions on _hirmos/HIRMOS_CORE.md`.
 
 After that, follow this path in order. Treat this page as the canonical guide for the first-use journey, and avoid branching into the broader docs lanes until this page tells you to.
 
 ## What the drop-in install looks like inside your project
 
-A normal drop-in install keeps your project README and adds the HIRMOS framework surfaces beside it. The GitHub landing-page `README.md` from the framework repository is **not** copied over to your project.
+A normal drop-in install keeps your project root files and adds the `_hirmos/` framework folder beside them. Use a generated HIRMOS Core release package rather than copying the full GitHub repository checkout into your project. The GitHub landing-page `README.md`, root `LICENSE`, `.github/`, and `ops/` surfaces from the framework repository are **not** copied over to your project.
 
 ```text
 your-project-folder/
-├── HIRMOS_CORE.md          # bootstrap file the LLM reads first
-├── HIRMOS_ORCHESTRATOR.md  # human operator playbook
 ├── README.md               # your project README
 └── _hirmos/
+    ├── HIRMOS_CORE.md          # bootstrap file the AI tool reads first
+    ├── HIRMOS_ORCHESTRATOR.md  # human operator playbook
     ├── STACK_CONFIG.json
     ├── VERSION
     ├── CHANGELOG.md
@@ -34,7 +34,7 @@ your-project-folder/
     └── stacks/
 ```
 
-You do not need to learn every folder now. The important thing is that your project keeps its own README, the LLM starts with `HIRMOS_CORE.md`, and the framework lives under `_hirmos/`.
+You do not need to learn every folder now. The important thing is that your project keeps its own README, the AI tool starts with `_hirmos/HIRMOS_CORE.md`, and the framework lives under `_hirmos/`.
 
 ## Step 1 — Get the basic mental model
 - [Overview](./overview.md) — what HIRMOS is trying to help you do and what you can ignore for now

@@ -17,7 +17,7 @@ It emphasizes:
 ┌─────────────────────────────────────────────────────────────────────┐
 │ 1. Bootstrap                                                       │
 │                                                                     │
-│ - Orchestrator asks the LLM to read and follow HIRMOS_CORE.md             │
+│ - Orchestrator asks the AI tool to read and follow _hirmos/HIRMOS_CORE.md             │
 │ - The Core reads its governing files and becomes framework-aware   │
 │ - Installed extensions become available through the command model  │
 └─────────────────────────────────────────────────────────────────────┘

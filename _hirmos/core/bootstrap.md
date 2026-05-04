@@ -107,7 +107,7 @@ It does **not** own workflow-specific intelligence that belongs in extensions or
 
 The Core must do only the following:
 
-1. Bootstrap framework operation through `HIRMOS_CORE.md` and `_hirmos/core/bootstrap.md`.
+1. Bootstrap framework operation through `_hirmos/HIRMOS_CORE.md` and `_hirmos/core/bootstrap.md`.
 2. Discover installed extensions.
 3. Read and validate extension manifests.
 4. Resolve public runnable surfaces declared by manifests.
@@ -1018,7 +1018,7 @@ Allowed `QUIZ_GATE_STATUS` values:
 ### Part 1 — Source of truth and working-copy discipline
 
 #### Q1
-Read first: `HIRMOS_CORE.md` and `_hirmos/core/bootstrap.md`
+Read first: `_hirmos/HIRMOS_CORE.md` and `_hirmos/core/bootstrap.md`
 
 What is the authoritative source of truth for the run, what is the active cumulative working copy, and what must happen before claiming a file was created, updated, verified, or already present?
 

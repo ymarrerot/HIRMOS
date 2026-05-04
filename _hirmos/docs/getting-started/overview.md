@@ -7,7 +7,7 @@ HIRMOS helps you turn intent into governed, reviewable AI-assisted engineering w
 If you are new to HIRMOS, keep this mental model in mind:
 
 1. **Bootstrap the framework**
-   - Ask the LLM to read and follow `HIRMOS_CORE.md`.
+   - Ask your AI tool to read and follow `_hirmos/HIRMOS_CORE.md`.
 2. **Start with a high-level entrypoint when one exists**
    - When a high-level cycle exists, start there instead of stitching together lower-level commands manually.
 3. **Let the framework write reviewable artifacts**

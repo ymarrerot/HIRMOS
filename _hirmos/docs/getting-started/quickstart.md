@@ -5,7 +5,7 @@ This is the smallest successful path through the framework. Think of it as a smo
 ## Bootstrap the core
 
 ```text
-Read and follow the instructions in HIRMOS_CORE.md
+Read and follow the instructions on _hirmos/HIRMOS_CORE.md
 ```
 
 ## Check the active stack

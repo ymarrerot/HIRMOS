@@ -4,14 +4,14 @@ This file is the human/operator playbook for working with the HIRMOS Core.
 
 ## First step
 
-Before asking the framework to run anything, initialize the LLM by saying:
+Before asking the framework to run anything, initialize your AI tool by saying:
 
 ```text
-Read and follow the instructions in HIRMOS_CORE.md
+Read and follow the instructions on _hirmos/HIRMOS_CORE.md
 ```
 
 That bootstrap step loads the core rules and command protocol before any extension work begins.
-`HIRMOS_CORE.md` is only the bootstrap/orchestration entrypoint; the real runtime behavior comes from the core contract and installed extensions.
+`_hirmos/HIRMOS_CORE.md` is only the bootstrap/orchestration entrypoint; the real runtime behavior comes from the core contract and installed extensions.
 
 ## Supported commands
 

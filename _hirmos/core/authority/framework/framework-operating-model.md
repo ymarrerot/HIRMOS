@@ -39,7 +39,7 @@ This is where the framework teaches the runtime:
 - what the major governed surfaces are
 - how to treat extensions as public command surfaces instead of random folders
 
-In practice, bootstrap normally begins with `HIRMOS_CORE.md`.
+In practice, bootstrap normally begins with `_hirmos/HIRMOS_CORE.md`.
 
 ### Core protocol
 

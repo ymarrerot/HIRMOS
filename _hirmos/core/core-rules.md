@@ -8,7 +8,7 @@ It defines the minimum behavioral rules the Core must adopt before performing fr
 
 The core must do only the following:
 
-1. Bootstrap framework operation through `HIRMOS_CORE.md` and the `_hirmos/core/bootstrap.md` handoff it requires.
+1. Bootstrap framework operation through `_hirmos/HIRMOS_CORE.md` and the `_hirmos/core/bootstrap.md` handoff it requires.
 2. Discover installed extensions.
 3. Read and validate extension manifests.
 4. Resolve public runnable surfaces declared by manifests.

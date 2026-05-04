@@ -1,0 +1,16 @@
+name: Public Core Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify-public-core:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify public Core repository boundary
+        run: bash ops/scripts/verify-public-core.sh

@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Private, security, marketplace, or business support
+    url: mailto:support@hirmos.dev
+    about: Use email for private, security, marketplace, vendor, or business-related questions.

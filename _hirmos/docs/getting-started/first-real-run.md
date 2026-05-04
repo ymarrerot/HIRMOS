@@ -21,9 +21,9 @@ If your project only has the minimal built-in extensions, treat this page as a r
 
 Tell your LLM:
 
-> Read and follow the instructions in `HIRMOS_CORE.md`.
+> Read and follow the instructions on `_hirmos/HIRMOS_CORE.md`.
 
-If you are the human operator, keep `HIRMOS_ORCHESTRATOR.md` available so you can make decisions when the cycle pauses.
+If you are the human operator, keep `_hirmos/HIRMOS_ORCHESTRATOR.md` available so you can make decisions when the cycle pauses.
 
 ## Step 2 — Confirm the extension is available
 
