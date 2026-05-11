@@ -61,6 +61,23 @@ Disable remote download and require an existing `_hirmos/` or local `--source`:
 hirmos init --offline
 ```
 
+## CLI update notice
+
+When `hirmos init` runs online, it checks whether a newer published HIRMOS CLI version is available on npm. If a newer version exists, the CLI prints a non-blocking message such as:
+
+```text
+A newer HIRMOS CLI is available: 1.3.2.
+Update with: npm install -g hirmos@latest
+```
+
+The notice does not stop initialization. Network failures, registry errors, or timeouts are ignored.
+
+Use `--offline` to disable both remote framework download and the update check. To disable only the update notice while keeping remote framework download available, run:
+
+```bash
+HIRMOS_CLI_UPDATE_CHECK=0 hirmos init
+```
+
 ## Supported integrations
 
 ```text

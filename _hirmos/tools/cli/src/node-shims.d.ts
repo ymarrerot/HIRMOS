@@ -5,3 +5,4 @@ declare module "child_process";
 declare const process: any;
 declare const require: any;
 declare const module: any;
+declare const __dirname: string;

@@ -5,6 +5,31 @@ This file is the concrete upgrade guidance surface for the framework.
 For the authoritative framework-wide versioning doctrine, see:
 - [Versioning contract](./core/authority/framework/versioning-contract.md)
 
+## Upgrading to 1.3.2
+
+This patch release keeps the framework package and the published `hirmos` npm CLI aligned after adding a non-blocking CLI update notice.
+
+### What changed
+
+- `hirmos init` now checks the npm registry for a newer published CLI version and prints a non-blocking update notice when one is available.
+- The notice does not prevent initialization and is skipped when the check fails, times out, or is disabled.
+- `hirmos init --offline` disables both remote framework download and the npm update check.
+- Set `HIRMOS_CLI_UPDATE_CHECK=0` to disable only the npm update notice while still allowing normal remote framework download.
+
+### Required actions
+
+- Publish a matching GitHub Release `v1.3.2` with `hirmos-framework.zip` before publishing `hirmos@1.3.2` to npm.
+- Existing users can update the CLI with:
+
+```bash
+npm install -g hirmos@latest
+```
+
+### Compatibility notes
+
+- Existing `hirmos@1.3.1` installations continue to work, but they will not show the new update notice.
+- The update check is best-effort and non-blocking; network failures do not fail `hirmos init`.
+
 ## Upgrading to 1.3.1
 
 This patch release coordinates the framework package and the published `hirmos` npm CLI after adding remote GitHub release installation support.

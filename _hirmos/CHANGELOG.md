@@ -9,6 +9,16 @@ For the authoritative framework-wide versioning doctrine, see:
 
 No unreleased changes yet.
 
+## [1.3.2] - 2026-05-11
+
+### Added
+
+- Added a non-blocking npm update notice to `hirmos init`. When a newer published HIRMOS CLI version is available, the CLI now shows an update hint without blocking initialization.
+
+### Changed
+
+- Updated CLI help and README guidance to document the update notice and the `HIRMOS_CLI_UPDATE_CHECK=0` escape hatch for disabling only the npm update check.
+
 ## [1.3.1] - 2026-05-11
 
 ### Added

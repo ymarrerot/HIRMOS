@@ -83,6 +83,17 @@ if find _hirmos/inputs -mindepth 2 -type f ! -name 'README.md' ! -name '.gitkeep
   fail "extension-populated runtime inputs found in public Core"
 fi
 
+
+if find _hirmos/tools/cli -type d \( -name node_modules -o -name coverage -o -name .nyc_output \) 2>/dev/null | grep -q .; then
+  find _hirmos/tools/cli -type d \( -name node_modules -o -name coverage -o -name .nyc_output \) 2>/dev/null
+  fail "CLI local dependency/test artifact directories found in public repo"
+fi
+
+if find _hirmos/tools/cli -type f \( -name '*.tgz' -o -name 'hirmos-*.tgz' -o -name 'npm-debug.log*' -o -name 'yarn-debug.log*' -o -name 'yarn-error.log*' -o -name 'pnpm-debug.log*' -o -name '*.tsbuildinfo' \) 2>/dev/null | grep -q .; then
+  find _hirmos/tools/cli -type f \( -name '*.tgz' -o -name 'hirmos-*.tgz' -o -name 'npm-debug.log*' -o -name 'yarn-debug.log*' -o -name 'yarn-error.log*' -o -name 'pnpm-debug.log*' -o -name '*.tsbuildinfo' \) 2>/dev/null
+  fail "CLI local publish/test/cache artifacts found in public repo"
+fi
+
 python3 - <<'PY'
 from pathlib import Path
 from urllib.parse import unquote

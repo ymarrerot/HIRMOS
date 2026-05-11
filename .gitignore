@@ -1,2 +1,15 @@
+# OS/editor noise
 .DS_Store
 *.tmp
+
+# HIRMOS CLI local dependencies and generated publish/test artifacts
+_hirmos/tools/cli/node_modules/
+_hirmos/tools/cli/*.tgz
+_hirmos/tools/cli/hirmos-*.tgz
+_hirmos/tools/cli/npm-debug.log*
+_hirmos/tools/cli/yarn-debug.log*
+_hirmos/tools/cli/yarn-error.log*
+_hirmos/tools/cli/pnpm-debug.log*
+_hirmos/tools/cli/coverage/
+_hirmos/tools/cli/.nyc_output/
+_hirmos/tools/cli/*.tsbuildinfo

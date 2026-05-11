@@ -2,6 +2,7 @@
 import { parseArgs, helpText } from "./lib/args";
 import { HirmosCliError } from "./lib/errors";
 import { runInit } from "./commands/init";
+import { formatUpdateNotice, getUpdateNotice } from "./lib/update-notice";
 
 function main(): void {
   try {
@@ -12,6 +13,13 @@ function main(): void {
     }
 
     if (parsed.command === "init") {
+      if (!parsed.offline) {
+        const updateNotice = getUpdateNotice();
+        if (updateNotice) process.stderr.write(`${formatUpdateNotice(updateNotice)}
+
+`);
+      }
+
       const summary = runInit({
         projectPath: parsed.projectPath,
         integrations: parsed.integrations,
