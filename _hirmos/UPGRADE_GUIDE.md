@@ -5,6 +5,36 @@ This file is the concrete upgrade guidance surface for the framework.
 For the authoritative framework-wide versioning doctrine, see:
 - [Versioning contract](./core/authority/framework/versioning-contract.md)
 
+## Upgrading to 1.3.3
+
+This patch release keeps the framework package and the published `hirmos` npm CLI aligned after improving the `hirmos init` first-run guidance.
+
+### What changed
+
+- `hirmos init` now points users first to the productized HIRMOS workflow command path after initialization:
+
+```text
+hirmos requirements
+hirmos system-design
+hirmos implementation
+```
+
+- The Core bootstrap prompt remains available as fallback initialization for tools that do not automatically pick up the selected agent/tool integration files.
+
+### Required actions
+
+- Publish a matching GitHub Release `v1.3.3` with `hirmos-framework.zip` before publishing `hirmos@1.3.3` to npm.
+- Existing users can update the CLI with:
+
+```bash
+npm install -g hirmos@latest
+```
+
+### Compatibility notes
+
+- Existing projects initialized with earlier 1.3.x versions remain valid.
+- This patch changes user guidance only; it does not change the framework package layout or integration registry format.
+
 ## Upgrading to 1.3.2
 
 This patch release keeps the framework package and the published `hirmos` npm CLI aligned after adding a non-blocking CLI update notice.

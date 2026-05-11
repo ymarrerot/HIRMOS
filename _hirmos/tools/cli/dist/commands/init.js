@@ -58,7 +58,16 @@ function formatInitSummary(first, selected, added, alreadyInstalled, targets, in
         for (const target of targets)
             lines.push(`- ${target}`);
         lines.push("", "Next step:");
-        lines.push("Open your AI coding tool and ask it to read and follow _hirmos/HIRMOS_CORE.md.");
+        lines.push("Open your AI coding tool in this project and run a HIRMOS workflow command, for example:");
+        lines.push("");
+        lines.push("hirmos requirements");
+        lines.push("hirmos system-design");
+        lines.push("hirmos implementation");
+        lines.push("");
+        lines.push("Fallback initialization:");
+        lines.push("If your tool does not automatically pick up the selected agent/tool integration files, copy and paste this prompt into your agent:");
+        lines.push("");
+        lines.push("Read and follow the instructions on _hirmos/HIRMOS_CORE.md.");
         lines.push("", "To add more integrations later:");
         lines.push("hirmos init --integration claude,cursor,copilot");
         return `${lines.join("\n")}\n`;

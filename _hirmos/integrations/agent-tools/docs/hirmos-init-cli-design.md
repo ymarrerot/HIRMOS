@@ -373,7 +373,20 @@ Installed integrations:
 - agents
 
 Next step:
-Open your AI coding tool and ask it to read and follow _hirmos/HIRMOS_CORE.md.
+Open your AI coding tool in this project and run a HIRMOS workflow command, for example:
+
+```text
+hirmos requirements
+hirmos system-design
+hirmos implementation
+```
+
+Fallback initialization:
+If your tool does not automatically pick up the selected agent/tool integration files, copy and paste this prompt into your agent:
+
+```text
+Read and follow the instructions on _hirmos/HIRMOS_CORE.md.
+```
 
 To add more integrations later:
 hirmos init --integration claude,cursor,copilot

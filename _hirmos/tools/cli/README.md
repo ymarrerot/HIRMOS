@@ -66,7 +66,7 @@ hirmos init --offline
 When `hirmos init` runs online, it checks whether a newer published HIRMOS CLI version is available on npm. If a newer version exists, the CLI prints a non-blocking message such as:
 
 ```text
-A newer HIRMOS CLI is available: 1.3.2.
+A newer HIRMOS CLI is available: 1.3.3.
 Update with: npm install -g hirmos@latest
 ```
 

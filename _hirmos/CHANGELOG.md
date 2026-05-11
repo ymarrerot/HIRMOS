@@ -9,6 +9,13 @@ For the authoritative framework-wide versioning doctrine, see:
 
 No unreleased changes yet.
 
+## [1.3.3] - 2026-05-11
+
+### Changed
+
+- Updated the `hirmos init` first-run summary so the primary next step is the productized HIRMOS workflow command path: `hirmos requirements`, `hirmos system-design`, and `hirmos implementation` inside the user's AI coding tool.
+- Reframed the Core bootstrap prompt as fallback initialization for tools that do not automatically pick up the selected agent/tool integration files.
+
 ## [1.3.2] - 2026-05-11
 
 ### Added
