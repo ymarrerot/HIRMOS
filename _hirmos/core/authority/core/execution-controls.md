@@ -18,7 +18,7 @@ The rendered framework identity label used in surfaced output does not change Co
 
 The execution-control lifecycle begins only after a prompt has been successfully recognized as a supported Core command.
 
-Unsupported or malformed `cmd:` inputs fail before this lifecycle begins.
+Unsupported or malformed `hirmos` inputs fail before this lifecycle begins.
 
 Once a prompt has been recognized as a supported Core command, command-valid surfaced output is not allowed unless the required execution-control artifacts exist, all required controls are listed, and all listed controls are truthfully satisfied.
 
@@ -33,7 +33,7 @@ Every command starts with `Identity display execution control` as the default ba
 After default initialization, Core examines the resolved command and run characteristics and adds any additional execution controls required for that run.
 
 Examples:
-- `cmd: run extension ...` may add `Extension execution control`;
+- runnable workflow commands such as `hirmos system-design` may add `Extension execution control`;
 - hook-aware runs may add `Hook execution control`;
 - future commands may add other Core-owned or command-specific controls as needed.
 
@@ -148,6 +148,6 @@ Built-in execution control names and governing files:
 
 ## Invalid-command exclusion note
 
-An invalid or unsupported `cmd:` input does not produce command-valid completion.
+An invalid or unsupported `hirmos` input does not produce command-valid completion.
 
 The runtime must surface invalid-command failure rather than entering a fake, partial, or guessed run state.

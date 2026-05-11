@@ -11,3 +11,10 @@ exposes_hooks:
     summary: Runs after the hello-world main output is produced.
     effects:
       - add-output-formatting
+hirmos_commands:
+  hello-world:
+    description: Run the hello-world example.
+    entrypoint: default
+    visibility: public
+    regular_user_safe: true
+    arguments: Optional message context.

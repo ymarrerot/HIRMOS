@@ -22,7 +22,7 @@ Define what `/_hirmos/core/authority/extensions/` is for, what it owns, what it 
 
 Most common confusions:
 - `/_hirmos/core/authority/core/`
-- `/_hirmos/docs/extensions/`
+- `/_hirmos/docs/3-extend-contribute/extensions/`
 - `/_hirmos/core/authority/framework/`
 
 ## If you are unsure

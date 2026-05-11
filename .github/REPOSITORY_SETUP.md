@@ -8,7 +8,7 @@ Recommended minimal settings for `main`:
 
 - Require pull request before merging.
 - Require 1 approval.
-- Require status checks to pass after `Public Core Check` appears in GitHub.
+- Require status checks to pass after `Repository Check` appears in GitHub.
 - Require conversation resolution.
 - Block force pushes.
 - Block branch deletion.
@@ -37,7 +37,7 @@ This requires the GitHub CLI and an authenticated session.
 The public repository check is:
 
 ```bash
-bash ops/scripts/verify-public-core.sh
+bash ops/scripts/verify-repo.sh
 ```
 
 The GitHub Action runs the same check on pull requests and pushes to `main`.

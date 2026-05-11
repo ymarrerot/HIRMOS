@@ -1,0 +1,43 @@
+id: system-design-agent
+version: 1.1.0
+requires_core: '>=1.0.0 <2.0.0'
+types:
+- runnable
+summary: Design workflows, design artifacts, and design-family orchestration.
+entry: entrypoints/system-design.md
+entrypoints:
+  system-design: entrypoints/system-design.md
+  system-design-cycle: entrypoints/system-design-cycle.md
+  staged-delivery-targets: entrypoints/staged-delivery-targets.md
+  system-sot: entrypoints/system-sot.md
+  architecture-sot: entrypoints/architecture-sot.md
+  phases-sot: entrypoints/phases-sot.md
+  phase-design-cycle: entrypoints/phase-design-cycle.md
+  phase-sot: entrypoints/phase-sot.md
+hirmos_commands:
+  system-design:
+    description: Run the System Design step.
+    entrypoint: system-design
+    visibility: public
+    regular_user_safe: true
+    arguments: Optional system design scope or constraints.
+runtime:
+  category: agent
+  identity: System Design Agent
+exposes_hooks:
+- name: system-design-agent.system-design.contribute-unresolved-items
+  entrypoint: system-design
+  phase: contribute-unresolved-items
+  summary: Accepts normalized unresolved-item contributions before System Design feed
+    finalization.
+  effects:
+  - contribute-unresolved-items
+  - enrich-unresolved-item-feed
+- name: system-design-agent.system-design.before-final-gating-review
+  entrypoint: system-design
+  phase: before-final-gating-review
+  summary: Runs after major System Design artifacts are generated but before final
+    gating review.
+  effects:
+  - add-validation-findings
+  - add-trace-notes

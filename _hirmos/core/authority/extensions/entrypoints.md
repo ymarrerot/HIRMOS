@@ -77,10 +77,10 @@ When the behavior is serious enough to need a stronger local quality bar, valida
 
 This keeps the public run surface concise while preserving rigor.
 
-## Beyond Clear Instructions when applicable
+## Beyond Clear Specs when applicable
 
-For the canonical framework pattern about when clear instructions are not enough, and when governed synthesis structures, surfaced-output templates, strict self-validation, and fail-closed behavior should be added, see:
-- [Beyond Clear Instructions](./beyond-clear-instructions.md#when-this-applies)
+For the canonical framework pattern about when clear specs are not enough, and when governed synthesis structures, surfaced-output templates, strict self-validation, and fail-closed behavior should be added, see:
+- [Beyond Clear Specs](./beyond-clear-specs.md#when-this-applies)
 
 Use that doctrine when an entrypoint performs trust-sensitive synthesis, especially across multiple producers, multiple execution branches, or main-path plus hook contributions.
 

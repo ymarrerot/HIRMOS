@@ -44,6 +44,32 @@ Installed extensions.
 
 Installed stack packages.
 
+### `_hirmos/integrations/`
+
+HIRMOS-owned integration surfaces for connecting HIRMOS to external tools, environments, and future interoperability adapters.
+
+Current v1 child surface:
+
+```text
+_hirmos/integrations/agent-tools/
+```
+
+`_hirmos/integrations/agent-tools/` owns agent/IDE/tool bootstrap integration templates, the integration registry, managed-block rules, and contributor guidance consumed by the product-facing `hirmos init` CLI.
+
+This surface is a productization and tool-discovery adapter surface. It is not Core runtime behavior, not extension behavior, and not a replacement for `_hirmos/HIRMOS_CORE.md`.
+
+### `_hirmos/tools/`
+
+HIRMOS-maintained developer tooling that belongs to HIRMOS but is not Core runtime authority and not extension workflow behavior.
+
+Current v1 child surface:
+
+```text
+_hirmos/tools/cli/
+```
+
+`_hirmos/tools/cli/` owns the TypeScript implementation of the product-facing `hirmos init` CLI.
+
 ### `_hirmos/extensions/_templates/`
 
 Central starter and scaffolding templates, including framework starter templates such as extension starters.
@@ -58,7 +84,7 @@ Extension-owned result artifacts and deliverables intended for human consumption
 
 ### `_hirmos/artifacts/context/`
 
-Normalized extension-owned runtime context artifacts, with flat `_hirmos/artifacts/context/` reserved for framework-global artifacts.
+Normalized runtime context artifacts. Extension-owned context belongs under `_hirmos/artifacts/context/<extension-id>/...`; project-level cross-extension context belongs under `_hirmos/artifacts/context/project/`; flat `_hirmos/artifacts/context/` remains reserved for framework-global artifacts.
 
 ### `_hirmos/artifacts/sot/`
 
@@ -82,9 +108,11 @@ Governed operational runtime artifacts produced during the implementation stage 
 
 This folder is intended for execution-oriented extensions such as an installed implementation-focused extension. It includes run evidence, execution reviews, retries, and other downstream-consumable operational records.
 
-### `_hirmos/STACK_CONFIG.json`
+### `_hirmos/project.json`
 
-The active project stack selection.
+Project-local HIRMOS configuration metadata, including active stack selection and installed agent integration metadata.
+
+This file is configuration metadata. It is not runtime truth, not artifact authority, and not a replacement for `_hirmos/HIRMOS_CORE.md`.
 
 ## Ownership and write boundaries
 

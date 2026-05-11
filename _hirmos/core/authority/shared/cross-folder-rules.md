@@ -2,18 +2,19 @@
 
 ## Purpose
 
-Define the six active framework folders that carry the main doctrine and guidance load, explain what each folder is for, what each folder must not own, and provide the first routing decision when placement is ambiguous.
+Define the active authority and documentation lanes that carry the main doctrine and guidance load, explain what each lane is for, what each lane must not own, and provide the first routing decision when placement is ambiguous.
 
 This file is the global folder-routing rule for the active folder system.
 
-## The six active folders
+## The active folders
 
 - `/_hirmos/core/authority/core/`
 - `/_hirmos/core/authority/framework/`
 - `/_hirmos/core/authority/extensions/`
-- `/_hirmos/docs/framework/`
-- `/_hirmos/docs/core/`
-- `/_hirmos/docs/extensions/`
+- `/_hirmos/docs/1-use-hirmos/`
+- `/_hirmos/docs/2-methodology/`
+- `/_hirmos/docs/3-extend-contribute/`
+- `/_hirmos/docs/reference/`
 
 ## Folder purposes
 
@@ -26,14 +27,17 @@ Use this folder for framework-wide authoritative doctrine, contracts, and standa
 ### `/_hirmos/core/authority/extensions/`
 Use this folder for framework-wide extension doctrine, authoring standards, and extension-side contracts.
 
-### `/_hirmos/docs/framework/`
-Use this folder for user-facing framework guidance, conceptual explanation, and practical orientation.
+### `/_hirmos/docs/1-use-hirmos/`
+Use this folder for regular-user guidance for running HIRMOS on a software project.
 
-### `/_hirmos/docs/core/`
-Use this folder for user-facing explanation of the Core as a distinct framework entity.
+### `/_hirmos/docs/2-methodology/`
+Use this folder for user-facing explanation of Orchestrated Spec-Driven Development and the Beyond Clear Specs pattern.
 
-### `/_hirmos/docs/extensions/`
-Use this folder for user-facing extension onboarding, tutorials, examples, and practical author guidance.
+### `/_hirmos/docs/3-extend-contribute/`
+Use this folder for power-user, contributor, and extension-author guidance, including Core, framework, and extension internals.
+
+### `/_hirmos/docs/reference/`
+Use this folder for cross-cutting reference material such as glossary, runtime surfaces, artifact models, stacks, and folder definitions.
 
 ## What each folder must not own
 
@@ -52,20 +56,25 @@ Use this folder for user-facing extension onboarding, tutorials, examples, and p
 - single-extension local operational method
 - user-facing tutorials and examples
 
-### `/_hirmos/docs/framework/` must not own
-- final framework doctrine
-- review-grounding source-of-truth material
-- Core-local internals as doctrine
+### `/_hirmos/docs/1-use-hirmos/` must not own
+- Core or extension-authoring doctrine
+- advanced framework internals as the default path
+- contributor-facing mechanics
 
-### `/_hirmos/docs/core/` must not own
-- canonical Core doctrine
-- broader framework doctrine
-- extension author standards
+### `/_hirmos/docs/2-methodology/` must not own
+- Core runtime authority
+- extension-authoring implementation rules
+- vendor/tool comparison pages
 
-### `/_hirmos/docs/extensions/` must not own
-- final extension doctrine
-- review-grounding source-of-truth material
-- Core internals as doctrine
+### `/_hirmos/docs/3-extend-contribute/` must not own
+- final Core or extension doctrine
+- regular-user onboarding as the default path
+- methodology explanations better owned by `/_hirmos/docs/2-methodology/`
+
+### `/_hirmos/docs/reference/` must not own
+- new doctrine
+- default onboarding paths
+- miscellaneous material without a clear reference purpose
 
 ## If you are unsure
 
@@ -78,17 +87,20 @@ Use this decision test:
 
 Then refine further:
 
-- If the guidance is about the Core specifically → `/_hirmos/docs/core/`
-- If the guidance is about the framework broadly → `/_hirmos/docs/framework/`
-- If the guidance is about building or understanding extensions → `/_hirmos/docs/extensions/`
+- If the guidance is for running HIRMOS on a project → `/_hirmos/docs/1-use-hirmos/`
+- If the guidance explains Orchestrated SDD or Beyond Clear Specs → `/_hirmos/docs/2-methodology/`
+- If the guidance is for contributors, Core understanding, framework internals, or extension authoring → `/_hirmos/docs/3-extend-contribute/`
+- If the content is cross-cutting lookup material → `/_hirmos/docs/reference/`
 
 ## Common confusions
 
 - `/_hirmos/core/authority/core/` vs `/_hirmos/core/authority/framework/`: Core behavior vs framework-wide doctrine
 - `/_hirmos/core/authority/framework/` vs `/_hirmos/core/authority/extensions/`: broader framework doctrine vs extension doctrine
-- `/_hirmos/core/authority/extensions/` vs `/_hirmos/docs/extensions/`: authoritative extension doctrine vs user-facing extension guidance
-- `/_hirmos/core/authority/core/` vs `/_hirmos/docs/core/`: authoritative Core rules vs reader-friendly Core explanation
-- `/_hirmos/core/authority/framework/` vs `/_hirmos/docs/framework/`: authoritative framework doctrine vs framework guidance
+- `/_hirmos/core/authority/extensions/` vs `/_hirmos/docs/3-extend-contribute/extensions/`: authoritative extension doctrine vs user-facing extension guidance
+- `/_hirmos/core/authority/core/` vs `/_hirmos/docs/3-extend-contribute/core/`: authoritative Core rules vs reader-friendly Core explanation
+- `/_hirmos/core/authority/framework/` vs `/_hirmos/docs/3-extend-contribute/framework/`: authoritative framework doctrine vs framework guidance
+- `/_hirmos/docs/1-use-hirmos/` vs `/_hirmos/docs/3-extend-contribute/`: regular-user path vs power-user/contributor path
+- `/_hirmos/docs/2-methodology/` vs `/_hirmos/docs/3-extend-contribute/`: methodology explanation vs implementation/application guidance
 
 ## Special case: the `/_hirmos/core/authority/shared/` lane
 

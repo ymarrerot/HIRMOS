@@ -186,51 +186,66 @@ Do not invent aliases, paraphrase commands into new public commands, or treat ex
 
 ## Operational rule — command identification
 
-Inputs beginning with `cmd:` must be treated as attempted Core commands.
+Inputs beginning with `hirmos` must be treated as attempted HIRMOS commands.
 
-After removing the `cmd:` prefix and any immediately following whitespace, the remaining text must be matched against the exact supported Core command surface taught in this step.
+After removing the `hirmos` prefix and any immediately following whitespace, the remaining text must be matched against the supported command surface taught in this step.
 
-Do not reinterpret a `cmd:` input as ordinary prose, folder-inspection intent, or best-effort conversational assistance.
+Do not reinterpret a malformed `hirmos` input as ordinary prose, folder-inspection intent, or best-effort conversational assistance.
 
-Only after a `cmd:` input is successfully matched as a supported Core command may the runtime proceed into the command-resolution and execution-control lifecycle.
+Only after a `hirmos` input is successfully matched as a supported command may the runtime proceed into the command-resolution and execution-control lifecycle.
 
 ## Operational rule — runtime-folder creation boundary
 
 Runtime folders such as `_hirmos/inputs/<extension-id>/`, `_hirmos/artifacts/context/<extension-id>/`, and `_hirmos/artifacts/outputs/<extension-id>/` are project runtime surfaces; Core/entrypoints must create missing runtime folders during init or first run.
 
-## Supported commands
+## Supported command surface
 
-The public Core command surface is:
+### Workflow commands
 
 ```text
-cmd: list extensions
-cmd: describe extension <id>
-cmd: describe extension <id>:<entrypoint>
-cmd: run extension <id> [arguments...]
-cmd: run extension <id>:<entrypoint> [arguments...]
-cmd: explain run extension <id> [arguments...]
-cmd: explain run extension <id>:<entrypoint> [arguments...]
+hirmos <command> [arguments...]
+hirmos <command>:<entrypoint> [arguments...]
+```
+
+Examples:
+
+```text
+hirmos requirements
+hirmos system-design
+hirmos implementation
+hirmos system-design:phase-design-cycle
+```
+
+### Core utility commands
+
+```text
+hirmos list extensions
+hirmos describe extension <id>
+hirmos describe extension <id>:<entrypoint>
+hirmos explain <command> [arguments...]
+hirmos explain <command>:<entrypoint> [arguments...]
 ```
 
 ## Command matching rules
 
-- `cmd:` is the Core command-intent prefix.
-- Command words after `cmd:` are lowercase.
-- Extension ids must match manifest ids.
-- Entrypoint names must match manifest `entrypoints` keys when used.
+- `hirmos` is the command-intent prefix.
+- Command words after `hirmos` are lowercase.
+- Workflow command names must match installed extension manifest `hirmos_commands` declarations.
+- Entrypoint names must match the owning extension manifest `entrypoints` keys when used.
+- Core utility commands are resolved by Core directly.
 - The Core does not invent aliases.
 - Harmless trailing punctuation immediately after an otherwise valid command may be ignored during normalization.
 - Unknown names fail clearly.
-- If the text after `cmd:` does not exactly match a supported Core command form, fail clearly.
+- If a `hirmos` input does not match a supported command form, fail clearly.
 
-## Fail-closed rule — unsupported or malformed cmd inputs
+## Fail-closed rule — unsupported or malformed hirmos inputs
 
-- If an input begins with `cmd:` but does not match an exact supported Core command form, the runtime must fail closed.
+- If an input begins with `hirmos` but does not match a supported command form, the runtime must fail closed.
 - The runtime must not downgrade the prompt into ordinary prose help.
 - The runtime must not best-guess the intended command.
 - The runtime must surface a clear invalid-command result instead of a normal answer.
-- When corrective guidance is surfaced for an invalid `cmd:` input, recommend only supported `cmd:` public command forms.
-- Do not recommend old bare forms such as `list extensions`, `describe extension <id>`, or `describe extension <id>:<entrypoint>`.
+- When corrective guidance is surfaced for an invalid `hirmos` input, recommend only supported `hirmos` command forms.
+- Do not recommend old command forms.
 
 ## Dependency behavior
 
@@ -243,46 +258,51 @@ Rules:
 
 ## Command semantics the bootstrap must understand
 
-### `cmd: run extension <id> [arguments...]`
+### `hirmos <command> [arguments...]`
 
 Interpretation:
-1. resolve the target extension id;
-2. capture any trailing argument tail for the active entrypoint;
-3. load and validate the target manifest;
-4. confirm the target includes `runnable` in `types`;
-5. resolve the default public entrypoint from `entry`;
-6. validate required dependencies declared in `requires`;
-7. resolve the active stack from `_hirmos/STACK_CONFIG.json` and the selected stack package;
-8. follow the run execution controls model for the outer command path and any controls added for this run;
-9. read and honor the resolved entrypoint's `Execution Contract` section;
-10. pass the captured argument tail to the active entrypoint and execute the workflow.
+1. parse the workflow command name and capture any trailing argument tail;
+2. inspect installed extension manifests for `hirmos_commands.<command>`;
+3. fail clearly if no installed extension declares the command;
+4. fail closed and surface a conflict if multiple installed extensions declare the command;
+5. load and validate the owning extension manifest;
+6. confirm the owning extension includes `runnable` in `types`;
+7. resolve the command's declared `entrypoint`;
+8. validate required dependencies declared in `requires`;
+9. resolve the active stack from `_hirmos/project.json` and the selected stack package;
+10. follow the run execution controls model for the outer command path and any controls added for this run;
+11. read and honor the resolved entrypoint's `Execution Contract` section;
+12. pass the captured argument tail to the active entrypoint and execute the workflow.
 
-### `cmd: run extension <id>:<entrypoint> [arguments...]`
+### `hirmos <command>:<entrypoint> [arguments...]`
 
 Interpretation:
-1. resolve the target extension id;
-2. capture any trailing argument tail for the active entrypoint;
-3. load and validate the target manifest;
-4. confirm the target includes `runnable` in `types`;
-5. resolve the named public entrypoint from `entrypoints.<entrypoint>`;
-6. validate required dependencies declared in `requires`;
-7. resolve the active stack from `_hirmos/STACK_CONFIG.json` and the selected stack package;
-8. follow the run execution controls model for the outer command path and any controls added for this run;
-9. read and honor the resolved entrypoint's `Execution Contract` section;
-10. pass the captured argument tail to the active entrypoint and execute the workflow.
+1. parse the workflow command name, named entrypoint selector, and any trailing argument tail;
+2. resolve the owning extension through `hirmos_commands.<command>`;
+3. fail clearly if no installed extension declares the command;
+4. fail closed and surface a conflict if multiple installed extensions declare the command;
+5. load and validate the owning extension manifest;
+6. confirm the owning extension includes `runnable` in `types`;
+7. resolve the named public entrypoint from `entrypoints.<entrypoint>`;
+8. validate required dependencies declared in `requires`;
+9. resolve the active stack from `_hirmos/project.json` and the selected stack package;
+10. follow the run execution controls model for the outer command path and any controls added for this run;
+11. read and honor the resolved entrypoint's `Execution Contract` section;
+12. pass the captured argument tail to the active entrypoint and execute the workflow.
 
-### `cmd: describe extension <id>`
+### `hirmos describe extension <id>`
 The response should include:
 - extension id;
 - types;
 - summary;
 - default entrypoint if present;
 - named public entrypoints if present;
+- declared HIRMOS workflow commands if present;
 - declared dependencies if present;
 - exposed hooks if present;
 - hook subscriptions if present.
 
-### `cmd: describe extension <id>:<entrypoint>`
+### `hirmos describe extension <id>:<entrypoint>`
 The response should include:
 - extension id;
 - target entrypoint name;
@@ -292,14 +312,18 @@ The response should include:
 - any exposed hooks relevant to that entrypoint;
 - the entrypoint execution-contract summary: purpose, produces, and terminal states.
 
-### `cmd: list extensions`
+### `hirmos list extensions`
 List installed extensions showing:
 - extension id;
 - types;
-- summary.
+- summary;
+- declared HIRMOS workflow commands if present.
 
-### `cmd: explain run extension ...`
+### `hirmos explain <command> [arguments...]` and `hirmos explain <command>:<entrypoint> [arguments...]`
+Show the resolved run plan without executing it.
+
 The response should include:
+- the owning extension id;
 - the resolved entry file;
 - the active stack id;
 - any exposed hooks relevant to the active entrypoint;
@@ -309,10 +333,10 @@ The response should include:
 
 ## Entrypoint arguments
 
-`cmd: run extension ...` and `cmd: explain run extension ...` may include an optional argument tail after the resolved extension target.
+Workflow commands may include an optional argument tail after the resolved command or command entrypoint.
 
 Rules:
-- the Core resolves only the extension id and optional entrypoint name;
+- the Core resolves only the HIRMOS command name and optional entrypoint selector;
 - any remaining trailing text is treated as the entrypoint argument tail;
 - the Core does not assign semantic meaning to that tail;
 - argument parsing and validation belong to the owning extension;
@@ -320,7 +344,7 @@ Rules:
 
 ## Operational rule
 
-From this point onward, the LLM must not invent commands that are not part of the Core command surface.
+From this point onward, the LLM must not invent commands that are not part of the HIRMOS command surface.
 It must also stop treating internal filenames or workflow nicknames as if they were public commands.
 It must not treat bare prose prompts as Core commands by default.
 
@@ -328,11 +352,11 @@ It must not treat bare prose prompts as Core commands by default.
 
 Before leaving Step 3, verify all of the following:
 
-- I understand that `cmd:` is the Core command-intent marker.
-- I will not interpret a `cmd:` input as ordinary prose.
-- I will only treat the text after `cmd:` as a Core command if it matches the exact supported command surface.
-- If a `cmd:` input does not match the supported command surface, I must fail closed.
-- Extension manifests govern public runnable surfaces.
+- I understand that `hirmos` is the command-intent marker.
+- I will not interpret a malformed `hirmos` input as ordinary prose.
+- I will only treat text after `hirmos` as a HIRMOS command if it matches the supported command surface.
+- If a `hirmos` input does not match the supported command surface, I must fail closed.
+- Extension manifests govern public runnable workflow commands through `hirmos_commands`.
 - Argument meaning belongs to the resolved extension entrypoint, not to the Core.
 
 ---
@@ -368,7 +392,7 @@ Every command starts by seeding `Identity display execution control`.
 After default initialization, the Core must add every additional execution control required by the resolved command and run characteristics.
 
 Examples:
-- `cmd: run extension ...` must add `Extension execution control`;
+- runnable workflow commands must add `Extension execution control`;
 - hook-aware runs must add `Hook execution control`;
 - future commands must add any other Core-owned or command-specific controls they require.
 
@@ -521,7 +545,7 @@ Before leaving Step 5, verify all of the following:
 
 ## Why this must be understood now
 
-Step 4 established that `cmd: run extension ...` must add `Extension execution control`. Resolve the runnable extension surface through this step before continuing execution.
+Step 4 established that runnable workflow commands must add `Extension execution control`. Resolve the runnable extension surface through this step before continuing execution.
 
 ## Extension location and manifest requirement
 
@@ -640,9 +664,9 @@ Additional handling rules:
 
 ## Entrypoint resolution rule
 
-When the command is `cmd: run extension <id>`, the Core resolves the manifest `entry` as the public default runnable entrypoint.
+When the command is `hirmos <command>`, the Core resolves the owning extension through `hirmos_commands.<command>` and then resolves that command's declared `entrypoint`.
 
-When the command is `cmd: run extension <id>:<entrypoint>`, the Core resolves the named file path from the manifest `entrypoints` map.
+When the command is `hirmos <command>:<entrypoint>`, the Core first resolves the owning extension through `hirmos_commands.<command>`, then resolves the named file path from that extension's `entrypoints` map.
 
 Once resolved, the runnable public entrypoint becomes the primary workflow instruction surface for local execution. For runnable public entrypoints, the Core must expect and use a minimal execution contract that includes:
 - `Purpose`;
@@ -814,19 +838,19 @@ That content lives inside stack packages.
 ## Stack location
 
 ```text
-_hirmos/STACK_CONFIG.json
+_hirmos/project.json
 _hirmos/stacks/<stack-id>/stack.yaml
 _hirmos/stacks/<stack-id>/...
 ```
 
 ## Active stack resolution
 
-The active stack is resolved from `_hirmos/STACK_CONFIG.json`.
+The active stack is resolved from `_hirmos/project.json`.
 
-The config must declare exactly one active stack id.
+The config must declare exactly one `stack.active_stack` value.
 
 Core then:
-1. reads `_hirmos/STACK_CONFIG.json`;
+1. reads `_hirmos/project.json`;
 2. resolves `_hirmos/stacks/<stack-id>/stack.yaml`;
 3. validates the required declared stack surfaces;
 4. exposes the active stack context for stack consumers.
@@ -834,7 +858,7 @@ Core then:
 ## Normalized stack context
 
 Any stack-aware extension should treat the following as the canonical read path:
-1. `_hirmos/STACK_CONFIG.json`
+1. `_hirmos/project.json` (`stack.active_stack`)
 2. `_hirmos/stacks/<active-stack-id>/stack.yaml`
 3. the stack surfaces declared by that manifest
 
@@ -850,8 +874,8 @@ Not every consumer needs every surface.
 ## Validation rules
 
 Core-level stack validation must ensure:
-- `_hirmos/STACK_CONFIG.json` exists and is readable;
-- exactly one active stack id is declared;
+- `_hirmos/project.json` exists and is readable;
+- exactly one `stack.active_stack` value is declared;
 - the referenced stack directory exists;
 - `stack.yaml` exists and is readable;
 - all required declared surfaces resolve to readable files;
@@ -868,7 +892,7 @@ It must use the Core-resolved active stack path.
 
 Before leaving Step 8, verify all of the following:
 
-> The active stack is project-level Core state. It comes from `_hirmos/STACK_CONFIG.json` and the selected stack package, and must not be guessed.
+> The active stack is project-level Core state. It comes from `_hirmos/project.json` (`stack.active_stack`) and the selected stack package, and must not be guessed.
 
 ---
 
@@ -1032,7 +1056,7 @@ What must happen if continuity of the active cumulative working copy becomes unc
 #### Q3
 Read first: `_hirmos/core/bootstrap.md`
 
-What does the `cmd:` prefix mean in HIRMOS, and what must happen if a `cmd:` input does not exactly match the supported Core command surface?
+What does the `hirmos` prefix mean in HIRMOS, and what must happen if a `hirmos` input does not exactly match the supported Core command surface?
 
 #### Q4
 Read first: `_hirmos/core/authority/core/identity-display-execution-control.md`

@@ -1,0 +1,16 @@
+name: Repository Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify repository boundary
+        run: bash ops/scripts/verify-repo.sh

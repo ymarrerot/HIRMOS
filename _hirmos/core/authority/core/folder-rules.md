@@ -25,13 +25,13 @@ Define what `/_hirmos/core/authority/core/` is for, what it owns, what it must n
 Most common confusions:
 - `/_hirmos/core/authority/framework/`
 - `/_hirmos/core/authority/extensions/`
-- `/_hirmos/docs/core/`
+- `/_hirmos/docs/3-extend-contribute/core/`
 
 Use `/_hirmos/core/authority/framework/` when the question is about a framework-wide rule or standard rather than how the Core behaves internally.
 
 Use `/_hirmos/core/authority/extensions/` when the question is about framework-wide extension doctrine rather than Core runtime behavior.
 
-Use `/_hirmos/docs/core/` when the content teaches humans how to understand or use the Core rather than defining canonical Core-local rules.
+Use `/_hirmos/docs/3-extend-contribute/core/` when the content teaches humans how to understand or use the Core rather than defining canonical Core-local rules.
 
 ## If you are unsure
 

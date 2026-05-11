@@ -20,7 +20,8 @@ An extension manifest is the authoritative declaration surface for extension ide
 From the extension side, the manifest should declare:
 - who the extension is
 - what kind of extension it is
-- what public runnable surfaces it exposes
+- what HIRMOS workflow commands it exposes
+- what public runnable surfaces those commands resolve to
 - what dependencies it requires
 - what hooks it exposes or subscribes to
 - what runtime identity metadata it declares when applicable
@@ -38,9 +39,11 @@ Do not overload the manifest with explanatory prose or local operational method 
 
 The manifest states what the extension declares. Other surfaces explain why and how.
 
-## Public surface declarations
+## Public command and surface declarations
 
-If an extension exposes a public runnable surface, the manifest should declare it explicitly.
+If an extension exposes a user-runnable workflow, the manifest should declare a HIRMOS workflow command under `hirmos_commands`.
+
+The command declaration should resolve to an entrypoint exposed by `entry` or `entrypoints`.
 
 If a file is not meant to be run as part of the extension's public contract, do not expose it through manifest declarations.
 
@@ -86,7 +89,8 @@ The Core authority file remains authoritative for:
 
 When reviewing an extension manifest, ask:
 - Is the manifest used as a declaration surface rather than an explanation surface?
-- Are public runnable surfaces declared intentionally?
+- Are HIRMOS workflow commands declared intentionally?
+- Do declared workflow commands resolve to valid public entrypoints?
 - Are dependencies real and meaningful?
 - Are hook declarations healthy and justified?
 - Is deeper workflow method kept out of the manifest?

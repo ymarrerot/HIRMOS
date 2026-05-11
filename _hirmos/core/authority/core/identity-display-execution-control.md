@@ -111,7 +111,7 @@ It should:
 
 ## Invalid command surfaced result
 
-When a `cmd:` input fails exact command matching, the surfaced result must clearly report invalid-command failure.
+When a `hirmos` input fails exact command matching, the surfaced result must clearly report invalid-command failure.
 
 It must not present ordinary assistant help as though a valid Core command executed.
 

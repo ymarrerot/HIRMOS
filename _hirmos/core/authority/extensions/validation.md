@@ -47,10 +47,10 @@ Examples include:
 
 Do not hide serious extension-local validation only inside ad hoc implementation details.
 
-## Beyond Clear Instructions, surfaced outputs, and self-validation
+## Beyond Clear Specs, surfaced outputs, and self-validation
 
-For the canonical Beyond Clear Instructions pattern for trust-sensitive synthesis and surfaced outputs, see:
-- [Beyond Clear Instructions](./beyond-clear-instructions.md#required-controls)
+For the canonical Beyond Clear Specs pattern for trust-sensitive synthesis and surfaced outputs, see:
+- [Beyond Clear Specs](./beyond-clear-specs.md#required-controls)
 
 This doctrine is especially relevant when missing contributions, dropped branches, omitted sections, overstated completion claims, or vague summaries could mislead the Orchestrator, a reviewer, or an API consumer.
 

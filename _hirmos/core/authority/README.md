@@ -6,7 +6,7 @@ Use this lane when you need canonical rules, contracts, role boundaries, or stan
 
 If you are new to HIRMOS, start with:
 - [Docs hub](../../docs/README.md)
-- [Getting started](../../docs/getting-started/README.md)
+- [Getting started](../../docs/1-use-hirmos/getting-started/README.md)
 
 ## Authority lanes
 

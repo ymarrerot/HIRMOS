@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "hirmos": {
+    "framework_path": "_hirmos"
+  },
+  "stack": {
+    "active_stack": "generic"
+  },
+  "integrations": {
+    "installed": []
+  }
+}

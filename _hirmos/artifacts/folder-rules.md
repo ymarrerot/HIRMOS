@@ -55,3 +55,14 @@ It exists to make the install surface easier to understand for first-time visito
 
 - `_hirmos/artifacts/context/<extension-id>/<extension-entrypoint>/RUN_EXECUTION_CONTROLS.md` is the canonical run execution controls artifact path for extension-scoped runs.
 - `_hirmos/artifacts/context/<extension-id>/<extension-entrypoint>/HOOK_EXECUTION_CONTROL.md` is the canonical hook execution control artifact path for hook-aware extension-scoped runs.
+
+
+## Project-level runtime context artifacts
+
+- `_hirmos/artifacts/context/project/` is valid for cross-extension project context artifacts that are not owned by a single extension.
+- The canonical unresolved-item governance artifacts live under `_hirmos/artifacts/context/project/`:
+  - `UNRESOLVED_ITEMS_INVENTORY.md`
+  - `UNRESOLVED_ITEMS_RECONCILIATION_WORKLIST.md`
+  - `UNRESOLVED_ITEMS_FEED.md`
+  - `UNRESOLVED_ITEMS_LEDGER.md`
+- These artifacts are project coordination surfaces, not Core-owned runtime controls and not extension-local inventories.

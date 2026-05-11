@@ -10,29 +10,46 @@ Before asking the framework to run anything, initialize your AI tool by saying:
 Read and follow the instructions on _hirmos/HIRMOS_CORE.md
 ```
 
-That bootstrap step loads the core rules and command protocol before any extension work begins.
-`_hirmos/HIRMOS_CORE.md` is only the bootstrap/orchestration entrypoint; the real runtime behavior comes from the core contract and installed extensions.
+This loads `_hirmos/HIRMOS_CORE.md` and starts the Core bootstrap path.
 
-## Supported commands
+That bootstrap step loads the core rules and command protocol before any extension work begins. `_hirmos/HIRMOS_CORE.md` is only the bootstrap/orchestration entrypoint; the real runtime behavior comes from the core contract and installed extensions.
+
+## Supported command surface
+
+Workflow commands use this shape:
 
 ```text
-cmd: run extension <id>
-cmd: run extension <id>:<entrypoint>
-cmd: describe extension <id>
-cmd: describe extension <id>:<entrypoint>
-cmd: list extensions
-cmd: explain run extension <id>
-cmd: explain run extension <id>:<entrypoint>
+hirmos <command>
+hirmos <command>:<entrypoint>
+```
+
+Examples:
+
+```text
+hirmos requirements
+hirmos system-design
+hirmos implementation
+hirmos system-design:phase-design-cycle
+```
+
+Core utility commands:
+
+```text
+hirmos list extensions
+hirmos describe extension <id>
+hirmos describe extension <id>:<entrypoint>
+hirmos explain <command>
+hirmos explain <command>:<entrypoint>
 ```
 
 ## Command meanings
-Use the exact public entrypoint names shown by `cmd: describe extension <id>`. Do not assume cycle names, concept names, or extension-spec filenames are valid command aliases.
 
+- `hirmos <command>` runs the manifest-declared workflow command exposed by an installed extension.
+- `hirmos <command>:<entrypoint>` resolves the same command owner, then runs a named public entrypoint from that extension.
+- `hirmos describe extension ...` inspects an extension or one of its named public entrypoints.
+- `hirmos explain ...` shows the resolved plan for a workflow command without executing it.
 
-- `run extension <id>` uses the extension's default public entrypoint.
-- `run extension <id>:<entrypoint>` uses a named public entrypoint exposed by that extension.
-- `describe ...` inspects an extension or one of its named public entrypoints.
-- `explain run ...` shows the resolved plan without executing it.
+Use `hirmos list extensions` and `hirmos describe extension <id>` when you need to inspect available commands. Do not assume cycle names, concept names, or extension-spec filenames are valid command aliases.
 
 ## Core-owned terminal output wrapper
 
@@ -53,12 +70,11 @@ Canonical rendered example:
 
 ```text
 [HIRMOS]
-Command resolved: run extension system-design-agent:system-design-cycle
+Command resolved: hirmos system-design
 
 [System Design Agent]
 ...response body...
 ```
-
 
 ## Canonical authority lanes
 
@@ -79,10 +95,10 @@ If you want to compare alternatives from other installed extensions, treat those
 
 ## Operator guidance
 
-- Start with the highest-level coherent entrypoint that fits the job.
+- Start with the highest-level coherent command that fits the job.
 - Drop to lower-level reusable entrypoints when you need tighter control or a narrower reusable unit.
-- Use `describe` before `run` when you want to inspect an extension's public surface.
-- Use `explain run` when you want to inspect hooks and execution order before running.
+- Use `hirmos describe extension <id>` before running a command when you want to inspect an extension's public surface.
+- Use `hirmos explain <command>` when you want to inspect hooks and execution order before running.
 - Prefer adding capabilities as extensions instead of expanding the core.
 - Progress updates do not mean a runnable command is finished.
 - Treat a runnable command as complete only when a terminal run-state block is emitted.
@@ -117,30 +133,8 @@ Any proposed direction is advisory only until the Orchestrator explicitly accept
 
 Serious cycles may end in one of these governed states:
 
-- **Completed** — the cycle is governably finalized for the current dependency state.
-- **Paused** — the cycle stopped at a decision checkpoint and is waiting for Orchestrator direction.
-- **Provisional** — the cycle was allowed to run despite unresolved upstream gating, so the outputs are useful for exploration and steering but are not yet the current authoritative finalized state.
+- completed
+- paused
+- failed
 
-## Provisional downstream runs
-
-When you ask a downstream cycle to run while upstream gating items still remain unresolved, the framework should allow the command to run, but it must warn you before continuing.
-
-That warning should state:
-
-- the command will run;
-- the resulting state will be `provisional`;
-- why the state is provisional;
-- one short sentence explaining that the outputs are useful for exploration and steering but must not be treated as the current authoritative finalized state.
-
-Once the upstream gating items are later resolved in a materially cycle-shaping way, earlier downstream trust artifacts become **stale by dependency** and should be rerun before being treated as current authoritative status.
-
-## Important boundary
-
-Not every internal file inside an extension is a public runnable surface.
-
-Public runnable surfaces must be declared by the extension manifest:
-
-- `entry` defines the default public entrypoint
-- `entrypoints` defines optional named public entrypoints
-
-Serious extensions may use extension-local specs to define local method, validation, and quality expectations for important entrypoints.
+Do not treat incomplete output as completion merely because the response sounds confident.

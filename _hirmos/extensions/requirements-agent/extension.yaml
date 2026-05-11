@@ -1,0 +1,50 @@
+id: requirements-agent
+version: 1.0.0
+requires_core: ">=1.0.0 <2.0.0"
+types:
+  - runnable
+summary: Official HIRMOS extension for the Requirements step in Orchestrated Spec-Driven Development.
+entry: entrypoints/requirements.md
+entrypoints:
+  requirements: entrypoints/requirements.md
+  requirements-input-pack: entrypoints/requirements-input-pack.md
+  requirements-sot: entrypoints/requirements-sot.md
+hirmos_commands:
+  requirements:
+    description: Run the Requirements step.
+    entrypoint: requirements
+    visibility: public
+    regular_user_safe: true
+    arguments: Optional requirements input guidance or scope.
+runtime:
+  category: agent
+  identity: Requirements Agent
+exposes_hooks:
+  - name: requirements-agent.requirements.before-input-discovery
+    entrypoint: requirements
+    phase: before-input-discovery
+    summary: Runs before the Requirements step inspects raw requirement-relevant inputs.
+    effects:
+      - inspect-inputs
+      - enrich-runtime-context
+  - name: requirements-agent.requirements.before-requirements-normalization
+    entrypoint: requirements
+    phase: before-requirements-normalization
+    summary: Runs before requirements intake normalization.
+    effects:
+      - generate-derived-input-artifacts
+      - enrich-runtime-context
+  - name: requirements-agent.requirements.contribute-unresolved-items
+    entrypoint: requirements
+    phase: contribute-unresolved-items
+    summary: Accepts normalized unresolved-item contributions before Requirements unresolved-item feed finalization.
+    effects:
+      - contribute-unresolved-items
+      - enrich-unresolved-item-feed
+  - name: requirements-agent.requirements.before-final-gating-review
+    entrypoint: requirements
+    phase: before-final-gating-review
+    summary: Runs after Requirements artifacts are generated but before final gating review.
+    effects:
+      - add-validation-findings
+      - add-trace-notes

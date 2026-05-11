@@ -59,8 +59,8 @@ Add more structure only when the extension truly needs it:
 ## Related guidance
 
 Use these when you need the deeper framework rules:
-- `../../../docs/extensions/creating-your-first-extension.md`
-- `../../../docs/extensions/public-entrypoints.md`
-- `../../../docs/extensions/spec-backed-entrypoints.md`
+- `../../../docs/3-extend-contribute/extensions/creating-your-first-extension.md`
+- `../../../docs/3-extend-contribute/extensions/public-entrypoints.md`
+- `../../../docs/3-extend-contribute/extensions/spec-backed-entrypoints.md`
 - `../../../core/authority/core/extension-manifest-authority.md`
 - `../../../core/authority/core/entrypoint-execution-contract.md`

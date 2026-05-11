@@ -6,30 +6,30 @@ Define the Core-local expectations for runtime traces, visibility, and execution
 
 ## Trace Requirements
 
-Every `cmd: run extension` command should print a short trace before the extension output.
+Every runnable workflow command should print a short trace before the extension output.
 
 Recommended format for a named entrypoint run:
 
 ```text
-[Core] command: cmd: run extension design-workflow:system-design-cycle
-[Core] target extension: design-workflow
-[Core] target entrypoint: system-design-cycle
-[Core] entry: entrypoints/system-design-cycle.md
+[Core] command: hirmos requirements
+[Core] owning extension: requirements-agent
+[Core] target entrypoint: requirements
+[Core] entry: entrypoints/requirements.md
 [Core] active stack: generic
 [Core] exposed hooks:
-  - design-workflow.system-design-cycle.before-input-discovery
-  - design-workflow.system-design-cycle.before-requirements-normalization
+  - requirements-agent.requirements.before-input-discovery
+  - requirements-agent.requirements.before-requirements-normalization
 [Core] resolved hook subscriptions:
-  - some-extension :: design-workflow.system-design-cycle.before-requirements-normalization :: priority 10
+  - some-extension :: requirements-agent.requirements.before-requirements-normalization :: priority 10
 [Core] executing active workflow
 ```
 
-Recommended format for `cmd: explain run extension`:
+Recommended format for `hirmos explain <command>`:
 
 ```text
-[Core] command: cmd: explain run extension some-extension:some-entrypoint
-[Core] target extension: some-extension
-[Core] target entrypoint: some-entrypoint
+[Core] command: hirmos explain system-design:phase-design-cycle
+[Core] owning extension: system-design-agent
+[Core] target entrypoint: phase-design-cycle
 [Core] entry: entrypoints/some-entrypoint.md
 [Core] active stack: generic
 [Core] matching hooks: 2

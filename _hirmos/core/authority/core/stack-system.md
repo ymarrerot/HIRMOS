@@ -20,19 +20,21 @@ The stack package must declare the surfaces it exposes. Consumers should read on
 
 ## Active stack selection
 
-The active stack is selected through `_hirmos/STACK_CONFIG.json`.
+The active stack is selected through `_hirmos/project.json`.
 
 Current config shape:
 
 ```json
 {
-  "spec_version": 1,
-  "active_stack": "generic"
+  "schema_version": 1,
+  "stack": {
+    "active_stack": "generic"
+  }
 }
 ```
 
 Rules:
-- exactly one `active_stack` must be declared
+- exactly one `stack.active_stack` value must be declared
 - the selected stack id must resolve to one valid stack package
 
 ## Stack package contract {#stack-package-contract}
@@ -79,7 +81,7 @@ A stack package is valid only if:
 Extensions should not invent ad hoc ways of discovering stack information.
 
 A stack consumer should read:
-1. `_hirmos/STACK_CONFIG.json`
+1. `_hirmos/project.json`
 2. the active stack's `stack.yaml`
 3. the declared surfaces it needs
 

@@ -12,7 +12,8 @@ For the local ownership rules of this folder, see [Folder rules](./folder-rules.
 - `hooks.md`
 - `manifests.md`
 - `validation.md`
-- `beyond-clear-instructions.md`
+- `beyond-clear-specs.md`
 - `naming-conventions.md`
 - `stacks.md`
 - `lifecycle-and-cycles.md`
+- `unresolved-item-contribution-contract.md`

@@ -8,7 +8,7 @@ Use namespaced paths:
 - `_hirmos/inputs/<extension-id>/...`
 
 Examples:
-- `_hirmos/inputs/system-design-agent/requirements/`
+- `_hirmos/inputs/requirements-agent/requirements/`
 - `_hirmos/inputs/prototype-ingestion/prototypes/`
 
 Normalized working artifacts belong in `_hirmos/artifacts/context/`. Authoritative outputs belong in locations such as `_hirmos/artifacts/sot/`, `_hirmos/artifacts/phases/`, or extension-specific output paths defined by the relevant extension.

@@ -12,7 +12,7 @@ That file is the sole canonical owner of the outer command path and `RUN_EXECUTI
 
 ## Runnable command shape
 
-For runnable commands such as `cmd: run extension ...`, Core resolves the command target, any argument tail, and any runtime prerequisites, then executes the run under [Execution controls](./authority/core/execution-controls.md).
+For runnable workflow commands such as `hirmos system-design` or `hirmos system-design:phase-design-cycle`, Core resolves the manifest-declared command owner, any optional entrypoint selector, any argument tail, and any runtime prerequisites, then executes the run under [Execution controls](./authority/core/execution-controls.md).
 
 The resolved entrypoint remains the primary instruction source for extension-local workflow behavior. Trustworthy completion may be surfaced only after all listed run execution controls are `EXECUTED`.
 
@@ -25,8 +25,8 @@ Owning workflows may include explicit hook invocation markers. When a command/ru
 The core may carry an optional argument tail for runnable entrypoints.
 
 The core owns only:
-- parsing the extension target;
-- separating the trailing argument tail from that target;
+- parsing the workflow command and optional entrypoint selector;
+- separating the trailing argument tail from that command target;
 - passing that tail through to the active entrypoint.
 
 The owning extension owns:

@@ -5,3 +5,10 @@ types:
   - runnable
 summary: Describe what this extension does.
 entry: index.md
+hirmos_commands:
+  example-command:
+    description: Replace with a short user-facing command description.
+    entrypoint: default
+    visibility: public
+    regular_user_safe: true
+    arguments: Optional argument guidance.

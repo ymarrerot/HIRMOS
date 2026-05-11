@@ -11,7 +11,7 @@ You can use this extension without studying its internal folders. For most users
 ## Fast mental model
 
 ```text
-cmd: run extension hello-world
+hirmos hello-world
         │
         ▼
    hello-world
@@ -58,4 +58,4 @@ Yes. `pretty-output` is the included example of a hook-only extension that forma
 
 - Read the extension file itself: [`index.md`](./index.md)
 - Compare it with the hook demo extension: [`../pretty-output/README.md`](../pretty-output/README.md)
-- Learn how to build your own extensions: [`../../docs/extensions/creating-your-first-extension.md`](../../docs/extensions/creating-your-first-extension.md)
+- Learn how to build your own extensions: [`../../docs/3-extend-contribute/extensions/creating-your-first-extension.md`](../../docs/3-extend-contribute/extensions/creating-your-first-extension.md)

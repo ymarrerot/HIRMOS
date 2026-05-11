@@ -1,0 +1,23 @@
+id: implementation-agent
+version: 1.1.0
+requires_core: ">=1.0.0 <2.0.0"
+types:
+  - runnable
+summary: Implementation planning, bounded implementation execution, implementation-owned engineering standards, local review discipline, and retry/escalation ownership.
+entry: entrypoints/implementation.md
+entrypoints:
+  implementation: entrypoints/implementation.md
+  implementation-planning-cycle: entrypoints/implementation-planning-cycle.md
+  prompt-planning: entrypoints/prompt-planning.md
+  agent-prompt: entrypoints/agent-prompt.md
+  implementation-execution-cycle: entrypoints/implementation-execution-cycle.md
+hirmos_commands:
+  implementation:
+    description: Run the Implementation step.
+    entrypoint: implementation
+    visibility: public
+    regular_user_safe: true
+    arguments: Optional implementation phase or scope.
+runtime:
+  category: agent
+  identity: Implementation Agent

@@ -1,159 +1,266 @@
 # HIRMOS
 
-**Orchestrated AI software engineering**
+**Open framework for Orchestrated Spec-Driven Development**
 
-HIRMOS is a modular framework for governed AI-assisted software engineering. It gives teams a minimal framework core plus installable extensions so AI-assisted work stays reviewable, structured, and easier to evolve over time.
+HIRMOS is an open modular framework for AI-assisted software engineering. It implements **Orchestrated Spec-Driven Development**: a practical workflow that uses specs to define what the AI agent should build, then adds orchestration to govern how the work proceeds, pauses, validates, and proves completion.
 
-Use the open-source core to establish a governed operating model, then add only the extensions you need for requirements, system design, implementation, presentation, or custom workflows. You do not need to understand the internal framework structure to begin.
+```text
+Spec-Driven Development (SDD) gives the work a clearer source of truth: the spec.
+Orchestrated SDD keeps that foundation and adds governance for how the agent proceeds, pauses, validates, and proves completion.
+HIRMOS is the framework implementation for Orchestrated SDD.
+```
+
+## Why HIRMOS exists
+
+Spec-Driven Development is a major step beyond ad hoc prompting. Clear Specs are much stronger than vague requests.
+
+But **Clear Specs are not enough**.
+
+The simple distinction is:
+
+```text
+Specs define the intended work.
+Orchestration governs how the work proceeds.
+Evidence shows whether completion can be trusted.
+```
+
+This is not only about today's model limitations. Serious AI-assisted software work needs traceable decisions, durable artifacts, reviewable outputs, validation, and honest terminal states across sessions, files, people, and time.
+
+That need is especially visible today because AI agents can still:
+
+- skip context or reconcile inputs incompletely;
+- make silent assumptions when an unresolved decision should pause the work;
+- lose assumptions, open questions, and tradeoffs in prose instead of durable artifacts;
+- validate weakly or hide validation gaps;
+- claim completion when required evidence, decisions, or checks are missing.
+
+HIRMOS adds the orchestration layer around the work: runtime controls, durable artifacts, unresolved-decision handling, hooks, validation, fail-closed behavior, terminal states, and evidence-backed completion.
+
+The result is not black-box code generation. The result is a practical workflow that stays inspectable, pauses when trust would be lost, and leaves reviewable evidence behind.
+
+HIRMOS follows four onboarding principles:
+
+- **Simple by default.** Start with the three-step workflow.
+- **Transparent by design.** Artifacts, decisions, and evidence remain inspectable.
+- **Rigorous underneath.** Runtime controls, validation, and fail-closed behavior protect the workflow.
+- **Progressive disclosure.** Learn the internals only when you need them.
+
+---
+
+## The HIRMOS workflow
+
+The regular-user flow is intentionally simple:
+
+```text
+Requirements → System Design → Implementation
+```
+
+It is backed by official lifecycle extensions:
+
+```text
+hirmos requirements
+hirmos system-design
+hirmos implementation
+```
+
+What each step does:
+
+1. **Requirements** turns goals, notes, files, prototypes, constraints, and user context into structured requirements artifacts.
+2. **System Design** turns requirements into architecture, system decisions, phase design, and implementation-ready planning artifacts.
+3. **Implementation** plans, pauses for approval when needed, executes bounded phases, validates results, and completes with Evidence-backed Review.
+
+Supporting extensions can add specialized context such as prototypes, presentation/design inputs, solution briefs, or private workflow intelligence.
 
 ---
 
 ## Fast mental model
 
-This is only a high-level picture. Most users can start with the core plus only the extensions they actually need.
+Most users can start with Core plus the official extensions for the workflow they need.
 
 ```text
-                              ┌──────────────────┐
-                              │ solution-brief * │
-                              └────────┬─────────┘
-                                       │
-                                       ▼
-┌───────────────────────┐    ┌─────────────────────┐    ┌───────────────────────┐
-│ presentation-design * ├───►│ system-design-agent │◄───┤ prototype-ingestion * │
-└───────────────────────┘    │        **           │    └───────────────────────┘
-                             └─────────────────────┘  
-                                       ▲ 
-                                       │
-                                       │
-                                       │
-┌───────────────────────┐     ╔══════════════════╗    ┌───────────────────────┐
-│ private extension +   │◄────║     FRAMEWORK    ║───►│ community extension ++│
-└───────────────────────┘     ║       CORE       ║    └───────────────────────┘
-                              ╚══════════════════╝  
-                                       │ 
-                                       │
-                                       │
-                                       ▼                                       
-                            ┌───────────────────────┐                             
-                            │  implementation-agent │                             
-                            │          **           │                             
-                            └───────────────────────┘                             
+                         Requirements → System Design → Implementation
+
+┌──────────────────────┐    ┌──────────────────────┐    ┌──────────────────────┐
+│  requirements-agent  │───►│  system-design-agent │───►│ implementation-agent │
+└──────────────────────┘    └──────────────────────┘    └──────────────────────┘
+          ▲                           ▲                            ▲
+          │                           │                            │
+┌──────────────────────┐    ┌──────────────────────┐    ┌──────────────────────┐
+│ prototype-ingestion* │    │ presentation-design* │    │   solution-brief*    │
+└──────────────────────┘    └──────────────────────┘    └──────────────────────┘
+          ▲                           ▲                            ▲
+          └───────────────┬───────────┴──────────────┬─────────────┘
+                          │                          │
+                 ╔══════════════════╗       ┌──────────────────────┐
+                 ║  FRAMEWORK CORE  ║◄─────►│ private/community ext │
+                 ╚══════════════════╝       └──────────────────────┘
 ```
 
-- `**` major official extension
-- `*` supporting official extension
-- `+` private extension
-- `++` community extension
+- **Core** provides the shared operating model, command surface, runtime controls, hook governance, and fail-closed behavior.
+- **Official lifecycle extensions** provide Requirements, System Design, and Implementation workflows.
+- **Supporting extensions** add specialized inputs or outputs without forcing everything into Core.
+- **Private/community extensions** can extend HIRMOS while preserving the same governed workflow.
 
 ---
 
-## Who HIRMOS is for
+## What HIRMOS helps with
 
-HIRMOS is a strong fit for software engineers and teams who:
-- **Focus on system design and implementation** as the foundational phases of the software development life cycle.
-- **Want AI assistance** without losing reviewability or granular control.
-- **Want a minimal framework core** with installable workflow extensions.
-- **Commit to a governed process** over the unpredictability of pure prompt improvisation.
+HIRMOS is built for teams and technical builders who want AI-assisted development that remains inspectable and governed.
 
-## Who HIRMOS is not for
+It helps you:
 
-HIRMOS is likely not the right fit if you:
-- **Prefer "one-and-done" prompts** over a systematic, multi-step engineering workflow.
-- **Prioritize speed over traceability**, favoring "black-box" generation over reviewable design artifacts.
-- **Avoid formal design patterns** in favor of unstructured, improvisational coding.
-- **Are seeking a casual coding utility** rather than a governed framework for system implementation.
+- move from rough intent to reviewable requirements;
+- turn requirements into system design before coding;
+- break implementation into bounded, reviewable phases;
+- keep unresolved decisions visible instead of hidden in prose;
+- preserve project truth in durable artifacts;
+- know when the agent completed, paused, or failed honestly;
+- extend the workflow through composable extensions.
+
+HIRMOS is probably **not** the right fit if you want one-shot prompts, hidden black-box generation, or maximum speed without traceability.
 
 ---
 
 ## What this looks like in practice
 
-### Example 1 — Turn messy requirements into a governed system design path
-A team starts with a vague feature request, a product note, or a customer conversation. HIRMOS can help structure that into reviewable system design work, create the right supporting artifacts, and move the team toward a clearer implementation path without jumping straight into ungoverned coding.
+### From rough input to requirements
 
-### Example 2 — Turn approved system design into reviewable AI-assisted implementation
-A team already finished system design and phase design, and now wants AI help during implementation. HIRMOS can use implementation planning to turn approved system design artifacts into implementation-ready prompts and then support governed implementation execution with review, retry, and clearer next steps instead of ad hoc coding sessions.
+A team starts with a vague feature request, product note, customer conversation, prototype, or set of user stories. HIRMOS helps turn that input into requirements artifacts such as `REQUIREMENTS_SOT.md`, while surfacing assumptions, open questions, and unresolved items instead of hiding them.
 
-### Example 3 — Turn prototype-driven exploration into production-ready system design work
-A CEO, founder, or manager codes a prototype in a tool like Claude Code and hands it to the development team. HIRMOS can ingest that prototype, extract what is materially useful, and help the team convert prototype-driven exploration into governed production-ready system design and implementation work.
+### From requirements to system design
 
----
+A team has reviewed requirements and wants a design path before implementation. HIRMOS uses `system-design-agent` to produce system and architecture artifacts such as `SYSTEM_SOT.md`, `ARCHITECTURE_SOT.md`, and `PHASES_SOT.md`.
 
-## FAQ
+### From approved design to implementation
 
-**What is HIRMOS?**  
-A modular framework for governed AI-assisted software engineering.
-
-**Why does it exist?**  
-Because AI-assisted software engineering needs more than prompts: it needs structure, reviewability, clear ownership, and workflow pieces that can evolve independently.
-
-**What is in this repository?**  
-The open HIRMOS core, bundled framework docs, extension-authoring docs, and the official/example extensions included in this distribution. Not every future extension needs to ship in this repository.
-
-**How does HIRMOS work at a high level?**  
-The core provides the shared operating model, command surface, and execution rules. Extensions add the specialized workflow intelligence for design, implementation, presentation, ingestion, or other project-specific work.
-
-**Do I need every extension?**  
-No. Use the core and only the extensions you actually need.
-
-**Where do I find extensions?**  
-Explore extensions in the HIRMOS Marketplace at [hirmos.dev](https://hirmos.dev).
-
-**What is the difference between the core and extensions?**  
-The core provides the shared operating model, while extensions add specialized workflow intelligence.
-
-**Can I build private or community extensions?**  
-Yes. You can build private extensions for your own organization or projects, and community extensions can later be shared or sold through the HIRMOS Marketplace.
-
-**Does this README replace my project README?**  
-No. This is the GitHub landing page for the framework; your project keeps its own README. Install HIRMOS from a generated release package, not by copying the entire GitHub checkout into your project.
+A team is ready to build. HIRMOS uses `implementation-agent` to plan implementation, pause for approval where needed, execute bounded phases, validate results, and finish with Evidence-backed Review.
 
 ---
 
-## What do you want to do next?
+## Installing and initializing HIRMOS
 
-### I want to install the framework in a project
-Use a generated HIRMOS Core release package. Do not copy the full GitHub repository checkout into a project, because the repository also contains GitHub collaboration metadata and maintainer automation that are not part of a normal project install.
+Install the HIRMOS CLI, then initialize the project from the project root:
 
-A normal install preserves your project root files and adds the drop-in `_hirmos/` folder beside them. Then initialize HIRMOS by prompting your AI tool with: `Read and follow the instructions on _hirmos/HIRMOS_CORE.md`.
+```bash
+npm install -g hirmos
+hirmos init
+```
 
-### I want to use the framework
-- Follow the [Getting started guide](./_hirmos/docs/getting-started/README.md) for the canonical low-cognitive-load onboarding path. For first use, stay on that guide instead of mixing it with the broader docs lanes too early.
+If `_hirmos/` is not already present, `hirmos init` downloads the latest HIRMOS framework release package, installs the drop-in `_hirmos/` folder, and generates the default `agents` integration.
 
-### I want to explore extensions
-Included demo extensions in this distribution:
-- `hello-world`: [hello-world README](./_hirmos/extensions/hello-world/README.md)
-- `pretty-output`: [pretty-output README](./_hirmos/extensions/pretty-output/README.md)
+A normal install preserves your project root files and adds only the drop-in `_hirmos/` folder beside them. Do not copy the full GitHub repository checkout into a project, because the repository also contains collaboration metadata and maintainer automation that are not part of a normal project install.
 
-Most official and community extensions are discovered through the marketplace:
-- `system-design-agent`: [Marketplace page](https://hirmos.dev/marketplace/system-design-agent/)
-- `implementation-agent`: [Marketplace page](https://hirmos.dev/marketplace/implementation-agent/)
-- `presentation-design`: [Marketplace page](https://hirmos.dev/marketplace/presentation-design/)
-- `prototype-ingestion`: [Marketplace page](https://hirmos.dev/marketplace/prototype-ingestion/)
-- `solution-brief`: [Marketplace page](https://hirmos.dev/marketplace/solution-brief/)
+`hirmos init` is a terminal command. It generates thin agent-native bootstrap files, defaults to the `agents` integration, and points the selected AI tool to `_hirmos/HIRMOS_CORE.md`. It does not invoke agents and does not run HIRMOS workflows.
 
-### I want to understand the framework
-- Start with the docs hub: [Docs index](./_hirmos/docs/README.md)
-- See the operating model: [Framework operating model](./_hirmos/docs/framework/framework-operating-model.md)
-- Understand project truth and reviewability: [Source of truth model](./_hirmos/docs/framework/source-of-truth-model.md)
-- Learn how extensions collaborate: [Framework hooks guide](./_hirmos/docs/framework/hooks.md)
-- See how stack awareness fits in: [Framework stacks guide](./_hirmos/docs/framework/stacks.md)
+To initialize a specific HIRMOS release, use:
 
-### I want to build my own extensions
-- Extension authoring overview: [Extensions overview](./_hirmos/docs/extensions/overview.md)
-- Create your first extension: [Creating your first extension](./_hirmos/docs/extensions/creating-your-first-extension.md)
-- Public entrypoints: [Public entrypoints](./_hirmos/docs/extensions/public-entrypoints.md)
-- Spec-backed entrypoints: [Spec-backed entrypoints](./_hirmos/docs/extensions/spec-backed-entrypoints.md)
-- Hooks authoring: [Hooks authoring](./_hirmos/docs/extensions/hooks-authoring.md)
-- Best practices: [Extension best practices](./_hirmos/docs/extensions/best-practices.md)
+```bash
+hirmos init --version 1.3.1
+```
+
+To initialize from a local release package instead of downloading, use:
+
+```bash
+hirmos init --source /path/to/hirmos-framework.zip
+```
+
+To initialize additional agent-native adapters, rerun:
+
+```bash
+hirmos init --integration claude,cursor,copilot
+```
+
+Supported integration IDs are `agents`, `claude`, `cursor`, `copilot`, `codex`, `opencode`, `gemini`, `windsurf`, and `kiro`.
+
+If you are not using the CLI yet, initialize HIRMOS by prompting your AI tool with the explicit bootstrap instruction:
+
+```text
+Read and follow the instructions on _hirmos/HIRMOS_CORE.md
+```
+
+After HIRMOS Core is loaded in the AI tool, use the regular HIRMOS workflow commands as agent-facing instructions:
+
+```text
+hirmos requirements
+hirmos system-design
+hirmos implementation
+```
+
+These workflow commands are interpreted by HIRMOS after Core has loaded. They are not terminal shell commands.
+
+---
+
+## Decide what you want to do next
+
+### I want to use HIRMOS on a project
+
+Start with the regular-user docs lane:
+
+1. [Install and Initialize HIRMOS](./_hirmos/docs/1-use-hirmos/getting-started/install-and-initialize.md)
+2. [Use HIRMOS in 3 Steps](./_hirmos/docs/1-use-hirmos/getting-started/use-hirmos-in-3-steps.md)
+3. [Quickstart](./_hirmos/docs/1-use-hirmos/getting-started/quickstart.md)
+4. [First Real Run](./_hirmos/docs/1-use-hirmos/getting-started/first-real-run.md)
+
+### I want to understand the methodology
+
+Read the Orchestrated SDD docs:
+
+- [Orchestrated Spec-Driven Development](./_hirmos/docs/2-methodology/README.md)
+- [Specs are not enough](./_hirmos/docs/2-methodology/specs-are-not-enough.md)
+- [Beyond Clear Specs](./_hirmos/docs/2-methodology/beyond-clear-specs.md)
+
+### I want to extend or contribute to HIRMOS
+
+Start with the contributor/extension-author lane:
+
+- [Extend & Contribute to HIRMOS](./_hirmos/docs/3-extend-contribute/README.md)
+- [Extensions overview](./_hirmos/docs/3-extend-contribute/extensions/overview.md)
+- [Creating your first extension](./_hirmos/docs/3-extend-contribute/extensions/creating-your-first-extension.md)
+
+### I need reference material
+
+Use the reference lane when you need definitions or cross-cutting artifact context:
+
+- [Reference index](./_hirmos/docs/reference/README.md)
+- [Glossary](./_hirmos/docs/reference/glossary.md)
+- [Source of truth model](./_hirmos/docs/reference/source-of-truth-model.md)
+
+---
+
+## Extensions in this distribution
+
+The HIRMOS framework package includes the free official starter workflow:
+
+- `requirements-agent`
+- `system-design-agent`
+- `implementation-agent`
+
+The public repository also includes demo extensions for learning and validation:
+
+- [`hello-world`](./_hirmos/extensions/hello-world/README.md)
+- [`pretty-output`](./_hirmos/extensions/pretty-output/README.md)
+
+Supporting, marketplace, private, and community extensions can add specialized workflow intelligence without making Core larger. Examples include presentation/design input handling, prototype ingestion, solution briefs, security/compliance review, team handoff, or custom organization workflows.
+
+Explore marketplace extensions at [hirmos.dev](https://hirmos.dev).
+
+---
+
+## Repository contents
+
+This repository contains the open HIRMOS framework, bundled documentation, the free official starter workflow, example extensions, and maintainer automation for packaging and release workflows.
 
 For install-surface navigation after your first successful use, see [_hirmos/README.md](./_hirmos/README.md). For canonical folder definitions, see [Top-level folder definitions](./_hirmos/core/authority/framework/top-level-folder-definitions.md).
 
+---
 
 ## Contributing
 
 Public Core contributions are welcome through GitHub issues and pull requests. Small documentation fixes can go straight to a PR. Core behavior, bootstrap, command protocol, hook, packaging, or extension-contract changes should start as a proposal issue first.
 
 HIRMOS Core is intentionally small. Contributions that move extension-specific behavior into Core will usually be declined or redirected into an extension proposal.
+
+---
 
 ## License
 

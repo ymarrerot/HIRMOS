@@ -32,6 +32,7 @@ types:
 summary: Prints a hello world message.
 entry: index.md
 entrypoints: {}
+hirmos_commands: {}
 requires: []
 exposes_hooks: []
 hooks: []
@@ -92,6 +93,31 @@ runtime: {}
 - keys are public entrypoint names
 - values are relative paths inside the extension folder
 
+### `hirmos_commands`
+- optional for extensions that are not run directly by users
+- recommended for runnable extensions
+- map of agent-facing HIRMOS workflow command names to extension-owned entrypoints
+- commands are resolved by Core from installed extension manifests
+
+Each command declaration should include:
+- `description` — short user-facing description
+- `entrypoint` — entrypoint key or default entrypoint selector
+- `visibility` — `public`, `advanced`, or `internal`
+- `regular_user_safe` — boolean indicating whether the command is suitable for regular users
+- `arguments` — optional argument guidance
+
+Example:
+
+```yaml
+hirmos_commands:
+  system-design:
+    description: Run the System Design step.
+    entrypoint: system-design
+    visibility: public
+    regular_user_safe: true
+    arguments: Optional system design scope or constraints.
+```
+
 ### `requires`
 - optional
 - list of required installed extension ids
@@ -128,14 +154,14 @@ Optional exposed-hook fields:
 #### Exposed hook example
 
 ```yaml
-id: design-workflow
+id: requirements-workflow
 version: 1.0.0
 requires_core: ">=1.0.0 <2.0.0"
 exposes_hooks:
-  - name: design-workflow.system-design-cycle.before-requirements-normalization
-    entrypoint: system-design-cycle
+  - name: requirements-workflow.requirements.before-requirements-normalization
+    entrypoint: requirements
     phase: before-requirements-normalization
-    summary: Runs before requirements intake normalization for system design.
+    summary: Runs before requirements normalization in the Requirements workflow.
     effects:
       - inspect-inputs
       - generate-derived-input-artifacts
@@ -161,8 +187,8 @@ id: prototype-normalizer
 version: 1.0.0
 requires_core: ">=1.0.0 <2.0.0"
 hooks:
-  - target: design-workflow.system-design-cycle.before-requirements-normalization
-    file: hooks/system-design-cycle.before-requirements-normalization.md
+  - target: requirements-workflow.requirements.before-requirements-normalization
+    file: hooks/requirements-workflow.requirements.before-requirements-normalization.md
     priority: 10
 ```
 
@@ -218,6 +244,8 @@ The framework should validate:
 - `summary` exists;
 - `entry` exists for runnable extensions;
 - every `entrypoints` path exists;
+- every `hirmos_commands` entry points to a valid default or named public entrypoint;
+- every declared HIRMOS command name is lowercase and stable;
 - every exposed hook has required fields;
 - exposed hook names are unique within the owning extension;
 - every referenced hook subscription file exists;
@@ -227,6 +255,7 @@ The framework should validate:
 
 Additional handling rules:
 - unknown top-level fields should be ignored with warning for now;
+- duplicate HIRMOS command declarations across installed extensions must surface a conflict instead of silently choosing;
 - `requires` values must be extension ids, not entrypoint references;
 - hook extensions should omit `entry` unless a future contract explicitly needs it;
 - `runtime.identity`, when present, should be short and human-readable.
@@ -247,29 +276,35 @@ types:
   - runnable
 summary: Prints a hello world message.
 entry: index.md
+hirmos_commands:
+  hello-world:
+    description: Run the hello-world example.
+    entrypoint: default
+    visibility: public
+    regular_user_safe: true
 ```
 
 ## Runnable extension with exposed hooks
 
 ```yaml
-id: design-workflow
+id: requirements-workflow
 version: 1.0.0
 requires_core: ">=1.0.0 <2.0.0"
 types:
   - runnable
-summary: Design workflows and design artifacts.
-entry: entrypoints/system-design-cycle.md
+summary: Requirements workflows and requirements artifacts.
+entry: entrypoints/requirements.md
 entrypoints:
-  system-design-cycle: entrypoints/system-design-cycle.md
+  requirements: entrypoints/requirements.md
   requirements-sot: entrypoints/requirements-sot.md
 runtime:
   category: agent
   identity: System Design Agent
 exposes_hooks:
-  - name: design-workflow.system-design-cycle.before-requirements-normalization
-    entrypoint: system-design-cycle
+  - name: requirements-workflow.requirements.before-requirements-normalization
+    entrypoint: requirements
     phase: before-requirements-normalization
-    summary: Runs before requirements intake normalization for system design.
+    summary: Runs before requirements normalization in the Requirements workflow.
 ```
 
 ## Hook-only example

@@ -10,11 +10,10 @@ This contract exists to keep HIRMOS docs useful for onboarding and practical use
 
 This contract applies to user-facing docs under:
 - `/_hirmos/docs/`
-- `/_hirmos/docs/framework/`
-- `/_hirmos/docs/core/`
-- `/_hirmos/docs/extensions/`
-- `/_hirmos/docs/orchestrator/`
-- `/_hirmos/docs/examples/`
+- `/_hirmos/docs/1-use-hirmos/`
+- `/_hirmos/docs/2-methodology/`
+- `/_hirmos/docs/3-extend-contribute/`
+- `/_hirmos/docs/reference/`
 
 It complements folder rules and document-role rules. It does not replace them.
 
@@ -56,8 +55,10 @@ When a user-facing doc contains doctrinal material, apply this test:
 Docs may live in conceptual lanes, but they should still behave like guided user lanes.
 
 That means:
-- `getting-started/` should optimize for first successful use
-- framework, core, extension, and orchestrator docs should still route by depth and next step
+- `1-use-hirmos/` should optimize for first successful use
+- `2-methodology/` should explain Orchestrated SDD without becoming runtime authority
+- `3-extend-contribute/` should expose internals progressively for contributors and extension authors
+- `reference/` should remain lookup material, not a miscellaneous drawer
 - lane README files should help readers start, go next, and go deeper without assuming they want the full doctrine first
 
 ## Selective SDLC anchoring

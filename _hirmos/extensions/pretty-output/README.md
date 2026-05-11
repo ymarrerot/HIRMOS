@@ -56,4 +56,4 @@ To show the smallest useful shape of a hook-only extension.
 
 - Compare it with the runnable demo extension: [`../hello-world/README.md`](../hello-world/README.md)
 - Read the contributed hook file: [`hooks/hello-world.after-main-output.md`](./hooks/hello-world.after-main-output.md)
-- Learn how hook authoring works: [`../../docs/extensions/hooks-authoring.md`](../../docs/extensions/hooks-authoring.md)
+- Learn how hook authoring works: [`../../docs/3-extend-contribute/extensions/hooks-authoring.md`](../../docs/3-extend-contribute/extensions/hooks-authoring.md)

@@ -25,7 +25,7 @@ Define what `/_hirmos/core/authority/framework/` is for, what it owns, what it m
 Most common confusions:
 - `/_hirmos/core/authority/core/`
 - `/_hirmos/core/authority/extensions/`
-- `/_hirmos/docs/framework/`
+- `/_hirmos/docs/3-extend-contribute/framework/`
 
 ## If you are unsure
 

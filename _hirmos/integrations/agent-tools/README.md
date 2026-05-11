@@ -1,0 +1,98 @@
+# Agent Tool Integrations
+
+## Purpose
+
+Define the HIRMOS agent/tool integration templates consumed by the product-facing `hirmos init` CLI implemented in `_hirmos/tools/cli/`.
+
+These files are **bootstrap adapters**, not workflow authority and not Core runtime behavior. HIRMOS can still be used without these files through the canonical first-contact bootstrap instruction:
+
+```text
+Read and follow the instructions on _hirmos/HIRMOS_CORE.md
+```
+
+## Scope
+
+`hirmos init` generates thin context/bootstrap files for selected tools from this registry/template surface. It does not:
+
+- invoke agents;
+- install tool-native slash commands;
+- install deep command/skill packs;
+- duplicate HIRMOS Core doctrine;
+- run HIRMOS workflow commands.
+
+## Authority boundary
+
+Every generated integration file must point directly to:
+
+```text
+_hirmos/HIRMOS_CORE.md
+```
+
+That file remains the HIRMOS bootstrap authority for the project.
+
+`AGENTS.md` is one supported integration target. It is not the HIRMOS source of truth and other tool-specific files must not depend on it.
+
+## Locked integrations
+
+The locked integration ids are:
+
+```text
+agents
+claude
+cursor
+copilot
+codex
+opencode
+gemini
+windsurf
+kiro
+```
+
+The target registry is defined in [`registry.json`](./registry.json).
+
+## Managed-block rule
+
+Shared or conventional user-owned targets use the HIRMOS managed block markers. Dedicated HIRMOS-named tool files may be fully HIRMOS-managed later, but the current implementation keeps managed blocks everywhere for one safe update algorithm:
+
+```md
+<!-- HIRMOS:START -->
+...
+<!-- HIRMOS:END -->
+```
+
+Rules:
+
+- If the target file exists and already contains a HIRMOS managed block, replace only that block.
+- If the target file exists and does not contain a HIRMOS managed block, append a HIRMOS managed block.
+- If the target file does not exist, create it with the HIRMOS managed block.
+- Never overwrite user-owned content outside the HIRMOS managed block.
+
+See [`managed-blocks.md`](./managed-blocks.md) for the exact update behavior.
+
+See [`docs/hirmos-init-cli-design.md`](./docs/hirmos-init-cli-design.md) for the `hirmos init` CLI implementation design and behavior contract.
+
+## Shared target rule
+
+Some integrations intentionally use the same target file.
+
+For example:
+
+```text
+agents   -> AGENTS.md
+codex    -> AGENTS.md
+opencode -> AGENTS.md
+```
+
+When multiple selected integrations share the same target file, generate or update the HIRMOS managed block only once and record all selected integration ids in `_hirmos/project.json`.
+
+## Relationship to workflow commands
+
+Integration files do not define HIRMOS workflow commands.
+
+The command grammar and command resolution remain governed by `_hirmos/core/command-protocol.md`:
+
+```text
+hirmos <command>[:entrypoint] [arguments]
+```
+
+Workflow commands resolve through installed extension manifests using `hirmos_commands`.
