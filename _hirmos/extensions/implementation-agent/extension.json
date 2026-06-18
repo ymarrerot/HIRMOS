@@ -1,0 +1,21 @@
+{
+  "id": "implementation-agent",
+  "summary": "Implementation capabilities for implementation units, execution, validation, review, retry, and session implementation review.",
+  "lifecycle_stages": [
+    "implementation"
+  ],
+  "capabilities": [
+    "implementation-unit-planning",
+    "implementation-execution",
+    "implementation-unit-review",
+    "validation-review",
+    "retry-escalation",
+    "session-implementation-review"
+  ],
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "runtime": {
+    "identity": "Implementation Agent"
+  }
+}

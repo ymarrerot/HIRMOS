@@ -1,0 +1,40 @@
+name: Proposal
+description: Propose a framework, extension-contract, packaging, install, or example-extension change.
+title: "proposal: "
+labels: ["type: proposal", "status: needs-info"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What problem are you trying to solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Describe the smallest change that would solve the problem.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area affected
+      options:
+        - Docs/onboarding
+        - Example extension
+        - Core/bootstrap/command behavior
+        - Hook or execution-control behavior
+        - Extension contract or manifest
+        - Packaging/install/release
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: boundary
+    attributes:
+      label: HIRMOS boundary check
+      description: Explain why this belongs in public Core instead of a marketplace/private extension.
+    validations:
+      required: true

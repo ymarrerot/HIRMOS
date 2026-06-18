@@ -1,0 +1,227 @@
+# Command Protocol
+
+Status: core protocol.
+Purpose: define how user command intent routes into HIRMOS lifecycle responsibilities without making commands lifecycle authorities.
+
+Commands are user actions. Commands are not lifecycle stages. Commands activate, continue, inspect, or close governed work by routing into lifecycle responsibilities.
+
+## Public commands
+
+```text
+hirmos start
+hirmos continue
+hirmos status
+hirmos close
+```
+
+## Command-intent rule
+
+If user input begins with `hirmos`, treat it as HIRMOS runtime command intent.
+
+Do not downgrade malformed HIRMOS command input into ordinary prose. Fail clearly and recommend supported command forms.
+
+Supported forms:
+
+```text
+hirmos start [user request]
+hirmos continue
+hirmos status
+hirmos close
+```
+
+## Bootstrap prerequisite
+
+No command may execute until bootstrap has passed for the current agent/context.
+
+Bootstrap completion means the bootstrap report exists and records a passed quiz. Acknowledging files were read is not enough.
+
+## Advancing command rule
+
+`hirmos start`, `hirmos continue`, and `hirmos close` are advancing commands.
+
+Every advancing command must:
+
+1. verify bootstrap completion;
+2. read the matching command specification;
+3. create or read `_hirmos/session/SESSION_EXECUTION.md` as required by the command;
+4. establish command-specific execution controls before doing lifecycle work;
+5. read adaptive command, capability, stack, template, and validation files only as controls require them;
+6. update `SESSION_EXECUTION.md` before every user-facing readiness, completion, or blocked checkpoint;
+7. fail closed if required controls are `PENDING` or `BLOCKED` at a readiness or completion boundary.
+
+## Read-only command rule
+
+`hirmos status` is read-only. It may inspect state and report gaps. It must not advance lifecycle work, satisfy controls by assertion, instantiate new lifecycle artifacts, or mutate accepted system state.
+
+## Command summaries
+
+`hirmos start` starts a governed session from a User Request. It begins with request capture, creates `SESSION_EXECUTION.md`, establishes controls, and starts with Understand System State.
+
+`hirmos continue` advances the current lifecycle boundary only when the active execution controls allow continuation.
+
+`hirmos status` reports active or last-known HIRMOS state without advancing governed work.
+
+`hirmos close` runs Update System State when ready, archives the session, and resets the active session area.
+
+
+## Command state machine discipline
+
+
+### command protocol application
+
+Every public command specification must include command-state preconditions, state mutation rules, postconditions, and fail-closed recovery behavior. Command files may describe command-specific work, but they must not redefine the transition matrix in `_hirmos/core/protocol/COMMAND_STATE_MACHINE.md`.
+
+Required command-state discipline for all commands:
+
+| Requirement | Rule |
+|---|---|
+| Legality check | Read `SESSION_STATE.json` before advancing work and verify the requested command is legal for `status`, `lifecycle_stage`, and `allowed_next_commands`. |
+| Artifact-state check | Verify active/idle session scaffold consistency before executing an advancing command. |
+| State mutation | Update `SESSION_STATE.json` whenever a command changes lifecycle stage, continuation pass, blocking state, or recommended next command. |
+| Execution ledger | Update `SESSION_EXECUTION.md` for every advancing command, and append rather than overwrite command history. |
+| Response discipline | Surface exactly one primary next governed command that is legal under the updated `SESSION_STATE.json`. |
+| Fail closed | If legality, artifacts, or state are contradictory, stop before lifecycle work and recommend exactly one governed recovery command. |
+
+Command-specific files must use this protocol as their local command contract.
+
+Every command must apply `_hirmos/core/protocol/COMMAND_STATE_MACHINE.md` before recommending or executing a next command. `SESSION_STATE.json` is the machine-readable command-state authority. `SESSION_EXECUTION.md` explains execution history but must not override `SESSION_STATE.json`.
+
+Command legality is determined by:
+
+- `SESSION_STATE.json.status`;
+- `SESSION_STATE.json.lifecycle_stage`;
+- `SESSION_STATE.json.allowed_next_commands`;
+- active-session artifact presence or absence;
+- fail-closed controls recorded in `SESSION_EXECUTION.md`.
+
+If command legality is unclear or contradictory, the command must stop at a blocked/fail-closed state and recommend exactly one governed recovery command.
+
+## Mandatory start pause rule
+
+`hirmos start` must not go directly into implementation. For implementation-capable sessions, it must stop at implementation readiness after creating the Session Contract, unresolved-item register, session-contract review scaffold, execution spine, and implementation-unit plan when applicable. The next governed command is `hirmos continue`.
+
+## Cumulative continue pass rule
+
+`hirmos continue` is append-only. Each invocation must append a continuation pass record in `SESSION_EXECUTION.md`. Corrections, contract amendments, validation reruns, and route-backs must preserve prior pass history instead of overwriting it.
+
+## Exactly-one-next-command rule
+
+Every command response must recommend exactly one primary governed next command. Prose such as `reply to proceed` is not a governed command.
+
+## Artifact-backed checkpoint rule
+
+A command must not tell the user that an artifact exists, is ready, can be inspected, or authorizes a next step unless the artifact exists and contains non-placeholder content.
+
+## Terminal-state rule
+
+Every advancing command response must end in one clear terminal state from its command specification.
+
+If no terminal state can be reached safely, the command must enter `Blocked / Fail-Closed` or the command-specific blocked state and explain what control prevents continuation.
+
+## Bootstrap-only boundary
+
+If the user asked only for bootstrap, command execution is not authorized after bootstrap completes.
+
+
+## Capability routing during commands
+
+Advancing commands route needed work through installed extension capabilities when specialized work is needed to satisfy the active lifecycle boundary. Commands do not select capabilities by memory or preference; they route through `_hirmos/core/protocol/CAPABILITY_ROUTING.md` when routing is material.
+
+Capability routing materially affects lifecycle progress when the command must decide whether any installed extension capability is `REQUIRED`, `OPTIONAL`, `SKIPPED`, `NOT_APPLICABLE`, or `BLOCKED` before the active lifecycle boundary can safely continue.
+
+At minimum, capability routing is material when:
+
+- moving from Understand System State into Design;
+- deciding whether Design can reach implementation-readiness;
+- deciding whether Implementation may begin, continue, retry, or complete;
+- deciding whether Update System State may accept outcomes, archive, or close;
+- selecting requirements, system-design, delivery-design, phase-contracting, session-contract, technical-review, implementation-readiness, implementation, validation, evidence, or update-state capabilities;
+- a required artifact or execution control names a capability, extension, or entrypoint;
+- unresolved items, project type, stack evidence, delivery governance, runtime services, or current-state evidence affects which specialized work must run;
+- a capability may produce or update artifacts required for a readiness claim, completion claim, blocker, route-back, or user-facing checkpoint.
+
+When routing is material, the runner must read `_hirmos/core/protocol/CAPABILITY_ROUTING.md`, resolve the required extension and capability entrypoints through the installed manifests, and record the capability decision in `_hirmos/session/SESSION_EXECUTION.md`.
+
+Commands must not expose capability routing details in `domain_expert` mode unless the routing creates a user decision, blocker, or inspectable checkpoint.
+
+
+## Runtime integration command discipline
+
+Advancing commands must activate runtime integration controls when material services such as database, auth, messaging, storage, payments, deployment, or provider APIs affect the active request.
+
+Commands must not claim implementation completion, production readiness, update-state readiness, or close success beyond the posture and evidence recorded in `_hirmos/session/support/runtime-integration-readiness.md`, `SESSION_EXECUTION.md`, and relevant review artifacts.
+
+## Vertical slice and status UX discipline
+
+When Delivery Units, Phases, or implementation slices are active, advancing commands must read `_hirmos/core/protocol/VERTICAL_SLICE_AND_STATUS_UX.md` and maintain clear next-action status.
+
+Advancing command responses should recommend exactly one primary next command or terminal next action unless blocked.
+
+Commands must not preserve momentum by hiding blockers. Status summaries must distinguish:
+
+- active slice;
+- completed work;
+- blocked controls;
+- next allowed action;
+- next recommended Delivery Unit when known.
+
+## Close / accepted-state integrity discipline
+
+`hirmos close` must read `_hirmos/core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md` before claiming normal close success.
+
+Close success requires a consistent transaction across:
+
+- active session evidence;
+- `support/system-state-update.md`;
+- `support/close-checklist.md`;
+- archive manifest;
+- accepted-state records;
+- reset `SESSION_STATE.json`;
+- post-close `hirmos status` output.
+
+If these surfaces disagree, `hirmos close` must stop at `Close Blocked` or use an explicit abort-close path. It must not present archived artifacts as accepted current state unless Update System State accepted them.
+
+## Claim reconciliation command rule
+
+Any command that surfaces readiness, progress, implementation completion, runtime readiness, production readiness, package completeness, update-state readiness, or close success must apply claim reconciliation before surfacing the claim.
+
+The command must either:
+
+- create or update `_hirmos/session/support/claim-reconciliation.md`;
+- point to an existing current claim reconciliation record; or
+- record why claim reconciliation is `NOT_APPLICABLE`.
+
+A command must not use chat-only summaries as claim evidence.
+
+## Autonomous technical progress command rule
+
+Advancing commands must apply `_hirmos/core/protocol/AUTONOMOUS_TECHNICAL_PROGRESS.md` when technical setup, runtime integration, validation, local services, environment configuration, or provider adapters affect the active request.
+
+Commands should be firm and direct: make safe progress, fix encountered runtime problems inside accepted scope, record evidence, and recommend the next action.
+
+Commands must not ask the user to make routine technical choices until HIRMOS has checked whether the answer can be safely discovered or a safe default can be applied. Commands must ask or route to technical review when the choice affects domain behavior, cost, compliance, credential/account ownership, destructive operations, or production readiness.
+
+## Local setup and role-workflow smoke evidence
+
+Use `LOCAL_TECHNICAL_SETUP_AND_ROLE_WORKFLOW_SMOKE_CHECKS.md` for the governing rules when HIRMOS claims local runtime behavior, user-environment verification, or role workflow readiness.
+
+Required artifacts when applicable:
+
+- `_hirmos/session/support/local-runtime-evidence.md` records local environment, service, migration, seed, dev-server, and route evidence.
+- `_hirmos/session/support/role-workflow-smoke.md` records patient/staff/provider/manager/admin workflow smoke evidence.
+- `_hirmos/session/support/claim-reconciliation.md` reconciles whether the claim may be surfaced.
+
+Firm rule: tests/build/lint alone do not prove local runtime readiness or role workflow readiness.
+
+## durable current-system-state current-state command invariant
+
+Commands that surface accepted current truth must use `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` as the primary source.
+
+`hirmos close` must update or explicitly verify unchanged current system state before claiming success. `hirmos status` must prefer current system state over archive summaries, chat memory, or current-state latest-close metadata summaries.
+
+
+## Current-date and session-id discipline
+
+Commands that create session identifiers, archive paths, close records, accepted-state timestamps, or dated reports must resolve the actual current date from the runtime environment, available tool context, or explicit user-provided date. They must not reuse example dates, prior session dates, generated template dates, or stale dates from copied artifacts.
+
+If the current date cannot be established, the command must record the uncertainty in `_hirmos/session/SESSION_EXECUTION.md` and avoid date-specific claims until the date is resolved. Session IDs and archive folder names must be consistent with the resolved current date or explicitly documented as user-provided identifiers.

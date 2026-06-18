@@ -1,0 +1,34 @@
+{
+  "id": "prototype-ingestion",
+  "extension": "system-state-agent",
+  "summary": "Treat prototypes, POCs, screenshots, generated apps, or demo code as first-class evidence while separating observed behavior from intended behavior and authority.",
+  "lifecycle_stage": "understand_system_state",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "source inputs include a prototype, POC, demo app, screenshot flow, generated code, or exploratory implementation"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/support/request-intake.md",
+    "_hirmos/session/support/source-materials.md when source material exists"
+  ],
+  "produces_artifacts": [
+    "_hirmos/session/support/prototype-ingestion.md",
+    "_hirmos/session/support/system-state.md",
+    "_hirmos/session/unresolved-items.md",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "prototype/POC input control",
+    "system-state control",
+    "unresolved-item control when needed"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

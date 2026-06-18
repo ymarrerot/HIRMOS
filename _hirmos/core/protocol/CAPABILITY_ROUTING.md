@@ -1,0 +1,260 @@
+# Capability Routing Protocol
+
+Status: core protocol.
+Purpose: define how HIRMOS routes lifecycle-stage responsibilities to installed extension capabilities without turning capabilities into independent workflow authorities.
+
+Extension capabilities execute inside lifecycle-stage responsibilities. They do not replace the lifecycle and do not own lifecycle authority.
+
+## Core rule
+
+Lifecycle stages define the responsibility boundary. Extension capabilities are activated only when the active lifecycle stage needs specialized work to satisfy that boundary.
+
+Capability routing must answer four questions in order:
+
+1. Which lifecycle stage is active?
+2. Which installed extensions support that lifecycle stage?
+3. Which capabilities inside those extensions are needed by the active command, evidence, unresolved items, artifacts, and controls?
+4. Which capability entrypoints must be read and executed before the lifecycle boundary can safely continue?
+
+The runner must not choose a capability first and justify it afterward.
+
+## When routing is required
+
+Capability routing is required when an advancing command must decide whether an installed extension capability is `REQUIRED`, `OPTIONAL`, `SKIPPED`, `NOT_APPLICABLE`, or `BLOCKED` before the active lifecycle boundary can safely continue.
+
+At minimum, routing is required when:
+
+- moving from Understand System State into Design;
+- deciding whether Design can reach implementation-readiness;
+- deciding whether Implementation may begin, continue, retry, or complete;
+- deciding whether Update System State may accept outcomes, archive, or close;
+- selecting requirements, system-design, delivery-design, phase-contracting, session-contract, technical-review, implementation-readiness, implementation, validation, evidence, or update-state capabilities;
+- a required artifact or execution control names a capability, extension, or entrypoint;
+- unresolved items, project type, stack evidence, delivery governance, runtime services, or current-state evidence affects which specialized work must run;
+- a capability may produce or update artifacts required for a readiness claim, completion claim, blocker, route-back, or user-facing checkpoint.
+
+If none of these conditions apply, the runner may record capability routing as `NOT_APPLICABLE` for the boundary. The rationale must be artifact-backed when the boundary is user-facing.
+
+## Routing order
+
+HIRMOS routes capabilities from evidence, not from preferred capability names. The routing order is represented by the routing inputs below and applied through the linear routing workflow.
+
+## Routing inputs
+
+
+Routing must consider:
+
+1. User Request signals.
+2. Source input inventory, including uploads, prototypes, references, and POC inputs.
+3. General and focused system-state evidence.
+4. Active lifecycle boundary.
+5. Active command boundary.
+6. Unresolved-item state.
+7. Project type and stack evidence.
+8. Delivery governance and phase state, when active.
+9. Runtime integration posture, when material.
+10. Existing execution controls in `_hirmos/session/SESSION_EXECUTION.md`.
+11. Installed extension manifests.
+12. Installed capability manifests.
+
+Project type and stack decisions recorded in `support/project-context.md`, `support/stack-resolution.json`, and `SESSION_EXECUTION.md` may require, skip, or shape capabilities. They do not replace lifecycle authority.
+
+Rules:
+
+- stack package guidance may affect Implementation and evidence capabilities, but repository evidence governs actual commands;
+- stack contexts, when active, must be carried into Design, Implementation Unit artifacts, and Evidence Review;
+- large or multi-session routing must use Delivery Units or Phases when the work cannot be safely governed as one bounded session.
+
+## Linear routing workflow
+
+When an advancing command reaches a lifecycle boundary that requires capability routing, follow this workflow:
+
+1. Confirm the active lifecycle stage from `_hirmos/session/SESSION_STATE.json` and `_hirmos/session/SESSION_EXECUTION.md`.
+2. Read this protocol before selecting extension or capability entrypoints.
+3. Inspect installed extension manifests at `_hirmos/extensions/*/extension.json`.
+4. Select candidate extensions whose `lifecycle_stages` includes the active lifecycle stage.
+5. Resolve each selected extension's default entrypoint from `extension.json.entrypoints.default`.
+6. Read the selected extension entrypoint before running extension-owned routing work.
+7. Apply the shared extension method contained in the selected extension default entrypoint.
+8. Inspect the selected extension's listed capabilities from `extension.json.capabilities`.
+9. For each listed capability, read `_hirmos/extensions/<extension-id>/capabilities/<capability-id>/capability.json`.
+10. Compare the capability manifest against the active lifecycle stage, command boundary, activation triggers, required artifacts, active controls, unresolved-item state, project type, stack evidence, delivery state, and runtime posture.
+11. Assign one capability decision: `REQUIRED`, `OPTIONAL`, `SKIPPED`, `NOT_APPLICABLE`, or `BLOCKED`.
+12. For every `REQUIRED` capability and every selected `OPTIONAL` capability, resolve the runnable entrypoint from `capability.json.entrypoints.default`.
+13. Read the capability entrypoint before executing capability-specific work.
+14. Run only the capability-specific work needed by the active lifecycle boundary.
+15. Record decisions, entrypoint paths, reasons, controls, terminal states, and unresolved-item producer outcomes in `_hirmos/session/SESSION_EXECUTION.md`.
+16. Do not claim lifecycle-boundary completion until required capability controls are `SATISFIED`, `BLOCKED`, or `NOT_APPLICABLE` with rationale.
+
+This workflow is the canonical routing path. Command files may point to it, but they must not redefine it.
+
+## Extension discovery
+
+Installed extensions are discovered from:
+
+```text
+_hirmos/extensions/*/extension.json
+```
+
+An extension is a candidate for the active lifecycle stage when:
+
+- its `lifecycle_stages` includes the active lifecycle stage; and
+- the active command boundary may require specialized work owned by that extension.
+
+The extension manifest must declare:
+
+- extension `id`;
+- supported `lifecycle_stages`;
+- listed `capabilities`;
+- default extension entrypoint path under `entrypoints.default`.
+
+Runners must resolve the extension entrypoint from the manifest. They must not infer extension entrypoint paths from memory when the manifest is present.
+
+Example:
+
+```text
+Active lifecycle stage: design
+Candidate extension: _hirmos/extensions/design-agent/extension.json
+Reason: extension.json lifecycle_stages includes design
+Extension entrypoint: extension.json entrypoints.default
+```
+
+## Capability manifest inspection
+
+After selecting an extension, inspect the capability manifests listed by that extension.
+
+Canonical capability manifests live at:
+
+```text
+_hirmos/extensions/<extension-id>/capabilities/<capability-id>/capability.json
+```
+
+A capability manifest must define or reference:
+
+- capability `id`;
+- owning extension;
+- lifecycle stage;
+- activation mode and triggers;
+- required artifacts, when any;
+- produced artifacts, when any;
+- execution controls, when any;
+- default runnable entrypoint path.
+
+The runner must compare the capability manifest to the active lifecycle boundary and routing inputs before choosing the capability decision.
+
+Capability-specific triggers belong in `capability.json`. The global algorithm for how to inspect and apply those triggers belongs in this protocol.
+
+## Capability decisions
+
+Allowed capability decisions:
+
+```text
+REQUIRED
+OPTIONAL
+SKIPPED
+NOT_APPLICABLE
+BLOCKED
+```
+
+Use these tests:
+
+- `REQUIRED` — the capability must run or be satisfied before the active lifecycle boundary can safely complete. Use this when its output, control, artifact, evidence, or decision is necessary for readiness, completion, route-back, or continuation.
+- `OPTIONAL` — the capability could improve the result, but the active lifecycle boundary can safely continue without it. Optional capabilities may run only when doing so does not hide a required decision or over-expand scope.
+- `SKIPPED` — the capability is relevant but intentionally not run for an evidence-backed reason. The reason must be recorded.
+- `NOT_APPLICABLE` — the capability's lifecycle stage, activation triggers, required artifacts, and controls do not match the active request path or lifecycle boundary.
+- `BLOCKED` — the capability should run but cannot safely run because required evidence, artifacts, dependencies, provider configuration, working-copy state, or user decisions are missing.
+
+If a capability is needed to produce or validate an artifact required by the active lifecycle boundary, it is not optional.
+
+If a capability trigger matches but required inputs are missing, the decision is usually `BLOCKED`, not `SKIPPED`.
+
+If no capability trigger matches, the decision is usually `NOT_APPLICABLE`, not `SKIPPED`.
+
+## Capability activity record
+
+Capability decisions are recorded in `_hirmos/session/SESSION_EXECUTION.md`.
+
+Use this shape inside the execution spine:
+
+| Capability | Extension | Stage | Decision | Entrypoint | Reason | Required controls | Status |
+|---|---|---|---|---|---|---|---|
+
+Do not create a separate capability plan unless a future governed artifact explicitly defines that artifact, its template, validation rules, and lifecycle conditions.
+
+## Canonical capability entrypoint surface
+
+Runnable capability entrypoints are canonical only at:
+
+```text
+extensions/<agent>/capabilities/<capability>/entrypoints/default.md
+```
+
+Capability manifests must point directly to `entrypoints/default.md`, and runners must resolve that canonical path. Legacy redirect wrappers at `extensions/<agent>/capabilities/<capability>/entrypoint.md` are not allowed because they create a second discoverable surface without the complete execution contract.
+
+## Entrypoint execution contract
+
+Every runnable capability entrypoint must include:
+
+```text
+Purpose
+Produces
+Terminal States
+```
+
+The entrypoint contract is not a full lifecycle authority. It tells the runner what the capability does, what artifacts/evidence it may produce, and how it may terminate inside the active lifecycle-stage responsibility.
+
+## Capability completion rule
+
+A capability is not complete just because its entrypoint was read.
+
+A capability is complete only when:
+
+1. required input artifacts were inspected or explicitly determined not applicable;
+2. expected artifacts/evidence were produced or explicitly marked not applicable;
+3. unresolved-item producer obligations were handled;
+4. required execution controls are `SATISFIED` or `NOT_APPLICABLE` with rationale;
+5. `_hirmos/session/SESSION_EXECUTION.md` records the capability status.
+
+## Missing or conflicting provider rule
+
+HIRMOS must fail closed when:
+
+- a required lifecycle-stage capability has no installed extension provider;
+- multiple installed providers claim the same required capability and no selection rule exists;
+- an extension manifest is malformed;
+- a capability manifest is malformed;
+- a declared extension entrypoint path does not exist;
+- a declared capability entrypoint path does not exist;
+- required artifacts are missing and cannot be safely instantiated;
+- a capability decision contradicts lifecycle, unresolved-item, command-state, or execution-control state.
+
+## Unresolved-item producer rule
+
+Every capability that can discover uncertainty must either:
+
+1. contribute unresolved items to `_hirmos/session/unresolved-items.md`; or
+2. explicitly record that no material unresolved items were discovered.
+
+Capabilities must not hide unresolved items inside local prose.
+
+## Interaction-mode visibility
+
+Interaction modes change how capability routing is surfaced, not whether routing happens.
+
+- `domain_expert` normally hides capability-routing details unless a decision or blocker requires them.
+- `technical_supervisor` may summarize active capabilities, artifacts, assumptions, and evidence.
+- `framework_diagnostics` should expose capability decisions, entrypoints, skipped/not-applicable reasons, controls, and route-back triggers.
+
+## Governed checkpoint contribution rule
+
+When a capability result creates a user-facing decision, readiness claim, completion claim, blocker, or route-back, the capability must provide enough information for the active checkpoint artifact.
+
+At minimum, the capability must identify:
+
+- produced artifacts;
+- unresolved-item contribution or explicit none/not applicable;
+- controls affected;
+- terminal state reached;
+- whether user-facing output is required.
+
+Capability completion cannot be claimed if its unresolved-item producer obligation is missing or contradictory.

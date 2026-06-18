@@ -1,0 +1,32 @@
+{
+  "id": "understand-system-state",
+  "extension": "system-state-agent",
+  "summary": "Produce general and User Request-focused system-state understanding before Design owns governed requirements or scope.",
+  "lifecycle_stage": "understand_system_state",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "any governed software work is requested"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/support/request-intake.md"
+  ],
+  "produces_artifacts": [
+    "_hirmos/session/support/system-state.md",
+    "_hirmos/session/unresolved-items.md",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "system-state control",
+    "working-copy control",
+    "unresolved-item control when needed"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

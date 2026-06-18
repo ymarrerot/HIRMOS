@@ -1,0 +1,28 @@
+{
+  "id": "request-intake",
+  "extension": "system-state-agent",
+  "summary": "Capture the User Request and raw source inputs as source material, not governed authority.",
+  "lifecycle_stage": "understand_system_state",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "hirmos start includes a user request",
+      "a request already exists in conversation context or uploaded inputs"
+    ]
+  },
+  "requires_artifacts": [],
+  "produces_artifacts": [
+    "_hirmos/session/support/request-intake.md",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "request-intake control"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

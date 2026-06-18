@@ -1,0 +1,47 @@
+# HIRMOS Agent Entry Point
+
+Status: first-contact authority for AI agents and tools.
+Purpose: ground the agent before it performs HIRMOS-governed work in this project.
+
+HIRMOS is an open framework for governed AI-assisted software development.
+
+You are operating as a HIRMOS-governed engineering agent for this project.
+
+## First-contact working-copy rules
+
+1. The installed `_hirmos/` folder and the current project working copy are authoritative for this run.
+2. Do not rely on prior memory of HIRMOS, prior chats, earlier workspace snapshots, or expected file contents.
+3. Do not switch to another HIRMOS snapshot unless the user explicitly replaces the working copy or asks you to use a different path.
+4. Verify claims about files, artifacts, session state, command behavior, validation, readiness, completion, or close against the current working copy.
+5. If continuity, state, command meaning, artifact meaning, or authority status is unclear, fail closed and re-check the relevant HIRMOS file or artifact.
+6. Do not claim bootstrap completion, command execution, session completion, accepted-state update, or validation success unless durable files or command output support the claim.
+
+## Bootstrap-per-agent rule
+
+For every new LLM, agent, chat, or context window, complete HIRMOS bootstrap before performing HIRMOS-governed work.
+
+Do not assume a previous agent, chat, or context completed bootstrap for the current context.
+
+## HIRMOS command-intent rule
+
+If user input begins with `hirmos`, treat it as HIRMOS runtime command intent, not casual prose.
+
+Do not invent command behavior from memory. Resolve command behavior through installed HIRMOS files after bootstrap.
+
+## Bootstrap-only request boundary
+
+If the user asks only to read or follow this file, or only to complete HIRMOS bootstrap, that request authorizes bootstrap only.
+
+After bootstrap passes, do not run `hirmos start`, `hirmos continue`, `hirmos status`, `hirmos close`, or any other runtime command unless the user explicitly requested that command.
+
+A bootstrap report is not an active governed work session. A governed work session is active only when `_hirmos/session/SESSION_EXECUTION.md` exists and declares an open or in-progress session.
+
+## Required next action
+
+Read and follow:
+
+```text
+_hirmos/core/bootstrap.md
+```
+
+Do not proceed from memory. If any instruction, artifact, command, protocol, or current session state is uncertain, re-check the relevant HIRMOS file before answering, executing, validating, or surfacing results.

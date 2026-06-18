@@ -1,0 +1,37 @@
+{
+  "id": "session-implementation-review",
+  "extension": "implementation-agent",
+  "summary": "Review all implementation units together against the Session Contract, delivery/phase criteria, validation evidence, and remaining blockers.",
+  "lifecycle_stage": "implementation",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "all active implementation units are complete or intentionally not applicable",
+      "implementation completion is being considered"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/SESSION_CONTRACT.md",
+    "_hirmos/session/unresolved-items.md",
+    "_hirmos/session/session-contract-review.md",
+    "_hirmos/session/implementation-units/",
+    "_hirmos/session/support/ evidence when applicable"
+  ],
+  "produces_artifacts": [
+    "_hirmos/session/session-contract-review.md",
+    "_hirmos/session/SESSION_CONTRACT.md final verdict mirror",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "session implementation review control",
+    "validation/evidence control",
+    "Update System State readiness contribution"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "system-state-agent",
+  "summary": "System-state capabilities for request intake, source/prototype ingestion, current-state understanding, and accepted-state update.",
+  "lifecycle_stages": [
+    "understand_system_state",
+    "update_system_state"
+  ],
+  "capabilities": [
+    "request-intake",
+    "source-material-ingestion",
+    "prototype-ingestion",
+    "understand-system-state",
+    "update-system-state"
+  ],
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "runtime": {
+    "identity": "System State Agent"
+  }
+}

@@ -1,0 +1,11 @@
+# OS/editor noise
+.DS_Store
+*.tmp
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Local package/build artifacts should not be committed to the public repo payload.
+*.zip
+*.tgz

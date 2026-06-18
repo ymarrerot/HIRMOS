@@ -1,0 +1,33 @@
+{
+  "id": "technical-review",
+  "extension": "design-agent",
+  "summary": "Make technical assumptions and technical decisions inspectable by a technical reviewer without forcing Domain Expert approval of routine technical details.",
+  "lifecycle_stage": "design",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "Design contains technical assumptions",
+      "technical decisions affect implementation, risk, architecture, data, security, performance, or reviewability"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/support/system-state.md",
+    "_hirmos/session/DESIGN.md"
+  ],
+  "produces_artifacts": [
+    "_hirmos/session/support/technical-review.md",
+    "_hirmos/session/unresolved-items.md",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "technical-review control",
+    "unresolved-item control when needed"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

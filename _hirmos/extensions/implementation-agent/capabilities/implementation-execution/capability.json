@@ -1,0 +1,33 @@
+{
+  "id": "implementation-execution",
+  "extension": "implementation-agent",
+  "summary": "Perform authorized project-file changes for a specific implementation unit and record execution evidence.",
+  "lifecycle_stage": "implementation",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "an implementation unit is approved/authorized and project-file changes are in scope"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/implementation-units/IU-<unit-id>.md",
+    "_hirmos/session/SESSION_CONTRACT.md",
+    "_hirmos/session/unresolved-items.md"
+  ],
+  "produces_artifacts": [
+    "project files when authorized",
+    "_hirmos/session/implementation-units/IU-<unit-id>.md",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "implementation-execution control",
+    "validation/evidence control"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

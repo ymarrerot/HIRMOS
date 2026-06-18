@@ -1,0 +1,14 @@
+{
+  "id": "python-backend",
+  "status": "installed",
+  "name": "Python Backend",
+  "purpose": "Guidance for Python backend services, APIs, workers, or data-processing code.",
+  "surfaces": [
+    "STACK_OVERVIEW.md",
+    "ENGINEERING_STACK_STANDARDS.md",
+    "STACK_COMMANDS.md",
+    "STACK_ARCHITECTURE_GUIDANCE.md",
+    "EXECUTION_STACK_RULES.md",
+    "EVIDENCE_COMMANDS.md"
+  ]
+}

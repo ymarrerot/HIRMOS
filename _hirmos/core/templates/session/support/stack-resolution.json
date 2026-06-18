@@ -1,0 +1,17 @@
+{
+  "active_stack": "generic",
+  "selection_source": "repository-evidence | system-state | user-request | prototype | config | default-generic",
+  "confidence": "high | medium | low | unknown",
+  "evidence": [
+    {
+      "source": "",
+      "finding": ""
+    }
+  ],
+  "stack_path": "_hirmos/stacks/<stack-id>",
+  "missing_surfaces": [],
+  "conflicts": [],
+  "decision": "use | generic-fallback | blocked",
+  "stack_contexts": [],
+  "notes": ""
+}

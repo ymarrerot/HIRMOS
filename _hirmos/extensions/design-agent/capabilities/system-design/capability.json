@@ -1,0 +1,34 @@
+{
+  "id": "system-design",
+  "extension": "design-agent",
+  "summary": "Define the product, technical, or system design needed to satisfy governed requirements and preserve system constraints.",
+  "lifecycle_stage": "design",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "Design must define architecture, behavior, data, workflow, integration, or preservation decisions"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/support/system-state.md",
+    "_hirmos/session/DESIGN.md"
+  ],
+  "produces_artifacts": [
+    "_hirmos/session/DESIGN.md",
+    "_hirmos/session/support/technical-review.md",
+    "_hirmos/session/unresolved-items.md",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "Design control",
+    "technical-review control",
+    "unresolved-item control when needed"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

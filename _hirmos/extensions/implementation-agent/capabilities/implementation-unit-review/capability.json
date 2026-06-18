@@ -1,0 +1,32 @@
+{
+  "id": "implementation-unit-review",
+  "extension": "implementation-agent",
+  "summary": "Review a completed implementation unit against its request, Session Contract, and evidence requirements.",
+  "lifecycle_stage": "implementation",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "an implementation unit has been executed or needs local review before completion"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/implementation-units/IU-<unit-id>.md",
+    "_hirmos/session/SESSION_CONTRACT.md",
+    "_hirmos/session/unresolved-items.md"
+  ],
+  "produces_artifacts": [
+    "_hirmos/session/implementation-units/IU-<unit-id>.md",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "unit-review control",
+    "validation/evidence control"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

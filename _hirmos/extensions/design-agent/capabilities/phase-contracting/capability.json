@@ -1,0 +1,41 @@
+{
+  "id": "phase-contracting",
+  "extension": "design-agent",
+  "summary": "Create or update separate durable Phase Contract files under an approved durable Delivery Plan.",
+  "lifecycle_stage": "design",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "Delivery Plan requires phases",
+      "multi-session delivery requires separate phase files",
+      "active session must be sourced from a phase",
+      "phase coverage or sequencing must be repaired",
+      "brownfield preservation risk requires bounded phase contracts"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md",
+    "_hirmos/session/DESIGN.md",
+    "_hirmos/session/SESSION_EXECUTION.md",
+    "_hirmos/session/unresolved-items.md"
+  ],
+  "produces_artifacts": [
+    "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md",
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md status/coverage update when needed",
+    "_hirmos/session/SESSION_EXECUTION.md",
+    "_hirmos/session/unresolved-items.md when phase blockers are found"
+  ],
+  "execution_controls": [
+    "phase-contracting control",
+    "delivery-plan coverage control",
+    "session-contract source-readiness control",
+    "unresolved-item control when needed"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "update-system-state",
+  "extension": "system-state-agent",
+  "summary": "Synchronize accepted outcomes into durable system state, preserve session history, and prepare future sessions without performing implementation.",
+  "lifecycle_stage": "update_system_state",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "hirmos close is invoked",
+      "completed outcomes must become durable accepted state",
+      "session history must be archived"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "produces_artifacts": [
+    "_hirmos/session/support/system-state-update.md",
+    "_hirmos/session/support/close-checklist.md",
+    "_hirmos/system/history/sessions/<session-id>/",
+    "_hirmos/system/accepted-state",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "Update System State control",
+    "archive control",
+    "validation/evidence control"
+  ],
+  "unresolved_items": {
+    "producer": false,
+    "required_when_material": false
+  }
+}

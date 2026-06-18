@@ -1,0 +1,14 @@
+{
+  "id": "generic",
+  "status": "installed",
+  "name": "Generic",
+  "purpose": "Use when no more specific installed stack can be selected safely or when evidence is insufficient.",
+  "surfaces": [
+    "STACK_OVERVIEW.md",
+    "ENGINEERING_STACK_STANDARDS.md",
+    "STACK_COMMANDS.md",
+    "STACK_ARCHITECTURE_GUIDANCE.md",
+    "EXECUTION_STACK_RULES.md",
+    "EVIDENCE_COMMANDS.md"
+  ]
+}

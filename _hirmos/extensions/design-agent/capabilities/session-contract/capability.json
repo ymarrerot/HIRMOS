@@ -1,0 +1,41 @@
+{
+  "id": "session-contract",
+  "extension": "design-agent",
+  "summary": "Create the active Session Contract from governed Design authority and, when applicable, a durable phase contract; require single-session safety evidence when delivery governance is not used.",
+  "lifecycle_stage": "design",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "Design must authorize Implementation",
+      "a bounded session needs contract authority before implementation or review",
+      "a durable phase is adopted into the active session",
+      "single-session work needs affirmative safety evidence",
+      "single-session safety evidence must be recorded before skipping durable delivery governance"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/DESIGN.md",
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md when Delivery-Need Classification is YES",
+    "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when Delivery-Need Classification is YES",
+    "_hirmos/session/unresolved-items.md",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "produces_artifacts": [
+    "_hirmos/session/SESSION_CONTRACT.md",
+    "_hirmos/session/SESSION_EXECUTION.md",
+    "_hirmos/session/unresolved-items.md when contract blockers are found"
+  ],
+  "execution_controls": [
+    "session-contract control",
+    "delivery-source-adoption control",
+    "implementation-authorization control",
+    "unresolved-item control"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

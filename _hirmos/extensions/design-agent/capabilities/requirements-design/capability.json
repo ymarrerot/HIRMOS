@@ -1,0 +1,35 @@
+{
+  "id": "requirements-design",
+  "extension": "design-agent",
+  "summary": "Convert User Request inputs and system-state findings into governed requirements authority.",
+  "lifecycle_stage": "design",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "request requires requirements authority",
+      "source inputs include requirement candidates",
+      "Design must produce or revise governed requirements"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/support/request-intake.md",
+    "_hirmos/session/support/system-state.md",
+    "_hirmos/session/unresolved-items.md"
+  ],
+  "produces_artifacts": [
+    "_hirmos/session/DESIGN.md",
+    "_hirmos/session/unresolved-items.md",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "Design control",
+    "unresolved-item control"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

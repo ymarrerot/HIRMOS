@@ -1,0 +1,34 @@
+{
+  "id": "validation-review",
+  "extension": "implementation-agent",
+  "summary": "Run or inspect stack/project validation evidence and decide whether evidence proves the active scope.",
+  "lifecycle_stage": "implementation",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "Implementation reached validation boundary",
+      "review-only or validation-only request requires evidence",
+      "close/update depends on validation evidence"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/SESSION_CONTRACT.md",
+    "_hirmos/session/unresolved-items.md",
+    "implementation evidence or review target"
+  ],
+  "produces_artifacts": [
+    "_hirmos/session/support/evidence-review.md",
+    "validation logs or evidence references",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "validation/evidence control"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

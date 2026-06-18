@@ -1,0 +1,31 @@
+{
+  "id": "source-material-ingestion",
+  "extension": "system-state-agent",
+  "summary": "Classify uploaded or referenced source material and extract focus signals without turning source material into authority.",
+  "lifecycle_stage": "understand_system_state",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "uploaded files, notes, tickets, screenshots, docs, or referenced source materials exist"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/support/request-intake.md"
+  ],
+  "produces_artifacts": [
+    "_hirmos/session/support/source-materials.md",
+    "_hirmos/session/unresolved-items.md",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "source input control",
+    "unresolved-item control when needed"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

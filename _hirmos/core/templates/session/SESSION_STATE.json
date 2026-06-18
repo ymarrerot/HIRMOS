@@ -1,0 +1,19 @@
+{
+  "schema_version": "session-state-v1",
+  "status": "idle",
+  "session_id": "",
+  "session_title": "",
+  "active_command": null,
+  "last_command": null,
+  "lifecycle_stage": "idle",
+  "continuation_pass": 0,
+  "pending_correction": false,
+  "allowed_next_commands": [
+    "hirmos start",
+    "hirmos status"
+  ],
+  "recommended_next_command": "hirmos start",
+  "blocking_reason": null,
+  "created_at": null,
+  "updated_at": null
+}

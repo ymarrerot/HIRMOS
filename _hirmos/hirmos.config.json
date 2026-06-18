@@ -1,0 +1,28 @@
+{
+  "framework": {
+    "name": "HIRMOS",
+    "version": "1.0.0",
+    "architecture": "current-state-first-orchestration"
+  },
+  "interaction_mode": "domain_expert",
+  "available_interaction_modes": [
+    "domain_expert",
+    "technical_supervisor",
+    "framework_diagnostics"
+  ],
+  "stack": {
+    "active_stack": "generic",
+    "available_stacks": [
+      "generic",
+      "nextjs-typescript",
+      "python-backend"
+    ],
+    "stack_contexts": []
+  },
+  "commands": [
+    "start",
+    "continue",
+    "status",
+    "close"
+  ]
+}

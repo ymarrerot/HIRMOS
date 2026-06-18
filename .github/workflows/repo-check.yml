@@ -1,0 +1,16 @@
+name: Repository Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Verify public repository surface
+        run: bash .github/scripts/verify-public-repo.sh

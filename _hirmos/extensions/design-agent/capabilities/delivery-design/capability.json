@@ -1,0 +1,41 @@
+{
+  "id": "delivery-design",
+  "extension": "design-agent",
+  "summary": "Create or update the durable Delivery Plan when multi-session delivery governance is required for any project type.",
+  "lifecycle_stage": "design",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "Delivery-Need Classification is YES",
+      "multi-session greenfield work",
+      "multi-session brownfield work",
+      "prototype-to-product delivery requires multiple sessions",
+      "request cannot be safely implemented as one bounded session",
+      "existing durable delivery plan must be updated"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/support/system-state.md",
+    "_hirmos/session/DESIGN.md",
+    "_hirmos/session/SESSION_EXECUTION.md",
+    "_hirmos/session/unresolved-items.md"
+  ],
+  "produces_artifacts": [
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md",
+    "_hirmos/session/SESSION_EXECUTION.md",
+    "_hirmos/session/unresolved-items.md when delivery blockers are found"
+  ],
+  "execution_controls": [
+    "Delivery-Need Classification Gate",
+    "durable-delivery-plan control",
+    "coverage-to-requirements control",
+    "unresolved-item control when needed"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

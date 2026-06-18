@@ -1,0 +1,40 @@
+{
+  "id": "implementation-readiness",
+  "extension": "design-agent",
+  "summary": "Determine whether Design has produced enough authority, unresolved-item disposition, durable delivery coverage when required, technical reviewability, and Session Contract scope for Implementation to begin.",
+  "lifecycle_stage": "design",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "Design is expected to authorize Implementation",
+      "Domain Expert start flow should advance to readiness when no gated items block it",
+      "Delivery-Need Classification gate must be evaluated before implementation readiness"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/DESIGN.md",
+    "_hirmos/session/SESSION_CONTRACT.md",
+    "_hirmos/session/unresolved-items.md",
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md when Delivery-Need Classification is YES",
+    "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when Delivery-Need Classification is YES",
+    "_hirmos/session/support/technical-review.md when applicable"
+  ],
+  "produces_artifacts": [
+    "_hirmos/session/support/implementation-readiness.md",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "implementation-readiness control",
+    "Delivery-Need Classification Gate",
+    "durable-delivery-source control",
+    "artifact-backed checkpoint control",
+    "unresolved-item control"
+  ],
+  "unresolved_items": {
+    "producer": false,
+    "required_when_material": false
+  }
+}

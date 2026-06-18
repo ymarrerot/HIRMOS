@@ -1,0 +1,34 @@
+{
+  "id": "implementation-unit-planning",
+  "extension": "implementation-agent",
+  "summary": "Turn an authorized Session Contract, Phase Contract, or Phase Contract into tailored implementation units.",
+  "lifecycle_stage": "implementation",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "Implementation is authorized",
+      "implementation units are needed to perform scoped work safely"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/SESSION_CONTRACT.md",
+    "_hirmos/session/unresolved-items.md",
+    "_hirmos/session/support/implementation-readiness.md"
+  ],
+  "produces_artifacts": [
+    "_hirmos/session/SESSION_CONTRACT.md Implementation Unit Plan section",
+    "_hirmos/session/implementation-units/IU-<unit-id>.md",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "implementation-unit control",
+    "implementation-authorization control"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

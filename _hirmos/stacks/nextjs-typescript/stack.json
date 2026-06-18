@@ -1,0 +1,14 @@
+{
+  "id": "nextjs-typescript",
+  "status": "installed",
+  "name": "Next.js TypeScript",
+  "purpose": "Guidance for Next.js projects using TypeScript and common React app structure.",
+  "surfaces": [
+    "STACK_OVERVIEW.md",
+    "ENGINEERING_STACK_STANDARDS.md",
+    "STACK_COMMANDS.md",
+    "STACK_ARCHITECTURE_GUIDANCE.md",
+    "EXECUTION_STACK_RULES.md",
+    "EVIDENCE_COMMANDS.md"
+  ]
+}

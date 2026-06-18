@@ -1,0 +1,22 @@
+{
+  "id": "design-agent",
+  "summary": "Design capabilities for governed requirements, system design, durable delivery planning, phase contracts, session contracts, technical review, and implementation readiness.",
+  "lifecycle_stages": [
+    "design"
+  ],
+  "capabilities": [
+    "requirements-design",
+    "system-design",
+    "delivery-design",
+    "phase-contracting",
+    "session-contract",
+    "technical-review",
+    "implementation-readiness"
+  ],
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "runtime": {
+    "identity": "Design Agent"
+  }
+}
