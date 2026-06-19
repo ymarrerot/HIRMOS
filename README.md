@@ -2,8 +2,6 @@
   <img src="assets/brand/hirmos-logo-primary-light-1200.png" alt="HIRMOS" width="360">
 </p>
 
-# HIRMOS
-
 **HIRMOS is an orchestration framework for AI-assisted software development.**
 
 HIRMOS helps AI coding agents work from the current state of a project, organize work into governed sessions, preserve decisions and evidence, and scale from small changes to larger deliveries without losing context.
