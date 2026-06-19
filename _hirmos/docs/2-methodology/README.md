@@ -2,7 +2,7 @@
 
 HIRMOS methodology is **Current-State-First Orchestrated Development**.
 
-HIRMOS starts from the current system state, turns requests and source material into governed design authority, implements accepted work with evidence, and updates durable current state so future sessions do not lose context.
+HIRMOS starts from the current system state, turns requests and source material into governed Design authority, realizes accepted Design through Implementation with evidence, and updates durable System State so future sessions do not lose context.
 
 This methodology keeps the rigor of spec-driven development, but does not require perfect upfront specs. A project may be greenfield, brownfield, or somewhere in between; HIRMOS starts by understanding the current system state, then activates the capabilities needed for the session.
 
@@ -23,10 +23,10 @@ The lifecycle is ordered, but not waterfall. If new evidence exposes missing fac
 
 ```text
 User Request focuses the work.
-System State grounds the work.
-Design governs what should happen.
+Understand System State grounds the work in current project truth.
+Design governs what should happen and what is allowed next.
 Implementation realizes accepted Design with evidence.
-Update System State preserves accepted outcomes.
+Update System State preserves accepted outcomes as durable system state.
 ```
 
 ## What “current-state-first” means

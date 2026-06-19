@@ -22,7 +22,7 @@ Lifecycle stages define the responsibility boundary. Extension capabilities are 
 
 ## User Request
 
-A User Request starts the work and shapes focused system-state understanding.
+A User Request starts and focuses the work, shaping focused system-state understanding.
 
 A User Request may include prose, uploaded requirements, tickets, screenshots, prototypes, proof-of-concept code, existing docs, or other source inputs.
 
@@ -36,7 +36,7 @@ A User Request is not:
 
 ## Understand System State
 
-Understand System State is mandatory before HIRMOS performs governed software work that designs, implements, validates, accepts, or changes anything about a software system.
+Understand System State grounds the session in current project truth and is mandatory before HIRMOS performs governed software work that designs, implements, validates, accepts, or changes anything about a software system.
 
 It owns:
 
@@ -60,7 +60,7 @@ It does not own:
 
 ## Design
 
-Design owns governed definition of what should be done and what is allowed to happen next.
+Design owns governed definition of what should happen and what is allowed next.
 
 It owns:
 
@@ -84,7 +84,7 @@ Design does not perform implementation or mutate accepted system state.
 
 ## Implementation
 
-Implementation is governed realization of accepted Design. It is not only coding.
+Implementation is governed realization of accepted Design with evidence. It is not only coding.
 
 It owns:
 
@@ -105,7 +105,7 @@ If Implementation discovers that Design or system-state evidence is wrong, incom
 
 ## Update System State
 
-Update System State converts completed, reviewed outcomes into durable accepted system state and session history.
+Update System State preserves accepted, reviewed outcomes as durable system state and session history.
 
 It owns:
 

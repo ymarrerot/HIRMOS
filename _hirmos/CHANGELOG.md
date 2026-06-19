@@ -14,6 +14,7 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 ### Changed
 
+- Standardized public lifecycle wording to `User Request → Understand System State → Design → Implementation → Update System State` across README and public documentation surfaces.
 - Clarified that `hirmos init` installs the latest GitHub framework release by default, while `hirmos init --version X.Y.Z` installs the matching GitHub framework release tag `vX.Y.Z`.
 - Updated release packaging guidance so users install from `hirmos-framework.zip`, not GitHub-generated source archives.
 

@@ -31,9 +31,9 @@ HIRMOS follows a current-state-first lifecycle:
 User Request
 ↓
 Understand System State
-→ Design the Work
-→ Implement with Evidence
-→ Update Current State
+→ Design
+→ Implementation
+→ Update System State
 ```
 
 The user request is the starting point, not the whole source of truth. HIRMOS starts by understanding the relevant current system state, then activates the capabilities needed for the session.
@@ -62,7 +62,7 @@ A HIRMOS-installed project includes a governed framework payload under `_hirmos/
 - recording execution progress and evidence in `SESSION_EXECUTION.md`;
 - using bounded implementation units when implementation is in scope;
 - reviewing completion before close;
-- updating durable current state for the next session.
+- updating durable system state for the next session.
 
 For larger work, HIRMOS can also organize delivery plans and phases so the project can continue safely across multiple sessions.
 

@@ -101,15 +101,15 @@ Understand System State
 → Update System State
 ```
 
-The User Request starts work and shapes focused system understanding. It is not governed requirements, design authority, implementation authorization, or accepted system state.
+The User Request starts and focuses the work. It is not governed requirements, Design authority, Implementation authorization, or accepted system state.
 
-Understand System State is mandatory for governed software work. It includes both general system-state understanding and request-focused system-state understanding.
+Understand System State is mandatory for governed software work. It grounds the session in current project truth through both general system-state understanding and request-focused system-state understanding.
 
 Design owns governed requirements, design, delivery planning, durable delivery plans, phase contracts, Session Contracts, decisions, completion criteria, and implementation authorization.
 
-Implementation owns governed realization of accepted Design, including implementation-unit planning, project-file changes, validation, review, retry, and evidence. It is not only coding.
+Implementation owns governed realization of accepted Design, including implementation-unit planning, project-file changes, validation, review, retry, and evidence. It realizes accepted Design with evidence; it is not only coding.
 
-Update System State owns accepted-state synchronization, session history, carry-forward records, close, and archive. It is not implementation.
+Update System State owns accepted-state synchronization, session history, carry-forward records, close, and archive. It preserves accepted outcomes as durable system state; it is not Implementation.
 
 The lifecycle is ordered but not waterfall. Later stages can discover new truth that requires route-back and regeneration by the owning earlier stage.
 

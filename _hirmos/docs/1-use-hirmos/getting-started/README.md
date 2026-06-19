@@ -29,6 +29,14 @@ Understand System State
 
 The lifecycle is ordered, but not waterfall. HIRMOS can route back when new facts, missing design authority, unresolved decisions, or failed evidence show that the current step is not ready.
 
+In this lifecycle:
+
+- User Request starts and focuses the work, but is not authority by itself.
+- Understand System State grounds the session in current project truth.
+- Design defines governed requirements, scope, and implementation readiness.
+- Implementation realizes accepted Design with evidence.
+- Update System State preserves accepted outcomes as durable system state.
+
 ## What the install looks like
 
 A normal install keeps your project files and adds one project-local framework folder:
