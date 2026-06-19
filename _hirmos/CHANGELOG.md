@@ -4,6 +4,25 @@ This changelog records user-visible changes to the HIRMOS framework payload.
 
 The framework version source of truth is `_hirmos/hirmos.config.json` under `framework.version`. This file explains what changed; it is not the machine-readable version source.
 
+## 1.0.2 — Lifecycle and CLI reference documentation alignment
+
+### Added
+
+- Added a dedicated CLI reference at `_hirmos/docs/reference/cli-reference.md` as the complete public guide for installing, checking, updating, and using the `hirmos` terminal CLI.
+- Added a dedicated framework command reference at `_hirmos/docs/reference/framework-command-reference.md` for AI-tool workflow commands such as `hirmos start`, `hirmos status`, `hirmos continue`, and `hirmos close`.
+
+### Changed
+
+- Standardized public lifecycle wording to `User Request → Understand System State → Design → Implementation → Update System State` across public README and documentation surfaces.
+- Updated CLI mentions in public getting-started and reference docs to point users to the dedicated CLI reference for complete usage.
+- Updated generated GitHub release notes to include the recommended `cd /your/project/path` install flow and a pointer to the CLI reference.
+- Cleaned public README branding so the logo acts as the primary HIRMOS heading without a duplicate `# HIRMOS` title.
+
+### Removed
+
+- Removed stale public lifecycle wording variants such as `Design the Work`, `Implement with Evidence`, and `Update Current State`.
+- Removed CLI usage details from the framework command reference so terminal CLI usage and AI-tool framework commands are documented separately.
+
 ## 1.0.1 — CLI publishing and release-note automation
 
 ### Added

@@ -11,6 +11,26 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 3. Avoid replacing `_hirmos/` in the middle of an unresolved implementation session when possible.
 4. Review the changelog for user-visible framework changes.
 
+## Upgrading from 1.0.1 to 1.0.2
+
+HIRMOS 1.0.2 is a documentation and release-note alignment update. It does not introduce a breaking framework migration.
+
+Recommended posture:
+
+1. Finish or pause any active HIRMOS session before replacing `_hirmos/`.
+2. Commit or back up the current project.
+3. Install the newer framework payload with the CLI or by replacing `_hirmos/` from `hirmos-framework.zip`.
+4. Use `_hirmos/docs/reference/cli-reference.md` for terminal CLI usage.
+5. Use `_hirmos/docs/reference/framework-command-reference.md` for AI-tool framework workflow commands.
+
+User-visible changes:
+
+- Public lifecycle wording is standardized as `User Request → Understand System State → Design → Implementation → Update System State`.
+- CLI usage now has a dedicated complete reference document.
+- Framework workflow commands and terminal CLI commands are documented separately.
+
+No session artifact migration is required.
+
 ## Upgrading from 1.0.0 to 1.0.1
 
 HIRMOS 1.0.1 is a documentation, release-packaging, and CLI-publishing guidance update. It does not introduce a breaking framework migration.

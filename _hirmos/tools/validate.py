@@ -218,7 +218,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'support/source-mat
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.0.1'
+expected_version = '1.0.2'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
