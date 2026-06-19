@@ -5,7 +5,7 @@ This is the lowest-cognitive-load path for using HIRMOS for the first time.
 If you only remember one thing from this page, remember this:
 
 ```text
-Use hirmos init to install HIRMOS and generate the integration file for your AI tool.
+Use `hirmos init` to install HIRMOS and generate the integration file for your AI tool. For the complete terminal CLI guide, see [CLI Reference](../../reference/cli-reference.md).
 ```
 
 That generated integration file is the normal bootstrap path. Directly prompting the agent to read `_hirmos/AGENTS.md` is the fallback when you are not using the CLI yet, installed manually, or the AI tool did not load its generated integration file.

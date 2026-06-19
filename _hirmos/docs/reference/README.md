@@ -7,7 +7,8 @@ Reference pages are practical orientation material. Core authority/protocol file
 ## Start here
 
 - [Artifact Model](artifact-model.md) — current HIRMOS artifact surfaces and their responsibilities.
-- [Command Reference](command-reference.md) — terminal CLI command vs AI-tool workflow commands.
+- [CLI Reference](cli-reference.md) — complete terminal CLI usage guide.
+- [Framework Command Reference](framework-command-reference.md) — AI-tool workflow commands used after HIRMOS bootstrap.
 - [Integration Tools](integration-tools.md) — supported AI-tool integrations and integration-template ownership.
 - [Runtime Surfaces](runtime-surfaces.md) — how install, framework, session, system, docs, and extension surfaces relate.
 - [Glossary](glossary.md) — common HIRMOS terms.
@@ -19,7 +20,8 @@ Reference pages are practical orientation material. Core authority/protocol file
 | Looking for... | Start with |
 |---|---|
 | What session files mean | [Artifact Model](artifact-model.md) |
-| Which commands are terminal vs AI-tool workflow commands | [Command Reference](command-reference.md) |
+| How to install, update, or run the terminal CLI | [CLI Reference](cli-reference.md) |
+| Which workflow commands to use inside an AI tool | [Framework Command Reference](framework-command-reference.md) |
 | Which AI tools HIRMOS supports | [Integration Tools](integration-tools.md) |
 | What `_hirmos/` areas are for | [Runtime Surfaces](runtime-surfaces.md) |
 | What a HIRMOS term means | [Glossary](glossary.md) |
@@ -29,7 +31,6 @@ Reference pages are practical orientation material. Core authority/protocol file
 ## Reference posture
 
 Reference pages should clarify names, surfaces, and responsibilities. They should not become a second copy of core protocols.
-
 
 ## Release notes and upgrades
 

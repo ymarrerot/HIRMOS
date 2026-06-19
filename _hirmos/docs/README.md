@@ -46,7 +46,8 @@ Start here:
 
 - [Reference](reference/README.md)
 - [Artifact Model](reference/artifact-model.md)
-- [Command Reference](reference/command-reference.md)
+- [CLI Reference](reference/cli-reference.md)
+- [Framework Command Reference](reference/framework-command-reference.md)
 - [Integration Tools](reference/integration-tools.md)
 - [Runtime Surfaces](reference/runtime-surfaces.md)
 - [Glossary](reference/glossary.md)
@@ -66,13 +67,14 @@ Start here:
 | Understand unresolved decisions and assumptions | [Unresolved Items](2-methodology/unresolved-items.md) |
 | Extend or contribute to HIRMOS | [Extend & Contribute](3-extend-contribute/README.md) |
 | Understand framework structure | [Framework Structure](3-extend-contribute/framework-structure.md) |
-| Understand terminal vs workflow commands | [Command Reference](reference/command-reference.md) |
+| Use the terminal CLI | [CLI Reference](reference/cli-reference.md) |
+| Use HIRMOS workflow commands inside an AI tool | [Framework Command Reference](reference/framework-command-reference.md) |
 | Understand AI-tool integrations | [Integration Tools](reference/integration-tools.md) |
 | Look up artifact names or terminology | [Reference](reference/README.md) |
 
 ## If you only remember one thing
 
-Use `hirmos init` to install the framework and generate the AI-tool integration file for your tool. That generated integration file is the normal bootstrap path.
+Use `hirmos init` to install the framework and generate the AI-tool integration file for your tool. That generated integration file is the normal bootstrap path. For complete CLI usage, including install, update, `--integration`, `--source`, `--version`, and `--offline`, see the [CLI Reference](reference/cli-reference.md).
 
 If you are not using the CLI yet, installed HIRMOS manually, or your AI tool did not load the generated integration file, use this fallback bootstrap prompt:
 

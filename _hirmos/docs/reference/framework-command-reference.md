@@ -1,29 +1,8 @@
-# Command Reference
+# Framework Command Reference
 
-This page summarizes the command surfaces users see when working with HIRMOS.
+This page summarizes the HIRMOS framework workflow commands used inside an AI coding tool after HIRMOS has been installed and bootstrapped.
 
-There are two different command layers:
-
-```text
-Terminal CLI command:
-  hirmos init
-
-Framework workflow commands inside an AI coding tool:
-  hirmos start
-  hirmos status
-  hirmos continue
-  hirmos close
-```
-
-Do not confuse these layers.
-
-## Terminal CLI command
-
-### `hirmos init`
-
-Run this in a project repository to install HIRMOS framework files and supported AI-tool integration files.
-
-The terminal CLI installs the framework payload. It does not run the HIRMOS software-work lifecycle by itself.
+For terminal CLI usage, see the complete [CLI Reference](cli-reference.md).
 
 ## Framework workflow commands
 
@@ -36,6 +15,8 @@ Read and follow _hirmos/AGENTS.md
 ```
 
 Then use framework workflow commands in the AI-agent conversation.
+
+These are not terminal CLI commands.
 
 ### `hirmos start "<request>"`
 
@@ -92,4 +73,3 @@ Expected behavior:
 HIRMOS workflow commands require AI-agent reasoning over the current project, source materials, artifacts, unresolved items, and implementation evidence. A thin shell command cannot perform that work honestly.
 
 The terminal CLI installs HIRMOS. The AI coding tool runs HIRMOS workflow through the framework instructions.
-

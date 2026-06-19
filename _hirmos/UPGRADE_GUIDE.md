@@ -11,6 +11,23 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 3. Avoid replacing `_hirmos/` in the middle of an unresolved implementation session when possible.
 4. Review the changelog for user-visible framework changes.
 
+## Upgrading from 1.0.0 to 1.0.1
+
+HIRMOS 1.0.1 is a documentation, release-packaging, and CLI-publishing guidance update. It does not introduce a breaking framework migration.
+
+Recommended posture:
+
+1. Finish or pause any active HIRMOS session before replacing `_hirmos/`.
+2. Commit or back up the current project.
+3. Install the newer framework payload with the CLI or by replacing `_hirmos/` from `hirmos-framework.zip`.
+4. Review `_hirmos/CHANGELOG.md` for user-visible changes.
+
+CLI note: the framework version and npm CLI package version may differ. To update the terminal CLI, run:
+
+```bash
+npm install -g hirmos@latest
+```
+
 ## Installing HIRMOS 1.0
 
 HIRMOS 1.0 is the initial public baseline. It is organized around current-state-first orchestration and governed session artifacts.

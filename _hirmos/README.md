@@ -66,18 +66,17 @@ For larger work, HIRMOS can also organize delivery plans and phases so the proje
 
 ## Install HIRMOS
 
-Install HIRMOS into a project with the CLI:
+Install the HIRMOS CLI from npm:
 
 ```bash
-hirmos init ./your-project --integration agents,cursor,claude
+npm install -g hirmos
 ```
 
-You can choose the integrations you use. For example:
+Then initialize HIRMOS inside your project:
 
 ```bash
-hirmos init --integration agents
-hirmos init --integration agents,cursor,copilot,codex
-hirmos init ./my-project --integration agents,claude,gemini,windsurf,kiro
+cd /your/project/path
+hirmos init
 ```
 
 A normal install adds the framework folder at the project root:
@@ -89,6 +88,8 @@ your-project/
 ```
 
 The CLI installs the framework payload and AI-tool integration files. It does not execute the HIRMOS workflow itself.
+
+For the complete CLI guide, including version checks, updates, `--integration`, `--source`, `--version`, and `--offline`, see [`docs/reference/cli-reference.md`](./docs/reference/cli-reference.md).
 
 ## Use HIRMOS inside your AI coding tool
 

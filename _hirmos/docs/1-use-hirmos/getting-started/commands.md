@@ -11,11 +11,7 @@ hirmos close
 
 These are framework workflow commands used inside the AI-agent conversation after bootstrap. They are not terminal CLI commands.
 
-The terminal CLI is currently focused on installation and integration setup, especially:
-
-```bash
-hirmos init
-```
+The terminal CLI is focused on installation and integration setup. For complete CLI usage, see [CLI Reference](../../reference/cli-reference.md).
 
 ## `hirmos start`
 

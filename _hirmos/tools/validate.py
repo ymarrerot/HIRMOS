@@ -109,7 +109,8 @@ required = [
     'docs/3-extend-contribute/validation.md',
     'docs/reference/README.md',
     'docs/reference/artifact-model.md',
-    'docs/reference/command-reference.md',
+    'docs/reference/cli-reference.md',
+    'docs/reference/framework-command-reference.md',
     'docs/reference/integration-tools.md',
     'docs/reference/runtime-surfaces.md',
     'docs/reference/glossary.md',
@@ -187,7 +188,8 @@ for rel, phrases in {
     'docs/3-extend-contribute/framework-structure.md': ['Public repository surface', 'Framework version metadata', 'Docs vs protocols'],
     'docs/3-extend-contribute/capabilities-and-entrypoints.md': ['Canonical entrypoint surfaces', 'Execution contract'],
     'docs/3-extend-contribute/validation.md': ['Public repository validation', 'Maintainer validation'],
-    'docs/reference/command-reference.md': ['Terminal CLI command', 'Framework workflow commands'],
+    'docs/reference/cli-reference.md': ['hirmos init [project-path]', '--integration', '--source', '--version', '--offline'],
+    'docs/reference/framework-command-reference.md': ['Framework workflow commands', 'hirmos start', 'hirmos continue', 'hirmos close'],
     'docs/reference/integration-tools.md': ['Supported integrations', 'canonical integration registry'],
 }.items():
     body = (root / rel).read_text()
@@ -216,7 +218,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'support/source-mat
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.0.0'
+expected_version = '1.0.1'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)

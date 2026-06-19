@@ -10,13 +10,22 @@ The installed framework folder is self-contained and should live beside your pro
 
 ## Install with the CLI
 
-From the project root, run:
+Install the HIRMOS CLI from npm:
 
 ```bash
+npm install -g hirmos
+```
+
+Then initialize HIRMOS inside your project:
+
+```bash
+cd /your/project/path
 hirmos init
 ```
 
 The CLI installs the framework payload and selected AI-tool integration files. It does not own the framework method, session lifecycle, or integration templates.
+
+For the complete CLI guide, including version checks, updates, `--integration`, `--source`, `--version`, and `--offline`, see [CLI Reference](../../reference/cli-reference.md).
 
 The canonical integration registry and templates live inside the framework payload:
 
@@ -85,7 +94,7 @@ hirmos status
 hirmos close
 ```
 
-These are agent-facing HIRMOS commands used inside the AI-tool conversation. They are not terminal CLI commands.
+These are agent-facing HIRMOS commands used inside the AI-tool conversation. They are not terminal CLI commands. See [Framework Command Reference](../../reference/framework-command-reference.md).
 
 ## Validate an installation
 

@@ -4,6 +4,29 @@ This changelog records user-visible changes to the HIRMOS framework payload.
 
 The framework version source of truth is `_hirmos/hirmos.config.json` under `framework.version`. This file explains what changed; it is not the machine-readable version source.
 
+## 1.0.1 — CLI publishing and release-note automation
+
+### Added
+
+- Added public-facing CLI install, version-check, and update instructions across the README and getting-started documentation.
+- Added documentation for the split release model: HIRMOS framework versions align with GitHub framework release tags, while the `hirmos` npm CLI package may use a different npm version because npm package history cannot be reset.
+- Added generated GitHub release notes support that derives the framework version and release-specific change summary from this changelog.
+
+### Changed
+
+- Clarified that `hirmos init` installs the latest GitHub framework release by default, while `hirmos init --version X.Y.Z` installs the matching GitHub framework release tag `vX.Y.Z`.
+- Updated release packaging guidance so users install from `hirmos-framework.zip`, not GitHub-generated source archives.
+
+### Fixed
+
+- Ignored local CLI dependency and packaging artifacts such as `tools/cli/node_modules/`, npm tarballs, logs, coverage output, and TypeScript build-info files.
+
+### Upgrade notes
+
+- No breaking framework migration is required from 1.0.0 to 1.0.1.
+- Existing projects may continue using their current `_hirmos/` payload, or install 1.0.1 when they want the updated documentation and release metadata.
+- CLI npm package updates are managed separately from the framework version; use `npm install -g hirmos@latest` to update the terminal CLI.
+
 ## 1.0.0 — Initial public baseline
 
 ### Added

@@ -6,13 +6,21 @@ Use this path when you want the shortest practical first run.
 
 Install HIRMOS into the project you want the AI agent to work on. A normal installation adds a project-local `_hirmos/` folder and tool-specific integration files.
 
-If you are using the CLI installer, the terminal command is:
+If the CLI is not installed yet, install it from npm:
+
+```bash
+npm install -g hirmos
+```
+
+Then run the installer from the project root:
 
 ```bash
 hirmos init
 ```
 
 The terminal CLI installs HIRMOS. It does not run `hirmos start`, `hirmos continue`, `hirmos status`, or `hirmos close`.
+
+For the complete CLI guide, including update checks and advanced install options, see [CLI Reference](../../reference/cli-reference.md).
 
 ## 2. Bootstrap the AI tool
 
