@@ -8,7 +8,7 @@ Review all implementation units together against the Session Contract, delivery/
 
 ### Produces
 
-- `_hirmos/session/session-contract-review.md` updates
+- `_hirmos/session/SESSION_CONTRACT.md` section 11 updates
 - `_hirmos/session/SESSION_CONTRACT.md` final-verdict mirror updates
 - `_hirmos/session/SESSION_EXECUTION.md` implementation-completion gate
 
@@ -31,14 +31,14 @@ Review all implementation units together against the Session Contract, delivery/
 
 - `_hirmos/session/SESSION_CONTRACT.md`
 - `_hirmos/session/unresolved-items.md`
-- `_hirmos/session/session-contract-review.md`
+- `_hirmos/session/SESSION_CONTRACT.md` section 11
 - all applicable `_hirmos/session/implementation-units/IU-xx.md` artifacts
 - validation/evidence appendices when applicable
 
 ## Execution controls contributed
 
 - session implementation review control
-- Session Contract Review completion control
+- `SESSION_CONTRACT.md` section 11 review completion control
 - Update System State readiness contribution
 
 ## Method
@@ -50,11 +50,11 @@ Session implementation review is the aggregate review above local unit review. I
 1. Inspect every applicable IU artifact.
 2. Confirm every completed unit contains execution evidence and a Unit Review verdict.
 3. Confirm the combined units satisfy 100% of `SESSION_CONTRACT.md`, or record exact gaps/deferred items/blockers.
-4. Complete `_hirmos/session/session-contract-review.md` promised-vs-verified coverage.
+4. Complete `_hirmos/session/SESSION_CONTRACT.md` section 11 promised-vs-verified coverage.
 5. Reconcile unresolved items by direct review of `_hirmos/session/unresolved-items.md`.
 6. Decide whether implementation completion may be claimed or must fail closed.
 
-Implementation completion cannot be claimed merely because all individual units passed; the combined implementation must satisfy the Session Contract or explicitly fail/partial/defer under the Session Contract Review rules.
+Implementation completion cannot be claimed merely because all individual units passed; the combined implementation must satisfy the Session Contract or explicitly fail/partial/defer under the `SESSION_CONTRACT.md` section 11 review rules.
 
 
 

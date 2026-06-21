@@ -15,10 +15,10 @@ It is intentionally compact and operational. It is not a heavyweight software re
 | Surface | Responsibility |
 |---|---|
 | Raw source inputs | Original user-provided material. Examples: `_hirmos/inputs/uploads/requirements.txt`, prototype files, UI notes, reference material, conversation context. |
-| `support/source-materials.md` / `support/prototype-ingestion.md` | Source inventory and evidence extraction from raw material. Prototype-derived findings remain evidence, not accepted requirements. |
+| `DESIGN.md` source matrix / `DESIGN.md` source matrix | Source inventory and evidence extraction from raw material. Prototype-derived findings remain evidence, not accepted requirements. |
 | `REQUIREMENTS_BASELINE.md` | Normalized accepted requirement universe, requirement IDs, source mapping, scope classification, unresolved/gated requirements, delivery-unit mapping, and coverage status. |
 | `DESIGN.md` / `DELIVERY_PLAN.md` | Design decisions and delivery decomposition based on the accepted requirements baseline. |
-| `support/claim-reconciliation.md` / evidence artifacts | Evidence for claims that requirements were implemented, verified, blocked, or deferred. |
+| `EVIDENCE.md` claim reconciliation / evidence artifacts | Evidence for claims that requirements were implemented, verified, blocked, or deferred. |
 | `CURRENT_SYSTEM_STATE.md` | Merged accepted current truth after close; it references the accepted requirements baseline but does not replace it. |
 
 Firm rule: raw requirement notes are not governed requirements until normalized into `REQUIREMENTS_BASELINE.md` or explicitly classified as out of scope, gated, blocked, duplicate, superseded, or not applicable.
@@ -105,7 +105,7 @@ NOT_APPLICABLE
 REJECTED
 ```
 
-Coverage status is a requirement-coverage status, not evidence status. Evidence status must use canonical claim/evidence states from `support/claim-reconciliation.md`.
+Coverage status is a requirement-coverage status, not evidence status. Evidence status must use canonical claim/evidence states from `EVIDENCE.md` claim reconciliation.
 
 ## Requirements baseline required sections
 
@@ -155,8 +155,8 @@ Acceptable source references include:
 - prototype ingestion artifact section;
 - source materials artifact section;
 - accepted prior requirements baseline ID;
-- user-approved decision/checkpoint artifact;
-- conversation-derived request, when recorded in `support/request-intake.md`.
+- user-approved decision/Current Continuation Snapshot;
+- conversation-derived request, when recorded in `SESSION_CONTRACT.md` parent authority.
 
 Do not silently promote prototype behavior, UI design notes, research-backed defaults, or model assumptions into confirmed requirements.
 
@@ -198,7 +198,7 @@ HIRMOS may receive several requirements-oriented source layers at once: raw note
 
 Use this two-step model:
 
-1. **Intake extraction** — `support/source-materials.md` and `support/prototype-ingestion.md` classify and extract evidence, assumptions, conflicts, delivery-target signals, and candidate requirement signals. These artifacts are governed intake artifacts, not requirements authority.
+1. **Intake extraction** — `DESIGN.md` source matrix and `DESIGN.md` source matrix classify and extract evidence, assumptions, conflicts, delivery-target signals, and candidate requirement signals. These artifacts are governed intake artifacts, not requirements authority.
 2. **Requirements baseline** — `REQUIREMENTS_BASELINE.md` converts accepted, assumption-based, gated, rejected, deferred, duplicate, superseded, and not-applicable requirement signals into a stable requirement catalog with source traceability and coverage mapping.
 
 Firm rule: a source signal is not accepted requirement truth merely because it appears in a raw upload, prototype, screenshot, generated app, or research note. It becomes governed requirements authority only when represented in `REQUIREMENTS_BASELINE.md` with source traceability, class, scope status, and uncertainty handling.
@@ -256,7 +256,7 @@ If a developer could reasonably ask “what should happen here?” for a materia
 
 ## Multiple-prototype intake rule
 
-When prototype-like inputs exist, `support/prototype-ingestion.md` must make clear whether there is one prototype or multiple prototype candidates.
+When prototype-like inputs exist, `DESIGN.md` source matrix must make clear whether there is one prototype or multiple prototype candidates.
 
 If multiple prototypes exist, HIRMOS must preserve two layers of evidence before requirements normalization:
 
@@ -330,7 +330,7 @@ Fail closed or route back when:
 
 ## Cross-run coverage synthesis rule
 
-When HIRMOS has access to multiple implementation candidates, self-runs, prototypes, generated apps, UX drafts, OpenSpec outputs, or comparable source packages, requirements coverage must be judged against the accepted `REQUIREMENTS_BASELINE.md`, not against the apparent completeness of any one candidate.
+When HIRMOS has access to multiple implementation candidates, self-runs, prototypes, generated apps, UX drafts, external spec-tool outputs, or comparable source packages, requirements coverage must be judged against the accepted `REQUIREMENTS_BASELINE.md`, not against the apparent completeness of any one candidate.
 
 Cross-run sources are evidence inputs. They may reveal missed requirements, stronger UX patterns, better tests, cleaner specifications, or stronger package hygiene, but they do not become requirements authority until their lessons are normalized into the requirements baseline, delivery plan, technical review, or carry-forward state.
 
@@ -343,4 +343,4 @@ Before claiming total or near-total requirements coverage, HIRMOS must check:
 - non-goals are preserved so the implementation does not overbuild;
 - each requirement has a delivery-unit mapping, a coverage status, and an evidence/carry-forward posture.
 
-Firm rule: do not claim `100% requirements coverage`, `complete MVP coverage`, or equivalent unless `REQUIREMENTS_BASELINE.md` supports that claim and `support/claim-reconciliation.md` records the evidence status for the coverage claim.
+Firm rule: do not claim `100% requirements coverage`, `complete MVP coverage`, or equivalent unless `REQUIREMENTS_BASELINE.md` supports that claim and `EVIDENCE.md` claim reconciliation records the evidence status for the coverage claim.

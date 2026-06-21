@@ -54,7 +54,7 @@ NOT_APPLICABLE
 
 ## Required Item Detail Blocks
 
-Every material unresolved item must preserve the minimum fields from `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`. Do not rely on summary tables when details are needed for user review, implementation, continuation, close, or future revalidation.
+Every material unresolved item must preserve the minimum fields from `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`, including `NON_GATING` items. Non-gating items are governed decisions or assumptions, not casual notes; they can hide risky shortcuts, deferred choices, or assumptions that must remain visible. Do not rely on summary tables when details are needed for user review, implementation, continuation, close, or future revalidation.
 
 ### `<ITEM-ID>` — `<Title>`
 
@@ -145,7 +145,7 @@ Prepare the concise user-facing unresolved-item basis for the next governed chec
 ### Checkpoint terminal state supported
 
 - Terminal state:
-- Backing checkpoint artifact:
+- Backing Current Continuation Snapshot:
 - Next allowed action:
 
 ## Accepted Assumptions and Carry-Forward Records

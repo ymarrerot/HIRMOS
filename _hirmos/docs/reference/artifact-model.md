@@ -1,33 +1,52 @@
 # Artifact Model Reference
 
-HIRMOS uses a contract-centered artifact model.
+HIRMOS uses a strict-necessity, contract-centered artifact model.
 
 ## Active session artifacts
 
-Active session artifacts use the active session spine below.
+Active session artifacts are governed by the strict-necessity surface below.
 
-## Active session spine
+## Active session surface
+
+New active-session artifacts should exist only when they are strictly necessary for one of these purposes:
+
+- authority;
+- machine state;
+- evidence;
+- gating;
+- continuity;
+- audit/history.
+
+If content is useful but does not need to exist as a separate artifact, keep it inside a major artifact section or omit it.
 
 ```text
 _hirmos/session/
   SESSION_STATE.json
-  SESSION_CONTRACT.md
+  SESSION_CONTRACT.md        # includes section 11 close verification
   SESSION_EXECUTION.md
   unresolved-items.md
-  session-contract-review.md
-  implementation-units/
-  checkpoints/
-  support/
+  REQUIREMENTS_BASELINE.md   # conditional requirements authority
+  DESIGN.md                  # conditional design authority
+  EVIDENCE.md                # conditional nontrivial evidence surface
+  implementation-units/      # conditional implementation-unit contracts/reviews
+  bootstrap/                 # required session infrastructure; bootstrap report required for governed session startup
+  stack-resolution.json       # conditional machine-readable stack routing only
 ```
 
-- `SESSION_STATE.json`: machine-readable command/lifecycle state.
-- `SESSION_CONTRACT.md`: active session scope, acceptance, coverage, and close verification authority.
-- `SESSION_EXECUTION.md`: linear execution-control spine and evidence ledger.
+## Major artifacts
+
+- `SESSION_STATE.json`: minimal machine-readable command/lifecycle state only; it does not carry narrative continuation handoff content.
+- `SESSION_CONTRACT.md`: active session scope, accepted constraints, completion criteria, production-shaped engineering gate, and section 11 close verification.
+- `SESSION_EXECUTION.md`: human-readable Current Continuation Snapshot, append-only execution-control spine, command timeline, evidence ledger, close/update controls, and next-action discipline.
 - `unresolved-items.md`: governed register for gated items, non-gating assumptions, technical-review items, dispositions, and revalidation.
-- `session-contract-review.md`: governed fast-access promised-vs-verified review and fail-closed verdict for implementation completion and close.
-- `implementation-units/IU-xx.md`: self-contained unit contract, evidence, review, and retries.
-- `checkpoints/`: user-facing lifecycle boundary receipts.
-- `support/`: evidence appendices only; not a source of session scope or final contract review authority.
+- `REQUIREMENTS_BASELINE.md`: conditional governed requirements and coverage authority.
+- `DESIGN.md`: conditional governed design and implementation-readiness authority.
+- `EVIDENCE.md`: conditional evidence surface for nontrivial validation, runtime, production-shaped engineering, and close support.
+- `implementation-units/IU-xx.md`: conditional unit-level contract, evidence, review, and retry surface.
+- `bootstrap/BOOTSTRAP_REPORT.md`: required bootstrap report for governed session startup and new-chat continuity.
+- `stack-resolution.json`: conditional machine-readable stack-routing state only.
+
+Former separate support files such as request intake, source materials, technical review, implementation readiness, runtime evidence, close checklist, claim reconciliation, archive manifest, and session-contract review are not part of the default active-session model. Their responsibilities belong in the major artifacts above.
 
 ## Source inputs
 
@@ -48,12 +67,14 @@ Durable current truth lives in `_hirmos/system/accepted-state/CURRENT_SYSTEM_STA
 
 ## Delivery plans
 
-Multi-session delivery plans live under:
+Durable multi-session delivery plans live under:
 
 ```text
 _hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md
 _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
 ```
+
+Use durable delivery artifacts only when the work cannot be safely governed as one session with implementation units. This applies to greenfield, brownfield, mixed, and unknown project types.
 
 ## Archive history
 
@@ -62,12 +83,3 @@ Closed sessions are archived under `_hirmos/system/history/sessions/<session-id>
 ## Archive history vs accepted state
 
 Archive history preserves evidence. Accepted current system state must be merged into `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` through governed close/update-state controls.
-
-## Durable delivery authority
-
-```text
-_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md
-_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
-```
-
-For multi-session work in any project type, these durable artifacts are required. Session-local delivery files are not canonical delivery authority.

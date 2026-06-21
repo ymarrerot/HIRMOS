@@ -152,8 +152,8 @@ Use `LOCAL_TECHNICAL_SETUP_AND_ROLE_WORKFLOW_SMOKE_CHECKS.md` for the governing 
 
 Required artifacts when applicable:
 
-- `_hirmos/session/support/local-runtime-evidence.md` records local environment, service, migration, seed, dev-server, and route evidence.
-- `_hirmos/session/support/role-workflow-smoke.md` records patient/staff/provider/manager/admin workflow smoke evidence.
-- `_hirmos/session/support/claim-reconciliation.md` reconciles whether the claim may be surfaced.
+- `_hirmos/session/EVIDENCE.md` records local environment, service, migration, seed, dev-server, and route evidence.
+- `_hirmos/session/EVIDENCE.md` records role-specific workflow smoke evidence for the relevant end-user, operator, privileged-user, and administrative paths.
+- `_hirmos/session/EVIDENCE.md` reconciles whether the claim may be surfaced.
 
 Firm rule: tests/build/lint alone do not prove local runtime readiness or role workflow readiness.

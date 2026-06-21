@@ -29,18 +29,18 @@ Convert User Request inputs, source materials, prototype findings, and system-st
 
 ## Required inputs
 
-- `_hirmos/session/support/request-intake.md`
-- `_hirmos/session/support/source-materials.md when source inputs exist`
+- `_hirmos/session/SESSION_CONTRACT.md`
+- `_hirmos/session/DESIGN.md source matrix when source inputs exist`
 - `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, when raw source files are present`
-- `_hirmos/session/support/prototype-ingestion.md when prototype/POC inputs exist`
-- `_hirmos/session/support/system-state.md`
+- `_hirmos/session/DESIGN.md source matrix when prototype/POC inputs exist`
+- `_hirmos/session/DESIGN.md`
 - `_hirmos/session/unresolved-items.md`
 
 ## Execution controls contributed
 
 - Design control
 - unresolved-item control
-- artifact-backed checkpoint control
+- snapshot-backed checkpoint control
 
 ## Method
 
@@ -50,7 +50,7 @@ This capability inherits shared extension rules from `_hirmos/extensions/design-
 
 When converting intake artifacts into governed requirements, preserve distinctions between confirmed source signals, assumptions, research-backed defaults, declared delivery targets, proposed delivery targets, open questions, pending confirmation items, prototype observed behavior, prototype intended behavior, prototype variants, and prototype conflicts.
 
-If multiple prototype inputs exist, require prototype-set reconciliation in `_hirmos/session/support/prototype-ingestion.md` before Design relies on prototype-derived requirements. If reconciliation is missing or blocked, set Design to `ROUTE_BACK_REQUIRED`, `NEEDS_USER_DECISION`, or `BLOCKED`.
+If multiple prototype inputs exist, require prototype-set reconciliation in `_hirmos/session/DESIGN.md` before Design relies on prototype-derived requirements. If reconciliation is missing or blocked, set Design to `ROUTE_BACK_REQUIRED`, `NEEDS_USER_DECISION`, or `BLOCKED`.
 
 Workflow-heavy requirements must not remain vague catalog rows. Add detailed requirement records or route unresolved behavior into `unresolved-items.md`.
 
@@ -88,7 +88,7 @@ Record full item fields in `unresolved-items.md`, including current status, down
 
 When material runtime services are involved, follow `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`.
 
-Record or consume `_hirmos/session/support/runtime-integration-readiness.md` as required by execution controls.
+Record or consume `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` as required by execution controls.
 
 Do not claim fixture/mock/boundary/local/production integration levels beyond what the active artifacts and evidence support.
 

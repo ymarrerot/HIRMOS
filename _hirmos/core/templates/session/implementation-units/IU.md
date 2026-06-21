@@ -205,7 +205,7 @@ Append retry sections here when a retry is required. Do not create a separate re
 - Session Contract coverage item(s) satisfied:
 - Remaining gaps:
 - Carry-forward candidates:
-- Session Contract Review impact:
+- `SESSION_CONTRACT.md` section 11 review impact:
 
 
 ## Phase Acceptance Evidence Contribution

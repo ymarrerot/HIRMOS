@@ -89,7 +89,7 @@ When the active request may involve material runtime services, read `_hirmos/cor
 
 Required behavior:
 
-- instantiate or update `_hirmos/session/support/runtime-integration-readiness.md` when material integration areas affect Design, Implementation, evidence, production readiness, or close;
+- instantiate or update `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` when material integration areas affect Design, Implementation, evidence, production readiness, or close;
 - do not silently downgrade real integration requirements to fixtures, mocks, console fallbacks, or boundary-only work;
 - do not surface low-level provider choices to Domain Expert users unless the protocol requires surfacing;
 - do not claim implementation completion, production readiness, or close success beyond the integration posture supported by evidence.
@@ -119,7 +119,7 @@ After normal close, `hirmos status` must report:
 - carry-forward items path;
 - one primary next command/action when supported.
 
-If `_hirmos/session/SESSION_STATE.json` claims an active session after close while the archive or close checklist claims success, status must report an integrity conflict instead of trusting either surface silently.
+If `_hirmos/session/SESSION_STATE.json` claims an active session after close while the archive or close controls claim success, status must report an integrity conflict instead of trusting either surface silently.
 
 ## Claim reconciliation behavior
 

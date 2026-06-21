@@ -9,7 +9,7 @@ Produce system/application design from governed requirements and system-state ev
 ### Produces
 
 - `_hirmos/session/DESIGN.md system/application design section`
-- `_hirmos/session/support/technical-review.md when technical assumptions or risks exist`
+- `_hirmos/session/DESIGN.md technical review when technical assumptions or risks exist`
 - `_hirmos/session/unresolved-items.md updates`
 - `_hirmos/session/SESSION_EXECUTION.md Design control updates`
 
@@ -30,7 +30,7 @@ Produce system/application design from governed requirements and system-state ev
 ## Required inputs
 
 - `_hirmos/session/DESIGN.md governed requirements section`
-- `_hirmos/session/support/system-state.md`
+- `_hirmos/session/DESIGN.md`
 - `_hirmos/session/unresolved-items.md`
 - stack/project-type evidence when available
 
@@ -78,6 +78,6 @@ Record full item fields in `unresolved-items.md`, including current status, down
 
 When material runtime services are involved, follow `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`.
 
-Record or consume `_hirmos/session/support/runtime-integration-readiness.md` as required by execution controls.
+Record or consume `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` as required by execution controls.
 
 Do not claim fixture/mock/boundary/local/production integration levels beyond what the active artifacts and evidence support.

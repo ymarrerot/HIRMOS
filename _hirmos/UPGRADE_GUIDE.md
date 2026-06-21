@@ -11,6 +11,28 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 3. Avoid replacing `_hirmos/` in the middle of an unresolved implementation session when possible.
 4. Review the changelog for user-visible framework changes.
 
+
+## Upgrading from 1.0.2 to 1.0.3
+
+HIRMOS 1.0.3 is a production-shaped doctrine, delivery-shape, and artifact-simplification update. It changes the expected shape of new HIRMOS sessions, but it does not require migration of existing archived sessions.
+
+Recommended posture:
+
+1. Finish or pause any active HIRMOS session before replacing `_hirmos/`.
+2. Commit or back up the current project.
+3. Install the newer framework payload with the CLI or by replacing `_hirmos/` from `hirmos-framework.zip`.
+4. For active sessions created under an older artifact model, either finish them with the old model or restart the session using the 1.0.3 session surface.
+5. For new implementation-capable work, expect HIRMOS to apply production-shaped engineering checks before implementation and at close.
+
+User-visible changes:
+
+- Production-shaped implementation is now a core HIRMOS posture, not only stack-specific advice.
+- Delivery-shape selection now prefers the smallest sufficient governed delivery shape across greenfield, brownfield, and mixed work.
+- The active session surface is simpler: continuation lives in `SESSION_EXECUTION.md`, machine state lives in `SESSION_STATE.json`, stack routing uses root `stack-resolution.json`, and the former `support/` and `checkpoints/` artifact models are removed.
+- Separate artifacts are justified only when they are strictly necessary for authority, machine state, evidence, gating, continuity, or audit/history.
+
+No archived-session migration is required. Existing projects may continue current sessions under their current artifact model, but new sessions should use the 1.0.3 model.
+
 ## Upgrading from 1.0.1 to 1.0.2
 
 HIRMOS 1.0.2 is a documentation and release-note alignment update. It does not introduce a breaking framework migration.

@@ -10,7 +10,7 @@ Authoritative active-session register:
 _hirmos/session/unresolved-items.md
 ```
 
-`SESSION_CONTRACT.md` may contain a compact control summary, but that summary is not sufficient for review, implementation, continuation, checkpointing, or close. HIRMOS must read and apply the register directly before every lifecycle boundary.
+`SESSION_CONTRACT.md` may contain a compact control summary, but that summary is not sufficient for review, implementation, continuation, continuation checkpointing, or close. HIRMOS must read and apply the register directly before every lifecycle boundary.
 
 ## The simple idea
 

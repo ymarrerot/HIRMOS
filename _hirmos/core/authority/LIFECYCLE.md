@@ -16,6 +16,15 @@ Understand System State
 
 This is an ordered governance lifecycle, not a waterfall and not a loose capability bag.
 
+## Production-shaped implementation posture
+
+HIRMOS implementation aims to produce production-shaped software by default. A session may intentionally produce a prototype, demo, fixture, local-only result, or throwaway experiment, but that limitation must be explicitly authorized in `SESSION_CONTRACT.md`, reflected in Design when Design is active, and preserved during Update System State.
+
+Production-shaped does not mean enterprise-grade, cloud-only, overbuilt, or fully deployed. It means the implementation should follow the architecture shape that would reasonably support production use for the requested system: durable data where durability matters, production-aligned local infrastructure where practical, real integration boundaries, safe secret/configuration handling, long-running work outside synchronous request paths, and evidence for critical flows.
+
+Core HIRMOS owns this posture. Selected-stack standards translate it into stack-specific defaults.
+
+
 Extension capabilities execute inside lifecycle-stage responsibilities. They do not replace the lifecycle.
 
 Lifecycle stages define the responsibility boundary. Extension capabilities are activated only when the active lifecycle stage needs specialized work to satisfy that boundary. Command-driven capability activation is governed by `_hirmos/core/protocol/COMMANDS.md`; capability discovery, routing, entrypoint resolution, and capability-decision recording are governed by `_hirmos/core/protocol/CAPABILITY_ROUTING.md`.

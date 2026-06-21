@@ -57,7 +57,7 @@ Routing must consider:
 11. Installed extension manifests.
 12. Installed capability manifests.
 
-Project type and stack decisions recorded in `support/project-context.md`, `support/stack-resolution.json`, and `SESSION_EXECUTION.md` may require, skip, or shape capabilities. They do not replace lifecycle authority.
+Project type and stack decisions recorded in `DESIGN.md`, `SESSION_CONTRACT.md`, `stack-resolution.json`, and `SESSION_EXECUTION.md` may require, skip, or shape capabilities. They do not replace lifecycle authority.
 
 Rules:
 
@@ -247,7 +247,7 @@ Interaction modes change how capability routing is surfaced, not whether routing
 
 ## Governed checkpoint contribution rule
 
-When a capability result creates a user-facing decision, readiness claim, completion claim, blocker, or route-back, the capability must provide enough information for the active checkpoint artifact.
+When a capability result creates a user-facing decision, readiness claim, completion claim, blocker, or route-back, the capability must provide enough information for the active Current Continuation Snapshot.
 
 At minimum, the capability must identify:
 

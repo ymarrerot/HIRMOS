@@ -14,11 +14,11 @@
     ]
   },
   "requires_artifacts": [
-    "_hirmos/session/support/system-state.md",
+    "_hirmos/session/DESIGN.md current-state basis",
     "_hirmos/session/DESIGN.md"
   ],
   "produces_artifacts": [
-    "_hirmos/session/support/technical-review.md",
+    "_hirmos/session/DESIGN.md technical review",
     "_hirmos/session/unresolved-items.md",
     "_hirmos/session/SESSION_EXECUTION.md"
   ],

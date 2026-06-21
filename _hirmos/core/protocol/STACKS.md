@@ -11,6 +11,13 @@ HIRMOS is single-stack by default and multi-stack aware by evidence.
 
 Project-wide `active_stack` is the normal path. Stack contexts are optional and activate only when repository evidence, accepted system state, or explicit configuration shows multiple bounded stack areas.
 
+
+## Production-shaped stack use
+
+Stack packages are not passive suggestions. When a selected stack has engineering standards, HIRMOS must use them to preserve production-shaped implementation unless repository evidence or the Session Contract authorizes a weaker local/demo shape.
+
+Stack standards should influence Design, implementation-unit planning, validation requirements, and close review for material architecture decisions. If the stack standard says a risk area is material, HIRMOS must either satisfy it, mark it not applicable with rationale, or record an authorized limitation/blocker.
+
 ## Stack selection priority
 
 1. Repository evidence.
@@ -67,7 +74,7 @@ HIRMOS must not invent commands because a stack package lists common defaults.
 When stack controls are active, create or update:
 
 ```text
-_hirmos/session/support/stack-resolution.json
+_hirmos/session/stack-resolution.json
 ```
 
 The stack resolution must record:

@@ -108,7 +108,7 @@ If command legality is unclear or contradictory, the command must stop at a bloc
 
 Every command response must recommend exactly one primary governed next command. Prose such as `reply to proceed` is not a governed command.
 
-## Artifact-backed checkpoint rule
+## Snapshot-backed checkpoint rule
 
 A command must not tell the user that an artifact exists, is ready, can be inspected, or authorizes a next step unless the artifact exists and contains non-placeholder content.
 
@@ -149,7 +149,7 @@ Commands must not expose capability routing details in `domain_expert` mode unle
 
 Advancing commands must activate runtime integration controls when material services such as database, auth, messaging, storage, payments, deployment, or provider APIs affect the active request.
 
-Commands must not claim implementation completion, production readiness, update-state readiness, or close success beyond the posture and evidence recorded in `_hirmos/session/support/runtime-integration-readiness.md`, `SESSION_EXECUTION.md`, and relevant review artifacts.
+Commands must not claim implementation completion, production readiness, update-state readiness, or close success beyond the posture and evidence recorded in `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md`, `SESSION_EXECUTION.md`, and relevant review artifacts.
 
 ## Vertical slice and status UX discipline
 
@@ -172,8 +172,8 @@ Commands must not preserve momentum by hiding blockers. Status summaries must di
 Close success requires a consistent transaction across:
 
 - active session evidence;
-- `support/system-state-update.md`;
-- `support/close-checklist.md`;
+- `SESSION_EXECUTION.md` close/update controls;
+- `SESSION_EXECUTION.md` close controls;
 - archive manifest;
 - accepted-state records;
 - reset `SESSION_STATE.json`;
@@ -187,7 +187,7 @@ Any command that surfaces readiness, progress, implementation completion, runtim
 
 The command must either:
 
-- create or update `_hirmos/session/support/claim-reconciliation.md`;
+- create or update `_hirmos/session/EVIDENCE.md`;
 - point to an existing current claim reconciliation record; or
 - record why claim reconciliation is `NOT_APPLICABLE`.
 
@@ -207,9 +207,9 @@ Use `LOCAL_TECHNICAL_SETUP_AND_ROLE_WORKFLOW_SMOKE_CHECKS.md` for the governing 
 
 Required artifacts when applicable:
 
-- `_hirmos/session/support/local-runtime-evidence.md` records local environment, service, migration, seed, dev-server, and route evidence.
-- `_hirmos/session/support/role-workflow-smoke.md` records patient/staff/provider/manager/admin workflow smoke evidence.
-- `_hirmos/session/support/claim-reconciliation.md` reconciles whether the claim may be surfaced.
+- `_hirmos/session/EVIDENCE.md` records local environment, service, migration, seed, dev-server, and route evidence.
+- `_hirmos/session/EVIDENCE.md` records role-specific workflow smoke evidence for the relevant end-user, operator, privileged-user, and administrative paths.
+- `_hirmos/session/EVIDENCE.md` reconciles whether the claim may be surfaced.
 
 Firm rule: tests/build/lint alone do not prove local runtime readiness or role workflow readiness.
 

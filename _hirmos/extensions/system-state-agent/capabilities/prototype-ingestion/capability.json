@@ -13,12 +13,12 @@
     ]
   },
   "requires_artifacts": [
-    "_hirmos/session/support/request-intake.md",
-    "_hirmos/session/support/source-materials.md when source material exists"
+    "_hirmos/session/SESSION_CONTRACT.md parent authority",
+    "_hirmos/session/DESIGN.md source matrix when source material exists"
   ],
   "produces_artifacts": [
-    "_hirmos/session/support/prototype-ingestion.md",
-    "_hirmos/session/support/system-state.md",
+    "_hirmos/session/DESIGN.md source matrix",
+    "_hirmos/session/DESIGN.md current-state basis",
     "_hirmos/session/unresolved-items.md",
     "_hirmos/session/SESSION_EXECUTION.md"
   ],

@@ -15,7 +15,7 @@ When HIRMOS attempts safe local technical progress, evidence must record:
 - result and raw/log evidence location when available;
 - whether the result proves build/test success, local runtime readiness, user-environment verification, or production readiness.
 
-Use canonical evidence states from `support/claim-reconciliation.md`.
+Use canonical evidence states from `EVIDENCE.md` claim reconciliation.
 
 ## Local setup and role-workflow smoke evidence
 

@@ -54,7 +54,7 @@ Every advancing command must establish relevant controls before claiming progres
 - working-copy control;
 - interaction-mode control;
 - lifecycle-boundary control;
-- artifact-backed checkpoint control;
+- snapshot-backed checkpoint control;
 - unresolved-item control when decisions or assumptions exist;
 - validation/evidence control when evidence is claimed.
 

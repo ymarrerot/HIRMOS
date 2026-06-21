@@ -18,8 +18,8 @@
     "_hirmos/session/SESSION_EXECUTION.md"
   ],
   "produces_artifacts": [
-    "_hirmos/session/support/system-state-update.md",
-    "_hirmos/session/support/close-checklist.md",
+    "_hirmos/session/SESSION_EXECUTION.md close/update controls",
+    "_hirmos/session/SESSION_EXECUTION.md close controls",
     "_hirmos/system/history/sessions/<session-id>/",
     "_hirmos/system/accepted-state",
     "_hirmos/session/SESSION_EXECUTION.md"

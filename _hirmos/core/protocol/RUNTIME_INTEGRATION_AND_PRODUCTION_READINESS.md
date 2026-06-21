@@ -7,7 +7,21 @@ Purpose: prevent HIRMOS from silently substituting fixture-backed, mock-only, or
 
 HIRMOS must not claim an integration is implemented, production-ready, or release-ready unless the active Design authority, Session Contract, Implementation evidence, and Update System State records identify the integration level and support the claim.
 
-HIRMOS may use local-safe defaults and defer production-provider decisions when that preserves progress, but it must track those decisions internally and surface them before production-readiness claims.
+HIRMOS may use local-safe defaults and defer production-provider decisions when that preserves progress, but local defaults should preserve the production architecture shape where practical. Weaker demo/local substitutions are allowed only when explicitly authorized by Design and the Session Contract, then preserved at close as limitations or carry-forward items.
+
+
+## Production-shaped default
+
+For implementation-capable sessions, HIRMOS must prefer production-shaped engineering defaults unless the Session Contract explicitly authorizes a weaker result.
+
+Production-shaped means:
+
+- local/dev infrastructure mirrors intended production infrastructure where practical;
+- durable business data uses durable persistence;
+- long-running provider, AI, image, video, import/export, billing, or batch work is not hidden inside synchronous request paths;
+- credit, usage, quota, billing, inventory, and account-balance mutations are concurrency-safe or explicitly limited;
+- secrets, environment variables, generated runtime data, and handoff/release packages have a safe posture;
+- limitations are explicit in Design, the Session Contract, evidence, and accepted-state updates.
 
 ## User-facing commitment levels
 
@@ -163,9 +177,9 @@ Use `LOCAL_TECHNICAL_SETUP_AND_ROLE_WORKFLOW_SMOKE_CHECKS.md` for the governing 
 
 Required artifacts when applicable:
 
-- `_hirmos/session/support/local-runtime-evidence.md` records local environment, service, migration, seed, dev-server, and route evidence.
-- `_hirmos/session/support/role-workflow-smoke.md` records patient/staff/provider/manager/admin workflow smoke evidence.
-- `_hirmos/session/support/claim-reconciliation.md` reconciles whether the claim may be surfaced.
+- `_hirmos/session/EVIDENCE.md` records local environment, service, migration, seed, dev-server, and route evidence.
+- `_hirmos/session/EVIDENCE.md` records role-specific workflow smoke evidence for the relevant end-user, operator, privileged-user, and administrative paths.
+- `_hirmos/session/EVIDENCE.md` reconciles whether the claim may be surfaced.
 
 Firm rule: tests/build/lint alone do not prove local runtime readiness or role workflow readiness.
 
@@ -189,10 +203,10 @@ Firm rule: HIRMOS must not close a session with noncanonical runtime posture val
 
 ## Close-time runtime posture materialization
 
-Before normal close, any material runtime provider or integration claim must have an owning `support/runtime-integration-readiness.md` artifact.
+Before normal close, any material runtime provider or integration claim must have an owning `DESIGN.md` / `EVIDENCE.md` runtime posture artifact.
 
-`support/runtime-integration-readiness.md` must use the canonical runtime posture values from this protocol. If a generated artifact or accepted-state file contains shorthand such as `LOCAL_REAL`, `provider ready`, `code complete`, or `console fallback`, close must route back and translate the value before accepted state is updated.
+`DESIGN.md` / `EVIDENCE.md` runtime posture must use the canonical runtime posture values from this protocol. If a generated artifact or accepted-state file contains shorthand such as `LOCAL_REAL`, `provider ready`, `code complete`, or `console fallback`, close must route back and translate the value before accepted state is updated.
 
-Runtime posture does not replace evidence status. A posture such as `LOCAL_REAL_INTEGRATION` still requires claim evidence from `support/claim-reconciliation.md` and local setup evidence from `support/local-runtime-evidence.md` when local runtime readiness is claimed.
+Runtime posture does not replace evidence status. A posture such as `LOCAL_REAL_INTEGRATION` still requires claim evidence from `EVIDENCE.md` claim reconciliation and local setup evidence from `EVIDENCE.md` when local runtime readiness is claimed.
 
 Firm rule: normal close is blocked when material runtime posture is claimed but the owning posture artifact is missing, noncanonical, or unsupported by evidence.

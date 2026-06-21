@@ -18,8 +18,8 @@
   },
   "requires_artifacts": [
     "_hirmos/session/DESIGN.md",
-    "_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md when Delivery-Need Classification is YES",
-    "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when Delivery-Need Classification is YES",
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md when Delivery Shape Decision selects a durable delivery shape",
+    "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when Delivery Shape Decision selects a durable delivery shape",
     "_hirmos/session/unresolved-items.md",
     "_hirmos/session/SESSION_EXECUTION.md"
   ],

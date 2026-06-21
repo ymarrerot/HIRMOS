@@ -57,4 +57,4 @@ Technical Supervisor and Framework Diagnostics modes can expose deeper evidence 
 
 ## Canonical values in generated artifacts
 
-Generated HIRMOS artifacts must use the canonical evidence states from `support/claim-reconciliation.md`. Do not use shorthand such as `observed`, `build pass`, `accepted at close`, or `deferred` as evidence states. Translate them into canonical values and explain nuance in rationale fields.
+Generated HIRMOS artifacts must use the canonical evidence states from `EVIDENCE.md` claim reconciliation. Do not use shorthand such as `observed`, `build pass`, `accepted at close`, or `deferred` as evidence states. Translate them into canonical values and explain nuance in rationale fields.

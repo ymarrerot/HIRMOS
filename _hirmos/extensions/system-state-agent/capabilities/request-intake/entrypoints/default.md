@@ -8,7 +8,7 @@ Capture the User Request and raw source inputs as source material, not governed 
 
 ### Produces
 
-- `_hirmos/session/support/request-intake.md`
+- `_hirmos/session/SESSION_CONTRACT.md`
 - `_hirmos/session/SESSION_EXECUTION.md` updates
 - `_hirmos/session/unresolved-items.md` updates when the request is materially ambiguous
 
@@ -74,6 +74,6 @@ Record full item fields in `unresolved-items.md`, including current status, down
 
 ## Project Context and Stack Classification
 
-When this capability encounters project-type or stack evidence, record findings for `support/project-context.md`, `support/stack-resolution.json`, or `SESSION_EXECUTION.md` as required by active controls.
+When this capability encounters project-type or stack evidence, record material findings in `DESIGN.md` / `SESSION_CONTRACT.md`, `stack-resolution.json` for machine-readable stack routing, or `SESSION_EXECUTION.md` as required by active controls.
 
 User Request labels and prototype technology signals are focus evidence, not final classification authority.

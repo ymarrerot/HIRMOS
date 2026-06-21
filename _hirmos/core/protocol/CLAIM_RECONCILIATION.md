@@ -72,7 +72,7 @@ Examples:
 - If HIRMOS claims tests passed, evidence must record command, working directory, result, and output/log or explain why logs are unavailable.
 - If HIRMOS claims local runtime works, evidence must say how the app was run and what was verified.
 - If HIRMOS claims production readiness, production integration decisions, credentials/environment disposition, and blockers must be reconciled.
-- If HIRMOS claims close success, accepted state, archive manifest, active session state, and close checklist must agree.
+- If HIRMOS claims close success, accepted state, archive controls, active session state, accepted-state records, and close controls must agree.
 
 ## Runtime verification distinction
 
@@ -123,7 +123,7 @@ It is not satisfied when material claims are `CLAIMED_NOT_LOGGED`, contradicted 
 
 ## Mandatory instantiation and canonical-state enforcement
 
-`support/claim-reconciliation.md` is mandatory when HIRMOS surfaces any material claim about:
+`EVIDENCE.md` claim reconciliation is mandatory when HIRMOS surfaces any material claim about:
 
 - implementation completion;
 - validation success;
@@ -135,7 +135,7 @@ It is not satisfied when material claims are `CLAIMED_NOT_LOGGED`, contradicted 
 - update-state readiness;
 - close/archive success.
 
-HIRMOS must instantiate `_hirmos/session/support/claim-reconciliation.md` before the material claim is surfaced. If claim reconciliation is missing, the claim state is `CLAIMED_NOT_LOGGED` or `BLOCKED`; HIRMOS must not upgrade it through chat language.
+HIRMOS must instantiate `_hirmos/session/EVIDENCE.md` before the material claim is surfaced. If claim reconciliation is missing, the claim state is `CLAIMED_NOT_LOGGED` or `BLOCKED`; HIRMOS must not upgrade it through chat language.
 
 Canonical claim status values are closed. Noncanonical labels are invalid. Do not use labels such as `VERIFIED_IN_BUILD`, `ACCEPTED_BY_SCOPE`, `LOCAL_REAL`, `CODE_COMPLETE`, `PARTIAL_PASS`, or similar substitutes as claim status values. Translate them into the canonical values in this protocol and record the rationale.
 
@@ -147,9 +147,9 @@ Use `LOCAL_TECHNICAL_SETUP_AND_ROLE_WORKFLOW_SMOKE_CHECKS.md` for the governing 
 
 Required artifacts when applicable:
 
-- `_hirmos/session/support/local-runtime-evidence.md` records local environment, service, migration, seed, dev-server, and route evidence.
-- `_hirmos/session/support/role-workflow-smoke.md` records patient/staff/provider/manager/admin workflow smoke evidence.
-- `_hirmos/session/support/claim-reconciliation.md` reconciles whether the claim may be surfaced.
+- `_hirmos/session/EVIDENCE.md` records local environment, service, migration, seed, dev-server, and route evidence.
+- `_hirmos/session/EVIDENCE.md` records role-specific workflow smoke evidence for the relevant end-user, operator, privileged-user, and administrative paths.
+- `_hirmos/session/EVIDENCE.md` reconciles whether the claim may be surfaced.
 
 Firm rule: tests/build/lint alone do not prove local runtime readiness or role workflow readiness.
 
@@ -173,7 +173,7 @@ Firm rule: do not invent new evidence states during a run. Add nuance in rationa
 
 ## Close Claim Materialization Record
 
-Close claims are material claims and must be reconciled in `_hirmos/session/support/claim-reconciliation.md` before normal close is surfaced.
+Close claims are material claims and must be reconciled in `_hirmos/session/EVIDENCE.md` before normal close is surfaced.
 
 The close claim materialization record must cover at least:
 

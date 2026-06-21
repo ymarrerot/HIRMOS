@@ -16,7 +16,7 @@
   "requires_artifacts": [
     "_hirmos/session/SESSION_CONTRACT.md",
     "_hirmos/session/unresolved-items.md",
-    "_hirmos/session/support/implementation-readiness.md"
+    "_hirmos/session/DESIGN.md readiness basis"
   ],
   "produces_artifacts": [
     "_hirmos/session/SESSION_CONTRACT.md Implementation Unit Plan section",

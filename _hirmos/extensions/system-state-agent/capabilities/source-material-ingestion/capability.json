@@ -13,10 +13,10 @@
     ]
   },
   "requires_artifacts": [
-    "_hirmos/session/support/request-intake.md"
+    "_hirmos/session/SESSION_CONTRACT.md parent authority"
   ],
   "produces_artifacts": [
-    "_hirmos/session/support/source-materials.md",
+    "_hirmos/session/DESIGN.md source matrix",
     "_hirmos/session/unresolved-items.md",
     "_hirmos/session/SESSION_EXECUTION.md"
   ],

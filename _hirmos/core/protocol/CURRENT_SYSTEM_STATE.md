@@ -61,7 +61,7 @@ It contains active unresolved items, assumptions, blockers, production/go-live b
 
 Use this file to answer: **which durable decisions are accepted, rejected, or superseded?**
 
-Session-local `support/technical-review.md` records decisions made during a session. `DECISION_LOG.md` records only accepted durable decisions that future sessions should rely on or revisit.
+Session-local `DESIGN.md` technical review records decisions made during a session. `DECISION_LOG.md` records only accepted durable decisions that future sessions should rely on or revisit.
 
 
 
@@ -92,7 +92,7 @@ Future sessions must read these pointers during Understand System State before d
 Required close sequence:
 
 1. Read prior `CURRENT_SYSTEM_STATE.md`.
-2. Read `support/system-state-update.md`, `support/close-checklist.md`, `support/claim-reconciliation.md` when material claims exist, and relevant session evidence.
+2. Read `SESSION_EXECUTION.md` close/update controls, `SESSION_EXECUTION.md` close controls, `EVIDENCE.md` claim reconciliation when material claims exist, and relevant session evidence.
 3. Classify each material outcome as accepted, rejected / not applied, evidence-only, superseded, or carry-forward.
 4. Merge accepted and superseded truth into `CURRENT_SYSTEM_STATE.md`.
 5. Update `DECISION_LOG.md` for accepted/rejected/superseded decisions.
@@ -142,7 +142,7 @@ Normal close is blocked when:
 
 - `CURRENT_SYSTEM_STATE.md` is missing;
 - accepted outcomes are not mapped to current-state sections;
-- material claims require `support/claim-reconciliation.md` but it is missing;
+- material claims require `EVIDENCE.md` claim reconciliation but it is missing;
 - `CURRENT_SYSTEM_STATE.md` latest-close metadata points to a different latest archive than the close transaction;
 - carry-forward items in session artifacts are not reflected in `CARRY_FORWARD.md` or explicitly rejected;
 - durable decisions are not reflected in `DECISION_LOG.md` or explicitly rejected;
@@ -164,7 +164,7 @@ Required sequence:
 3. If it is missing, record whether this is a new installation or an integrity failure.
 4. Read `CARRY_FORWARD.md` and `DECISION_LOG.md` as supporting accepted-state artifacts when present.
 5. Consult session archives only as history/evidence or to investigate contradictions. Archives are not the current system state.
-6. Record source status, contradictions, and confidence in `_hirmos/session/support/system-state.md`.
+6. Record source status, contradictions, and confidence in `_hirmos/session/DESIGN.md`.
 7. Mark the current-system-state-first execution controls in `_hirmos/session/SESSION_EXECUTION.md`.
 
 Firm rule: HIRMOS must not claim Design readiness, Implementation readiness, Implementation completion, or Update System State readiness unless current-system-state-first controls are satisfied or explicitly not applicable with rationale.
@@ -181,7 +181,7 @@ Accepted-State Artifact Invariants:
 - Preserve this invariant block during Update System State.
 - Do not replace this file with a chat summary or session-local artifact.
 - Use canonical runtime posture values from RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md.
-- Use canonical evidence states from support/claim-reconciliation.md.
+- Use canonical evidence states from EVIDENCE.md claim reconciliation.
 - Keep accepted-state decision classifications separate from evidence status.
 ```
 
@@ -192,7 +192,7 @@ Canonical accepted-state field rules:
 | Field type | Required value source |
 |---|---|
 | Runtime posture | canonical posture values from `RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md` only |
-| Evidence state | canonical evidence states from `support/claim-reconciliation.md` only |
+| Evidence state | canonical evidence states from `EVIDENCE.md` claim reconciliation only |
 | Update classification | update classifications from this protocol only |
 | Decision state | accepted/rejected/superseded decision records in `DECISION_LOG.md`; not evidence status |
 | Source note / rationale | free text allowed, but it must not replace canonical status fields |
@@ -204,6 +204,6 @@ y copy of current truth.
 
 ## Close-Time Delivery Pointer Refresh
 
-`CURRENT_SYSTEM_STATE.md` must be refreshed during close whenever delivery governance was active or required. The refresh must be sourced from `support/system-state-update.md`, the durable Delivery Plan, the adopted Phase file, and archive evidence.
+`CURRENT_SYSTEM_STATE.md` must be refreshed during close whenever delivery governance was active or required. The refresh must be sourced from `SESSION_EXECUTION.md` close/update controls, the durable Delivery Plan, the adopted Phase file, and archive evidence.
 
 A future session must not trust delivery pointers that were not refreshed or explicitly verified unchanged at the last delivery-governed close.

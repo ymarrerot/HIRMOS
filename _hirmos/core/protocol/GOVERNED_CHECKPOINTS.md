@@ -36,21 +36,13 @@ Before surfacing a governed checkpoint, verify and record in `SESSION_EXECUTION.
 - user action required, if any;
 - terminal state or next allowed action.
 
-## Required checkpoint artifact
+## Required Current Continuation Snapshot
 
-For checkpoints that request a user decision, claim implementation-readiness, claim implementation completion, claim update-state readiness, or fail closed, instantiate a checkpoint artifact using:
+For checkpoints that request a user decision, claim implementation-readiness, claim implementation completion, claim update-state readiness, fail closed, pause, or change continuation state, HIRMOS must update `_hirmos/session/SESSION_EXECUTION.md` → `Current Continuation Snapshot` before surfacing the user-facing checkpoint.
 
-```text
-_hirmos/core/templates/session/checkpoints/CHECKPOINT.md
-```
+The snapshot must summarize the current lifecycle stage, terminal state, authoritative artifacts reviewed, unresolved status, evidence status, next safe governed command, and what the next model must not do.
 
-Recommended active-session path:
-
-```text
-_hirmos/session/checkpoints/CHECKPOINT_<checkpoint-id>.md
-```
-
-Status-only command output may be read-only and does not require a checkpoint artifact unless it changes continuation state.
+Status-only command output may be read-only and does not require a snapshot update unless it changes continuation state.
 
 ## Domain Expert rendering
 
@@ -86,8 +78,8 @@ Non-gating assumptions may be carried only when the assumption, risk, scope, own
 
 A checkpoint is complete only when:
 
-- checkpoint artifact exists when required;
-- `SESSION_EXECUTION.md` Checkpoint Log references it;
+- Current Continuation Snapshot is current when required;
+- `SESSION_EXECUTION.md` Continuation Boundary Log records the surfaced boundary;
 - execution controls reflect the checkpoint terminal state;
 - unresolved-item dispositions affected by the checkpoint are recorded;
 - the user-facing output does not claim more than the artifacts support.
@@ -97,7 +89,7 @@ A checkpoint is complete only when:
 
 When HIRMOS approaches production-readiness or release-readiness, a governed checkpoint must include material runtime integration status.
 
-The checkpoint must be backed by `_hirmos/session/support/runtime-integration-readiness.md` when material integration areas exist.
+The checkpoint must be backed by `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` when material integration areas exist.
 
 In `domain_expert` mode, the checkpoint should surface:
 
@@ -120,7 +112,7 @@ If claim reconciliation downgrades the claim, the checkpoint must surface the do
 
 A governed checkpoint must surface autonomous technical decisions when they become material to continuation, implementation authorization, technical review, production readiness, or release readiness.
 
-Use `_hirmos/session/support/technical-review.md` as the backing artifact for technical decisions and `_hirmos/session/support/runtime-integration-readiness.md` for material integration posture.
+Use `_hirmos/session/DESIGN.md` as the backing artifact for technical decisions and `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` for material integration posture.
 
 In `domain_expert` mode, summarize only:
 
@@ -137,8 +129,8 @@ Use `LOCAL_TECHNICAL_SETUP_AND_ROLE_WORKFLOW_SMOKE_CHECKS.md` for the governing 
 
 Required artifacts when applicable:
 
-- `_hirmos/session/support/local-runtime-evidence.md` records local environment, service, migration, seed, dev-server, and route evidence.
-- `_hirmos/session/support/role-workflow-smoke.md` records patient/staff/provider/manager/admin workflow smoke evidence.
-- `_hirmos/session/support/claim-reconciliation.md` reconciles whether the claim may be surfaced.
+- `_hirmos/session/EVIDENCE.md` records local environment, service, migration, seed, dev-server, and route evidence.
+- `_hirmos/session/EVIDENCE.md` records role-specific workflow smoke evidence for the relevant end-user, operator, privileged-user, and administrative paths.
+- `_hirmos/session/EVIDENCE.md` reconciles whether the claim may be surfaced.
 
 Firm rule: tests/build/lint alone do not prove local runtime readiness or role workflow readiness.

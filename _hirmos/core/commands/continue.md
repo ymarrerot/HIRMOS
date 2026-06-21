@@ -29,6 +29,11 @@ Before execution:
 3. `_hirmos/session/SESSION_EXECUTION.md`
 4. Any governing command, authority, protocol, capability, stack, template, or artifact file named by pending controls, including `_hirmos/core/protocol/GOVERNED_CHECKPOINTS.md` when a checkpoint will be surfaced.
 
+
+## Production-shaped engineering posture
+
+When the command reaches Design, Implementation, or close/update-state for software work, HIRMOS must apply the production-shaped default from `_hirmos/core/authority/LIFECYCLE.md` and `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`. Do not treat prototype/demo/local-only shortcuts as neutral defaults. They must be explicitly authorized, evidenced, and preserved as limitations or carry-forward items.
+
 ## Required behavior
 
 
@@ -45,7 +50,7 @@ Before advancing work, `hirmos continue` must apply `_hirmos/core/protocol/COMMA
 - `_hirmos/session/SESSION_STATE.json` exists and is valid;
 - `status` is `active`;
 - `hirmos continue` is legal for the current `lifecycle_stage` and `allowed_next_commands`;
-- required active-session artifacts exist: `SESSION_CONTRACT.md`, `SESSION_EXECUTION.md`, `unresolved-items.md`, and `session-contract-review.md`;
+- required active-session artifacts exist: `SESSION_CONTRACT.md`, `SESSION_EXECUTION.md`, `unresolved-items.md`, and `SESSION_CONTRACT.md` section 11;
 - no gated unresolved item blocks the requested boundary;
 - if `lifecycle_stage = implementation_complete`, a bare `hirmos continue` is rejected unless `pending_correction = true` or the command includes a correction/contract-amendment request.
 
@@ -70,7 +75,6 @@ If the latest recorded pass and `SESSION_STATE.json.continuation_pass` disagree,
 Every accepted `hirmos continue` must:
 
 - increment `SESSION_STATE.json.continuation_pass`;
-- set `active_command = hirmos continue` and `last_command = hirmos continue`;
 - append a continuation pass record to `SESSION_EXECUTION.md` before surfacing results;
 - append the control mutation and ledger integrity records required by `SESSION_EXECUTION.md`;
 - update `lifecycle_stage`, `allowed_next_commands`, `recommended_next_command`, `pending_correction`, and `blocking_reason` as the pass outcome requires.
@@ -103,7 +107,7 @@ Continuation pass types:
 - Validation-only pass
 - Route-back pass
 
-If the user requests work outside the current Session Contract, HIRMOS must amend `SESSION_CONTRACT.md` before implementation. If the request is a correction inside existing scope, HIRMOS must record it as a corrective continuation pass. Bare `hirmos continue` after `implementation_complete` is illegal unless `SESSION_STATE.json.pending_correction` is true or the prior checkpoint explicitly recommended `hirmos continue`.
+If the user requests work outside the current Session Contract, HIRMOS must amend `SESSION_CONTRACT.md` before implementation. If the request is a correction inside existing scope, HIRMOS must record it as a corrective continuation pass. Bare `hirmos continue` after `implementation_complete` is illegal unless `SESSION_STATE.json.pending_correction` is true or `SESSION_EXECUTION.md` Current Continuation Snapshot explicitly recommended `hirmos continue`.
 
 ## Session artifact update rules
 
@@ -155,11 +159,11 @@ Stop at `Blocked / Fail-Closed` when:
 Before surfacing a checkpoint that asks for a decision, claims readiness/completion, fails closed, or changes continuation state, HIRMOS must:
 
 1. read `_hirmos/core/protocol/GOVERNED_CHECKPOINTS.md`;
-2. instantiate `_hirmos/session/checkpoints/CHECKPOINT_<checkpoint-id>.md` when required;
-3. verify the checkpoint artifact is backed by existing non-placeholder session artifacts;
+2. update `_hirmos/session/SESSION_EXECUTION.md` → `Current Continuation Snapshot` when required;
+3. verify the Current Continuation Snapshot is backed by existing non-placeholder session artifacts;
 4. verify unresolved-item status from `_hirmos/session/unresolved-items.md` when decisions, assumptions, blockers, or continuation are involved;
-5. record the checkpoint in `SESSION_EXECUTION.md`;
-6. surface only claims supported by the checkpoint artifact and active controls.
+5. record the surfaced boundary in `SESSION_EXECUTION.md` Continuation Boundary Log;
+6. surface only claims supported by the Current Continuation Snapshot and active controls.
 
 
 ## Project-type and stack controls
@@ -170,7 +174,7 @@ Required behavior:
 
 - classify project type from evidence, not User Request label alone;
 - select stack from repository evidence first, then accepted state, request/config preference, prototype evidence, installed packages, or `generic` fallback;
-- instantiate `support/project-context.md` and `support/stack-resolution.json` when project-type or stack decisions affect Design, Implementation, validation, or Update System State;
+- record material project-type decisions in `DESIGN.md` / `SESSION_CONTRACT.md`, record machine-readable stack routing in `stack-resolution.json` when needed, and record command controls in `SESSION_EXECUTION.md`;
 - activate stack contexts only when evidence shows multiple bounded stack areas;
 - block or route back when project type, stack, or stack context uncertainty affects authority or evidence.
 
@@ -181,7 +185,7 @@ When the active request may involve material runtime services, read `_hirmos/cor
 
 Required behavior:
 
-- instantiate or update `_hirmos/session/support/runtime-integration-readiness.md` when material integration areas affect Design, Implementation, evidence, production readiness, or close;
+- instantiate or update `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` when material integration areas affect Design, Implementation, evidence, production readiness, or close;
 - do not silently downgrade real integration requirements to fixtures, mocks, console fallbacks, or boundary-only work;
 - do not surface low-level provider choices to Domain Expert users unless the protocol requires surfacing;
 - do not claim implementation completion, production readiness, or close success beyond the integration posture supported by evidence.
@@ -206,7 +210,7 @@ Unsupported, unlogged, contradicted, or environment-blocked claims must be downg
 
 ## Current-system-state-first continuation rule
 
-When `hirmos continue` advances into Design, Implementation, or a route-back that depends on current-state understanding, verify that `_hirmos/session/support/system-state.md` records current-system-state-first completion.
+When `hirmos continue` advances into Design, Implementation, or a route-back that depends on current-state understanding, verify that `_hirmos/session/DESIGN.md` records current-system-state-first completion.
 
 If `CURRENT_SYSTEM_STATE.md` exists but was not read by Understand System State, route back to Understand System State before advancing.
 
@@ -266,3 +270,15 @@ Required status terms: Phase Progress Ledger, Carry-Forward Items, partial phase
 Before writing a new continuation pass, count the existing continuation passes and identify their detail headings in `_hirmos/session/SESSION_EXECUTION.md`. After writing the new pass, verify that every previous pass row and detail heading is still present and that the new pass was appended.
 
 If the ledger was overwritten or an earlier detail block was removed, restore the missing history before surfacing the checkpoint. This is a command-state violation, not an acceptable cleanup.
+
+
+## Production-shaped engineering continuation gate
+
+When implementation is active for software work, `hirmos continue` must preserve the Production-Shaped Engineering Gate from `DESIGN.md`, `SESSION_CONTRACT.md`, and `SESSION_EXECUTION.md`.
+
+Required behavior:
+
+- do not implement shortcuts that contradict the gate unless the Session Contract is amended first;
+- record route-back when implementation evidence invalidates the production-shaped design or delivery shape;
+- materialize `EVIDENCE.md` when command/runtime/provider/storage/database evidence becomes nontrivial;
+- do not claim implementation completion when code evidence contradicts production-shaped claims.

@@ -8,8 +8,8 @@ Treat prototypes, POCs, screenshots, generated apps, or demo code as first-class
 
 ### Produces
 
-- `_hirmos/session/support/prototype-ingestion.md`
-- `_hirmos/session/support/system-state.md` focus contributions
+- `_hirmos/session/DESIGN.md`
+- `_hirmos/session/DESIGN.md` focus contributions
 - `_hirmos/session/unresolved-items.md` updates for prototype conflicts, unclear intent, or preservation risks
 - `_hirmos/session/SESSION_EXECUTION.md` updates
 
@@ -28,8 +28,8 @@ Treat prototypes, POCs, screenshots, generated apps, or demo code as first-class
 
 ## Required inputs
 
-- `_hirmos/session/support/request-intake.md`
-- `_hirmos/session/support/source-materials.md` when source material exists
+- `_hirmos/session/SESSION_CONTRACT.md`
+- `_hirmos/session/DESIGN.md` when source material exists
 - Available prototype/POC materials or an explicit unreadable/missing status
 
 ## Execution controls contributed
@@ -78,6 +78,6 @@ Record full item fields in `unresolved-items.md`, including current status, down
 
 ## Project Context and Stack Classification
 
-When this capability encounters project-type or stack evidence, record findings for `support/project-context.md`, `support/stack-resolution.json`, or `SESSION_EXECUTION.md` as required by active controls.
+When this capability encounters project-type or stack evidence, record material findings in `DESIGN.md` / `SESSION_CONTRACT.md`, `stack-resolution.json` for machine-readable stack routing, or `SESSION_EXECUTION.md` as required by active controls.
 
 User Request labels and prototype technology signals are focus evidence, not final classification authority.

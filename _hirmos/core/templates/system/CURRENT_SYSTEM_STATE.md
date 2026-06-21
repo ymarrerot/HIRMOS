@@ -5,7 +5,7 @@
 > - Preserve this invariant block during Update System State.
 > - Do not replace this file with a chat summary or session-local artifact.
 > - Use canonical runtime posture values from `RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`.
-> - Use canonical evidence states from `support/claim-reconciliation.md`.
+> - Use canonical evidence states from `EVIDENCE.md` claim reconciliation.
 > - Keep accepted-state decision classifications separate from evidence status.
 
 Status: durable accepted-state record.
@@ -115,7 +115,7 @@ Pointer update rules:
 - Current System State pointers must agree with the durable Delivery Plan row and adopted PHASE-xx.md file.
 
 
-- If Delivery-Need Classification is `YES`, this section must point to the durable Delivery Plan and active Phase before the next implementation-capable session claims readiness.
+- If the selected delivery shape requires durable delivery artifacts, this section must point to the durable Delivery Plan and active Phase before the next implementation-capable session claims readiness.
 - If a phase is accepted, superseded, blocked, or replaced at close, Update System State must update these pointers or explicitly record why they are unchanged.
 - If delivery governance is not active, record `NO` or `NOT_APPLICABLE`; do not leave stale delivery or phase pointers from a prior delivery.
 - `hirmos status` must read this section before reporting active/next delivery work.
@@ -255,7 +255,7 @@ Do not use shorthand values such as `observed`, `build pass`, `LOCAL_REAL`, `ACC
 
 ## Cross-Run Lessons Applied
 
-Use this section when accepted state incorporates lessons from multiple candidate implementations, prototypes, generated apps, OpenSpec outputs, UX drafts, or prior self-runs.
+Use this section when accepted state incorporates lessons from multiple candidate implementations, prototypes, generated apps, external spec-tool outputs, UX drafts, or prior self-runs.
 
 | Lesson source | Accepted lesson | Applied to | Requirement / DU reference | Evidence / decision reference |
 |---|---|---|---|---|
@@ -270,10 +270,10 @@ When a session closes delivery-governed work, this pointer section must be refre
 
 Required refresh inputs:
 
-- `support/system-state-update.md` Close-Time Delivery / Phase Status Transaction;
+- `SESSION_EXECUTION.md` close/update controls Close-Time Delivery / Phase Status Transaction;
 - parent `DELIVERY_PLAN.md` Delivery Status Update Log;
 - adopted `PHASE-xx.md` Close-Time Phase Status Update Contract;
-- session archive manifest and session-contract-review verdict.
+- session archive manifest and SESSION_CONTRACT.md close-verification verdict.
 
 If no pointer value changed, record that the value was explicitly verified unchanged. Missing or stale delivery pointers block normal close.
 

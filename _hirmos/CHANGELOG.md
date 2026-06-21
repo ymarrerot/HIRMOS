@@ -4,6 +4,46 @@ This changelog records user-visible changes to the HIRMOS framework payload.
 
 The framework version source of truth is `_hirmos/hirmos.config.json` under `framework.version`. This file explains what changed; it is not the machine-readable version source.
 
+## Unreleased
+
+No unreleased changes.
+
+## 1.0.3 — Production-shaped doctrine, delivery shape, and artifact simplification
+
+### Added
+
+- Added a core production-shaped implementation doctrine: governed implementation should aim for production-shaped software by default unless the Session Contract explicitly authorizes a prototype, demo, fixture, or local-only result.
+- Added a Production-Shaped Engineering Gate before implementation readiness and at close.
+- Added production-shaped Design obligations for material engineering areas such as persistence, background jobs, credits/usage, provider APIs, file storage, secrets/configuration, and critical-flow evidence.
+- Added concrete Next.js TypeScript engineering standards for local PostgreSQL preference, long-running job architecture, credit/usage safety, provider boundaries, upload/storage hygiene, environment hygiene, and evidence expectations.
+- Added explicit smallest-sufficient delivery-shape decision logic for greenfield, brownfield, and mixed work.
+- Added the strict-necessity session artifact rule: separate artifacts are justified only for authority, machine state, evidence, gating, continuity, or audit/history.
+- Added a required near-top `Current Continuation Snapshot` section in `SESSION_EXECUTION.md` for cross-chat continuation.
+
+### Changed
+
+- Strengthened core lifecycle, command, runtime-integration, and stack protocols so production-shaped implementation is a core HIRMOS posture, not only stack-level advice.
+- Updated Design and Implementation entrypoints to reject unapproved demo/local shortcuts as neutral implementation choices.
+- Changed delivery-shape selection so HIRMOS prefers the smallest sufficient governed delivery shape instead of treating broad work as automatically multi-session.
+- Consolidated former session support-artifact responsibilities into major artifacts: `SESSION_CONTRACT.md`, `DESIGN.md`, `EVIDENCE.md`, `SESSION_EXECUTION.md`, and implementation units.
+- Consolidated checkpoint continuation into `SESSION_EXECUTION.md` and removed the separate checkpoint artifact/folder model.
+- Removed the session `support/` directory model and moved conditional machine-readable stack routing to root `stack-resolution.json`.
+- Minimized `SESSION_STATE.json` so it owns only machine-readable command and lifecycle state, while `SESSION_EXECUTION.md` owns human-readable continuation.
+- Improved artifact quality rules around `SESSION_CONTRACT.md`, `DESIGN.md`, `SESSION_EXECUTION.md`, unresolved-item detail, and stale support-artifact regressions.
+
+### Removed
+
+- Removed the separate `checkpoints/` artifact model.
+- Removed the separate `support/` directory model.
+- Removed obsolete `SESSION_STATE.json` fields that duplicated human-readable continuation context.
+
+### Upgrade notes
+
+- Existing archived sessions do not need migration.
+- Active sessions created under an older artifact model may be finished with their current model or restarted under 1.0.3 if the simplified session surface is preferred.
+- Future implementation-capable sessions should expect stronger production-shape checks before implementation authorization and close acceptance.
+- New sessions should not create `support/`, `checkpoints/`, or legacy support files such as request intake, source materials, technical review, implementation readiness, local runtime evidence, role workflow smoke, claim reconciliation, close checklist, archive manifest, or session-contract review as separate artifacts. Their responsibilities now live in the major artifacts. If stack routing needs machine-readable state, use root `stack-resolution.json`.
+
 ## 1.0.2 — Lifecycle and CLI reference documentation alignment
 
 ### Added
@@ -54,7 +94,7 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 - Introduced HIRMOS as an orchestration framework for AI-assisted software development.
 - Added the current-state-first lifecycle: User Request → Understand System State → Design → Implementation → Update System State.
 - Added the workflow command set used inside AI coding tools: `hirmos start`, `hirmos status`, `hirmos continue`, and `hirmos close`.
-- Added the contract-centered session artifact spine: `SESSION_CONTRACT.md`, `SESSION_EXECUTION.md`, `REQUIREMENTS_BASELINE.md`, `DESIGN.md`, `unresolved-items.md`, `session-contract-review.md`, and `implementation-units/IU-xx.md`.
+- Added the contract-centered session artifact spine: `SESSION_CONTRACT.md`, `SESSION_EXECUTION.md`, `REQUIREMENTS_BASELINE.md`, `DESIGN.md`, `unresolved-items.md`, `SESSION_CONTRACT.md` section 11, and `implementation-units/IU-xx.md`.
 - Added durable accepted-state artifacts under `_hirmos/system/accepted-state/`.
 - Added delivery and phase lifecycle support for large or multi-session work.
 - Added canonical extension/capability routing through extension manifests, extension default entrypoints, capability manifests, and capability default entrypoints.

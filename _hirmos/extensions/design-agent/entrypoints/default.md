@@ -10,6 +10,15 @@ Route the active Design lifecycle boundary to the installed `design-agent` capab
 
 - Design capability activation decisions in `_hirmos/session/SESSION_EXECUTION.md`.
 - Design-stage artifacts produced by selected capability entrypoints.
+
+## Production-shaped Design obligation
+
+For implementation-capable software work, Design must prefer production-shaped architecture by default. Do not treat demo/local shortcuts as equal options when a production-shaped local/default path is practical.
+
+Design must identify material engineering areas affected by the request, including persistence, auth, provider APIs, file/object storage, background jobs, credit/usage accounting, secrets/configuration, deployment assumptions, and validation evidence.
+
+If Design authorizes a weaker prototype, fixture, local-only, or demo-only result, record the limitation explicitly in `DESIGN.md`, `SESSION_CONTRACT.md`, and `unresolved-items.md` or carry-forward notes as appropriate.
+
 - Unresolved-item contributions when Design discovers material uncertainty.
 - Route-back records when Design lacks safe system-state evidence.
 
@@ -44,7 +53,7 @@ Route the active Design lifecycle boundary to the installed `design-agent` capab
 
 ### Source input surfaces
 
-Design may inspect `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, `_hirmos/inputs/prototypes/`, and `_hirmos/inputs/references/`. These files are raw source material only and must be reconciled through `support/source-materials.md`, `support/prototype-ingestion.md`, `REQUIREMENTS_BASELINE.md`, `SESSION_CONTRACT.md`, or `unresolved-items.md` before they become governed authority.
+Design may inspect `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, `_hirmos/inputs/prototypes/`, and `_hirmos/inputs/references/`. These files are raw source material only and must be reconciled through `DESIGN.md` source matrix, `DESIGN.md` source matrix, `REQUIREMENTS_BASELINE.md`, `SESSION_CONTRACT.md`, or `unresolved-items.md` before they become governed authority.
 
 ### Operating sequence
 
@@ -52,24 +61,25 @@ Design may inspect `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, `_hi
 2. Use `_hirmos/core/protocol/CAPABILITY_ROUTING.md` to decide which design capabilities are `REQUIRED`, `OPTIONAL`, `SKIPPED`, `NOT_APPLICABLE`, or `BLOCKED`.
 3. Produce governed requirements before system/application design relies on requirement authority.
 4. Produce system/application design from governed requirements plus system-state evidence.
-5. Decide whether delivery decomposition is needed.
+5. Decide the smallest sufficient governed delivery shape using `DELIVERY_GOVERNANCE.md`; do not equate broad greenfield or brownfield work with automatic multi-session delivery.
 6. Produce technical review material when assumptions, risks, or reviewer inspection paths exist.
 7. Produce a Session Contract and Implementation Readiness before Implementation can begin.
 8. Record Design capability results, route-backs, unresolved-item producer outcomes, and readiness gates in `SESSION_EXECUTION.md`.
 
 ### Durable Delivery / Phase Capability Rewire
 
-Use `_hirmos/core/protocol/DELIVERY_GOVERNANCE.md`. When Delivery-Need Classification is `YES`, route through:
+This section now implements Delivery Shape Capability Routing.
+
+Use `_hirmos/core/protocol/DELIVERY_GOVERNANCE.md` to select the smallest sufficient governed delivery shape.
 
 ```text
-Delivery-Need Classification Gate
-→ delivery-design
-→ phase-contracting
-→ session-contract
-→ implementation-readiness
+SINGLE_SESSION_VERTICAL_SLICE → session-contract → implementation-readiness
+SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS → session-contract → implementation-readiness
+MULTI_SESSION_DELIVERY → delivery-design → session-contract → implementation-readiness
+MULTI_SESSION_DELIVERY_WITH_PHASE_FILES → delivery-design → phase-contracting → session-contract → implementation-readiness
 ```
 
-`delivery-design` owns the durable `Durable Delivery Plan` at `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md`; `phase-contracting` owns `PHASE-xx.md`; `session-contract` adopts one bounded phase/session into the Session Contract; `implementation-readiness` blocks when durable delivery or phase authority is missing, placeholder-only, or not mapped to the Session Contract. For a `NO` classification, the Session Contract must record affirmative single-session safety evidence.
+Design must explain why the selected shape is safer than smaller alternatives and why larger alternatives would add unnecessary governance overhead. For a single-session shape, the Session Contract must record affirmative bounded-scope safety evidence.
 
 ### Design authority rules
 
@@ -115,3 +125,7 @@ Material requirements must be normalized into `_hirmos/session/REQUIREMENTS_BASE
 ### Cross-run synthesis responsibilities
 
 When prior runs, accepted state, or carry-forward items affect scope, Design must reconcile them into governed requirements, Design, Session Contract, or unresolved items instead of relying on chat memory.
+
+
+A Durable Delivery Plan remains the durable authority for multi-session delivery shapes.
+When the selected delivery shape uses phase files, Design uses durable `PHASE-xx.md` contracts.

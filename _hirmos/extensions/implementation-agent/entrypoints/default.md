@@ -10,6 +10,15 @@ Route the active Implementation lifecycle boundary to installed implementation-a
 
 - Capability activation decisions recorded in `_hirmos/session/SESSION_EXECUTION.md`.
 - Capability-owned artifacts produced by selected capability entrypoints.
+
+## Production-shaped Implementation obligation
+
+Implementation must realize the accepted Design with production-shaped engineering defaults unless the Session Contract explicitly authorizes a weaker result.
+
+Do not satisfy a contract by choosing a shortcut that changes the architecture shape of the system, such as using synchronous request-time work for long-running provider operations, using non-durable storage for durable business data, or using preflight-only checks for credit/usage mutations.
+
+When a production-shaped implementation cannot be completed in scope, Implementation must record the blocker or limitation, route back when required, and avoid close/completion claims beyond the supported evidence.
+
 - Route-back records when Implementation discovers invalid upstream authority.
 - Unresolved-item contributions or blockers when implementation evidence exposes material uncertainty.
 
@@ -89,7 +98,7 @@ Use `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md` when
 
 ### Claim reconciliation discipline
 
-Implementation must preserve final-file, command/log, validation, runtime, and user-environment verification evidence needed for `_hirmos/session/support/claim-reconciliation.md`. Chat-only summaries are not accepted implementation evidence.
+Implementation must preserve final-file, command/log, validation, runtime, and user-environment verification evidence needed for `_hirmos/session/EVIDENCE.md`. Chat-only summaries are not accepted implementation evidence.
 
 ### Autonomous technical progress discipline
 

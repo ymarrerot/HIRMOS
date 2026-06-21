@@ -71,7 +71,7 @@ They must not silently replace the authority of:
 - `SESSION_CONTRACT.md`;
 - `SESSION_EXECUTION.md`;
 - `unresolved-items.md`;
-- `session-contract-review.md`;
+- `SESSION_CONTRACT.md` section 11;
 - `CURRENT_SYSTEM_STATE.md`.
 
 A capability that finds an issue should contribute it to the appropriate governed artifact rather than hiding it in narrative text.

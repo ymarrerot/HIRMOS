@@ -34,7 +34,7 @@ Create the Session Contract that authorizes exactly what the active session may 
 - `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when applicable`
 - `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when applicable`
 - `_hirmos/session/unresolved-items.md`
-- `_hirmos/session/support/technical-review.md when applicable`
+- `_hirmos/session/DESIGN.md technical review when applicable`
 
 ## Execution controls contributed
 
@@ -77,7 +77,7 @@ Record full item fields in `unresolved-items.md`, including current status, down
 
 ## Project-type / stack requirements
 
-Use `support/project-context.md` and `support/stack-resolution.json` when present or required by controls.
+Use `DESIGN.md` / `SESSION_CONTRACT.md` for material project-type decisions and `stack-resolution.json` only when machine-readable stack routing is required by controls.
 
 For large or multi-session work in any project type, require governed Delivery Units or Phases when one bounded session cannot safely govern the change.
 
@@ -88,7 +88,7 @@ When stack contexts are active, carry in-scope/out-of-scope contexts into the Se
 
 When material runtime services are involved, follow `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`.
 
-Record or consume `_hirmos/session/support/runtime-integration-readiness.md` as required by execution controls.
+Record or consume `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` as required by execution controls.
 
 Do not claim fixture/mock/boundary/local/production integration levels beyond what the active artifacts and evidence support.
 
@@ -99,11 +99,11 @@ This capability must apply `_hirmos/core/protocol/DELIVERY_GOVERNANCE.md` before
 
 Required behavior:
 
-1. Read and record the Delivery-Need Classification answer from `SESSION_EXECUTION.md` and `SESSION_CONTRACT.md` when those artifacts exist.
-2. When classification is `YES`, use only durable delivery authority under `_hirmos/system/delivery/<delivery-id>/`.
-3. When classification is `YES`, require `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` and at least one `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` before implementation readiness.
-4. When classification is `NO`, verify the active Session Contract contains affirmative single-session safety evidence.
-5. When classification is `UNCERTAIN`, set this capability result to `BLOCKED` or `ROUTE_BACK_REQUIRED`; do not authorize Implementation.
+1. Read and record the Delivery Shape Decision from `SESSION_EXECUTION.md` and `SESSION_CONTRACT.md` when those artifacts exist.
+2. When the selected shape is `MULTI_SESSION_DELIVERY` or `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, use only durable delivery authority under `_hirmos/system/delivery/<delivery-id>/`.
+3. When the selected shape is `MULTI_SESSION_DELIVERY`, require `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md`; when the selected shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, require both the Delivery Plan and an adopted `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` before implementation readiness.
+4. When the selected shape is a single-session shape, verify the active Session Contract contains affirmative bounded-scope safety evidence and implementation-unit coverage when required.
+5. When the selected shape is `UNCERTAIN`, set this capability result to `BLOCKED` or `ROUTE_BACK_REQUIRED`; do not authorize Implementation.
 6. Do not create or depend on session-local delivery authority artifacts.
 
 Forbidden session-local delivery authorities:

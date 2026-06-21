@@ -101,8 +101,8 @@ Close evidence must prove a state transaction, not merely a user-facing summary.
 
 Required close evidence includes:
 
-- `support/system-state-update.md` accepted/rejected/evidence-only/carry-forward classification;
-- `support/close-checklist.md` close readiness and integrity checks;
+- `SESSION_EXECUTION.md` close/update controls accepted/rejected/evidence-only/carry-forward classification;
+- `SESSION_EXECUTION.md` close controls close readiness and integrity checks;
 - archive manifest under `_hirmos/system/history/sessions/<session-id>/`;
 - current-state latest-close metadata and carry-forward updates;
 - reset `SESSION_STATE.json` after normal close;
@@ -148,8 +148,8 @@ Use `LOCAL_TECHNICAL_SETUP_AND_ROLE_WORKFLOW_SMOKE_CHECKS.md` for the governing 
 
 Required artifacts when applicable:
 
-- `_hirmos/session/support/local-runtime-evidence.md` records local environment, service, migration, seed, dev-server, and route evidence.
-- `_hirmos/session/support/role-workflow-smoke.md` records patient/staff/provider/manager/admin workflow smoke evidence.
-- `_hirmos/session/support/claim-reconciliation.md` reconciles whether the claim may be surfaced.
+- `_hirmos/session/EVIDENCE.md` records local environment, service, migration, seed, dev-server, and route evidence.
+- `_hirmos/session/EVIDENCE.md` records role-specific workflow smoke evidence for the relevant end-user, operator, privileged-user, and administrative paths.
+- `_hirmos/session/EVIDENCE.md` reconciles whether the claim may be surfaced.
 
 Firm rule: tests/build/lint alone do not prove local runtime readiness or role workflow readiness.

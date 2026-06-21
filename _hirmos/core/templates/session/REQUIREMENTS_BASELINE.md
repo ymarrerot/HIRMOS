@@ -54,7 +54,7 @@ Complete this section when prototype, POC, screenshot-flow, generated-app, demo-
 | Prototype-set reconciliation completed | `YES / NO / NOT_APPLICABLE / BLOCKED` |
 | Blocking conflicts / variants | `<none / summary / unresolved item IDs>` |
 
-If multiple prototypes exist, do not proceed to Design on prototype-derived requirements until shared signals, conflicts, variants, and normalized requirement candidates are recorded in `_hirmos/session/support/prototype-ingestion.md` or explicitly blocked/gated.
+If multiple prototypes exist, do not proceed to Design on prototype-derived requirements until shared signals, conflicts, variants, and normalized requirement candidates are recorded in `_hirmos/session/DESIGN.md` or explicitly blocked/gated.
 
 ## 3. Product Goal
 
@@ -180,7 +180,7 @@ Firm rule: before implementation authorization, every material in-scope requirem
 |---|---|---|---|---|
 | REQ-FUNC-001 | `NOT_STARTED / PLANNED / IN_PROGRESS / IMPLEMENTED / PARTIAL / VERIFIED / DEFERRED / BLOCKED / NOT_APPLICABLE / REJECTED` | `<artifact path>` | `<remaining work>` | `<accepted / carry-forward / rejected>` |
 
-Coverage status is not evidence status. Evidence status belongs in `support/claim-reconciliation.md`.
+Coverage status is not evidence status. Evidence status belongs in `EVIDENCE.md` claim reconciliation.
 
 ## 10. Source Traceability
 
@@ -218,11 +218,11 @@ Every material source signal must be dispositioned before Design claims readines
 
 ## Cross-Run / Candidate Source Coverage Check
 
-Use this section when the session compares multiple candidate implementations, prototypes, generated apps, prior self-runs, OpenSpec outputs, UX drafts, or other candidate sources.
+Use this section when the session compares multiple candidate implementations, prototypes, generated apps, prior self-runs, external spec-tool outputs, UX drafts, or other candidate sources.
 
 | Candidate / source | Source type | Useful coverage lessons | Missing / weaker areas | Salvage destination | Requirement IDs affected |
 |---|---|---|---|---|---|
-| | HIRMOS run / OpenSpec run / prototype / Lovable app / UX note / other | | | REQUIREMENTS_BASELINE / DELIVERY_PLAN / TECHNICAL_REVIEW / ROLE_WORKFLOW_SMOKE_CHECKS / CARRY_FORWARD | |
+| | HIRMOS run / external spec-tool run / prototype / external app-builder output / UX note / other | | | REQUIREMENTS_BASELINE / DELIVERY_PLAN / TECHNICAL_REVIEW / ROLE_WORKFLOW_SMOKE_CHECKS / CARRY_FORWARD | |
 
 Coverage claim gate:
 
@@ -233,6 +233,6 @@ Coverage claim gate:
 | Acceptance criteria checked separately from implementation breadth? | yes / no / not_applicable |
 | Any candidate lessons promoted to new/updated requirements? | yes / no |
 | Any candidate lessons rejected or marked not applicable? | yes / no |
-| Coverage claim reconciled in support/claim-reconciliation.md? | yes / no / not_applicable |
+| Coverage claim reconciled in EVIDENCE.md claim reconciliation? | yes / no / not_applicable |
 
 Firm rule: candidate comparison output cannot substitute for updating this requirements baseline when the comparison reveals missing, partial, deferred, or newly clarified requirements.

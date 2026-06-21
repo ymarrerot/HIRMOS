@@ -31,7 +31,7 @@ When Implementation runs, HIRMOS should record:
 - retry or escalation if needed;
 - session implementation review.
 
-## Artifact-backed checkpoint rule
+## Snapshot-backed checkpoint rule
 
 HIRMOS must not tell the user that an artifact exists, is ready, or can be inspected unless the artifact exists and contains non-placeholder content.
 
@@ -45,10 +45,10 @@ HIRMOS close is an evidence-backed claim. Before normal close, required evidence
 
 Use the owning artifact for the evidence type:
 
-- `support/claim-reconciliation.md` for material close, validation, runtime, implementation, integration, production-readiness, packaging, and accepted-state claims;
-- `support/local-runtime-evidence.md` for local setup/runtime/user-environment claims;
-- `support/role-workflow-smoke.md` for role/actor/workflow-readiness claims;
-- `support/runtime-integration-readiness.md` for runtime provider/integration posture claims;
-- `support/evidence-review.md` and `support/session-implementation-review.md` for implementation evidence and completion decisions.
+- `EVIDENCE.md` claim reconciliation for material close, validation, runtime, implementation, integration, production-readiness, packaging, and accepted-state claims;
+- `EVIDENCE.md` for local setup/runtime/user-environment claims;
+- `EVIDENCE.md` for role/actor/workflow-readiness claims;
+- `DESIGN.md` / `EVIDENCE.md` runtime posture for runtime provider/integration posture claims;
+- `EVIDENCE.md` and `implementation-units/IU-xx.md` review for implementation evidence and completion decisions.
 
 If the right artifact is missing, the truthful result is blocked or downgraded. Do not use another artifact as a substitute owner.

@@ -8,7 +8,7 @@ Classify uploaded or referenced source material and extract focus signals withou
 
 ### Produces
 
-- `_hirmos/session/support/source-materials.md`
+- `_hirmos/session/DESIGN.md`
 - `_hirmos/session/unresolved-items.md` updates when inputs conflict, are unreadable, or create material uncertainty
 - `_hirmos/session/SESSION_EXECUTION.md` updates
 
@@ -26,7 +26,7 @@ Classify uploaded or referenced source material and extract focus signals withou
 
 ## Required inputs
 
-- `_hirmos/session/support/request-intake.md`
+- `_hirmos/session/SESSION_CONTRACT.md`
 - Available source materials or explicit statement that no extra source materials exist.
 
 ## Execution controls contributed
@@ -74,6 +74,6 @@ Record full item fields in `unresolved-items.md`, including current status, down
 
 ## Project Context and Stack Classification
 
-When this capability encounters project-type or stack evidence, record findings for `support/project-context.md`, `support/stack-resolution.json`, or `SESSION_EXECUTION.md` as required by active controls.
+When this capability encounters project-type or stack evidence, record material findings in `DESIGN.md` / `SESSION_CONTRACT.md`, `stack-resolution.json` for machine-readable stack routing, or `SESSION_EXECUTION.md` as required by active controls.
 
 User Request labels and prototype technology signals are focus evidence, not final classification authority.

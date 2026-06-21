@@ -21,3 +21,17 @@ A passing build is not enough to prove production readiness. Real runtime behavi
 ## Canonical runtime posture values
 
 Runtime integration posture fields use only the canonical posture values from `RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`. Do not use shorthand such as `LOCAL_REAL`, `provider-ready`, or `production ready pending credentials` in posture fields.
+
+
+## Production-shaped by default
+
+HIRMOS now treats production-shaped implementation as the default posture for governed software work. This does not mean every session must deploy to production or use enterprise-grade infrastructure. It means the local implementation should preserve the architecture shape needed for production where practical.
+
+Examples:
+
+- use local PostgreSQL when PostgreSQL is the intended production database;
+- use a persisted job/worker/cron shape for long-running AI or image work;
+- make credit/usage/billing mutations transactional, idempotent, or explicitly limited;
+- keep secrets and runtime-generated files out of release or handoff packages.
+
+If a session intentionally uses a prototype, fixture, demo-only, or local-only shortcut, the limitation must be authorized in the Session Contract and preserved at close.

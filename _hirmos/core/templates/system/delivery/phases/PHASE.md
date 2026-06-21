@@ -317,7 +317,7 @@ Required when `Phase type` is `BROWNFIELD` or `MIXED`.
 - Acceptance gate status: PENDING / PASS / BLOCKED / NOT_APPLICABLE
 - Phase acceptance evidence status: PENDING / COMPLETE / INCOMPLETE / BLOCKED / NOT_APPLICABLE
 - All exit criteria satisfied or explicitly deferred/excluded: yes / no / not_applicable
-- Session Contract Review acceptance verdict: ACCEPTED / PARTIAL / BLOCKED / FAILED / NOT_REVIEWED
+- `SESSION_CONTRACT.md` section 11 review acceptance verdict: ACCEPTED / PARTIAL / BLOCKED / FAILED / NOT_REVIEWED
 - Implementation Unit evidence complete: yes / no / not_applicable
 - Unresolved adopted work remaining: yes / no / not_applicable
 - Delivery Plan status updated: yes / no / not_applicable

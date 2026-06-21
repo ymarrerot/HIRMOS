@@ -10,7 +10,7 @@ Last updated from session:
 
 This is the durable multi-session delivery authority for the delivery ID above.
 
-For multi-session work in any project type, a Delivery Plan is needed and separate phase files are required.
+For durable multi-session delivery, a Delivery Plan is needed. Separate phase files are required only when the selected delivery shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`.
 
 Canonical location:
 
@@ -54,7 +54,16 @@ UNKNOWN
 
 `UNKNOWN` phase type blocks implementation readiness until current-state understanding classifies the phase as `GREENFIELD`, `BROWNFIELD`, or `MIXED`.
 
-## Delivery-Need Classification Source
+## Delivery Shape Source
+
+Compatibility label: Delivery-Need Classification Source.
+
+- Delivery shape: SINGLE_SESSION_VERTICAL_SLICE | SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS | MULTI_SESSION_DELIVERY | MULTI_SESSION_DELIVERY_WITH_PHASE_FILES
+- Why this shape is necessary:
+- Why smaller shape was insufficient:
+- Why phase files are / are not needed:
+
+## Delivery Shape Decision Source
 
 - Classification answer: YES | NO | UNCERTAIN
 - Classification evidence:

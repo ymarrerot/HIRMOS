@@ -22,11 +22,11 @@ Future sessions read the accepted baseline with `CURRENT_SYSTEM_STATE.md` so the
 
 ## Supporting inputs
 
-- `support/source-materials.md`: source inventory and evidence extraction.
-- `support/prototype-ingestion.md`: prototype-derived evidence, intended/observed behavior separation, business logic, data contracts, integrations, conflicts, and missing production concerns.
+- `DESIGN.md` source matrix: source inventory and evidence extraction.
+- `DESIGN.md` source matrix: prototype-derived evidence, intended/observed behavior separation, business logic, data contracts, integrations, conflicts, and missing production concerns.
 - `unresolved-items.md`: gated or unresolved requirement decisions.
 - `DELIVERY_PLAN.md`: delivery-unit mapping.
-- `support/claim-reconciliation.md`: evidence status for claims, not requirements coverage.
+- `EVIDENCE.md` claim reconciliation: evidence status for claims, not requirements coverage.
 
 ## Rule of thumb
 
@@ -34,7 +34,7 @@ Future sessions read the accepted baseline with `CURRENT_SYSTEM_STATE.md` so the
 
 `CURRENT_SYSTEM_STATE.md` answers what is accepted current truth now.
 
-`support/claim-reconciliation.md` answers what evidence supports claims.
+`EVIDENCE.md` claim reconciliation answers what evidence supports claims.
 
 
 ## Prior framework refinements
@@ -53,13 +53,13 @@ HIRMOS keeps the current compact artifact model, but applies these lessons from 
 
 ## Cross-run synthesis and requirement coverage
 
-When HIRMOS compares multiple runs, generated apps, prototypes, OpenSpec outputs, or UX-first tools, the comparison is useful only if its lessons are routed back into the current HIRMOS authority model.
+When HIRMOS compares multiple runs, generated apps, prototypes, external spec-tool outputs, or UX-first tools, the comparison is useful only if its lessons are routed back into the current HIRMOS authority model.
 
 Use this routing:
 
 - product coverage gaps → `REQUIREMENTS_BASELINE.md`;
 - UX/operator-flow strengths → UI/UX requirement IDs, delivery-unit acceptance criteria, and role workflow smoke checks;
-- engineering strengths → `support/technical-review.md` and implementation-unit criteria;
+- engineering strengths → `DESIGN.md` technical review and implementation-unit criteria;
 - testing strengths → stack evidence commands and role/workflow smoke checks;
 - artifact/state weaknesses → close/update-state and claim reconciliation;
 - package/handoff weaknesses → packaging protocol and package-cleanliness evidence.

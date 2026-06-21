@@ -78,7 +78,7 @@ Implementation must not begin from raw requirements alone.
 
 ### Brownfield targeted change
 
-A targeted brownfield change may skip durable Delivery Plan governance only when focused system-state understanding proves the change can be safely governed by one Session Contract and the Delivery-Need Classification Gate records affirmative single-session safety evidence.
+A targeted brownfield change may skip durable Delivery Plan governance only when focused system-state understanding proves the change can be safely governed by one Session Contract and the Delivery Shape Decision Gate records affirmative single-session safety evidence.
 
 It still requires:
 
@@ -88,7 +88,7 @@ It still requires:
 - Session Contract;
 - Implementation authorization when project files will change.
 
-### Large or multi-session delivery need
+### Large or multi-session delivery shape
 
 Large or multi-session work requires governed delivery decomposition when it cannot be safely implemented as one bounded session. This applies to any project type: greenfield, brownfield, mixed, prototype-to-product, and other delivery paths.
 
@@ -151,9 +151,9 @@ Route back or block when:
 Interaction modes change visibility, not classification rigor.
 
 
-## Delivery governance classification fields
+## Delivery shape fields
 
-Project-type classification must include delivery need, not only greenfield/brownfield labels.
+Project-type classification must include delivery shape, not only greenfield/brownfield labels.
 
 Required fields:
 
@@ -164,6 +164,6 @@ Required delivery artifact: none / DELIVERY_PLAN.md + PHASE-xx.md
 Reasoning evidence:
 ```
 
-For multi-session work in any project type, a Delivery Plan is needed and separate phase files are required.
+For durable multi-session delivery, a Delivery Plan is needed. Separate phase files are required only when the selected delivery shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`.
 
 HIRMOS must apply `_hirmos/core/protocol/DELIVERY_GOVERNANCE.md` before implementation readiness.

@@ -8,7 +8,7 @@ Produce general and User Request-focused system-state understanding before Desig
 
 ### Produces
 
-- `_hirmos/session/support/system-state.md`
+- `_hirmos/session/DESIGN.md`
 - `_hirmos/session/unresolved-items.md` updates
 - `_hirmos/session/SESSION_EXECUTION.md` system-state control status
 
@@ -27,9 +27,9 @@ Produce general and User Request-focused system-state understanding before Desig
 
 ## Required inputs
 
-- `_hirmos/session/support/request-intake.md`
-- `_hirmos/session/support/source-materials.md` when source materials exist
-- `_hirmos/session/support/prototype-ingestion.md` when prototype/POC inputs exist
+- `_hirmos/session/SESSION_CONTRACT.md`
+- `_hirmos/session/DESIGN.md` when source materials exist
+- `_hirmos/session/DESIGN.md` when prototype/POC inputs exist
 - repository/project evidence when a codebase exists
 - `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` when it exists; if missing, record the absence explicitly
 - supporting accepted-state records when they exist: `_hirmos/system/accepted-state/CARRY_FORWARD.md` and `_hirmos/system/accepted-state/DECISION_LOG.md`; latest-close metadata lives inside `CURRENT_SYSTEM_STATE.md`
@@ -92,7 +92,7 @@ Record full item fields in `unresolved-items.md`, including current status, down
 
 ## Project Context and Stack Classification
 
-When this capability encounters project-type or stack evidence, record findings for `support/project-context.md`, `support/stack-resolution.json`, or `SESSION_EXECUTION.md` as required by active controls.
+When this capability encounters project-type or stack evidence, record material findings in `DESIGN.md` / `SESSION_CONTRACT.md`, `stack-resolution.json` for machine-readable stack routing, or `SESSION_EXECUTION.md` as required by active controls.
 
 User Request labels and prototype technology signals are focus evidence, not final classification authority.
 
@@ -101,7 +101,7 @@ User Request labels and prototype technology signals are focus evidence, not fin
 
 When material runtime services are involved, follow `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`.
 
-Record or consume `_hirmos/session/support/runtime-integration-readiness.md` as required by execution controls.
+Record or consume `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` as required by execution controls.
 
 Do not claim fixture/mock/boundary/local/production integration levels beyond what the active artifacts and evidence support.
 
@@ -115,7 +115,7 @@ Required sequence for accepted-state understanding:
 2. If it exists, read it first as the primary accepted current-state source.
 3. Read `_hirmos/system/accepted-state/CARRY_FORWARD.md` and `_hirmos/system/accepted-state/DECISION_LOG.md` as supporting accepted-state records when present. Read latest-close metadata from `CURRENT_SYSTEM_STATE.md`.
 4. Use session archives only as history/evidence or to resolve contradictions. Do not reconstruct current truth from archives when `CURRENT_SYSTEM_STATE.md` exists.
-5. Record the read status, missing status, contradictions, and confidence in `_hirmos/session/support/system-state.md` and `_hirmos/session/SESSION_EXECUTION.md`.
+5. Record the read status, missing status, contradictions, and confidence in `_hirmos/session/DESIGN.md` and `_hirmos/session/SESSION_EXECUTION.md`.
 6. Set terminal state `BLOCKED` when accepted-state contradictions make safe Design impossible without clarification.
 
 Completion is invalid until the current-system-state-first control is `SATISFIED` or explicitly `NOT_APPLICABLE` with rationale.

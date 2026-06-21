@@ -27,6 +27,6 @@ Design owns governed requirements, design, scope, delivery structure, technical 
 
 ## Durable delivery authority
 
-For multi-session work in any project type, a Delivery Plan is needed and separate phase files are required.
+For durable multi-session delivery, a Delivery Plan is needed. Separate phase files are required only when the selected delivery shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`.
 
 Durable delivery authority lives under `_hirmos/system/delivery/<delivery-id>/`, not under `_hirmos/session/`. Active sessions consume the durable Delivery Plan and `PHASE-xx.md` through `SESSION_CONTRACT.md` and implementation units.

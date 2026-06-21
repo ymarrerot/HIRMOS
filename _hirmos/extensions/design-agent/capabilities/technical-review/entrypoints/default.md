@@ -8,7 +8,7 @@ Create reviewer-facing technical assumption, risk, decision, and inspection mate
 
 ### Produces
 
-- `_hirmos/session/support/technical-review.md`
+- `_hirmos/session/DESIGN.md`
 - `_hirmos/session/DESIGN.md technical assumptions summary`
 - `_hirmos/session/unresolved-items.md technical-review items`
 - `_hirmos/session/SESSION_EXECUTION.md technical-review control updates`
@@ -31,7 +31,7 @@ Create reviewer-facing technical assumption, risk, decision, and inspection mate
 ## Required inputs
 
 - `_hirmos/session/DESIGN.md`
-- `_hirmos/session/support/system-state.md`
+- `_hirmos/session/DESIGN.md`
 - `_hirmos/session/unresolved-items.md`
 - stack/project-type evidence when applicable
 
@@ -39,7 +39,7 @@ Create reviewer-facing technical assumption, risk, decision, and inspection mate
 
 - technical-review control
 - Design control
-- artifact-backed checkpoint control
+- snapshot-backed checkpoint control
 
 ## Method
 
@@ -79,6 +79,6 @@ Record full item fields in `unresolved-items.md`, including current status, down
 
 When material runtime services are involved, follow `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`.
 
-Record or consume `_hirmos/session/support/runtime-integration-readiness.md` as required by execution controls.
+Record or consume `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` as required by execution controls.
 
 Do not claim fixture/mock/boundary/local/production integration levels beyond what the active artifacts and evidence support.

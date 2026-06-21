@@ -5,7 +5,7 @@
 > - Preserve this invariant block during Update System State.
 > - Do not replace this file with a chat summary or session-local artifact.
 > - Use canonical runtime posture values from `RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`.
-> - Use canonical evidence states from `support/claim-reconciliation.md`.
+> - Use canonical evidence states from `EVIDENCE.md` claim reconciliation.
 > - Keep accepted-state decision classifications separate from evidence status.
 
 Status: durable accepted-state record.

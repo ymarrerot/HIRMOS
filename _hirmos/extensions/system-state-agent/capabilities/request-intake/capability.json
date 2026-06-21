@@ -15,7 +15,7 @@
   },
   "requires_artifacts": [],
   "produces_artifacts": [
-    "_hirmos/session/support/request-intake.md",
+    "_hirmos/session/SESSION_CONTRACT.md parent authority",
     "_hirmos/session/SESSION_EXECUTION.md"
   ],
   "execution_controls": [

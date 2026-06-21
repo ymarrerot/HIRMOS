@@ -18,7 +18,7 @@ AI agents often say “implementation complete” after tests pass. Serious soft
 - the database was reachable;
 - migrations and seed ran;
 - the dev server responded;
-- a patient/staff/provider/admin workflow was exercised;
+- role-specific end-user, operator, privileged-user, or administrative workflows were exercised;
 - the user's environment was verified;
 - production readiness was verified.
 
@@ -30,4 +30,4 @@ Technical Supervisor and Framework Diagnostics modes can inspect the detailed ev
 
 ## Missing smoke checks
 
-When role workflows are in scope, `support/role-workflow-smoke.md` must exist even if smoke checks are not run. Use `NOT_RUN`, `BLOCKED`, or `NOT_APPLICABLE` for each workflow and carry forward the limitation.
+When role workflows are in scope, `EVIDENCE.md` must exist even if smoke checks are not run. Use `NOT_RUN`, `BLOCKED`, or `NOT_APPLICABLE` for each workflow and carry forward the limitation.

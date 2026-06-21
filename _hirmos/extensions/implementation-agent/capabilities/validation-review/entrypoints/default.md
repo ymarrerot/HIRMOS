@@ -8,7 +8,7 @@ Run or inspect stack/project validation evidence and decide whether evidence pro
 
 ### Produces
 
-- `_hirmos/session/support/evidence-review.md`
+- `_hirmos/session/EVIDENCE.md`
 - validation logs or evidence references
 - `_hirmos/session/SESSION_EXECUTION.md evidence claims`
 
@@ -87,6 +87,6 @@ Each Implementation Unit should target one primary stack context unless a cross-
 
 When material runtime services are involved, follow `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`.
 
-Record or consume `_hirmos/session/support/runtime-integration-readiness.md` as required by execution controls.
+Record or consume `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` as required by execution controls.
 
 Do not claim fixture/mock/boundary/local/production integration levels beyond what the active artifacts and evidence support.

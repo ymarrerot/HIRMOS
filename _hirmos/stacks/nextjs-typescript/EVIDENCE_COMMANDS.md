@@ -15,7 +15,7 @@ When HIRMOS attempts safe local technical progress, evidence must record:
 - result and raw/log evidence location when available;
 - whether the result proves build/test success, local runtime readiness, user-environment verification, or production readiness.
 
-Use canonical evidence states from `support/claim-reconciliation.md`.
+Use canonical evidence states from `EVIDENCE.md` claim reconciliation.
 
 ## Local setup and role-workflow smoke evidence
 
@@ -43,6 +43,6 @@ Examples of evidence to record when safe and applicable:
 - database migration command such as `npx prisma migrate dev`, `prisma db push`, or stack-specific equivalent when authorized;
 - seed command when present;
 - `npm run dev` and route response checks;
-- login, patient, staff, provider, manager/admin route smoke observations.
+- login and role-specific route smoke observations for relevant end-user, operator, privileged-user, and administrative paths.
 
 Do not run destructive resets against unknown data without explicit approval.

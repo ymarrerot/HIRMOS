@@ -47,7 +47,7 @@ HIRMOS must not do these autonomously:
 - use, request, expose, or invent production secrets;
 - create paid provider accounts or make cost-bearing vendor choices;
 - make compliance/legal/security commitments such as HIPAA readiness or BAA sufficiency;
-- change domain behavior, user workflows, launch scope, pricing, clinical policy, or operational ownership silently;
+- change domain behavior, user workflows, launch scope, pricing, regulated policy, or operational ownership silently;
 - deploy to production or mutate production infrastructure without explicit authority;
 - claim production readiness when evidence does not support it.
 
@@ -85,7 +85,7 @@ Framework Diagnostics mode may show the full control, routing, artifact, and evi
 
 ## Technical decision recording
 
-Use the existing `support/technical-review.md` artifact as the technical decision ledger. Do not create a separate decision-ledger artifact unless future evidence proves it is necessary.
+Use the existing `DESIGN.md` technical review artifact as the technical decision ledger. Do not create a separate decision-ledger artifact unless future evidence proves it is necessary.
 
 For each material autonomous technical decision, record:
 
@@ -106,7 +106,7 @@ Autonomous progress may move an integration from `DEMO_FIXTURE` or `INTEGRATION_
 
 ## Claim and evidence relationship
 
-This protocol does not redefine evidence states. Use canonical evidence states from `support/claim-reconciliation.md`.
+This protocol does not redefine evidence states. Use canonical evidence states from `EVIDENCE.md` claim reconciliation.
 
 Autonomous progress must be evidence-bound. A successful build does not prove local runtime readiness; a local runtime test does not prove production readiness; adapter code does not prove provider delivery.
 
@@ -125,8 +125,8 @@ Use `LOCAL_TECHNICAL_SETUP_AND_ROLE_WORKFLOW_SMOKE_CHECKS.md` for the governing 
 
 Required artifacts when applicable:
 
-- `_hirmos/session/support/local-runtime-evidence.md` records local environment, service, migration, seed, dev-server, and route evidence.
-- `_hirmos/session/support/role-workflow-smoke.md` records patient/staff/provider/manager/admin workflow smoke evidence.
-- `_hirmos/session/support/claim-reconciliation.md` reconciles whether the claim may be surfaced.
+- `_hirmos/session/EVIDENCE.md` records local environment, service, migration, seed, dev-server, and route evidence.
+- `_hirmos/session/EVIDENCE.md` records role-specific workflow smoke evidence for the relevant end-user, operator, privileged-user, and administrative paths.
+- `_hirmos/session/EVIDENCE.md` reconciles whether the claim may be surfaced.
 
 Firm rule: tests/build/lint alone do not prove local runtime readiness or role workflow readiness.

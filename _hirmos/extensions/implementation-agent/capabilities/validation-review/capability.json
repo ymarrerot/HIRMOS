@@ -20,7 +20,7 @@
     "implementation evidence or review target"
   ],
   "produces_artifacts": [
-    "_hirmos/session/support/evidence-review.md",
+    "_hirmos/session/EVIDENCE.md",
     "validation logs or evidence references",
     "_hirmos/session/SESSION_EXECUTION.md"
   ],

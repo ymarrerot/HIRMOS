@@ -196,8 +196,8 @@ Cross-run UX lessons should be integrated into existing Phases / delivery slices
 - `REQUIREMENTS_BASELINE.md` for UI/UX requirement coverage;
 - `DELIVERY_PLAN.md` for user-journey sequencing;
 - `SESSION_CONTRACT.md` for authorized UX work;
-- `support/role-workflow-smoke.md` for operator journey checks;
-- `support/claim-reconciliation.md` before claiming workflow readiness.
+- `EVIDENCE.md` for operator journey checks;
+- `EVIDENCE.md` claim reconciliation before claiming workflow readiness.
 
 Minimum operator-flow questions for workflow-heavy apps:
 

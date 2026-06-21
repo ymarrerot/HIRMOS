@@ -10,7 +10,7 @@ Execute one approved implementation unit using its self-contained `IU-xx.md` art
 
 - updated `_hirmos/session/implementation-units/IU-xx.md` Execution Record section
 - project/file changes authorized by the unit
-- validation/evidence entries in the same IU artifact and/or `_hirmos/session/support/` appendices when needed
+- validation/evidence entries in the same IU artifact and/or `_hirmos/session/EVIDENCE.md` when nontrivial evidence cannot fit cleanly in the IU artifact
 - `_hirmos/session/SESSION_EXECUTION.md` execution-control updates
 
 ### Terminal States

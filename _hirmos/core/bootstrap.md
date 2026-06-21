@@ -247,7 +247,7 @@ The central active-session artifact is:
 _hirmos/session/unresolved-items.md
 ```
 
-`SESSION_CONTRACT.md` may contain only a compact unresolved-items control summary. It is not sufficient for review, implementation, continuation, checkpointing, or close. HIRMOS must read and apply `_hirmos/session/unresolved-items.md` directly before every lifecycle boundary.
+`SESSION_CONTRACT.md` may contain only a compact unresolved-items control summary. It is not sufficient for review, implementation, continuation, continuation checkpointing, or close. HIRMOS must read and apply `_hirmos/session/unresolved-items.md` directly before every lifecycle boundary.
 
 Minimum classifications:
 
@@ -360,7 +360,7 @@ Some protocols are not full bootstrap reads, but the agent must know when they b
 During bootstrap, remember these firm evidence and readiness rules:
 
 - canonical runtime posture and evidence states are closed sets;
-- material claims require `support/claim-reconciliation.md`;
+- material claims require `EVIDENCE.md` claim reconciliation;
 - close success requires archive, accepted state, and post-close session state to agree;
 - local runtime readiness requires local setup evidence;
 - role workflow readiness requires role-workflow smoke evidence.

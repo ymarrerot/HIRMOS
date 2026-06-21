@@ -87,7 +87,7 @@ During Understand System State, read `_hirmos/system/accepted-state/CURRENT_SYST
 
 ### Current-system-state-first understanding
 
-Record the read status, contradictions, confidence, and Design handoff for `CURRENT_SYSTEM_STATE.md` in `_hirmos/session/support/system-state.md` and update current-system-state-first controls in `_hirmos/session/SESSION_EXECUTION.md`.
+Record the read status, contradictions, confidence, and Design handoff for `CURRENT_SYSTEM_STATE.md` in `_hirmos/session/DESIGN.md` and update current-system-state-first controls in `_hirmos/session/SESSION_EXECUTION.md`.
 
 ### Accepted-state invariant and canonical-value responsibilities
 

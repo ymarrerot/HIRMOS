@@ -106,7 +106,7 @@ Minimum package-cleanliness evidence:
 - explicit exclusion check for `.env`, `.env.*` except `.env.example`, `.DS_Store`, `__MACOSX/`, `node_modules/`, `.next/`, `.git/`, generated runtime folders, and live secret files;
 - any intentionally included local evidence files and their label/rationale;
 - whether secret values are absent, redacted, placeholder-only, or intentionally included by explicit user request;
-- final package-cleanliness claim status recorded in `support/claim-reconciliation.md` when package cleanliness is surfaced.
+- final package-cleanliness claim status recorded in `EVIDENCE.md` claim reconciliation when package cleanliness is surfaced.
 
 A package may include generated application source when that source is the product being handed off, but it must not silently include local machine state, live secrets, dependency folders, build cache, or operating-system metadata.
 
@@ -123,6 +123,6 @@ Cross-run package lessons must route to:
 - package-cleanliness evidence for handoff claims;
 - setup instructions and `.env.example` expectations;
 - carry-forward items when a baseline is usable but not safely package-clean;
-- `support/claim-reconciliation.md` when package cleanliness or reproducibility is surfaced.
+- `EVIDENCE.md` claim reconciliation when package cleanliness or reproducibility is surfaced.
 
 Firm rule: do not select a baseline solely on product coverage when its package/handoff state would make local continuation unsafe, unreproducible, or confusing.

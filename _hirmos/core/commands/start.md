@@ -38,6 +38,11 @@ Before execution:
 
 Read stack, capability, template, and extension files only when the active command controls require them. Capability and extension routing must follow `_hirmos/core/protocol/CAPABILITY_ROUTING.md`; command-triggered routing and adaptive-read discipline must follow `_hirmos/core/protocol/COMMANDS.md`. When Design, Implementation, Update System State, project type, stack, runtime integration, delivery governance, or unresolved-item state requires a specialized capability decision, read `_hirmos/core/protocol/CAPABILITY_ROUTING.md` before selecting extension or capability entrypoints.
 
+
+## Production-shaped engineering posture
+
+When the command reaches Design, Implementation, or close/update-state for software work, HIRMOS must apply the production-shaped default from `_hirmos/core/authority/LIFECYCLE.md` and `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`. Do not treat prototype/demo/local-only shortcuts as neutral defaults. They must be explicitly authorized, evidenced, and preserved as limitations or carry-forward items.
+
 ## Required behavior
 
 
@@ -56,36 +61,44 @@ If any check fails, `hirmos start` must stop at `Blocked / Fail-Closed`, identif
 
 ### Required state mutation
 
-### Delivery-Need Classification Gate
+### Delivery Shape Decision Gate
 
 Before `hirmos start` may claim `Ready for Implementation` for any implementation-capable request, it must apply `_hirmos/core/protocol/DELIVERY_GOVERNANCE.md` and answer this literal question in `SESSION_EXECUTION.md` and `SESSION_CONTRACT.md`:
 
 ```text
-Does this request require multi-session delivery governance?
-Answer: YES / NO / UNCERTAIN.
+What is the smallest sufficient governed delivery shape for this request?
+Answer: SINGLE_SESSION_VERTICAL_SLICE / SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS / MULTI_SESSION_DELIVERY / MULTI_SESSION_DELIVERY_WITH_PHASE_FILES / UNCERTAIN.
 Evidence:
 Decision factors:
-If NO, why is one bounded session safe?
-If YES, required Delivery Plan:
+Smaller-shape safety analysis:
+Larger-shape overhead analysis:
+Required durable delivery artifacts, if any:
 If UNCERTAIN, what must be inspected before deciding?
 ```
 
 Fail-closed behavior:
 
-- `YES` requires a durable Delivery Plan at `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` and at least one phase file under `_hirmos/system/delivery/<delivery-id>/phases/` before implementation can be authorized.
-- `UNCERTAIN` blocks implementation readiness until the uncertainty is resolved.
-- `NO` requires affirmative single-session safety evidence and a list of Delivery Plan triggers considered and ruled out.
+- `UNCERTAIN` blocks implementation readiness until resolved.
+- `SINGLE_SESSION_VERTICAL_SLICE` requires affirmative bounded-scope safety evidence.
+- `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` requires implementation units that collectively cover the Session Contract.
+- `MULTI_SESSION_DELIVERY` requires a durable Delivery Plan before implementation authorization.
+- `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` requires a durable Delivery Plan and exactly one adopted durable phase file before implementation authorization.
 
-For multi-session work in any project type, a Delivery Plan is needed and separate phase files are required. HIRMOS must bias toward delivery governance when classification is ambiguous. When classification is `YES`, Design must route through `delivery-design → phase-contracting → session-contract → implementation-readiness` before implementation authorization.
+Use the smallest governed delivery shape that preserves engineering quality, implementation truth, reviewability, validation, continuity, and accepted-state integrity.
+
+Capability routing:
+
+- single-session shapes route through `session-contract → implementation-readiness`;
+- multi-session delivery routes through `delivery-design → session-contract → implementation-readiness`;
+- multi-session delivery with phase files routes through `delivery-design → phase-contracting → session-contract → implementation-readiness`.
 
 When `hirmos start` accepts a governable request, it must update `SESSION_STATE.json` to an active session before lifecycle work continues:
 
 - `status = active`;
-- `active_command = hirmos start`;
-- `last_command = hirmos start`;
-- `session_id` and `session_title` populated;
+- `session_id` populated;
 - `lifecycle_stage` advanced through the governed start stages as they are reached;
-- `allowed_next_commands` and `recommended_next_command` updated at every user-facing boundary.
+- `status`, `allowed_next_commands`, `recommended_next_command`, `blocking_reason`, and `updated_at` updated at every user-facing boundary;
+
 
 For implementation-capable sessions, the final start state must be `lifecycle_stage = implementation_readiness`, `allowed_next_commands = ["hirmos continue", "hirmos status"]`, and `recommended_next_command = hirmos continue`.
 
@@ -100,7 +113,7 @@ For implementation-capable sessions, the final start state must be `lifecycle_st
 7. Establish baseline execution controls.
 8. Instantiate only the session artifacts required by the active request path.
 9. Run Understand System State before claiming Design authority.
-10. During Understand System State, read `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` first when it exists. If it is missing, record the absence explicitly in `_hirmos/session/support/system-state.md` and `_hirmos/session/SESSION_EXECUTION.md`.
+10. During Understand System State, read `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` first when it exists. If it is missing, record the absence explicitly in `_hirmos/session/DESIGN.md` and `_hirmos/session/SESSION_EXECUTION.md`.
 11. Read supporting accepted-state artifacts (`CURRENT_SYSTEM_STATE.md` latest-close metadata, `CARRY_FORWARD.md`, `DECISION_LOG.md`) when present. Use session archives only as history/evidence, not as the primary current-state source.
 12. Use the User Request and source inputs to guide focused system-state understanding, but do not treat them as governed requirements.
 13. Route to Design only after the system-state and current-system-state-first controls are satisfied, explicitly not applicable with rationale, or blocked.
@@ -140,12 +153,13 @@ Record these controls in `SESSION_EXECUTION.md` at minimum:
 | Interaction-mode control | always | configured mode missing or unsupported |
 | Lifecycle-boundary control | always | active boundary missing or inconsistent |
 | SESSION_EXECUTION control | always | execution spine not created or not updated |
-| Artifact-backed checkpoint control | always | user-facing checkpoint references missing/placeholders |
+| Snapshot-backed checkpoint control | always | user-facing checkpoint references missing/placeholders |
 | System-state control | always for governed software work | current-state evidence missing or insufficient |
 | Current-system-state-first control | always for governed software work | `CURRENT_SYSTEM_STATE.md` exists but was not read first, missing status was not recorded, or accepted-state contradictions were not classified |
 | Unresolved-item control | always for governed sessions | `_hirmos/session/unresolved-items.md` missing, not directly reviewed, gated items unresolved, or classification missing |
 | Session Contract control | before Implementation or close | `SESSION_CONTRACT.md` missing, placeholder, incomplete, or not coverage-reviewed |
-| Delivery-Need Classification control | before Implementation Readiness for implementation-capable sessions | classification missing, UNCERTAIN, unsafe NO, or YES without durable Delivery Plan and phase file |
+| Delivery Shape Decision control | before Implementation Readiness for implementation-capable sessions | shape missing, UNCERTAIN, unsafe smaller shape, or selected durable-delivery shape without required artifacts |
+| Production-Shaped Engineering Gate control | before Implementation Readiness for implementation-capable software sessions | gate missing, material area blocked, or weaker posture not explicitly authorized |
 | Design control | when Design is needed | governed requirements/design/session contract missing or blocked |
 | Implementation authorization control | before Implementation | Design has not authorized Implementation |
 | Validation/evidence control | when evidence is claimed | claimed evidence lacks artifact/log/output |
@@ -161,7 +175,7 @@ Before meaningful Design or Implementation begins:
 - its absence has been explicitly recorded; and
 - supporting accepted-state artifacts have been read when present; and
 - archive history has not been used as a substitute for current truth; and
-- `_hirmos/session/support/system-state.md` records the accepted-state read status, contradictions, confidence, and handoff to Design.
+- `_hirmos/session/DESIGN.md` records the accepted-state read status, contradictions, confidence, and handoff to Design.
 
 Firm rule: do not claim `Ready for Implementation`, `Implementation Complete`, or `Ready to Update System State` from `hirmos start` while the current-system-state-first control is `PENDING` or `BLOCKED`.
 
@@ -175,6 +189,7 @@ Do not claim `Ready for Implementation` unless:
 - `_hirmos/session/unresolved-items.md` was directly reviewed, not inferred from the Session Contract summary;
 - `SESSION_CONTRACT.md` exists, covers authorized scope, and authorizes Implementation;
 - implementation authorization is recorded;
+- the Production-Shaped Engineering Gate is complete for material areas or explicitly not applicable;
 - any referenced artifacts exist and are non-placeholder.
 
 If user-owned Domain/Risk/Resource decisions block progress, surface a concise decision checkpoint and stop at `Needs User Decision`.
@@ -189,14 +204,14 @@ If system evidence, Design authority, or required artifacts are insufficient, st
 Common instantiation sequence:
 
 1. `SESSION_EXECUTION.md` always.
-2. `support/request-intake.md`, `support/source-materials.md`, or `support/prototype-ingestion.md` when request/source/prototype inputs require durable extraction.
-3. `support/system-state.md` for governed software work.
+2. `SESSION_CONTRACT.md` parent authority, `DESIGN.md` source matrix, or `DESIGN.md` source matrix when request/source/prototype inputs require durable extraction.
+3. `DESIGN.md` current-state basis for governed software work.
 4. `unresolved-items.md` always for governed sessions.
 5. `SESSION_CONTRACT.md` before Implementation can be authorized or close can be claimed.
 6. Design artifacts only when Design is active.
-7. Durable delivery artifacts under `_hirmos/system/delivery/<delivery-id>/` when Delivery-Need Classification is YES.
+7. Durable delivery artifacts under `_hirmos/system/delivery/<delivery-id>/` when the selected delivery shape requires them.
 8. Implementation artifacts only when Implementation is authorized.
-8. Update System State / close support artifacts only when close/update-state is active.
+8. Update System State / close major artifact sections only when close/update-state is active.
 
 Every created artifact must be recorded in `SESSION_EXECUTION.md` under `Artifact Instantiation Log`. Do not reference an artifact as inspectable or ready until it exists and contains non-placeholder content.
 
@@ -218,11 +233,11 @@ Before returning control to the user, update:
 Before surfacing a checkpoint that asks for a decision, claims readiness/completion, fails closed, or changes continuation state, HIRMOS must:
 
 1. read `_hirmos/core/protocol/GOVERNED_CHECKPOINTS.md`;
-2. instantiate `_hirmos/session/checkpoints/CHECKPOINT_<checkpoint-id>.md` when required;
-3. verify the checkpoint artifact is backed by existing non-placeholder session artifacts;
+2. update `_hirmos/session/SESSION_EXECUTION.md` → `Current Continuation Snapshot` when required;
+3. verify the Current Continuation Snapshot is backed by existing non-placeholder session artifacts;
 4. verify unresolved-item status from `_hirmos/session/unresolved-items.md` when decisions, assumptions, blockers, or continuation are involved;
-5. record the checkpoint in `SESSION_EXECUTION.md`;
-6. surface only claims supported by the checkpoint artifact and active controls.
+5. record the surfaced boundary in `SESSION_EXECUTION.md` Continuation Boundary Log;
+6. surface only claims supported by the Current Continuation Snapshot and active controls.
 
 
 ## Project-type and stack controls
@@ -233,7 +248,7 @@ Required behavior:
 
 - classify project type from evidence, not User Request label alone;
 - select stack from repository evidence first, then accepted state, request/config preference, prototype evidence, installed packages, or `generic` fallback;
-- instantiate `support/project-context.md` and `support/stack-resolution.json` when project-type or stack decisions affect Design, Implementation, validation, or Update System State;
+- record material project-type decisions in `DESIGN.md` / `SESSION_CONTRACT.md`, record machine-readable stack routing in `stack-resolution.json` when needed, and record command controls in `SESSION_EXECUTION.md`;
 - activate stack contexts only when evidence shows multiple bounded stack areas;
 - block or route back when project type, stack, or stack context uncertainty affects authority or evidence.
 
@@ -244,7 +259,7 @@ When the active request may involve material runtime services, read `_hirmos/cor
 
 Required behavior:
 
-- instantiate or update `_hirmos/session/support/runtime-integration-readiness.md` when material integration areas affect Design, Implementation, evidence, production readiness, or close;
+- instantiate or update `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` when material integration areas affect Design, Implementation, evidence, production readiness, or close;
 - do not silently downgrade real integration requirements to fixtures, mocks, console fallbacks, or boundary-only work;
 - do not surface low-level provider choices to Domain Expert users unless the protocol requires surfacing;
 - do not claim implementation completion, production readiness, or close success beyond the integration posture supported by evidence.
@@ -285,7 +300,7 @@ Firm rule: do not claim `Ready for Implementation` until material in-scope requi
 
 ## Current System State Delivery Pointer Precheck
 
-Before final Delivery-Need Classification, `hirmos start` must read the Active Development Context and Delivery Pointers in `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` when present.
+Before final Delivery Shape Decision, `hirmos start` must read the Active Development Context and Delivery Pointers in `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` when present.
 
 If those pointers indicate an active, blocked, or next recommended durable delivery/phase, `hirmos start` must not default to a single-session path merely because the current user request is short. It must either adopt the active durable delivery context or record why the new request is unrelated and safely bounded.
 
@@ -293,7 +308,7 @@ If the pointers reference a missing or contradictory Delivery Plan or Phase file
 
 ## Durable Phase Adoption Pre-Implementation Gate
 
-When Delivery-Need Classification is `YES`, `hirmos start` must not end at implementation readiness until `SESSION_CONTRACT.md` adopts exactly one durable phase file.
+When the selected delivery shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, `hirmos start` must not end at implementation readiness until `SESSION_CONTRACT.md` adopts exactly one durable phase file.
 
 Required checks:
 

@@ -13,10 +13,10 @@
     ]
   },
   "requires_artifacts": [
-    "_hirmos/session/support/request-intake.md"
+    "_hirmos/session/SESSION_CONTRACT.md parent authority"
   ],
   "produces_artifacts": [
-    "_hirmos/session/support/system-state.md",
+    "_hirmos/session/DESIGN.md current-state basis",
     "_hirmos/session/unresolved-items.md",
     "_hirmos/session/SESSION_EXECUTION.md"
   ],

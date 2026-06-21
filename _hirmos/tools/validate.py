@@ -3,6 +3,11 @@ from pathlib import Path
 import json, sys, re
 
 root = Path(__file__).resolve().parents[1]
+
+def fail(message: str):
+    print('FAIL: ' + message)
+    sys.exit(1)
+
 required = [
     'AGENTS.md',
     'tools/test_validator_regressions.py',
@@ -46,8 +51,8 @@ required = [
     'docs/2-methodology/requirements-baseline-and-coverage.md',
     'core/protocol/AUTONOMOUS_TECHNICAL_PROGRESS.md',
     'core/protocol/LOCAL_TECHNICAL_SETUP_AND_ROLE_WORKFLOW_SMOKE_CHECKS.md',
-    'core/templates/session/support/local-runtime-evidence.md',
-    'core/templates/session/support/role-workflow-smoke.md',
+    'core/templates/session/EVIDENCE.md',
+    'core/templates/session/EVIDENCE.md',
     'docs/2-methodology/local-technical-setup-and-role-workflow-smoke-checks.md',
     'core/commands/start.md',
     'core/commands/continue.md',
@@ -57,31 +62,15 @@ required = [
     'core/templates/session/SESSION_CONTRACT.md',
     'core/templates/session/unresolved-items.md',
     'core/templates/session/implementation-units/IU.md',
-    'core/templates/session/session-contract-review.md',
     'core/templates/system/CURRENT_SYSTEM_STATE.md',
     'core/templates/system/delivery/DELIVERY_PLAN.md',
     'core/templates/system/delivery/phases/PHASE.md',
-    'core/templates/session/support/claim-reconciliation.md',
-    'core/templates/session/support/project-context.md',
-    'core/templates/session/support/stack-resolution.json',
-    'core/templates/session/support/runtime-integration-readiness.md',
-    'core/templates/session/checkpoints/CHECKPOINT.md',
+    'core/templates/session/stack-resolution.json',
     'core/templates/session/bootstrap/BOOTSTRAP_REPORT.md',
-    'core/templates/session/support/request-intake.md',
-    'core/templates/session/support/source-materials.md',
-    'core/templates/session/support/prototype-ingestion.md',
-    'core/templates/session/support/system-state.md',
     'core/templates/session/DESIGN.md',
-    'core/templates/session/support/technical-review.md',
-    'core/templates/session/support/implementation-readiness.md',
-    'core/templates/session/support/evidence-review.md',
-    'core/templates/session/support/session-implementation-review.md',
-    'core/templates/session/support/system-state-update.md',
-    'core/templates/session/support/close-checklist.md',
-    'core/templates/session/support/archive-manifest.md',
+    'core/templates/session/EVIDENCE.md',
     'session/SESSION_STATE.json',
     'session/implementation-units/.gitkeep',
-    'session/support/.gitkeep',
     'system/accepted-state/CURRENT_SYSTEM_STATE.md',
     'system/accepted-state/CARRY_FORWARD.md',
     'system/accepted-state/DECISION_LOG.md',
@@ -212,13 +201,13 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'raw source materia
         sys.exit(1)
 
 requirements_design_entrypoint = (root/'extensions/design-agent/capabilities/requirements-design/entrypoints/default.md').read_text(errors='ignore')
-for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'support/source-materials.md']:
+for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source matrix']:
     if phrase not in requirements_design_entrypoint:
         print(f'FAIL: requirements-design entrypoint missing source-input surface phrase: {phrase}')
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.0.2'
+expected_version = '1.0.3'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -250,12 +239,11 @@ for phrase in [
     'Baseline Control Families',
     'Control Self-Validation',
     'Fail-Closed Conditions',
-    'Checkpoint Log',
+    'Continuation Boundary Log',
     'Route-Back Records',
     'Readiness Gates',
     'SESSION_CONTRACT.md',
     'unresolved-items.md',
-    'session-contract-review.md',
     'PENDING',
     'BLOCKED',
 ]:
@@ -291,9 +279,14 @@ for phrase in [
 
 for rel in ['core/templates/session/SESSION_STATE.json', 'session/SESSION_STATE.json']:
     state_obj = json.loads((root/rel).read_text())
-    for field in ['schema_version','status','session_id','session_title','active_command','last_command','lifecycle_stage','continuation_pass','pending_correction','allowed_next_commands','recommended_next_command','blocking_reason','created_at','updated_at']:
+    for field in ['schema_version','status','session_id','lifecycle_stage','continuation_pass','pending_correction','allowed_next_commands','recommended_next_command','blocking_reason','created_at','updated_at']:
         if field not in state_obj:
             print(f'FAIL: {rel} missing SESSION_STATE field: {field}')
+            sys.exit(1)
+    forbidden_fields = ['session_title', 'active_command', 'last_command']
+    for field in forbidden_fields:
+        if field in state_obj:
+            print(f'FAIL: {rel} contains removed SESSION_STATE field: {field}')
             sys.exit(1)
     if state_obj.get('schema_version') != 'session-state-v1':
         print(f'FAIL: {rel} schema_version must be ')
@@ -326,16 +319,32 @@ IDLE_ALLOWED_FILES = {
     Path('.gitkeep'),
     Path('SESSION_STATE.json'),
     Path('bootstrap/.gitkeep'),
-    Path('checkpoints/.gitkeep'),
     Path('implementation-units/.gitkeep'),
-    Path('support/.gitkeep'),
 }
 ACTIVE_REQUIRED_ROOT_FILES = {
     'SESSION_STATE.json',
     'SESSION_CONTRACT.md',
     'SESSION_EXECUTION.md',
     'unresolved-items.md',
-    'session-contract-review.md',
+}
+PROHIBITED_SUPPORT_ARTIFACT_NAMES = {
+    'archive-manifest.md',
+    'claim-reconciliation.md',
+    'close-checklist.md',
+    'evidence-review.md',
+    'implementation-readiness.md',
+    'local-runtime-evidence.md',
+    'project-context.md',
+    'prototype-ingestion.md',
+    'request-intake.md',
+    'role-workflow-smoke.md',
+    'runtime-integration-readiness.md',
+    'SESSION_CONTRACT.md section 11',
+    'session-implementation-review.md',
+    'source-materials.md',
+    'system-state-update.md',
+    'system-state.md',
+    'technical-review.md',
 }
 DEPRECATED_SESSION_SURFACES = {
     'SESSION_SCOPE_CONTRACT.md',
@@ -363,7 +372,6 @@ DEPRECATED_REFERENCE_MARKERS = {
     'IMPLEMENTATION_UNIT_REVIEW',
     'RETRY_REQUEST',
     'ACCEPTED_STATE_INDEX',
-    'support/session-contract-review',
     'implementation-units.md',
     'hirmos build',
     'build/status/continue/close',
@@ -393,8 +401,36 @@ def _validate_no_deprecated_references_outside_tooling():
                 print(f'FAIL: deprecated artifact/command reference {marker!r} found in {rel}')
                 sys.exit(1)
 
+
+def _validate_strict_necessity_support_surface():
+    support_template_dir = root / 'core/templates/session/support'
+    if support_template_dir.exists():
+        print('FAIL: core/templates/session/support must not exist after support directory removal; use core/templates/session/stack-resolution.json for stack routing state')
+        sys.exit(1)
+
+    active_support_dir = root / 'session/support'
+    if active_support_dir.exists():
+        print('FAIL: session/support must not exist after support directory removal; use session/stack-resolution.json when stack routing state is needed')
+        sys.exit(1)
+
+    stack_resolution_template = root / 'core/templates/session/stack-resolution.json'
+    if not stack_resolution_template.exists():
+        print('FAIL: missing root stack-resolution template: core/templates/session/stack-resolution.json')
+        sys.exit(1)
+
+    if (root / 'session/stack-resolution.json').exists():
+        try:
+            json.loads((root / 'session/stack-resolution.json').read_text())
+        except json.JSONDecodeError as exc:
+            print(f'FAIL: session/stack-resolution.json is not valid JSON: {exc}')
+            sys.exit(1)
+
 def _validate_session_state_semantics(state_path: Path, active_session_dir: Path | None = None):
     state_obj = json.loads(state_path.read_text())
+    for removed_field in ['session_title', 'active_command', 'last_command']:
+        if removed_field in state_obj:
+            print(f'FAIL: {state_path.relative_to(root)} contains removed SESSION_STATE field: {removed_field}')
+            sys.exit(1)
     status = state_obj.get('status')
     stage = state_obj.get('lifecycle_stage')
     allowed = state_obj.get('allowed_next_commands')
@@ -428,8 +464,8 @@ def _validate_session_state_semantics(state_path: Path, active_session_dir: Path
         if stage != 'idle':
             print(f'FAIL: {state_path.relative_to(root)} idle status must use lifecycle_stage idle')
             sys.exit(1)
-        if state_obj.get('session_id') or state_obj.get('session_title') or state_obj.get('active_command') or blocking_reason:
-            print(f'FAIL: {state_path.relative_to(root)} idle state must not retain active session identity, active_command, or blocking_reason')
+        if state_obj.get('session_id') or blocking_reason:
+            print(f'FAIL: {state_path.relative_to(root)} idle state must not retain active session identity or blocking_reason')
             sys.exit(1)
         if continuation_pass != 0 or state_obj.get('pending_correction') is not False:
             print(f'FAIL: {state_path.relative_to(root)} idle state must have continuation_pass 0 and pending_correction false')
@@ -486,7 +522,7 @@ def _validate_session_state_semantics(state_path: Path, active_session_dir: Path
             if missing_active:
                 print(f'FAIL: active session missing canonical root artifact(s): {missing_active}')
                 sys.exit(1)
-            for dirname in ['implementation-units','checkpoints','support']:
+            for dirname in ['implementation-units','bootstrap']:
                 if not (active_session_dir/dirname).is_dir():
                     print(f'FAIL: active session missing canonical directory: session/{dirname}')
                     sys.exit(1)
@@ -562,7 +598,7 @@ def _extract_resulting_phase_status(system_state_update: str, phase_body: str) -
     return value
 
 
-def _validate_phase_progress_carry_forward(phase_rel: Path, stage: str | None, system_state_update: str, session_execution: str, session_review: str) -> None:
+def _validate_phase_progress_carry_forward(phase_rel: Path, stage: str | None, close_controls: str, session_execution: str, session_review: str) -> None:
     if stage not in {'implementation_complete', 'close_ready'}:
         return
     phase_body = _read_optional_text(root / phase_rel)
@@ -573,41 +609,41 @@ def _validate_phase_progress_carry_forward(phase_rel: Path, stage: str | None, s
         print('FAIL: phase progress missing carry-forward record in SESSION_EXECUTION.md')
         sys.exit(1)
     if ' Phase Progress / Carry-Forward Review' not in session_review:
-        print('FAIL: phase progress missing carry-forward review in session-contract-review.md')
+        print('FAIL: phase progress missing carry-forward review in SESSION_CONTRACT.md section 11')
         sys.exit(1)
 
-    resulting_status = _extract_resulting_phase_status(system_state_update, phase_body)
+    resulting_status = _extract_resulting_phase_status(close_controls, phase_body)
     if resulting_status in {'PARTIAL', 'BLOCKED', 'DEFERRED'}:
-        if re.search(r'Carry-forward required\s*:\s*yes', system_state_update, re.I) and not re.search(r'Carry-forward status\s*:\s*RECORDED', system_state_update, re.I):
+        if re.search(r'Carry-forward required\s*:\s*yes', close_controls, re.I) and not re.search(r'Carry-forward status\s*:\s*RECORDED', close_controls, re.I):
             print(f'FAIL: phase progress {resulting_status} outcome missing carry-forward obligations')
             sys.exit(1)
-        combined = '\n'.join([system_state_update, phase_body, session_review])
+        combined = '\n'.join([close_controls, phase_body, session_review])
         if not _has_recorded_carry_forward(combined):
             print(f'FAIL: phase progress {resulting_status} outcome missing carry-forward obligations')
             sys.exit(1)
     if resulting_status == 'ACCEPTED':
         # Accepted is allowed, but accepted status must not coexist with unresolved carry-forward required markers.
-        if re.search(r'Carry-forward required\s*:\s*yes', system_state_update, re.I) and not _has_recorded_carry_forward(system_state_update):
+        if re.search(r'Carry-forward required\s*:\s*yes', close_controls, re.I) and not _has_recorded_carry_forward(close_controls):
             print('FAIL: phase progress accepted outcome contradicts required carry-forward without recorded target')
             sys.exit(1)
 
 
-def _validate_phase_acceptance_enforcement(phase_rel: Path, stage: str | None, system_state_update: str, session_execution: str, session_review: str) -> None:
+def _validate_phase_acceptance_enforcement(phase_rel: Path, stage: str | None, close_controls: str, session_execution: str, session_review: str) -> None:
     if stage not in {'implementation_complete', 'close_ready'}:
         return
     phase_body = _read_optional_text(root / phase_rel)
-    resulting_status = _extract_resulting_phase_status(system_state_update, phase_body)
+    resulting_status = _extract_resulting_phase_status(close_controls, phase_body)
     if resulting_status != 'ACCEPTED':
         return
 
     phase_type = _extract_label_value(phase_body, 'Phase type') or 'UNKNOWN'
-    combined = '\n'.join([phase_body, system_state_update, session_execution, session_review])
+    combined = '\n'.join([phase_body, close_controls, session_execution, session_review])
 
     required_pairs = [
         ('phase body', phase_body, ' Phase Acceptance Evidence Gate'),
         ('session execution', session_execution, ' Phase Acceptance Enforcement Record'),
         ('session contract review', session_review, ' Phase Acceptance Review'),
-        ('system state update', system_state_update, ' Phase Acceptance Transaction'),
+        ('close controls', close_controls, ' Phase Acceptance Transaction'),
     ]
     for label, body, phrase in required_pairs:
         if phrase not in body:
@@ -624,13 +660,13 @@ def _validate_phase_acceptance_enforcement(phase_rel: Path, stage: str | None, s
         sys.exit(1)
 
     if not re.search(r'Phase acceptance verdict\s*:\s*ACCEPTED', session_review, re.I):
-        print('FAIL: phase acceptance accepted outcome missing ACCEPTED verdict in session-contract-review.md')
+        print('FAIL: phase acceptance accepted outcome missing ACCEPTED verdict in SESSION_CONTRACT.md section 11')
         sys.exit(1)
 
     if re.search(r'Unresolved adopted work remaining\s*:\s*yes', combined, re.I):
         print('FAIL: phase acceptance accepted outcome has unresolved adopted work remaining')
         sys.exit(1)
-    remaining_work = _extract_label_value(system_state_update, 'Remaining adopted work')
+    remaining_work = _extract_label_value(close_controls, 'Remaining adopted work')
     if remaining_work and remaining_work not in {'NONE', 'DEFERRED_WITH_RATIONALE'}:
         print('FAIL: phase acceptance accepted outcome has remaining adopted work not reconciled')
         sys.exit(1)
@@ -731,9 +767,10 @@ def _validate_delivery_governance_active_session(active_session_dir: Path) -> No
     stage = state_obj.get('lifecycle_stage')
     session_contract = _read_optional_text(active_session_dir / 'SESSION_CONTRACT.md')
     current_state = _read_optional_text(root / 'system/accepted-state/CURRENT_SYSTEM_STATE.md')
-    system_state_update = _read_optional_text(active_session_dir / 'support/system-state-update.md')
     session_execution = _read_optional_text(active_session_dir / 'SESSION_EXECUTION.md')
-    session_review = _read_optional_text(active_session_dir / 'session-contract-review.md')
+    evidence_text = _read_optional_text(active_session_dir / 'EVIDENCE.md')
+    session_review = session_contract
+    close_controls = '\n'.join([session_execution, evidence_text, session_contract])
 
     classification_yes = bool(re.search(r'(Answer|Classification answer|Delivery governance active)\s*:\s*YES', session_contract, re.I))
     classification_uncertain = bool(re.search(r'(Answer|Classification answer|Delivery governance active)\s*:\s*UNCERTAIN', session_contract, re.I))
@@ -766,18 +803,18 @@ def _validate_delivery_governance_active_session(active_session_dir: Path) -> No
 
     _validate_phase_entry_gate(phase_text_path, phase_rel, stage)
     _validate_phase_lifecycle_status_report(session_execution)
-    _validate_phase_progress_carry_forward(phase_rel, stage, system_state_update, session_execution, session_review)
-    _validate_phase_acceptance_enforcement(phase_rel, stage, system_state_update, session_execution, session_review)
+    _validate_phase_progress_carry_forward(phase_rel, stage, close_controls, session_execution, session_review)
+    _validate_phase_acceptance_enforcement(phase_rel, stage, close_controls, session_execution, session_review)
 
     if plan_text_path not in current_state or phase_text_path not in current_state:
         print('FAIL: delivery pointer mismatch between SESSION_CONTRACT.md and CURRENT_SYSTEM_STATE.md')
         sys.exit(1)
 
     if stage in {'implementation_complete', 'close_ready'}:
-        if 'Close-Time Delivery / Phase Status Transaction' not in system_state_update:
-            print('FAIL: delivery close missing status transaction in SYSTEM_STATE_UPDATE.md')
+        if 'Close-Time Delivery / Phase Status Transaction' not in close_controls:
+            print('FAIL: delivery close missing status transaction in SESSION_EXECUTION.md or EVIDENCE.md')
             sys.exit(1)
-        if not re.search(r'DELIVERY_STATUS_UPDATE_APPLIED|DELIVERY_STATUS_UNCHANGED_VERIFIED', system_state_update):
+        if not re.search(r'DELIVERY_STATUS_UPDATE_APPLIED|DELIVERY_STATUS_UNCHANGED_VERIFIED', close_controls):
             print('FAIL: delivery close status transaction must record applied or unchanged verification')
             sys.exit(1)
 
@@ -800,6 +837,7 @@ for rel, phrases in {
 
 
 _validate_no_deprecated_references_outside_tooling()
+_validate_strict_necessity_support_surface()
 regression_runner = (root/'tools/test_validator_regressions.py').read_text()
 regression_docs = (root/'tools/fixtures/README.md').read_text()
 for phrase in [
@@ -842,6 +880,33 @@ for rel, phrases in {
 
 
 
+# Artifact template quality checks after governance-tax cleanup
+
+_session_execution_template = (root/'core/templates/session/SESSION_EXECUTION.md').read_text()
+if _session_execution_template.count('## Current Continuation Snapshot') != 1:
+    print('FAIL: SESSION_EXECUTION.md must contain exactly one Current Continuation Snapshot section')
+    sys.exit(1)
+if _session_execution_template.find('## Current Continuation Snapshot') > _session_execution_template.find('## Command Resolution'):
+    print('FAIL: Current Continuation Snapshot must appear before Command Resolution')
+    sys.exit(1)
+if 'Next safe governed command' not in _session_execution_template or 'What the next model must not do' not in _session_execution_template:
+    print('FAIL: Current Continuation Snapshot must preserve next-command and must-not-do continuation controls')
+    sys.exit(1)
+_design_template = (root/'core/templates/session/DESIGN.md').read_text()
+if _design_template.count('## Runtime Integration and Production Readiness Design') != 1:
+    print('FAIL: DESIGN.md must contain exactly one Runtime Integration and Production Readiness Design heading')
+    sys.exit(1)
+_contract_template = (root/'core/templates/session/SESSION_CONTRACT.md').read_text()
+_nonblank_contract = [line.strip() for line in _contract_template.splitlines() if line.strip()]
+if len(_nonblank_contract) < 4 or _nonblank_contract[1] != 'Status: active-session Main Artifact.':
+    print('FAIL: SESSION_CONTRACT.md must place status/purpose before delivery-shape sections')
+    sys.exit(1)
+_unresolved_template = (root/'core/templates/session/unresolved-items.md').read_text()
+if 'including `NON_GATING` items' not in _unresolved_template or 'Non-gating items are governed decisions or assumptions' not in _unresolved_template:
+    print('FAIL: unresolved-items.md must preserve full-detail treatment for material non-gating items')
+    sys.exit(1)
+
+
 # command protocol update checks
 for rel, phrases in {
     'core/commands/start.md': ['Command-state gate', 'Required state mutation', 'status` is `idle`', 'final start state'],
@@ -857,8 +922,6 @@ for rel, phrases in {
 
 # Contract-centered session spine checks
 for rel, phrases in {
-    'core/protocol/SESSION_ARTIFACTS.md': ['contract-centered session spine', 'SESSION_CONTRACT.md', 'unresolved-items.md', 'session-contract-review.md', 'implementation-units/', 'support/'],
-    'core/authority/ARTIFACT_MODEL.md': ['Contract-centered artifact model', 'SESSION_CONTRACT.md', 'unresolved-items.md', 'session-contract-review.md'],
 }.items():
     body = (root / rel).read_text()
     for phrase in phrases:
@@ -875,15 +938,14 @@ if 'allowed_next_commands' not in state or 'recommended_next_command' not in sta
 
 # durable delivery governance checks
 for rel, phrases in {
-    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery-Need Classification Gate', 'For multi-session work in any project type, a Delivery Plan is needed and separate phase files are required', 'Answer: YES / NO / UNCERTAIN', 'Single-session eligibility'],
-    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery-Need Classification Source', 'Delivery Decomposition', 'Delivery Coverage Matrix', 'Status Update Log'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'Single-session eligibility'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Decomposition', 'Delivery Coverage Matrix', 'Status Update Log'],
     'core/templates/system/delivery/phases/PHASE.md': ['Phase Contract', 'Source Delivery Plan', 'Binary Exit Criteria', 'Session Handoff'],
-    'core/templates/session/SESSION_CONTRACT.md': ['Delivery Governance Classification', 'Does this request require multi-session delivery governance?', 'Single-session safety justification'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Delivery-Need Classification Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
-    'core/templates/session/session-contract-review.md': ['Delivery Governance Classification Review', 'prevent unsafe single-session scope'],
-    'core/protocol/PROJECT_TYPES.md': ['Delivery governance classification fields', 'Delivery governance required: YES / NO / UNCERTAIN'],
-    'core/protocol/COMMAND_STATE_MACHINE.md': ['Delivery-Need Classification state gate', 'must not recommend `hirmos continue`'],
-    'core/commands/start.md': ['Delivery-Need Classification Gate', 'bias toward delivery governance'],
+    'core/templates/session/SESSION_CONTRACT.md': ['Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Selected shape justification'],
+    'core/templates/session/SESSION_EXECUTION.md': ['Delivery Shape Decision Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
+    'core/protocol/PROJECT_TYPES.md': ['Delivery shape fields', 'Delivery governance required: YES / NO / UNCERTAIN'],
+    'core/protocol/COMMAND_STATE_MACHINE.md': ['Delivery Shape Decision state gate', 'must not recommend `hirmos continue`'],
+    'core/commands/start.md': ['Delivery Shape Decision Gate', 'smallest governed delivery shape'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Active Development Context', 'Delivery plan:', 'Active phase:'],
 }.items():
     body = (root/rel).read_text()
@@ -904,10 +966,10 @@ for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery / Phase Capability Routing', 'delivery-design → phase-contracting → session-contract → implementation-readiness', 'single-session safety evidence'],
     'extensions/design-agent/extension.json': ['phase-contracting', 'session-contract'],
     'extensions/design-agent/entrypoints/default.md': ['Durable Delivery / Phase Capability Rewire', 'delivery-design', 'phase-contracting', 'session-contract', 'implementation-readiness'],
-    'extensions/design-agent/capabilities/delivery-design/capability.json': ['Delivery-Need Classification is YES', '_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md'],
+    'extensions/design-agent/capabilities/delivery-design/capability.json': ['Delivery Shape Decision selects a durable delivery shape', '_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md'],
     'extensions/design-agent/capabilities/phase-contracting/capability.json': ['_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md', 'session-contract source-readiness control'],
     'extensions/design-agent/capabilities/session-contract/capability.json': ['durable phase', 'single-session safety evidence'],
-    'extensions/design-agent/capabilities/implementation-readiness/capability.json': ['durable delivery coverage when required', 'Delivery-Need Classification Gate'],
+    'extensions/design-agent/capabilities/implementation-readiness/capability.json': ['durable delivery coverage when required', 'Delivery Shape Decision gate'],
     'core/templates/session/SESSION_EXECUTION.md': ['Delivery / Phase Capability Routing Log', 'delivery-design', 'phase-contracting', 'session-contract', 'implementation-readiness'],
     'core/templates/session/SESSION_CONTRACT.md': ['Delivery / Phase Capability Routing Evidence', 'delivery-design', 'phase-contracting', 'implementation-readiness'],
 }.items():
@@ -943,11 +1005,8 @@ for rel, phrases in {
     'system/accepted-state/CURRENT_SYSTEM_STATE.md': ['Active Development Context and Delivery Pointers', 'Delivery governance active', 'Active phase lifecycle status', 'Active phase type', 'Next recommended phase'],
     'core/protocol/CURRENT_SYSTEM_STATE.md': ['Active Development Context and Delivery Pointers', 'Required pointer fields', 'Future sessions must read these pointers'],
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Current System State pointer rule', 'Required pointer fields', 'Close-time pointer update is mandatory', 'hirmos start` and Understand System State must inspect these pointers'],
-    'core/templates/session/support/system-state.md': ['Active Delivery Pointer Discovery', 'Impact on Delivery-Need Classification'],
     'core/templates/session/SESSION_CONTRACT.md': ['Current System State delivery pointer basis', 'Pointer consistency result'],
     'core/templates/session/SESSION_EXECUTION.md': ['Current System State Delivery Pointer Concordance', 'delivery-governed implementation must not proceed'],
-    'core/templates/session/support/system-state-update.md': ['Delivery Pointer Accepted-State Update', 'Fail-closed rule: if delivery governance was active'],
-    'core/templates/session/support/close-checklist.md': ['Delivery Pointer Close Gate', 'Current System State delivery pointers are not reconciled'],
     'core/commands/start.md': ['Current System State Delivery Pointer Precheck', 'must not default to a single-session path'],
     'core/commands/status.md': ['Durable Delivery Pointer Reporting', 'Status Blocked By Delivery Pointer Conflict'],
     'core/commands/continue.md': ['Durable Delivery Pointer Concordance', 'delivery governance reconciliation'],
@@ -968,9 +1027,6 @@ for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Durable Phase Adoption Rule', 'adopt exactly one durable phase file', 'Adoption status: ADOPTED / NOT_APPLICABLE / BLOCKED', 'multiple adopted active phase files'],
     'core/templates/session/SESSION_CONTRACT.md': ['Active Durable Phase Adoption', 'Does `SESSION_CONTRACT.md` adopt exactly one active durable `PHASE-xx.md`', 'Adopted phase scope', 'Phase exclusions / deferrals'],
     'core/templates/session/SESSION_EXECUTION.md': ['Durable Phase Adoption Gate', 'Exactly one durable phase adopted', 'Phase items mapped to Session Contract items'],
-    'core/templates/session/session-contract-review.md': ['Durable Phase Adoption Review', 'Did the review inspect the durable `PHASE-xx.md` directly?', 'promised-vs-verified phase coverage'],
-    'core/templates/session/support/close-checklist.md': ['Durable Phase Adoption Close Gate', 'Exactly one durable phase was adopted for implementation'],
-    'core/templates/session/support/system-state-update.md': ['Durable Phase Adoption Accepted-State Update', 'Phase result from this session'],
     'core/commands/start.md': ['Durable Phase Adoption Pre-Implementation Gate', 'adopts exactly one durable phase file'],
     'core/commands/continue.md': ['Durable Phase Adoption Continuation Check', 'must not silently switch to a different phase'],
     'core/commands/status.md': ['Durable Phase Adoption Status Reporting', 'Status must not imply implementation authorization'],
@@ -989,10 +1045,7 @@ for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Close-Time Delivery Plan / Phase Status Update Enforcement', 'Required close-time status authority chain', 'Close is blocked if Delivery Plan status'],
     'core/templates/system/delivery/DELIVERY_PLAN.md': ['Close-Time Delivery Status Update Contract', 'Delivery Status Update Log', 'next recommended phase is updated'],
     'core/templates/system/delivery/phases/PHASE.md': ['Close-Time Phase Status Update Contract', 'Phase Acceptance Review records the closed session', 'Binary Exit Criterion'],
-    'core/templates/session/support/system-state-update.md': ['Close-Time Delivery / Phase Status Transaction', 'DELIVERY_STATUS_UPDATE_APPLIED', 'DELIVERY_STATUS_UNCHANGED_VERIFIED'],
-    'core/templates/session/support/close-checklist.md': [' Delivery Plan / Phase Status Close Gate', 'Close-time delivery transaction recorded', 'Delivery status concordance checked'],
     'core/templates/session/SESSION_EXECUTION.md': [' Close-Time Delivery Status Execution Log', 'durable delivery status updates remain pending'],
-    'core/templates/session/session-contract-review.md': [' Close-Time Delivery Status Review', 'Delivery Plan, Phase file, or Current System State delivery pointers remain stale'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': [' Close-Time Delivery Pointer Refresh Rule', 'explicitly verified unchanged'],
     'core/protocol/CURRENT_SYSTEM_STATE.md': [' Close-Time Delivery Pointer Refresh', 'not refreshed or explicitly verified unchanged'],
     'core/commands/close.md': [' Durable Delivery Status Close Requirement', 'update durable delivery status before normal close success', 'archive manifest may record the transaction'],
@@ -1042,8 +1095,6 @@ for rel, phrases in {
     'core/templates/system/delivery/phases/PHASE.md': [' Phase Entry Gate', 'Entry gate status: PENDING / PASS / BLOCKED / UNCERTAIN', 'Greenfield Entry Gate Controls', 'Brownfield Entry Gate Controls'],
     'core/templates/session/SESSION_CONTRACT.md': [' Phase Entry Gate Evidence', 'Phase Entry Gate status: PASS / BLOCKED / UNCERTAIN / NOT_APPLICABLE'],
     'core/templates/session/SESSION_EXECUTION.md': [' Phase Entry Gate Execution Log', 'Implementation readiness authorized: YES / NO'],
-    'core/templates/session/session-contract-review.md': [' Phase Entry Gate Review', 'Was the Phase Entry Gate status PASS?'],
-    'core/templates/session/support/close-checklist.md': [' Phase Entry Gate Close Check', 'Phase Entry Gate evidence is missing'],
     'core/commands/start.md': [' Phase Entry Gate Enforcement', 'Phase Entry Gate', 'lifecycle status', 'phase type'],
     'core/commands/continue.md': [' Phase Entry Gate Enforcement', 'Phase Entry Gate', 'lifecycle status', 'phase type'],
     'core/commands/status.md': [' Phase Entry Gate Enforcement', 'Phase Entry Gate', 'lifecycle status', 'phase type'],
@@ -1064,9 +1115,6 @@ for rel, phrases in {
     'core/templates/system/delivery/phases/PHASE.md': [' Phase Progress Ledger', ' Carry-Forward Enforcement', 'Carry-forward status: NONE / RECORDED / BLOCKED / NOT_APPLICABLE', 'Greenfield Progress Controls', 'Brownfield Progress Controls'],
     'core/templates/session/SESSION_CONTRACT.md': [' Phase Progress and Carry-Forward Control', 'Previous Phase Progress Ledger inspected', 'Carry-forward required if not accepted'],
     'core/templates/session/SESSION_EXECUTION.md': [' Phase Progress / Carry-Forward Record', 'Adopted phase progress reviewed', 'Carry-forward obligations recorded'],
-    'core/templates/session/session-contract-review.md': [' Phase Progress / Carry-Forward Review', 'durable Phase Progress Ledger', 'carry-forward obligations recorded'],
-    'core/templates/session/support/system-state-update.md': [' Phase Progress / Carry-Forward Transaction', 'Resulting phase lifecycle status', 'Carry-forward status: RECORDED / BLOCKED / NOT_APPLICABLE'],
-    'core/templates/session/support/close-checklist.md': [' Phase Progress / Carry-Forward Close Check', 'phase outcome is `PARTIAL`, `BLOCKED`, or `DEFERRED`'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': [' Phase Progress Pointer Rule', 'still-active phase', 'explicit carry-forward target'],
     'system/accepted-state/CURRENT_SYSTEM_STATE.md': [' Phase Progress Pointer Rule', 'still-active phase', 'explicit carry-forward target'],
     'core/commands/start.md': [' Phase Progress / Carry-Forward Enforcement', 'Phase Progress Ledger', 'Carry-Forward Items'],
@@ -1090,9 +1138,6 @@ for rel, phrases in {
     'core/templates/system/delivery/phases/PHASE.md': [' Phase Acceptance Evidence Gate', 'Greenfield Acceptance Evidence', 'Brownfield Acceptance Evidence', 'Mixed Acceptance Evidence'],
     'core/templates/session/SESSION_CONTRACT.md': [' Phase Acceptance Control', 'Phase acceptance will be evaluated through Phase Acceptance Evidence Gate'],
     'core/templates/session/SESSION_EXECUTION.md': [' Phase Acceptance Enforcement Record', 'Phase Acceptance Evidence Gate inspected'],
-    'core/templates/session/session-contract-review.md': [' Phase Acceptance Review', 'Phase acceptance verdict', 'Phase acceptance evidence status'],
-    'core/templates/session/support/system-state-update.md': [' Phase Acceptance Transaction', 'Phase acceptance status', 'Phase acceptance evidence status'],
-    'core/templates/session/support/close-checklist.md': [' Phase Acceptance Close Check', 'Phase acceptance status: ACCEPTED'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': [' Phase Acceptance Pointer Rule', 'last accepted phase'],
     'system/accepted-state/CURRENT_SYSTEM_STATE.md': [' Phase Acceptance Pointer Rule', 'last accepted phase'],
     'core/commands/start.md': [' Phase Acceptance Enforcement', 'Phase Acceptance Evidence Gate'],
@@ -1148,7 +1193,7 @@ print('PASS: HIRMOS core authority/bootstrap static check')
 # Session artifact template checks
 session_artifacts = (root/'core/protocol/SESSION_ARTIFACTS.md').read_text()
 for phrase in [
-    'Artifact-backed checkpoint rule',
+    'Snapshot-backed checkpoint rule',
     'Artifact Instantiation Log',
     'A governed session is active only when',
     'Delivery governance artifacts',
@@ -1161,19 +1206,14 @@ for phrase in [
         sys.exit(1)
 
 template_expectations = {
-
-    'SESSION_CONTRACT.md': ['Authorized Scope', 'Delivery Governance Classification', 'Does this request require multi-session delivery governance?', 'Unresolved Items Control', 'Session Contract Review Control', 'session-contract-review.md', 'fail-closed'],
+    'SESSION_CONTRACT.md': ['Authorized Scope', 'Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Unresolved Items Control', 'Session Satisfaction Review and Close Verification', 'Fail-closed result'],
     'unresolved-items.md': ['Producer Contributions', 'Active Gated Items', 'Disposition History', 'Protocol authority'],
     'implementation-units/IU.md': ['Unit Contract', 'Execution Record', 'Unit Review', 'Does the actual implementation satisfy 100%', 'Retry Decision', 'Evidence from Failed Attempt', 'Escalation Condition'],
-    'session-contract-review.md': ['Promised Work Register', 'Delivery Governance Classification Review', 'prevent unsafe single-session scope', 'Verified Work Register', 'Promised vs Verified Coverage Matrix', 'Final Review Verdict', 'Fail-Closed Decision'],
-    'support/request-intake.md': ['User Request', 'Request Signals', 'Handoff to Understand System State'],
-    'support/system-state.md': ['General System State Understanding', 'Focused System State Understanding', 'Evidence Table'],
-    'DESIGN.md': ['Governed Requirements', 'Implementation Authorization Inputs', 'Route-Back Conditions'],
-    'support/implementation-readiness.md': ['Readiness Decision', 'Unresolved Item Gate', 'Checkpoint Message Basis'],
-    'implementation-units/IU.md': ['Unit Contract', 'In Scope', 'Out of Scope', 'Binary Acceptance Criteria', 'Pre-Execution Checks', 'Files / Artifacts Changed', 'Execution Result', 'Unit Review', 'Retries'],
-    'support/system-state-update.md': ['Accepted Outcomes', 'Rejected / Not Applied Outcomes', 'Future Session Readiness'],
-    'support/close-checklist.md': ['Update System State Readiness', 'Archive Readiness', 'Active Session Reset'],
+    'DESIGN.md': ['Current-State Basis', 'Governed Requirements', 'Delivery Shape Decision', 'Technical Review and Implementation Readiness Basis'],
+    'EVIDENCE.md': ['Command Evidence', 'Runtime and Critical-Flow Evidence', 'Production-Shaped Engineering Evidence', 'Claim Reconciliation Summary', 'Close / Archive Evidence'],
+    'SESSION_EXECUTION.md': ['Active Execution Controls', 'Artifact Instantiation Log', 'Close / Archive / Reset Invariant Controls'],
 }
+
 for name, phrases in template_expectations.items():
     body = (root/'core/templates/session'/name).read_text()
     for phrase in phrases:
@@ -1181,6 +1221,22 @@ for name, phrases in template_expectations.items():
             print(f'FAIL: template {name} missing session artifact phrase: {phrase}')
             sys.exit(1)
 
+
+
+# Artifact template quality checks after governance-tax cleanup
+_design_template = (root/'core/templates/session/DESIGN.md').read_text()
+if _design_template.count('## Runtime Integration and Production Readiness Design') != 1:
+    print('FAIL: DESIGN.md must contain exactly one Runtime Integration and Production Readiness Design heading')
+    sys.exit(1)
+_contract_template = (root/'core/templates/session/SESSION_CONTRACT.md').read_text()
+_nonblank_contract = [line.strip() for line in _contract_template.splitlines() if line.strip()]
+if len(_nonblank_contract) < 4 or _nonblank_contract[1] != 'Status: active-session Main Artifact.':
+    print('FAIL: SESSION_CONTRACT.md must place status/purpose before delivery-shape sections')
+    sys.exit(1)
+_unresolved_template = (root/'core/templates/session/unresolved-items.md').read_text()
+if 'including `NON_GATING` items' not in _unresolved_template or 'Non-gating items are governed decisions or assumptions' not in _unresolved_template:
+    print('FAIL: unresolved-items.md must preserve full-detail treatment for material non-gating items')
+    sys.exit(1)
 
 
 # command protocol update checks
@@ -1198,8 +1254,6 @@ for rel, phrases in {
 
 # Contract-centered session spine checks
 for rel, phrases in {
-    'core/protocol/SESSION_ARTIFACTS.md': ['contract-centered session spine', 'SESSION_CONTRACT.md', 'unresolved-items.md', 'session-contract-review.md', 'implementation-units/', 'support/'],
-    'core/authority/ARTIFACT_MODEL.md': ['Contract-centered artifact model', 'SESSION_CONTRACT.md', 'unresolved-items.md', 'session-contract-review.md'],
 }.items():
     body = (root / rel).read_text()
     for phrase in phrases:
@@ -1216,15 +1270,14 @@ if 'allowed_next_commands' not in state or 'recommended_next_command' not in sta
 
 # durable delivery governance checks
 for rel, phrases in {
-    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery-Need Classification Gate', 'For multi-session work in any project type, a Delivery Plan is needed and separate phase files are required', 'Answer: YES / NO / UNCERTAIN', 'Single-session eligibility'],
-    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery-Need Classification Source', 'Delivery Decomposition', 'Delivery Coverage Matrix', 'Status Update Log'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'Single-session eligibility'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Decomposition', 'Delivery Coverage Matrix', 'Status Update Log'],
     'core/templates/system/delivery/phases/PHASE.md': ['Phase Contract', 'Source Delivery Plan', 'Binary Exit Criteria', 'Session Handoff'],
-    'core/templates/session/SESSION_CONTRACT.md': ['Delivery Governance Classification', 'Does this request require multi-session delivery governance?', 'Single-session safety justification'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Delivery-Need Classification Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
-    'core/templates/session/session-contract-review.md': ['Delivery Governance Classification Review', 'prevent unsafe single-session scope'],
-    'core/protocol/PROJECT_TYPES.md': ['Delivery governance classification fields', 'Delivery governance required: YES / NO / UNCERTAIN'],
-    'core/protocol/COMMAND_STATE_MACHINE.md': ['Delivery-Need Classification state gate', 'must not recommend `hirmos continue`'],
-    'core/commands/start.md': ['Delivery-Need Classification Gate', 'bias toward delivery governance'],
+    'core/templates/session/SESSION_CONTRACT.md': ['Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Selected shape justification'],
+    'core/templates/session/SESSION_EXECUTION.md': ['Delivery Shape Decision Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
+    'core/protocol/PROJECT_TYPES.md': ['Delivery shape fields', 'Delivery governance required: YES / NO / UNCERTAIN'],
+    'core/protocol/COMMAND_STATE_MACHINE.md': ['Delivery Shape Decision state gate', 'must not recommend `hirmos continue`'],
+    'core/commands/start.md': ['Delivery Shape Decision Gate', 'smallest governed delivery shape'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Active Development Context', 'Delivery plan:', 'Active phase:'],
 }.items():
     body = (root/rel).read_text()
@@ -1245,10 +1298,10 @@ for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery / Phase Capability Routing', 'delivery-design → phase-contracting → session-contract → implementation-readiness', 'single-session safety evidence'],
     'extensions/design-agent/extension.json': ['phase-contracting', 'session-contract'],
     'extensions/design-agent/entrypoints/default.md': ['Durable Delivery / Phase Capability Rewire', 'delivery-design', 'phase-contracting', 'session-contract', 'implementation-readiness'],
-    'extensions/design-agent/capabilities/delivery-design/capability.json': ['Delivery-Need Classification is YES', '_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md'],
+    'extensions/design-agent/capabilities/delivery-design/capability.json': ['Delivery Shape Decision selects a durable delivery shape', '_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md'],
     'extensions/design-agent/capabilities/phase-contracting/capability.json': ['_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md', 'session-contract source-readiness control'],
     'extensions/design-agent/capabilities/session-contract/capability.json': ['durable phase', 'single-session safety evidence'],
-    'extensions/design-agent/capabilities/implementation-readiness/capability.json': ['durable delivery coverage when required', 'Delivery-Need Classification Gate'],
+    'extensions/design-agent/capabilities/implementation-readiness/capability.json': ['durable delivery coverage when required', 'Delivery Shape Decision gate'],
     'core/templates/session/SESSION_EXECUTION.md': ['Delivery / Phase Capability Routing Log', 'delivery-design', 'phase-contracting', 'session-contract', 'implementation-readiness'],
     'core/templates/session/SESSION_CONTRACT.md': ['Delivery / Phase Capability Routing Evidence', 'delivery-design', 'phase-contracting', 'implementation-readiness'],
 }.items():
@@ -1390,11 +1443,6 @@ for cap, phrases in system_state_entrypoints.items():
             sys.exit(1)
 
 system_state_templates = {
-    'support/request-intake.md': ['Ambiguity / Conflict Check', 'Initial Non-Authority Notice', 'Source material routing'],
-    'support/source-materials.md': ['Source Material Inventory', 'Prototype / POC Routing', 'Handoff to Design'],
-    'support/prototype-ingestion.md': ['Observed Behavior', 'Intended Behavior Signals', 'Implementation Details That Are Evidence Only'],
-    'support/system-state.md': ['Working-Copy Root and Evidence Boundary', 'General System State Understanding', 'Focused System State Understanding', 'Route-Back Inputs'],
-    'support/system-state-update.md': ['Readiness Controls', 'Accepted Outcomes', 'Rejected / Not Applied Outcomes', 'Archive Plan', 'Future Session Readiness'],
 }
 for name, phrases in system_state_templates.items():
     body = (root/'core/templates/session'/name).read_text()
@@ -1436,7 +1484,7 @@ design_entrypoints = {
     'phase-contracting': ['Method', 'Phase Contract', 'durable delivery'],
     'session-contract': ['Method', 'Session Contract', 'implementation unit planning, implementation unit review, session implementation review, and Update System State'],
     'technical-review': ['Method', 'Third-party review pointers', 'challenge/change path'],
-    'implementation-readiness': ['Method', 'Artifact-Backed Checkpoint', 'Session Contract authorizes exactly what Implementation may do'],
+    'implementation-readiness': ['Method', 'snapshot-backed checkpoint control', 'Session Contract authorizes exactly what Implementation may do'],
 }
 for cap, phrases in design_entrypoints.items():
     ep = root/'extensions/design-agent/capabilities'/cap/'entrypoints/default.md'
@@ -1448,8 +1496,6 @@ for cap, phrases in design_entrypoints.items():
 
 design_templates = {
     'DESIGN.md': ['Design Source Matrix', 'Governed Requirements', 'Delivery Structure Decision', 'Implementation Authorization Inputs'],
-    'support/technical-review.md': ['Third-Party Review Pointers', 'Challenge / Change Path', 'Items Not Requiring Domain Expert Input'],
-    'support/implementation-readiness.md': ['Readiness Decision', 'Artifact-Backed Checkpoint', 'Final Gate'],
 }
 for name, phrases in design_templates.items():
     body = (root/'core/templates/session'/name).read_text()
@@ -1491,7 +1537,6 @@ implementation_entrypoints = {
     'implementation-unit-review': ['Method', 'Unit review is local, specific, and evidence-based', 'A unit is not complete until local review is recorded'],
     'validation-review': ['Method', 'Validation review must distinguish run evidence from claims', 'not-run or not-applicable checks'],
     'retry-escalation': ['Method', 'Retry is not a second attempt at arbitrary implementation', 'route back instead of retrying'],
-    'session-implementation-review': ['Method', 'aggregate review above local unit review', 'session-contract-review.md'],
 }
 for cap, phrases in implementation_entrypoints.items():
     ep = root/'extensions/implementation-agent/capabilities'/cap/'entrypoints/default.md'
@@ -1503,8 +1548,7 @@ for cap, phrases in implementation_entrypoints.items():
 
 implementation_templates = {
     'implementation-units/IU.md': ['Unit Contract', 'Execution Record', 'Unit Review', 'Does the actual implementation satisfy 100%', 'Request-to-Result Review', 'Retry / Route-Back Decision', 'Not Run / Not Applicable Checks', 'Retry Decision', 'Evidence from Failed Attempt', 'Escalation Condition'],
-    'support/evidence-review.md': ['Evidence Claims', 'Not Run / Not Applicable', 'Scope Coverage', 'Evidence Limitations'],
-    'support/session-implementation-review.md': ['Unit Coverage', 'Validation / Evidence Gate', 'Scope Completion Decision', 'Update System State Readiness Contribution'],
+    'EVIDENCE.md': ['Evidence Claims', 'Not Run / Not Applicable', 'Scope Coverage', 'Evidence Limitations'],
 }
 for name, phrases in implementation_templates.items():
     body3 = (root/'core/templates/session'/name).read_text()
@@ -1622,25 +1666,13 @@ for cap_ep in root.glob('extensions/*-agent/capabilities/*/entrypoints/default.m
 checkpoint_protocol = (root/'core/protocol/GOVERNED_CHECKPOINTS.md').read_text()
 for phrase in [
     'Checkpoint types',
-    'Required checkpoint artifact',
+    'Required Current Continuation Snapshot',
     'Domain Expert rendering',
     'Unresolved-item checkpoint rule',
     'Checkpoint completion',
 ]:
     if phrase not in checkpoint_protocol:
         print(f'FAIL: GOVERNED_CHECKPOINTS.md missing unresolved/checkpoint phrase: {phrase}')
-        sys.exit(1)
-
-checkpoint_template = (root/'core/templates/session/checkpoints/CHECKPOINT.md').read_text()
-for phrase in [
-    'Checkpoint Identity',
-    'Backing Artifacts',
-    'Unresolved Items Summary',
-    'Domain Expert View',
-    'Self-Check Before Surfacing',
-]:
-    if phrase not in checkpoint_template:
-        print(f'FAIL: GOVERNED_CHECKPOINT.md missing unresolved/checkpoint phrase: {phrase}')
         sys.exit(1)
 
 unresolved_template = (root/'core/templates/session/unresolved-items.md').read_text()
@@ -1656,7 +1688,7 @@ for phrase in [
         sys.exit(1)
 
 session_execution = (root/'core/templates/session/SESSION_EXECUTION.md').read_text()
-for phrase in ['Governed Checkpoint Summary', 'Checkpoint artifact path', 'Unresolved item status']:
+for phrase in ['Governed Continuation Summary', 'Current Continuation Snapshot status', 'Unresolved item status']:
     if phrase not in session_execution:
         print(f'FAIL: SESSION_EXECUTION.md missing governed checkpoint phrase: {phrase}')
         sys.exit(1)
@@ -1708,7 +1740,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'raw source materia
         sys.exit(1)
 
 requirements_design_entrypoint = (root/'extensions/design-agent/capabilities/requirements-design/entrypoints/default.md').read_text(errors='ignore')
-for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'support/source-materials.md']:
+for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source matrix']:
     if phrase not in requirements_design_entrypoint:
         print(f'FAIL: requirements-design entrypoint missing source-input surface phrase: {phrase}')
         sys.exit(1)
@@ -1725,22 +1757,21 @@ for stack_id in cfg.get('stack', {}).get('available_stacks', []):
             print(f'FAIL: stack package {stack_id} missing {name}')
             sys.exit(1)
 
-project_context = (root/'core/templates/session/support/project-context.md').read_text()
+design_context = (root/'core/templates/session/DESIGN.md').read_text()
 for phrase in ['Project-Type Classification','Stack Classification','Stack Contexts','Delivery Routing Impact']:
-    if phrase not in project_context:
-        print(f'FAIL: support/project-context.md missing stack/project-type/delivery-unit phrase: {phrase}')
+    if phrase not in design_context:
+        print(f'FAIL: DESIGN.md missing stack/project-type/delivery routing phrase: {phrase}')
         sys.exit(1)
 
-stack_resolution = json.loads((root/'core/templates/session/support/stack-resolution.json').read_text())
+stack_resolution = json.loads((root/'core/templates/session/stack-resolution.json').read_text())
 for field in ['active_stack','selection_source','confidence','evidence','stack_path','missing_surfaces','conflicts','decision','stack_contexts','notes']:
     if field not in stack_resolution:
-        print(f'FAIL: support/stack-resolution.json missing field: {field}')
+        print(f'FAIL: stack-resolution.json missing field: {field}')
         sys.exit(1)
 
 i9_template_checks = {
-    'support/system-state.md': ['Stack Contexts', 'support/project-context.md updated or not required', 'support/stack-resolution.json updated or not required'],
     'implementation-units/IU.md': ['Stack Context', 'Cross-stack unit'],
-    'support/evidence-review.md': ['Evidence by Stack Context', 'repository evidence first'],
+    'EVIDENCE.md': ['Evidence by Stack Context', 'repository evidence first'],
     '../system/delivery/DELIVERY_PLAN.md': ['Delivery-Need Classification Source', 'Cross-Phase Constraints', 'Delivery Coverage Matrix'],
     'SESSION_EXECUTION.md': ['Project Context / Stack Summary'],
 }
@@ -1826,7 +1857,7 @@ for phrase in [
         print(f'FAIL: RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md missing runtime integration/production-readiness phrase: {phrase}')
         sys.exit(1)
 
-runtime_template = (root/'core/templates/session/support/runtime-integration-readiness.md').read_text()
+runtime_template = (root/'core/templates/session/DESIGN.md').read_text() + '\n' + (root/'core/templates/session/EVIDENCE.md').read_text()
 for phrase in [
     'Material Integration Areas',
     'Recommended Production Options',
@@ -1835,7 +1866,7 @@ for phrase in [
     'Update System State Carry-Forward',
 ]:
     if phrase not in runtime_template:
-        print(f'FAIL: RUNTIME_INTEGRATION_READINESS.md missing runtime integration/production-readiness phrase: {phrase}')
+        print(f'FAIL: DESIGN.md/EVIDENCE.md missing runtime integration/production-readiness phrase: {phrase}')
         sys.exit(1)
 
 for rel, phrases in {
@@ -1844,15 +1875,10 @@ for rel, phrases in {
     'core/protocol/SESSION_ARTIFACTS.md': ['Runtime integration readiness artifact'],
     'core/protocol/GOVERNED_CHECKPOINTS.md': ['Production readiness checkpoints'],
     'core/templates/session/DESIGN.md': ['Runtime Integration and Production Readiness Design'],
-    'core/templates/session/support/implementation-readiness.md': ['Runtime Integration Readiness Gate'],
-    'core/templates/session/support/technical-review.md': ['Runtime Integration Review'],
     'core/templates/session/implementation-units/IU.md': ['Runtime Integration Posture'],
     'core/templates/session/implementation-units/IU.md': ['Runtime Integration Execution Evidence'],
     'core/templates/session/implementation-units/IU.md': ['Runtime Integration Review'],
-    'core/templates/session/support/evidence-review.md': ['Runtime Integration Evidence Review'],
-    'core/templates/session/support/session-implementation-review.md': ['Runtime Integration Completion Review'],
-    'core/templates/session/support/system-state-update.md': ['Runtime Integration Accepted State'],
-    'core/templates/session/support/close-checklist.md': ['Runtime Integration Close Gate'],
+    'core/templates/session/EVIDENCE.md': ['Runtime Integration Evidence Review'],
     'core/templates/session/SESSION_EXECUTION.md': ['Runtime Integration / Production Readiness Summary'],
     'extensions/design-agent/entrypoints/default.md': ['Runtime integration and production-readiness design discipline'],
     'extensions/implementation-agent/entrypoints/default.md': ['Runtime integration implementation discipline'],
@@ -1922,9 +1948,6 @@ for phrase in [
         sys.exit(1)
 
 for rel, phrases in {
-    'core/templates/session/support/system-state-update.md': ['Close Transaction Integrity', 'Accepted-State Targets', 'Archive Manifest Link', 'Post-Close Status Expectation'],
-    'core/templates/session/support/close-checklist.md': ['Accepted-State Integrity Checks', 'Archive Manifest Checks', 'Post-Close Consistency Checks'],
-    'core/templates/session/support/archive-manifest.md': ['Archived Files', 'Accepted Outcomes Applied', 'Active-Session Reset Result', 'Post-Close Verification'],
     'core/templates/session/SESSION_EXECUTION.md': ['Close / Archive / Accepted-State Integrity Summary', 'Post-close status consistency'],
     'core/commands/close.md': ['Accepted-state integrity gate', 'CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md'],
     'core/commands/status.md': ['Post-close status behavior', 'integrity conflict'],
@@ -1963,7 +1986,7 @@ for phrase in [
         print(f'FAIL: CLAIM_RECONCILIATION.md missing claim reconciliation phrase: {phrase}')
         sys.exit(1)
 
-claim_template = (root/'core/templates/session/support/claim-reconciliation.md').read_text()
+claim_template = (root/'core/templates/session/EVIDENCE.md').read_text()
 for phrase in [
     'Claim Summary',
     'Final-File Reconciliation',
@@ -1972,7 +1995,7 @@ for phrase in [
     'Downgraded Claims',
 ]:
     if phrase not in claim_template:
-        print(f'FAIL: CLAIM_RECONCILIATION template missing claim reconciliation phrase: {phrase}')
+        print(f'FAIL: EVIDENCE.md missing claim reconciliation phrase: {phrase}')
         sys.exit(1)
 
 for rel, phrases in {
@@ -1981,12 +2004,9 @@ for rel, phrases in {
     'core/protocol/COMMANDS.md': ['Claim reconciliation command rule', 'chat-only summaries'],
     'core/authority/EXECUTION_CONTROL_GOVERNANCE.md': ['Claim reconciliation control'],
     'core/protocol/GOVERNED_CHECKPOINTS.md': ['Claim reconciliation checkpoint rule'],
-    'core/templates/session/support/evidence-review.md': ['Claim Reconciliation', 'CLAIMED_NOT_LOGGED'],
+    'core/templates/session/EVIDENCE.md': ['Claim Reconciliation', 'CLAIMED_NOT_LOGGED'],
     'core/templates/session/implementation-units/IU.md': ['Claim Reconciliation', 'PASS_WITH_LIMITATIONS'],
-    'core/templates/session/support/session-implementation-review.md': ['Claim Reconciliation', 'user-environment verification'],
     'core/templates/session/SESSION_EXECUTION.md': ['Claim Reconciliation Summary', 'claim reconciliation control'],
-    'core/templates/session/support/close-checklist.md': ['Claim Reconciliation Close Gate'],
-    'core/templates/session/support/system-state-update.md': ['Claim Reconciliation for Accepted Outcomes'],
     'extensions/implementation-agent/entrypoints/default.md': ['Claim reconciliation discipline', 'user-environment verification'],
     'extensions/design-agent/entrypoints/default.md': ['Claim reconciliation inputs'],
     'extensions/system-state-agent/entrypoints/default.md': ['Claim reconciliation during state update'],
@@ -2018,11 +2038,7 @@ for rel, phrases in {
     'extensions/implementation-agent/entrypoints/default.md': ['Autonomous technical progress discipline', 'Attempt safe local technical progress before deferring it'],
     'extensions/design-agent/entrypoints/default.md': ['Autonomous technical authorization discipline', 'authorize safe local/default technical progress'],
     'extensions/system-state-agent/entrypoints/default.md': ['Autonomous technical discovery discipline', 'package scripts'],
-    'core/templates/session/support/technical-review.md': ['Autonomous Technical Decision Ledger', 'INTERNAL_RECORDED'],
     'core/templates/session/SESSION_CONTRACT.md': ['Autonomous Technical Progress Authorization'],
-    'core/templates/session/support/implementation-readiness.md': ['Autonomous Technical Progress Gate'],
-    'core/templates/session/support/runtime-integration-readiness.md': ['Autonomous Integration Progress'],
-    'core/templates/session/checkpoints/CHECKPOINT.md': ['Progressive Technical Disclosure'],
     'core/authority/INTERACTION_MODES.md': ['Autonomous technical progress visibility'],
     'core/protocol/GOVERNED_CHECKPOINTS.md': ['Autonomous technical decision checkpoints'],
     'core/protocol/COMMANDS.md': ['Autonomous technical progress command rule'],
@@ -2057,9 +2073,6 @@ def require_phrases(group, mapping):
 
 require_phrases('archive/session-state integrity', {
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['Normalize the archived session state', 'pre_close_session_state_recorded', 'Close-time validator gate'],
-    'core/templates/session/support/close-checklist.md': ['Archive-State Consistency Gate', 'Archived SESSION_STATE.json is not active'],
-    'core/templates/session/support/archive-manifest.md': ['State Integrity Record', 'archived_session_state_status'],
-    'core/templates/session/support/system-state-update.md': ['Claim and Archive-State Application Gate'],
     'core/templates/session/SESSION_EXECUTION.md': ['archive-session-state-normalized'],
     'core/commands/close.md': ['Archive and session-state integrity invariant', 'Normalize the archived `SESSION_STATE.json`'],
 })
@@ -2071,9 +2084,6 @@ require_phrases('durable current-system-state merge and accepted-state invariant
     'system/accepted-state/CARRY_FORWARD.md': ['Active Carry-Forward Items', 'Active-Only Rule', 'Do not maintain a closed carry-forward table', 'Accepted-State Artifact Invariants:'],
     'system/accepted-state/DECISION_LOG.md': ['Active Accepted Decisions', 'Superseded Decisions', 'Accepted-State Artifact Invariants:'],
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['CURRENT_SYSTEM_STATE.md', 'DECISION_LOG.md', 'accepted-state invariant'],
-    'core/templates/session/support/system-state-update.md': ['Current-System-State Merge Plan', 'Accepted-state support artifacts', 'Canonical Accepted-State Merge Enforcement'],
-    'core/templates/session/support/close-checklist.md': ['Durable Current-State Close Gate', 'Accepted-State Invariant and Canonical Value Gate'],
-    'core/templates/session/support/archive-manifest.md': ['Accepted-State Merge Record', 'Accepted-State and Package Integrity Record'],
     'core/templates/session/SESSION_EXECUTION.md': ['Current-State Execution Controls', 'Invariant / Canonical Value Controls'],
     'core/commands/close.md': ['Durable current-system-state merge invariant', 'accepted-state navigation and latest-close metadata'],
     'core/commands/status.md': ['accepted current-state status', 'status invariant and canonical-value reporting'],
@@ -2110,9 +2120,7 @@ allowed_idle_files = {
     '.gitkeep',
     'SESSION_STATE.json',
     'bootstrap/.gitkeep',
-    'checkpoints/.gitkeep',
     'implementation-units/.gitkeep',
-    'support/.gitkeep',
 }
 required_idle_files = set(allowed_idle_files)
 actual_session_files = {
@@ -2131,7 +2139,7 @@ if session_state.get('status') == 'idle':
     if stale:
         fail('session scaffold invariant: active-session artifact(s) present while SESSION_STATE.status is idle: ' + ', '.join(stale))
 else:
-    for rel in ['SESSION_CONTRACT.md', 'SESSION_EXECUTION.md', 'unresolved-items.md', 'session-contract-review.md']:
+    for rel in ['SESSION_CONTRACT.md', 'SESSION_EXECUTION.md', 'unresolved-items.md']:
         if rel not in actual_session_files:
             fail(f'active session missing canonical root artifact: {rel}')
 
@@ -2139,7 +2147,6 @@ required_canonical_templates = [
     'core/templates/session/SESSION_CONTRACT.md',
     'core/templates/session/SESSION_EXECUTION.md',
     'core/templates/session/unresolved-items.md',
-    'core/templates/session/session-contract-review.md',
     'core/templates/session/implementation-units/IU.md',
 ]
 for rel in required_canonical_templates:
@@ -2160,33 +2167,25 @@ for phrase in [
     if phrase.lower() not in current.lower():
         fail(f'CURRENT_SYSTEM_STATE.md missing accepted-state navigation/current-state phrase: {phrase}')
 
-# Session contract review must be root-governed.
+# Session close verification must be embedded in the Session Contract under the strict-necessity model.
 session_contract = (root / 'core/templates/session/SESSION_CONTRACT.md').read_text()
-review_template = (root / 'core/templates/session/session-contract-review.md').read_text()
 execution_template = (root / 'core/templates/session/SESSION_EXECUTION.md').read_text()
 for phrase in [
-    'Authoritative review artifact: `_hirmos/session/session-contract-review.md`',
-    'This section is only a control pointer',
+    'Session Satisfaction Review and Close Verification',
+    'Promised work register',
+    'Verified work register',
+    'Promised vs verified coverage matrix',
     'Does the actual completed work satisfy 100% of `SESSION_CONTRACT.md`?',
+    'Fail-closed result',
 ]:
-    if phrase not in session_contract:
-        fail(f'SESSION_CONTRACT.md missing session-contract-review control phrase: {phrase}')
+    if phrase.lower() not in session_contract.lower():
+        fail(f'SESSION_CONTRACT.md missing embedded close verification phrase: {phrase}')
 for phrase in [
-    'Promised Work',
-    'Verified Work',
-    'Coverage Verdict',
-    'Fail-Closed Decision',
-    'Does the actual completed work satisfy 100% of `SESSION_CONTRACT.md`?',
-]:
-    if phrase not in review_template:
-        fail(f'session-contract-review.md template missing governed review phrase: {phrase}')
-for phrase in [
-    'session-contract-review.md',
-    'Session Contract Review Control',
+    'Close / Archive / Reset Invariant Controls',
     'Fail-closed rule',
 ]:
     if phrase not in execution_template:
-        fail(f'SESSION_EXECUTION.md missing session-contract-review execution control phrase: {phrase}')
+        fail(f'SESSION_EXECUTION.md missing strict-necessity close execution phrase: {phrase}')
 
 # Unresolved register must remain a governed root artifact and must not be replaced by SESSION_CONTRACT summary.
 unresolved_template = (root / 'core/templates/session/unresolved-items.md').read_text()

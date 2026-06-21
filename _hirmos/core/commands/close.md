@@ -31,6 +31,11 @@ Before execution:
 7. `_hirmos/session/SESSION_EXECUTION.md`
 7. Active session artifacts named by update-state controls
 
+
+## Production-shaped engineering posture
+
+When the command reaches Design, Implementation, or close/update-state for software work, HIRMOS must apply the production-shaped default from `_hirmos/core/authority/LIFECYCLE.md` and `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`. Do not treat prototype/demo/local-only shortcuts as neutral defaults. They must be explicitly authorized, evidenced, and preserved as limitations or carry-forward items.
+
 ## Required behavior
 
 
@@ -49,8 +54,8 @@ Before normal close, `hirmos close` must apply `_hirmos/core/protocol/COMMAND_ST
 - `_hirmos/session/SESSION_STATE.json` exists and is valid;
 - `status` is `active`;
 - `hirmos close` is legal for the current `lifecycle_stage` and `allowed_next_commands`;
-- `SESSION_CONTRACT.md`, `SESSION_EXECUTION.md`, `unresolved-items.md`, and `session-contract-review.md` exist and are non-placeholder;
-- `session-contract-review.md` has a final coverage verdict compatible with close;
+- `SESSION_CONTRACT.md`, `SESSION_EXECUTION.md`, `unresolved-items.md`, and `SESSION_CONTRACT.md` section 11 exist and are non-placeholder;
+- `SESSION_CONTRACT.md` section 11 has a final coverage verdict compatible with close;
 - no gated unresolved item remains open unless explicitly deferred/carried with user approval;
 - implementation-unit reviews are complete when implementation occurred.
 
@@ -63,7 +68,7 @@ A normal close must:
 - update active `SESSION_STATE.json` during close to reflect close execution;
 - archive the session with an archived `SESSION_STATE.json` normalized to `status = closed` and `lifecycle_stage = closed`;
 - reset active `_hirmos/session/SESSION_STATE.json` to idle after archive succeeds;
-- reset `allowed_next_commands` to `["hirmos start", "hirmos status"]` and `recommended_next_command` to `hirmos start`;
+- reset `session_id` and `blocking_reason` to empty/null, reset `allowed_next_commands` to `["hirmos start", "hirmos status"]`, and reset `recommended_next_command` to `hirmos start`;
 - leave no stale active-session artifacts outside the allowed idle scaffold.
 
 ### Close sequence
@@ -129,11 +134,11 @@ Stop at `Close Blocked` when:
 Before surfacing a checkpoint that asks for a decision, claims readiness/completion, fails closed, or changes continuation state, HIRMOS must:
 
 1. read `_hirmos/core/protocol/GOVERNED_CHECKPOINTS.md`;
-2. instantiate `_hirmos/session/checkpoints/CHECKPOINT_<checkpoint-id>.md` when required;
-3. verify the checkpoint artifact is backed by existing non-placeholder session artifacts;
+2. update `_hirmos/session/SESSION_EXECUTION.md` → `Current Continuation Snapshot` when required;
+3. verify the Current Continuation Snapshot is backed by existing non-placeholder session artifacts;
 4. verify unresolved-item status from `_hirmos/session/unresolved-items.md` when decisions, assumptions, blockers, or continuation are involved;
-5. record the checkpoint in `SESSION_EXECUTION.md`;
-6. surface only claims supported by the checkpoint artifact and active controls.
+5. record the surfaced boundary in `SESSION_EXECUTION.md` Continuation Boundary Log;
+6. surface only claims supported by the Current Continuation Snapshot and active controls.
 
 
 ## Project-type and stack awareness
@@ -149,7 +154,7 @@ When the active request may involve material runtime services, read `_hirmos/cor
 
 Required behavior:
 
-- instantiate or update `_hirmos/session/support/runtime-integration-readiness.md` when material integration areas affect Design, Implementation, evidence, production readiness, or close;
+- instantiate or update `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` when material integration areas affect Design, Implementation, evidence, production readiness, or close;
 - do not silently downgrade real integration requirements to fixtures, mocks, console fallbacks, or boundary-only work;
 - do not surface low-level provider choices to Domain Expert users unless the protocol requires surfacing;
 - do not claim implementation completion, production readiness, or close success beyond the integration posture supported by evidence.
@@ -168,7 +173,7 @@ Required behavior:
 
 ## Command-state close transition
 
-`hirmos close` is legal only when `SESSION_STATE.json.lifecycle_stage` is `implementation_complete`, `close_ready`, or an explicitly design-only terminal boundary. A normal close must reset active `SESSION_STATE.json` to `status: idle`, `lifecycle_stage: idle`, `allowed_next_commands: ["hirmos start", "hirmos status"]`, and `recommended_next_command: hirmos start`. The archived `SESSION_STATE.json` must be normalized to a closed/history state, not active.
+`hirmos close` is legal only when `SESSION_STATE.json.lifecycle_stage` is `implementation_complete`, `close_ready`, or an explicitly design-only terminal boundary. A normal close must reset active `SESSION_STATE.json` to `status: idle`, empty `session_id`, `lifecycle_stage: idle`, `allowed_next_commands: ["hirmos start", "hirmos status"]`, `recommended_next_command: hirmos start`, and no `blocking_reason`. The archived `SESSION_STATE.json` must be normalized to a closed/history state, not active.
 
 ## Accepted-state integrity gate
 
@@ -178,15 +183,15 @@ Before normal close success can be surfaced, HIRMOS must verify the complete clo
 
 Required checks:
 
-- `SESSION_CONTRACT.md` and `session-contract-review.md` classify promised work, verified work, gaps, deferred items, and final verdict.
+- `SESSION_CONTRACT.md` and `SESSION_CONTRACT.md` section 11 classify promised work, verified work, gaps, deferred items, and final verdict.
 - `unresolved-items.md` has no unresolved gated item blocking close, and all non-gating assumptions are accepted, resolved, or carried forward.
 - implementation units in `implementation-units/` are reviewed when Implementation was active.
 - `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` and active-only `CARRY_FORWARD.md` are updated only with accepted and carried outcomes.
-- the archive contains `support/archive-manifest.md` and the complete active session artifact set or recorded exceptions.
+- the archive contains `SESSION_EXECUTION.md` archive controls and the complete active session artifact set or recorded exceptions.
 - archived `SESSION_STATE.json` is normalized to closed/history state, not active.
 - active `_hirmos/session/SESSION_STATE.json` is reset to idle after normal close.
-- active `_hirmos/session/` contains only allowed idle scaffolding: `SESSION_STATE.json`, `.gitkeep`, `bootstrap/.gitkeep`, `checkpoints/.gitkeep`, `implementation-units/.gitkeep`, and `support/.gitkeep`.
-- `SESSION_EXECUTION.md`, `session-contract-review.md`, the archive manifest, and accepted-state records do not contradict each other.
+- active `_hirmos/session/` contains only allowed idle scaffolding: `SESSION_STATE.json`, `.gitkeep`, `bootstrap/.gitkeep`, and `implementation-units/.gitkeep`.
+- `SESSION_EXECUTION.md`, `SESSION_CONTRACT.md` section 11, the archive manifest, and accepted-state records do not contradict each other.
 
 If any check fails, the terminal state is `Close Blocked`, not `Closed / Archived`.
 
@@ -207,7 +212,7 @@ Required behavior:
 1. Preserve the complete active session artifact set under `_hirmos/system/history/sessions/<session-id>/` before resetting `_hirmos/session/`.
 2. Normalize the archived `SESSION_STATE.json` so a normally closed archive is terminal, not `active`.
 3. Reset active `_hirmos/session/SESSION_STATE.json` to idle after archive succeeds.
-4. Verify `support/archive-manifest.md`, `ARCHIVE_MANIFEST.md / SESSION_EXECUTION.md close controls`, accepted-state records, and post-close status agree.
+4. Verify `SESSION_EXECUTION.md` archive controls, `ARCHIVE_MANIFEST.md / SESSION_EXECUTION.md close controls`, accepted-state records, and post-close status agree.
 
 If archive/session-state integrity fails, the terminal state is `Close Blocked`.
 
@@ -216,7 +221,7 @@ If archive/session-state integrity fails, the terminal state is `Close Blocked`.
 Required behavior:
 
 1. Read existing `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`.
-2. Classify material outcomes in `SESSION_CONTRACT.md / session-contract-review.md close-verification record` as accepted, superseded, rejected / not applied, evidence-only, carry-forward, or blocked.
+2. Classify material outcomes in `SESSION_CONTRACT.md` section 11 close-verification record as accepted, superseded, rejected / not applied, evidence-only, carry-forward, or blocked.
 3. Merge accepted and superseded truth into `CURRENT_SYSTEM_STATE.md`.
 4. Update `DECISION_LOG.md` for durable decisions.
 5. Update `CARRY_FORWARD.md` for unresolved or future-session obligations.
@@ -227,7 +232,7 @@ Do not claim close success if `CURRENT_SYSTEM_STATE.md` was not updated or expli
 
 ### Claim reconciliation and evidence materialization invariant
 
-Normal close is itself a material close/archive/update-state claim. Therefore `_hirmos/session/support/claim-reconciliation.md` must exist for every normal close when claim reconciliation is applicable, and the close claim must be reconciled before it is surfaced.
+Normal close is itself a material close/archive/update-state claim. Therefore `_hirmos/session/EVIDENCE.md` must exist for every normal close when claim reconciliation is applicable, and the close claim must be reconciled before it is surfaced.
 
 Required behavior:
 
@@ -240,8 +245,8 @@ Required behavior:
 
 Required behavior:
 
-1. Create or verify `support/local-runtime-evidence.md` when local setup, local runtime, database, service, environment, or secret-readiness claims are made.
-2. Create or verify `support/role-workflow-smoke.md` when role/user/workflow readiness is claimed or role workflows are in scope, even if all workflow checks are `NOT_RUN`, `BLOCKED`, or `NOT_APPLICABLE`.
+1. Create or verify `EVIDENCE.md` when local setup, local runtime, database, service, environment, or secret-readiness claims are made.
+2. Create or verify `EVIDENCE.md` when role/user/workflow readiness is claimed or role workflows are in scope, even if all workflow checks are `NOT_RUN`, `BLOCKED`, or `NOT_APPLICABLE`.
 3. Keep build/test/lint evidence separate from local runtime readiness and role-workflow readiness.
 
 ### Canonical value invariant
@@ -309,8 +314,8 @@ When delivery governance is active, `hirmos close` must verify the adopted durab
 Close requires:
 
 - one adopted phase in `SESSION_CONTRACT.md`;
-- direct review of the durable `PHASE-xx.md` in `session-contract-review.md`;
-- accepted, partial, blocked, or superseded phase result recorded in `support/system-state-update.md`;
+- direct review of the durable `PHASE-xx.md` in `SESSION_CONTRACT.md` section 11;
+- accepted, partial, blocked, or superseded phase result recorded in `SESSION_EXECUTION.md` close/update controls;
 - Delivery Plan status and Current System State delivery pointers updated or explicitly verified unchanged.
 
 Close is blocked if phase adoption is missing, multiple phases are claimed, phase result is not reconciled, or accepted-state pointers would become stale.
@@ -324,14 +329,14 @@ Required behavior:
 
 1. Read the adopted durable phase from `SESSION_CONTRACT.md` Active Durable Phase Adoption.
 2. Read the parent `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` and active `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`.
-3. Reconcile `session-contract-review.md`, implementation-unit reviews, unresolved-items dispositions, and evidence against the adopted phase exit criteria.
-4. Complete `support/system-state-update.md` Close-Time Delivery / Phase Status Transaction.
+3. Reconcile `SESSION_CONTRACT.md` section 11, implementation-unit reviews, unresolved-items dispositions, and evidence against the adopted phase exit criteria.
+4. Complete `SESSION_EXECUTION.md` close/update controls Close-Time Delivery / Phase Status Transaction.
 5. Update or explicitly verify unchanged the adopted `PHASE-xx.md` Close-Time Phase Status Update Contract.
 6. Update the parent `DELIVERY_PLAN.md` Delivery Decomposition row and Delivery Status Update Log.
 7. Refresh `CURRENT_SYSTEM_STATE.md` Active Development Context and Delivery Pointers.
 8. Record carry-forward delivery obligations in `CARRY_FORWARD.md` or the next phase contract.
 
-Close is blocked if Delivery Plan status, Phase status, Session Contract adoption, session-contract-review verdict, implementation-unit review results, Current System State delivery pointers, and carry-forward obligations cannot be reconciled.
+Close is blocked if Delivery Plan status, Phase status, Session Contract adoption, SESSION_CONTRACT.md close-verification verdict, implementation-unit review results, Current System State delivery pointers, and carry-forward obligations cannot be reconciled.
 
 The archive manifest may record the transaction, but it does not substitute for updating the durable Delivery Plan and Phase file.
 
@@ -367,4 +372,20 @@ Required status terms: Phase Progress Ledger, Carry-Forward Items, partial phase
 
 Before claiming close success, reconcile stale active-session checkpoint text against current resolved state. If older sections still say gated items are unresolved, implementation is blocked, or delivery adoption is pending after later passes resolved those controls, close must either update the stale active-session text before archive or record the discrepancy as a blocked close issue.
 
-The archive must not preserve unresolved/blocking claims as active truth when `SESSION_STATE.json`, `SESSION_EXECUTION.md`, `unresolved-items.md`, `session-contract-review.md`, and accepted-state records show they were resolved.
+The archive must not preserve unresolved/blocking claims as active truth when `SESSION_STATE.json`, `SESSION_EXECUTION.md`, `unresolved-items.md`, `SESSION_CONTRACT.md` section 11, and accepted-state records show they were resolved.
+
+
+## Production-shaped engineering close gate
+
+Before normal close, `hirmos close` must review the Production-Shaped Engineering Gate against final files and evidence.
+
+Required close checks:
+
+- “async/background job” claims are supported by an actual background/worker/queue/cron processing path, not only persisted status fields;
+- credit/usage/billing claims are supported by transactional, idempotent, concurrency-safe, or explicitly constrained code/evidence;
+- provider-integration claims match the actual provider mode and environment posture;
+- durable data claims match the actual local/production persistence posture;
+- secrets, runtime uploads, generated outputs, local databases, caches, and OS metadata are excluded from handoff/release packages unless explicitly attached as evidence;
+- critical-flow evidence exists in `EVIDENCE.md` or a not-run/not-applicable rationale is accepted.
+
+If any check fails, close must downgrade the accepted claim, route back, or preserve the limitation as carry-forward. Do not accept production-shaped outcomes contradicted by implementation evidence.

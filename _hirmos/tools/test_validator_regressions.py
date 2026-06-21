@@ -97,9 +97,6 @@ def activate_session(root: Path, stage: str = "implementation_readiness", recomm
     state.update({
         "status": "active",
         "session_id": "fixture-delivery-001",
-        "session_title": "Fixture Delivery Session",
-        "active_command": "hirmos start",
-        "last_command": "hirmos start",
         "lifecycle_stage": stage,
         "continuation_pass": 1,
         "pending_correction": False,
@@ -108,8 +105,7 @@ def activate_session(root: Path, stage: str = "implementation_readiness", recomm
         "updated_at": "2026-01-01T00:00:00Z",
     })
     write_state(root, state)
-    for dirname in ["implementation-units", "checkpoints", "support"]:
-        (root / "session" / dirname).mkdir(exist_ok=True)
+    (root / "session" / "implementation-units").mkdir(exist_ok=True)
 
 
 def write_basic_active_artifacts(root: Path) -> None:
@@ -117,7 +113,7 @@ def write_basic_active_artifacts(root: Path) -> None:
     (session / "SESSION_CONTRACT.md").write_text("# SESSION_CONTRACT.md\n")
     (session / "SESSION_EXECUTION.md").write_text("# SESSION_EXECUTION.md\n")
     (session / "unresolved-items.md").write_text("# unresolved-items.md\n")
-    (session / "session-contract-review.md").write_text("# session-contract-review.md\n")
+    (session / "SESSION_CONTRACT.md section 11").write_text("# SESSION_CONTRACT.md section 11\n")
 
 
 def write_delivery_artifacts(
@@ -182,7 +178,7 @@ Acceptance decision can update durable phase to ACCEPTED: yes
 Acceptance gate status: PASS
 Phase acceptance evidence status: COMPLETE
 All exit criteria satisfied or explicitly deferred/excluded: yes
-Session Contract Review acceptance verdict: ACCEPTED
+Session Contract section 11 review acceptance verdict: ACCEPTED
 Implementation Unit evidence complete: yes
 Unresolved adopted work remaining: no
 Delivery Plan status updated: yes
@@ -221,9 +217,9 @@ Brownfield acceptance evidence: {bf_value}
 
     (session / "SESSION_CONTRACT.md").write_text(f"""# SESSION_CONTRACT.md
 
-## Delivery Governance Classification
+## Delivery Shape Decision
 
-Does this request require multi-session delivery governance?
+What is the smallest sufficient governed delivery shape for this request?
 Answer: {classification}
 Evidence: fixture evidence.
 Decision factors: fixture factors.
@@ -276,7 +272,7 @@ Exactly one recommended next command:
 
     (session / "SESSION_EXECUTION.md").write_text(f"# SESSION_EXECUTION.md\n\n## Durable Phase Adoption Gate\nGate status: PASS\n\n## Phase Entry Gate Execution Log\nImplementation readiness authorized: YES\n\n## Phase Progress / Carry-Forward Record\nAdopted phase progress reviewed: PASS\nCarry-forward obligations recorded: PASS\n{status_report}\n{acceptance_execution}\n")
     (session / "unresolved-items.md").write_text("# unresolved-items.md\n")
-    (session / "session-contract-review.md").write_text(f"# session-contract-review.md\n\n## Phase Entry Gate Review\nWas the Phase Entry Gate status PASS? YES\n\n## Phase Progress / Carry-Forward Review\nDid the session update or verify the durable Phase Progress Ledger? YES\nIf phase outcome is not ACCEPTED, are carry-forward obligations recorded? {cf_review_answer}\n{acceptance_review}\n")
+    (session / "SESSION_CONTRACT.md").write_text((session / "SESSION_CONTRACT.md").read_text() + f"\n\n## Phase Entry Gate Review\nWas the Phase Entry Gate status PASS? YES\n\n## Phase Progress / Carry-Forward Review\nDid the session update or verify the durable Phase Progress Ledger? YES\nIf phase outcome is not ACCEPTED, are carry-forward obligations recorded? {cf_review_answer}\n{acceptance_review}\n")
 
     delivery_dir = root / "system" / "delivery" / delivery_id
     (delivery_dir / "phases").mkdir(parents=True, exist_ok=True)
@@ -371,11 +367,10 @@ Next governed command: hirmos continue
 """)
 
     if close_transaction:
-        (session / "support").mkdir(parents=True, exist_ok=True)
         status = "DELIVERY_STATUS_UPDATE_APPLIED" if close_applied else "DELIVERY_STATUS_PENDING"
         cf_status = "RECORDED" if carry_forward_recorded else "NOT_APPLICABLE"
         cf_target = "_hirmos/system/delivery/fixture-delivery/phases/PHASE-02.md" if carry_forward_recorded else ""
-        (session / "support" / "system-state-update.md").write_text(f"""# SYSTEM_STATE_UPDATE.md
+        (session / "SESSION_EXECUTION.md").write_text((session / "SESSION_EXECUTION.md").read_text() + f"""
 
 ## Close-Time Delivery / Phase Status Transaction
 
@@ -401,12 +396,12 @@ def mutate_idle_stale_contract(root: Path) -> None:
     (root / "session" / "SESSION_CONTRACT.md").write_text("# stale contract\n")
 
 
-def mutate_active_missing_contract_review(root: Path) -> None:
+def mutate_active_missing_unresolved_items(root: Path) -> None:
     activate_session(root)
     session = root / "session"
-    for filename in ["SESSION_CONTRACT.md", "SESSION_EXECUTION.md", "unresolved-items.md"]:
+    for filename in ["SESSION_CONTRACT.md", "SESSION_EXECUTION.md"]:
         (session / filename).write_text(f"# {filename}\n")
-    # Deliberately omit session-contract-review.md.
+    # Deliberately omit unresolved-items.md.
 
 
 def mutate_unsupported_legacy_command(root: Path) -> None:
@@ -421,7 +416,6 @@ def mutate_readiness_wrong_recommendation(root: Path) -> None:
     state.update({
         "status": "active",
         "session_id": "fixture-active-002",
-        "session_title": "Fixture Readiness Session",
         "lifecycle_stage": "implementation_readiness",
         "allowed_next_commands": ["hirmos close", "hirmos status"],
         "recommended_next_command": "hirmos close",
@@ -520,7 +514,7 @@ def mutate_legacy_capability_entrypoint_wrapper(root: Path) -> None:
 CASES = [
     Case("valid baseline", mutate_none, True, "PASS:"),
     Case("idle stale SESSION_CONTRACT", mutate_idle_stale_contract, False, "stale active-session"),
-    Case("active missing session-contract-review", mutate_active_missing_contract_review, False, "missing canonical root artifact"),
+    Case("active missing unresolved-items", mutate_active_missing_unresolved_items, False, "missing canonical root artifact"),
     Case("unsupported legacy command", mutate_unsupported_legacy_command, False, "unsupported command"),
     Case("implementation readiness wrong recommendation", mutate_readiness_wrong_recommendation, False, "implementation_readiness"),
     Case("delivery governed active readiness passes", mutate_delivery_governed_active_readiness, True, "PASS:"),

@@ -43,9 +43,6 @@ Required fields:
   "schema_version": "session-state-v1",
   "status": "idle | active | blocked",
   "session_id": "",
-  "session_title": "",
-  "active_command": null,
-  "last_command": null,
   "lifecycle_stage": "idle",
   "continuation_pass": 0,
   "pending_correction": false,
@@ -59,7 +56,7 @@ Required fields:
 
 Rules:
 
-- `status`, `lifecycle_stage`, `allowed_next_commands`, and `recommended_next_command` are authoritative for command legality.
+- `status`, `session_id`, `lifecycle_stage`, `continuation_pass`, `pending_correction`, `allowed_next_commands`, `recommended_next_command`, `blocking_reason`, and timestamps are the full machine-state surface. Narrative continuation belongs in `SESSION_EXECUTION.md` Current Continuation Snapshot.
 - `SESSION_EXECUTION.md` may explain state but must not override `SESSION_STATE.json`.
 - If `SESSION_STATE.json` and `SESSION_EXECUTION.md` disagree, HIRMOS must fail closed.
 - `allowed_next_commands` must contain only supported governed commands.
@@ -96,7 +93,7 @@ Illegal transitions fail closed. In particular:
 
 - `hirmos start` is illegal when an active session exists.
 - `hirmos continue` is illegal when session status is `idle`.
-- bare `hirmos continue` is illegal after `implementation_complete` unless `pending_correction` is true or the previous surfaced checkpoint explicitly recommended `hirmos continue`.
+- bare `hirmos continue` is illegal after `implementation_complete` unless `pending_correction` is true or `SESSION_EXECUTION.md` Current Continuation Snapshot explicitly recommended `hirmos continue`.
 - `hirmos close` is illegal before a design-only, implementation-complete, or close-ready terminal boundary is reached.
 
 ## Mandatory start pause rule
@@ -109,7 +106,7 @@ For implementation-capable sessions, `hirmos start` must stop at `implementation
 - `_hirmos/session/SESSION_CONTRACT.md`
 - `_hirmos/session/SESSION_EXECUTION.md`
 - `_hirmos/session/unresolved-items.md`
-- `_hirmos/session/session-contract-review.md` initialized for later review
+- `_hirmos/session/SESSION_CONTRACT.md` section 11 initialized for later review
 - implementation unit plan in `SESSION_CONTRACT.md` when implementation is expected
 
 The user-facing result must explain:
@@ -147,7 +144,7 @@ Scope rules:
 - Same-contract corrections do not rewrite the Authorized Scope; they append correction records.
 - Scope expansions require a `Contract Amendment` section in `SESSION_CONTRACT.md` before implementation.
 - `unresolved-items.md` dispositions must be appended, not deleted.
-- `session-contract-review.md` must add review passes, not replace prior reviews.
+- `SESSION_CONTRACT.md` section 11 must add review passes, not replace prior reviews.
 - `implementation-units/IU-xx.md` must append attempts/retries/reviews.
 
 ## SESSION_EXECUTION append-only ledger requirements
@@ -226,19 +223,26 @@ Validators must eventually enforce:
 - no deprecated command-state diagnostics.
 
 
-## Delivery-Need Classification state gate
+## Delivery Shape Decision state gate
 
 Before an implementation-capable session may enter `implementation_readiness`, HIRMOS must apply `_hirmos/core/protocol/DELIVERY_GOVERNANCE.md`.
 
 Required state effect:
 
-- classification `YES` requires durable delivery artifacts before implementation readiness;
-- classification `UNCERTAIN` keeps the session blocked or in design/system-state understanding;
-- classification `NO` requires affirmative single-session safety evidence in `SESSION_CONTRACT.md`;
-- missing classification is a fail-closed condition.
+- `SINGLE_SESSION_VERTICAL_SLICE` requires bounded-scope safety evidence;
+- `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` requires implementation-unit coverage for the Session Contract;
+- `MULTI_SESSION_DELIVERY` requires a durable Delivery Plan before implementation readiness;
+- `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` requires a durable Delivery Plan and adopted phase file before implementation readiness;
+- `UNCERTAIN` keeps the session blocked or in Design/system-state understanding;
+- missing delivery-shape decision is a fail-closed condition.
 
-The exactly-one-next-command rule must not recommend `hirmos continue` for implementation when Delivery-Need Classification is missing, `UNCERTAIN`, or `YES` without a durable Delivery Plan and phase file.
+The exactly-one-next-command rule must not recommend `hirmos continue` for implementation when the Delivery Shape Decision is missing, `UNCERTAIN`, or references missing durable delivery artifacts.
 
+## Production-Shaped Engineering state gate
+
+Before an implementation-capable session may enter `implementation_readiness`, HIRMOS must record the Production-Shaped Engineering Gate in `DESIGN.md`, `SESSION_CONTRACT.md`, and `SESSION_EXECUTION.md`.
+
+Before a session may enter `close_ready` or `closed`, HIRMOS must verify that implementation evidence supports the exact production-shaped claims being accepted. If evidence contradicts a claim, the claim must be downgraded, routed back, or preserved as a limitation/carry-forward item.
 
 ## Append-only continuation ledger integrity
 

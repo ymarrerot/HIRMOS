@@ -8,8 +8,8 @@ Synchronize reviewed accepted outcomes into durable system state, preserve sessi
 
 ### Produces
 
-- `_hirmos/session/support/system-state-update.md`
-- `_hirmos/session/support/close-checklist.md`
+- `_hirmos/session/SESSION_EXECUTION.md`
+- `_hirmos/session/SESSION_EXECUTION.md`
 - `_hirmos/system/accepted-state/*` updates when outcomes are accepted
 - `_hirmos/system/history/sessions/<session-id>/` archive
 - `_hirmos/session/SESSION_STATE.json` reset or updated terminal state
@@ -33,8 +33,8 @@ Synchronize reviewed accepted outcomes into durable system state, preserve sessi
 ## Required inputs
 
 - `_hirmos/session/SESSION_EXECUTION.md`
-- `_hirmos/session/support/close-checklist.md` when close is requested
-- `_hirmos/session/support/system-state-update.md` when accepted-state changes are proposed
+- `_hirmos/session/SESSION_EXECUTION.md` when close is requested
+- `_hirmos/session/SESSION_EXECUTION.md` when accepted-state changes are proposed
 - applicable Design/Implementation/review/evidence artifacts for the completed session
 - `_hirmos/session/unresolved-items.md` when unresolved items exist
 
@@ -50,10 +50,10 @@ Synchronize reviewed accepted outcomes into durable system state, preserve sessi
 
 1. Read `SESSION_EXECUTION.md` and confirm the session has a valid current state and no required controls in `PENDING` or `BLOCKED` unless the close is an abort close.
 2. Confirm whether the session has reviewed outcomes eligible for accepted-state update.
-3. Confirm applicable evidence: Design readiness, Implementation review, Evidence Review, Session Implementation Review, unresolved-item dispositions, and close checklist.
+3. Confirm applicable evidence: Design readiness, implementation-unit reviews, `EVIDENCE.md` when present, unresolved-item dispositions, `SESSION_CONTRACT.md` section 11, and `SESSION_EXECUTION.md` close/update controls.
 4. Separate outcomes into accepted outcomes, rejected/not-applied outcomes, evidence-only artifacts, and carry-forward items.
-5. Create or update `_hirmos/session/support/system-state-update.md` with the update decision and evidence basis.
-6. Create or update `_hirmos/session/support/close-checklist.md` with archive readiness and active-session reset requirements.
+5. Create or update `_hirmos/session/SESSION_EXECUTION.md` with the update decision and evidence basis.
+6. Create or update `_hirmos/session/SESSION_EXECUTION.md` with archive readiness and active-session reset requirements.
 7. Apply accepted-state changes only when controls and evidence allow it.
 8. Archive the full active session under `_hirmos/system/history/sessions/<session-id>/`.
 9. Reset `_hirmos/session/` to clean session state after normal close, preserving only required scaffolding.
@@ -87,7 +87,7 @@ Record full item fields in `unresolved-items.md`, including current status, down
 
 When material runtime services are involved, follow `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`.
 
-Record or consume `_hirmos/session/support/runtime-integration-readiness.md` as required by execution controls.
+Record or consume `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` as required by execution controls.
 
 Do not claim fixture/mock/boundary/local/production integration levels beyond what the active artifacts and evidence support.
 

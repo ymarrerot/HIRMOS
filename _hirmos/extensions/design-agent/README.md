@@ -24,7 +24,7 @@ Design outputs are authority for downstream Implementation only when they are re
 
 ## Durable delivery capability chain
 
-When Delivery-Need Classification is `YES`, Design must route through:
+When the selected delivery shape requires durable delivery, Design must route through:
 
 ```text
 delivery-design → phase-contracting → session-contract → implementation-readiness

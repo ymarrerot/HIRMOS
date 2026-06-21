@@ -297,8 +297,8 @@ Before `PHASE-xx.md` may record `Lifecycle status: ACCEPTED`, HIRMOS must verify
 - all phase exit criteria are satisfied or explicitly deferred/excluded with rationale;
 - all adopted Session Contract items are reviewed;
 - every implementation unit has execution evidence and unit review;
-- `session-contract-review.md` records phase coverage and acceptance verdict;
-- `support/system-state-update.md` records the accepted phase transaction;
+- `SESSION_CONTRACT.md` section 11 records phase coverage and acceptance verdict;
+- `SESSION_EXECUTION.md` close/update controls records the accepted phase transaction;
 - Delivery Plan and Phase file status are updated;
 - `CURRENT_SYSTEM_STATE.md` delivery pointers are refreshed;
 - unresolved, partial, blocked, or deferred work is reconciled before acceptance.

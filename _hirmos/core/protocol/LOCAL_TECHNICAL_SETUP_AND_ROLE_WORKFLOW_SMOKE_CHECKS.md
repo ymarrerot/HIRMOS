@@ -71,10 +71,10 @@ For each material role, record:
 - route or workflow exercised;
 - expected result;
 - observed result;
-- evidence state from `support/claim-reconciliation.md`;
+- evidence state from `EVIDENCE.md` claim reconciliation;
 - limitations or blockers.
 
-For the healthcare MVP pattern, likely roles include patient, front-desk staff, provider, clinic manager, and platform/admin when applicable.
+For role-based software, likely roles may include end users, operators, reviewers, privileged users, support users, and administrators when applicable. Use the roles that actually exist in the system under test; do not import role names from unrelated domains.
 
 ## Claim rules
 
@@ -90,23 +90,23 @@ HIRMOS may claim role workflow readiness only for workflows with smoke evidence 
 
 Use:
 
-- `_hirmos/session/support/local-runtime-evidence.md` for local setup evidence;
-- `_hirmos/session/support/role-workflow-smoke.md` for role workflow smoke evidence;
-- `_hirmos/session/support/claim-reconciliation.md` for claim status;
-- `_hirmos/session/support/evidence-review.md` for aggregate evidence review;
-- `_hirmos/session/support/session-implementation-review.md` for implementation completion decision.
+- `_hirmos/session/EVIDENCE.md` for local setup evidence;
+- `_hirmos/session/EVIDENCE.md` for role workflow smoke evidence;
+- `_hirmos/session/EVIDENCE.md` for claim status;
+- `_hirmos/session/EVIDENCE.md` for aggregate evidence review;
+- `_hirmos/session/implementation-units/IU-xx.md review` for implementation completion decision.
 
 Firm rule: do not say “the app works locally” or “role workflows are verified” unless the corresponding evidence artifact supports that exact claim.
 
 ## Mandatory role-smoke artifact instantiation
 
-If a session implements role-based workflows, modifies role-based routes, or claims workflow readiness for any role, HIRMOS must instantiate `_hirmos/session/support/role-workflow-smoke.md`.
+If a session implements role-based workflows, modifies role-based routes, or claims workflow readiness for any role, HIRMOS must instantiate `_hirmos/session/EVIDENCE.md`.
 
 The artifact is required even when smoke checks are not run. In that case, each material workflow must be recorded with canonical evidence state `NOT_RUN`, `BLOCKED`, or `NOT_APPLICABLE` and a limitation/carry-forward note.
 
-Do not bury missing role-smoke evidence only in `CARRY_FORWARD.md`, `support/claim-reconciliation.md`, or chat output. Those artifacts may reference the limitation, but `support/role-workflow-smoke.md` is the owning workflow-smoke evidence artifact.
+Do not bury missing role-smoke evidence only in `CARRY_FORWARD.md`, `EVIDENCE.md` claim reconciliation, or chat output. Those artifacts may reference the limitation, but `EVIDENCE.md` is the owning workflow-smoke evidence artifact.
 
-Firm rule: role workflow readiness is not claimable when `support/role-workflow-smoke.md` is missing for in-scope role workflows.
+Firm rule: role workflow readiness is not claimable when `EVIDENCE.md` is missing for in-scope role workflows.
 
 ## Close-time local setup and role-workflow materialization
 
