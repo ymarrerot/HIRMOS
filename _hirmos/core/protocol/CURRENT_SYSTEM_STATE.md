@@ -73,15 +73,21 @@ Required pointer fields when applicable:
 
 - Delivery governance active
 - Active delivery ID
-- Delivery plan path
+- Delivery roadmap path
+- Active delivery scope path
 - Active phase path
 - Active phase status
+- Last accepted delivery
 - Last accepted phase
 - Last accepted session/archive
+- Next recommended delivery
+- Next recommended delivery scope
 - Next recommended phase
 - Next governed command
 
-Update System State must refresh these pointers during normal close whenever a session creates, updates, accepts, blocks, supersedes, or advances a durable Delivery Plan or Phase file. If the pointers are unchanged, the close artifact must say so with evidence.
+Update System State must refresh these pointers during normal close whenever a session creates, updates, accepts, blocks, supersedes, defers, cancels, or advances a durable delivery, Delivery Scope, Delivery Plan, or Phase file. If the pointers are unchanged, the close artifact must say so with evidence.
+
+When one delivery is accepted and a planned follow-up delivery is present in `DELIVERY_PLAN.md`, Update System State must record `Next recommended delivery` and `Next recommended delivery scope`, or explicitly record why no follow-up delivery is recommended.
 
 Future sessions must read these pointers during Understand System State before deciding that a request is safe for a single-session path. A stale or contradictory delivery pointer is a blocker for Design or Implementation readiness until reconciled.
 
@@ -92,7 +98,7 @@ Future sessions must read these pointers during Understand System State before d
 Required close sequence:
 
 1. Read prior `CURRENT_SYSTEM_STATE.md`.
-2. Read `SESSION_EXECUTION.md` close/update controls, `SESSION_EXECUTION.md` close controls, `EVIDENCE.md` claim reconciliation when material claims exist, and relevant session evidence.
+2. Read `SESSION_EXECUTION.md` close/update control pointers, `SESSION_EXECUTION.md` close controls, `EVIDENCE.md` claim reconciliation when material claims exist, and relevant session evidence.
 3. Classify each material outcome as accepted, rejected / not applied, evidence-only, superseded, or carry-forward.
 4. Merge accepted and superseded truth into `CURRENT_SYSTEM_STATE.md`.
 5. Update `DECISION_LOG.md` for accepted/rejected/superseded decisions.
@@ -204,6 +210,27 @@ y copy of current truth.
 
 ## Close-Time Delivery Pointer Refresh
 
-`CURRENT_SYSTEM_STATE.md` must be refreshed during close whenever delivery governance was active or required. The refresh must be sourced from `SESSION_EXECUTION.md` close/update controls, the durable Delivery Plan, the adopted Phase file, and archive evidence.
+`CURRENT_SYSTEM_STATE.md` must be refreshed during close whenever delivery governance was active or required. The refresh must be sourced from `SESSION_EXECUTION.md` close/update control pointers, the durable Delivery Plan, the adopted Phase file, and archive evidence.
 
 A future session must not trust delivery pointers that were not refreshed or explicitly verified unchanged at the last delivery-governed close.
+
+
+## PROD-L6 accepted-state delivery pointer model
+
+When durable delivery governance is active, `CURRENT_SYSTEM_STATE.md` must use the PROD-L delivery authority model:
+
+```text
+Delivery roadmap: `_hirmos/system/delivery/DELIVERY_PLAN.md`
+Active delivery scope: `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
+Active phase: `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`
+```
+
+It must not use `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` as the active delivery authority for new work. Completed or historical prior artifacts may be mentioned only as history, not as current active pointers.
+
+Future sessions must read these pointers before selecting delivery, phase, or single-session routing. If the pointers are missing, stale, or contradictory to the delivery roadmap/register, active delivery scope, phase file, or latest archive manifest, the command must fail closed until accepted-state reconciliation occurs.
+
+## Archive manifest concordance
+
+The latest close metadata in `CURRENT_SYSTEM_STATE.md` must agree with `_hirmos/system/history/sessions/<session-id>/ARCHIVE_MANIFEST.md` when a normal close has occurred. The archive manifest is a history-only concordance record; it does not replace `CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, or `DECISION_LOG.md`.
+
+Close is blocked when archive manifest concordance shows accepted outcomes, delivery pointer updates, active carry-forward items, archived session-state normalization, or active-session reset disagree with accepted state.

@@ -97,6 +97,6 @@ Preserve accepted-state artifact roles: `CURRENT_SYSTEM_STATE.md` is current tru
 
 Do not merge accepted outcomes or recommend close success until close-time evidence, claim reconciliation, accepted-state invariant blocks, canonical evidence/status/runtime values, and framework validation requirements are satisfied.
 
-### Requirements baseline source-input responsibilities
+### Requirements source-input responsibilities
 
 Source requirements, prototype-derived signals, UI notes, reference material, and accepted prior requirements must be inventoried and classified before Design relies on them. Source material ingestion and prototype ingestion extract signals; they do not create governed requirements by themselves.

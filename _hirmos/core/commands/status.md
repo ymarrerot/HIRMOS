@@ -158,14 +158,21 @@ Status must not silently normalize conflicting accepted-state files. It may reco
 Required status fields when applicable:
 
 - Active delivery ID
-- Delivery plan path
+- Delivery roadmap path
+- Active delivery scope path
 - Active phase path
 - Active phase status
+- Last accepted delivery
 - Last accepted phase/session
+- Next recommended delivery
+- Next recommended delivery scope
 - Next recommended phase
 - Next governed command
 
 If Current System State points to a missing or contradictory durable delivery artifact, status must report `Status Blocked By Delivery Pointer Conflict` and recommend repair through Update System State or delivery governance reconciliation.
+
+
+When no active session exists but `CURRENT_SYSTEM_STATE.md` names a `Next recommended delivery`, status must report that delivery as the likely next `hirmos start` context unless carry-forward or blockers say otherwise.
 
 ## Durable Phase Adoption Status Reporting
 
@@ -182,12 +189,13 @@ Status must not imply implementation authorization when no durable phase has bee
 
 ## Delivery Status Concordance Reporting
 
-When Current System State reports active delivery pointers, `hirmos status` must report whether the durable Delivery Plan, active Phase file, and Current System State pointers appear concordant.
+When Current System State reports active delivery pointers, `hirmos status` must report whether the durable Delivery Plan roadmap/register, active Delivery Scope, active Phase file, and Current System State pointers appear concordant.
 
 Required status output fields when delivery governance is active:
 
 - active delivery ID;
-- Delivery Plan path and status;
+- Delivery roadmap path and status;
+- Active delivery scope path and status;
 - active phase path and status;
 - last accepted phase;
 - next recommended phase;
@@ -266,3 +274,32 @@ Mixed phase status group:
 - Mixed-mode simplified interpretation blocked
 
 If the durable phase state is missing, contradictory, or unsupported for the current command state, status must report `Status Blocked By Phase Lifecycle Conflict` and recommend exactly one safe governed command.
+
+## PROD-L4 delivery-route status reporting
+
+`hirmos status` must make delivery routing visible without expanding the artifact surface.
+
+When a session is active, status must report:
+
+- selected Delivery Shape Decision;
+- active capability route;
+- whether `delivery-design`, `phase-contracting`, `session-scope`, and `implementation-readiness` are `REQUIRED`, `NOT_APPLICABLE`, `BLOCKED`, or satisfied;
+- required authority artifacts and whether each exists, is non-placeholder, and is concordant;
+- exactly one safe next governed command.
+
+If the route is blocked by missing or contradictory delivery roadmap, delivery scope, phase, session scope, or Current System State pointers, status must report `Status Blocked By Delivery Route Conflict` and recommend reconciliation rather than implementation.
+
+
+## PROD-L6 accepted-state status concordance
+
+When no active session exists, `hirmos status` must report the latest close using accepted-state metadata first, then the history-only `ARCHIVE_MANIFEST.md` for concordance. It must distinguish accepted current truth from archived evidence.
+
+For delivery-governed state, status must report:
+
+- Delivery roadmap path;
+- Active delivery scope path;
+- Active phase path, if applicable;
+- latest archive manifest path;
+- whether accepted-state pointers and archive manifest concordance pass.
+
+If accepted state still points to `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` as active delivery authority, report `Status Blocked By Delivery Pointer Conflict`.

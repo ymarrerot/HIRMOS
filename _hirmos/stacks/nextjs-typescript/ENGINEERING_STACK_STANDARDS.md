@@ -26,12 +26,12 @@ Production-shaped does not require deployment, cloud services, or enterprise arc
 - A simple local worker, cron route, or polling-compatible job processor is acceptable for an MVP if it preserves the production architecture shape and limitations are explicit.
 - Claim/lock or idempotency behavior is required when multiple workers or repeated invocations can process the same job.
 
-## Credits, usage, billing, quotas, and account balances
+## Metered state, usage, billing, quotas, and account balances
 
-- Credit/usage/billing/inventory mutations must be transactional, idempotent, or explicitly concurrency-limited.
+- Metered-state, billing, inventory, and account-balance mutations must be transactional, idempotent, or explicitly concurrency-limited.
 - Preflight checks alone are not sufficient when multiple requests can pass before deduction/reservation.
-- Prefer reservation/finalization or atomic decrement patterns when long-running work consumes credits.
-- Failed, retried, and partially completed jobs must have defined credit/usage semantics.
+- Prefer reservation/finalization or atomic decrement patterns when long-running work consumes usage allowances.
+- Failed, retried, and partially completed jobs must have defined metered-state semantics.
 
 ## Provider boundaries and external services
 

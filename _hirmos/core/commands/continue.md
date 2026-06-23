@@ -218,6 +218,9 @@ Firm rule: do not continue meaningful Design or Implementation while current-sys
 
 ## Durable Delivery Pointer Concordance
 
+
+When continuation enters Design, Implementation, correction, or close preparation for delivery-governed work, verify that the active session still matches `CURRENT_SYSTEM_STATE.md` delivery navigation. If `Next recommended delivery` exists but the session is working on a different delivery, record the user/request override or route back to delivery governance reconciliation.
+
 Before advancing implementation on a delivery-governed session, `hirmos continue` must verify that `SESSION_SCOPE.md` delivery authority agrees with Current System State active delivery pointers and the durable Delivery Plan / Phase file.
 
 If the session scope, current-state pointer, Delivery Plan, and active Phase file disagree, `hirmos continue` must fail closed and route to delivery governance reconciliation before implementation proceeds.
@@ -282,3 +285,17 @@ Required behavior:
 - record route-back when implementation evidence invalidates the production-shaped design or delivery shape;
 - materialize `EVIDENCE.md` when command/runtime/provider/storage/database evidence becomes nontrivial;
 - do not claim implementation completion when code evidence contradicts production-shaped claims.
+
+## PROD-L4 delivery-route continuation behavior
+
+`hirmos continue` must preserve the capability route selected by `hirmos start` unless a governed Session Scope amendment changes it.
+
+Required behavior:
+
+- Re-read `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, unresolved items, and any adopted delivery/phase artifacts before implementation or correction work.
+- Re-run capability routing checks for required route controls: `delivery-design`, `phase-contracting`, `session-scope`, and `implementation-readiness` when applicable.
+- Block continuation if a durable delivery artifact was removed, contradicted, or made stale since start.
+- Block continuation if a session attempts to implement work from a different delivery or phase than the adopted authority chain.
+- Record route preservation, route amendment, or route-back in `SESSION_EXECUTION.md`.
+
+A continuation pass may add evidence or implementation-unit detail, but it must not expand delivery scope silently.

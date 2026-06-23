@@ -7,10 +7,10 @@ Purpose: ensure `hirmos close` is a governed state transaction, not a chat summa
 
 `hirmos close` is not complete until four surfaces agree:
 
-1. **Session contract truth** — `_hirmos/session/SESSION_SCOPE.md`, especially close verification, shows what was promised, what was verified, unresolved-item disposition, and the final fail-closed verdict.
-2. **Execution truth** — `_hirmos/session/SESSION_EXECUTION.md` records the close command, execution controls, evidence log, archive/reset controls, and exactly one legal next command or action.
+1. **Session scope truth** — `_hirmos/session/SESSION_SCOPE.md`, especially close verification, shows what was promised, what was verified, unresolved-item disposition, and the final fail-closed verdict.
+2. **Execution truth** — `_hirmos/session/SESSION_EXECUTION.md` records the close command, execution controls, evidence pointers, archive/reset control pointers, and exactly one legal next command or action.
 3. **Accepted current truth** — `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`, active-only `CARRY_FORWARD.md`, and `DECISION_LOG.md` reflect only accepted outcomes and durable decisions.
-4. **Archive/reset truth** — the archive records archived artifacts and post-close verification, while active `_hirmos/session/` is reset to idle scaffolding. Archive manifest information belongs in `SESSION_EXECUTION.md` archive controls; do not create a separate active-session archive manifest support file.
+4. **Archive/reset truth** — the archive records archived artifacts and post-close verification, while active `_hirmos/session/` is reset to idle scaffolding. Archive manifest information belongs in history at `ARCHIVE_MANIFEST.md` and in `SESSION_EXECUTION.md` archive controls; do not create a separate active-session archive manifest support file.
 
 If any surface disagrees, HIRMOS must report `Close Blocked`, not `Closed / Archived`.
 
@@ -47,7 +47,7 @@ Implementation sessions also require:
 
 Evidence beyond implementation-unit records is required only when the claim family is active and cannot be captured clearly in the relevant implementation-unit artifact. In that case, use root `EVIDENCE.md` as the consolidated evidence surface. Do not create separate runtime-readiness, local-runtime-evidence, role-workflow-smoke, claim-reconciliation, close-checklist, archive-manifest, or session-scope-review support files for new sessions.
 
-`SESSION_EXECUTION.md` close/update controls, implementation-unit reviews, `EVIDENCE.md`, and `SESSION_SCOPE.md` close verification are the close evidence surfaces in the strict-necessity model. Close authority comes from `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, `unresolved-items.md`, implementation-unit artifacts, `EVIDENCE.md` when present, and accepted-state files.
+`SESSION_EXECUTION.md` close/update control pointers, implementation-unit reviews, `EVIDENCE.md`, and `SESSION_SCOPE.md` close verification are the close evidence surfaces in the strict-necessity model. Close authority comes from `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, `unresolved-items.md`, implementation-unit artifacts, `EVIDENCE.md` when present, and accepted-state files.
 
 ## Accepted-state records
 
@@ -62,7 +62,7 @@ The baseline accepted-state files are:
 - `CURRENT_SYSTEM_STATE.md` — canonical merged current truth, accepted-state navigation, active development-context pointers, and latest-close metadata;
 - `CARRY_FORWARD.md` — active carry-forward obligations only;
 - `DECISION_LOG.md` — durable accepted, rejected, superseded, and replaced decisions;
-- `REQUIREMENTS_BASELINE.md` when requirements governance is active.
+- `REQUIREMENTS.md` when requirements governance is active.
 
 A session archive is not accepted state by itself. Archived artifacts are history. Only accepted outcomes merged into `CURRENT_SYSTEM_STATE.md` become current accepted state.
 
@@ -129,7 +129,7 @@ The following are stale after normal close and must block close success if they 
 SESSION_SCOPE.md
 SESSION_EXECUTION.md
 unresolved-items.md
-REQUIREMENTS_BASELINE.md
+REQUIREMENTS.md
 DESIGN.md
 EVIDENCE.md
 implementation-units/IU-*.md
@@ -294,3 +294,20 @@ Any noncanonical value found in a structured evidence/status/posture field must 
 Accepted-state invariant blocks are preserved system content. Update System State may update values around them, but must not delete, rename, or weaken them. If an accepted-state artifact loses its invariant block or required invariant phrase, close is blocked and the artifact must be restored before archive success is claimed.
 
 Firm rule: close does not get a compliance grace period. Missing evidence artifacts, failed validation, lost accepted-state invariants, noncanonical structured values, or dirty package claims make the correct result `Close Blocked`, not `Closed with caveats`.
+
+
+## PROD-L6 accepted-state/history alignment
+
+ARCHIVE_MANIFEST.md is history-only. It records the close transaction and concordance checks, but it does not become accepted current truth by itself. Normal close is valid only when the archive manifest, `SESSION_EXECUTION.md` close controls, `SESSION_SCOPE.md` close verification, active-session reset, and accepted-state files agree.
+
+For delivery-governed work, close must verify that Current System State delivery pointers refreshed or were explicitly verified unchanged. The required pointer model is:
+
+```text
+Delivery roadmap: _hirmos/system/delivery/DELIVERY_PLAN.md
+Active delivery scope: _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md
+Active phase: _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
+```
+
+A normal close must not leave accepted state pointing to `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` as active delivery authority. That path is legacy/historical only under the PROD-L model.
+
+Close is blocked if `ARCHIVE_MANIFEST.md`, archived `SESSION_STATE.json`, active reset `SESSION_STATE.json`, and `CURRENT_SYSTEM_STATE.md` disagree about the close verdict, accepted outcomes, carry-forward state, delivery pointer updates, or next governed command.

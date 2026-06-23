@@ -33,7 +33,7 @@ Before execution:
 7. `_hirmos/core/protocol/GOVERNED_CHECKPOINTS.md`
 8. `_hirmos/core/protocol/VALIDATION_AND_EVIDENCE.md`
 9. `_hirmos/core/protocol/CURRENT_SYSTEM_STATE.md`
-10. `_hirmos/core/protocol/REQUIREMENTS_BASELINE.md`
+10. `_hirmos/core/protocol/REQUIREMENTS.md`
 11. `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md` when material runtime services are involved
 
 Read stack, capability, template, and extension files only when the active command controls require them. Capability and extension routing must follow `_hirmos/core/protocol/CAPABILITY_ROUTING.md`; command-triggered routing and adaptive-read discipline must follow `_hirmos/core/protocol/COMMANDS.md`. When Design, Implementation, Update System State, project type, stack, runtime integration, delivery governance, or unresolved-item state requires a specialized capability decision, read `_hirmos/core/protocol/CAPABILITY_ROUTING.md` before selecting extension or capability entrypoints.
@@ -169,6 +169,8 @@ Record these controls in `SESSION_EXECUTION.md` at minimum:
 
 `hirmos start` must treat `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` as the primary accepted current-state source.
 
+Future sessions must read delivery pointers during Understand System State before deciding that a request is safe for a single-session path. If `Next recommended delivery` and `Next recommended delivery scope` are present, adopt that delivery context unless the user request is clearly unrelated.
+
 Before meaningful Design or Implementation begins:
 
 - `CURRENT_SYSTEM_STATE.md` exists and has been read first; or
@@ -271,7 +273,7 @@ When the active request uses a Delivery Plan, Phase, Delivery Unit, or implement
 Required behavior:
 
 - identify the active Delivery Unit / Phase when one exists;
-- instantiate or update `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md status log` when delivery status materially affects the user-facing checkpoint or next action;
+- instantiate or update `_hirmos/system/delivery/DELIVERY_PLAN.md and _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md status log` when delivery status materially affects the user-facing checkpoint or next action;
 - keep `SESSION_EXECUTION.md` aligned with the active slice status;
 - recommend exactly one primary next command/action unless blocked;
 - do not imply the next Delivery Unit is authorized unless its governing contract and controls support it.
@@ -284,21 +286,24 @@ Unsupported, unlogged, contradicted, or environment-blocked claims must be downg
 
 ## Requirements-baseline-first Design enforcement
 
-Before meaningful Design for governed software work, `hirmos start` must establish `_hirmos/session/REQUIREMENTS_BASELINE.md` when source requirements, prototype-derived signals, UI design notes, reference materials, or accepted prior requirements materially affect scope.
+Before meaningful Design for governed software work, `hirmos start` must establish `_hirmos/session/REQUIREMENTS.md` when source requirements, prototype-derived signals, UI design notes, reference materials, or accepted prior requirements materially affect scope.
 
 Required behavior:
 
 - inventory and classify material source inputs;
-- read `_hirmos/system/accepted-state/REQUIREMENTS_BASELINE.md` when it exists;
-- instantiate `_hirmos/session/REQUIREMENTS_BASELINE.md` before Design relies on source requirements;
+- read `_hirmos/system/accepted-state/REQUIREMENTS.md` when it exists;
+- instantiate `_hirmos/session/REQUIREMENTS.md` before Design relies on source requirements;
 - normalize material requirements into stable requirement IDs;
 - classify non-goals, gated/unresolved requirements, blocked inputs, duplicates, superseded items, and not-applicable items;
 - record source traceability for each material requirement;
 - block or route back when Design would otherwise proceed from raw requirements or prototype evidence alone.
 
-Firm rule: do not claim `Ready for Implementation` until material in-scope requirements are mapped to Delivery Units, deferred, blocked, gated, or explicitly not applicable in `REQUIREMENTS_BASELINE.md`.
+Firm rule: do not claim `Ready for Implementation` until material in-scope requirements are mapped to Delivery Units, deferred, blocked, gated, or explicitly not applicable in `REQUIREMENTS.md`.
 
 ## Current System State Delivery Pointer Precheck
+
+
+Before delivery-shape selection, inspect `Last accepted delivery`, `Next recommended delivery`, and `Next recommended delivery scope` from `CURRENT_SYSTEM_STATE.md`. If a next delivery is recommended and the user request is compatible with planned continuation, adopt that delivery as the active context. Do not default to a single-session path while a compatible next recommended delivery is waiting.
 
 Before final Delivery Shape Decision, `hirmos start` must read the Active Development Context and Delivery Pointers in `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` when present.
 
@@ -312,7 +317,7 @@ When the selected delivery shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, `
 
 Required checks:
 
-- read `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md`;
+- read `_hirmos/system/delivery/DELIVERY_PLAN.md and _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`;
 - read the selected `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` directly;
 - confirm Current System State active delivery pointers do not contradict the selected phase;
 - write the Active Durable Phase Adoption section in `SESSION_SCOPE.md`;
@@ -347,3 +352,18 @@ Required status terms: Phase Progress Ledger, Carry-Forward Items, partial phase
 ## Phase Acceptance Enforcement
 
 `hirmos start` must inspect prior Phase Acceptance Evidence Gate results when continuing a delivery. If the previous phase is `READY_FOR_ACCEPTANCE`, the new session may be review/close-oriented, but it must not implement new work until the phase acceptance decision is resolved or a new phase is explicitly adopted.
+
+## PROD-L4 delivery-route runtime behavior
+
+`hirmos start` must use the Delivery Shape Decision to select the runtime capability route before it creates delivery/session authority artifacts.
+
+Required behavior:
+
+1. Read Current System State delivery pointers before shape selection.
+2. Apply `_hirmos/core/protocol/CAPABILITY_ROUTING.md` and record a capability routing table in `SESSION_EXECUTION.md`.
+3. For single-session shapes, instantiate `SESSION_SCOPE.md` only and record delivery governance as `NOT_APPLICABLE` with affirmative bounded-scope safety evidence.
+4. For `MULTI_SESSION_DELIVERY`, require `delivery-design` to create or append/update `_hirmos/system/delivery/DELIVERY_PLAN.md` and `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` before `session-scope` creates the active `SESSION_SCOPE.md`.
+5. For `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, require `delivery-design`, then `phase-contracting`, then `session-scope`, and verify exactly one adopted phase before implementation readiness.
+6. If any required capability is `BLOCKED` or `ROUTE_BACK_REQUIRED`, stop before implementation readiness and recommend exactly one safe next command.
+
+`hirmos start` must not create a per-delivery `DELIVERY_PLAN.md` under `<delivery-id>/`, must not create delivery artifacts for a safe single-session request, and must not overwrite the top-level delivery roadmap/register.

@@ -102,7 +102,7 @@ If command legality is unclear or contradictory, the command must stop at a bloc
 
 ## Cumulative continue pass rule
 
-`hirmos continue` is append-only. Each invocation must append a continuation pass record in `SESSION_EXECUTION.md`. Corrections, contract amendments, validation reruns, and route-backs must preserve prior pass history instead of overwriting it.
+`hirmos continue` is append-only. Each invocation must append a continuation pass record in `SESSION_EXECUTION.md`. Corrections, scope amendments, validation reruns, and route-backs must preserve prior pass history instead of overwriting it.
 
 ## Exactly-one-next-command rule
 
@@ -172,7 +172,7 @@ Commands must not preserve momentum by hiding blockers. Status summaries must di
 Close success requires a consistent transaction across:
 
 - active session evidence;
-- `SESSION_EXECUTION.md` close/update controls;
+- `SESSION_EXECUTION.md` close/update control pointers;
 - `SESSION_EXECUTION.md` close controls;
 - archive manifest;
 - accepted-state records;
@@ -225,3 +225,16 @@ Commands that surface accepted current truth must use `_hirmos/system/accepted-s
 Commands that create session identifiers, archive paths, close records, accepted-state timestamps, or dated reports must resolve the actual current date from the runtime environment, available tool context, or explicit user-provided date. They must not reuse example dates, prior session dates, generated template dates, or stale dates from copied artifacts.
 
 If the current date cannot be established, the command must record the uncertainty in `_hirmos/session/SESSION_EXECUTION.md` and avoid date-specific claims until the date is resolved. Session IDs and archive folder names must be consistent with the resolved current date or explicitly documented as user-provided identifiers.
+
+## PROD-L4 command-to-capability routing behavior
+
+Runtime commands must treat capability routing as part of command execution, not as optional design commentary.
+
+Command-specific behavior:
+
+- `hirmos start` must perform Delivery Shape Decision routing before claiming `Ready for Implementation`. It creates only the artifacts required by the selected route.
+- `hirmos continue` must re-check the active route before implementation, retry, or correction work. It must not silently switch from delivery-governed work to single-session work or adopt a different phase without a recorded Session Scope amendment.
+- `hirmos status` must report the active delivery route, required capabilities, artifact readiness, blocked capability decisions, and exactly one safe next governed command.
+- `hirmos close` must reconcile the route used by the session against `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, delivery artifacts, evidence, unresolved items, and accepted-state pointers before close success.
+
+The command surface does not redefine capability methods. It reads `_hirmos/core/protocol/CAPABILITY_ROUTING.md`, resolves installed extension/capability manifests, records the routing decisions in `SESSION_EXECUTION.md`, and follows the selected entrypoints.

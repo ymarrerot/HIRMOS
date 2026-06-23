@@ -175,3 +175,16 @@ hirmos close
 ```
 
 Those workflow commands are governed by the framework instructions and active session artifacts. They are not terminal CLI commands.
+
+## Installed framework payload alignment
+
+The CLI installs the packaged `_hirmos/` payload exactly as shipped by the framework release. Current framework releases include:
+
+```text
+_hirmos/session/SESSION_SCOPE.md
+_hirmos/system/delivery/DELIVERY_PLAN.md
+_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md
+_hirmos/system/history/sessions/<session-id>/ARCHIVE_MANIFEST.md
+```
+
+The CLI package version is independent from the framework payload version. A framework-only documentation, template, or validator update does not require a CLI version bump unless the terminal `hirmos init` behavior changes.

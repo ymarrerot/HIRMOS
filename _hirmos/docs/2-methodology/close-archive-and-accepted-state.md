@@ -21,7 +21,7 @@ The archive preserves what happened.
 
 Accepted state records what future sessions may treat as current truth.
 
-A file in the archive is not automatically accepted truth. `SESSION_EXECUTION.md` close/update controls decides what was accepted, rejected, preserved as evidence only, or carried forward.
+A file in the archive is not automatically accepted truth. `SESSION_EXECUTION.md` close/update control pointers decides what was accepted, rejected, preserved as evidence only, or carried forward.
 
 ## After close
 
@@ -42,3 +42,10 @@ New governed sessions close through the contract-centered artifact model. Close 
 Do not create separate close checklist, claim reconciliation, local-runtime evidence, runtime-readiness, archive-manifest, or session-scope-review support files for new sessions. Their responsibilities belong in `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, `EVIDENCE.md`, implementation units, and accepted-state records. The source-of-truth close verdict remains `SESSION_SCOPE.md` close verification plus accepted-state merge evidence.
 
 A normal close must archive all active session artifacts, normalize the archived session state, update accepted state, and reset `_hirmos/session/` to idle scaffolding only. If stale active artifacts remain after reset, the correct result is `Close Blocked`, not close success.
+
+
+## PROD-L6 archive concordance
+
+Normal close writes `_hirmos/system/history/sessions/<session-id>/ARCHIVE_MANIFEST.md` as a history-only archive manifest. The manifest records archived artifacts, accepted-state application, delivery pointer refresh, archived `SESSION_STATE.json` normalization, active-session reset, and post-close concordance. It supports accepted-state concordance but does not replace `CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, or `DECISION_LOG.md`.
+
+Accepted-state concordance requires `CURRENT_SYSTEM_STATE.md` latest-close metadata, the archive manifest, active carry-forward records, durable decisions, and post-close idle session state to agree.

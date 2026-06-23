@@ -31,7 +31,7 @@ Examples:
 
 - use local PostgreSQL when PostgreSQL is the intended production database;
 - use a persisted job/worker/cron shape for long-running AI or image work;
-- make credit/usage/billing mutations transactional, idempotent, or explicitly limited;
+- make metered-state/billing mutations transactional, idempotent, or explicitly limited;
 - keep secrets and runtime-generated files out of release or handoff packages.
 
 If a session intentionally uses a prototype, fixture, demo-only, or local-only shortcut, the limitation must be authorized in the Session Scope and preserved at close.

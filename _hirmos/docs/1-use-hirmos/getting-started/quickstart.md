@@ -104,3 +104,6 @@ HIRMOS asks only for decisions that matter.
 HIRMOS implements only authorized work.
 HIRMOS preserves accepted outcomes.
 ```
+
+
+New governed sessions use `_hirmos/session/SESSION_SCOPE.md` as the active session authority. Durable multi-session work uses `_hirmos/system/delivery/DELIVERY_PLAN.md` plus `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` when needed.

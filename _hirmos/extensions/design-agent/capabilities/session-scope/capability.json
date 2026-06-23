@@ -1,7 +1,7 @@
 {
   "id": "session-scope",
   "extension": "design-agent",
-  "summary": "Create the active Session Scope from governed Design authority and, when applicable, a durable phase contract; require single-session safety evidence when delivery governance is not used.",
+  "summary": "Create the active SESSION_SCOPE.md as combined scoped authority, either from single-session evidence or by adopting and narrowing delivery/phase authority.",
   "lifecycle_stage": "design",
   "entrypoints": {
     "default": "entrypoints/default.md"
@@ -9,19 +9,20 @@
   "activation": {
     "default": "conditional",
     "triggers": [
+      "single-session safety evidence required when delivery governance is not used",
       "Design must authorize Implementation",
-      "a bounded session needs contract authority before implementation or review",
-      "a durable phase is adopted into the active session",
       "single-session work needs affirmative safety evidence",
-      "single-session safety evidence must be recorded before skipping durable delivery governance"
+      "a durable delivery scope must be narrowed into this session",
+      "a durable phase is adopted into the active session",
+      "validation/review-only work needs explicit session authority"
     ]
   },
   "requires_artifacts": [
-    "_hirmos/session/DESIGN.md",
-    "_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md when Delivery Shape Decision selects a durable delivery shape",
-    "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when Delivery Shape Decision selects a durable delivery shape",
+    "_hirmos/session/SESSION_EXECUTION.md",
     "_hirmos/session/unresolved-items.md",
-    "_hirmos/session/SESSION_EXECUTION.md"
+    "_hirmos/system/delivery/DELIVERY_PLAN.md when Delivery Shape Decision selects a durable delivery shape",
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md when Delivery Shape Decision selects a durable delivery shape",
+    "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when Delivery Shape Decision selects MULTI_SESSION_DELIVERY_WITH_PHASE_FILES"
   ],
   "produces_artifacts": [
     "_hirmos/session/SESSION_SCOPE.md",
@@ -30,6 +31,7 @@
   ],
   "execution_controls": [
     "session-scope control",
+    "single-session-safety control",
     "delivery-source-adoption control",
     "implementation-authorization control",
     "unresolved-item control"

@@ -90,3 +90,8 @@ hirmos status
 hirmos continue
 hirmos close
 ```
+
+
+## Scope authority model
+
+Current HIRMOS releases use `SESSION_SCOPE.md` as active session authority. Durable multi-session work uses `_hirmos/system/delivery/DELIVERY_PLAN.md` as the delivery roadmap/register and `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` as the scoped authority for one delivery/release.

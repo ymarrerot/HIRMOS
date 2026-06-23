@@ -1,7 +1,7 @@
 {
   "id": "phase-contracting",
   "extension": "design-agent",
-  "summary": "Create or update separate durable Phase Contract files under an approved durable Delivery Plan.",
+  "summary": "Create or update durable phase files under one selected delivery scope when the selected delivery route requires phase files.",
   "lifecycle_stage": "design",
   "entrypoints": {
     "default": "entrypoints/default.md"
@@ -9,28 +9,28 @@
   "activation": {
     "default": "conditional",
     "triggers": [
-      "Delivery Plan requires phases",
-      "multi-session delivery requires separate phase files",
-      "active session must be sourced from a phase",
+      "Delivery Shape Decision selects MULTI_SESSION_DELIVERY_WITH_PHASE_FILES",
+      "active delivery scope requires ordered phases",
+      "active session must be sourced from exactly one phase",
       "phase coverage or sequencing must be repaired",
-      "brownfield preservation risk requires bounded phase contracts"
+      "brownfield preservation risk requires bounded phase authority"
     ]
   },
   "requires_artifacts": [
-    "_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md",
-    "_hirmos/session/DESIGN.md",
+    "_hirmos/system/delivery/DELIVERY_PLAN.md",
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md",
     "_hirmos/session/SESSION_EXECUTION.md",
     "_hirmos/session/unresolved-items.md"
   ],
   "produces_artifacts": [
     "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md",
-    "_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md status/coverage update when needed",
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md phase-plan update when needed",
     "_hirmos/session/SESSION_EXECUTION.md",
     "_hirmos/session/unresolved-items.md when phase blockers are found"
   ],
   "execution_controls": [
     "phase-contracting control",
-    "delivery-plan coverage control",
+    "delivery-scope adoption control",
     "session-scope source-readiness control",
     "unresolved-item control when needed"
   ],

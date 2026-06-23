@@ -1,13 +1,13 @@
-# Requirements Baseline and Coverage Mapping
+# Requirements and Coverage Mapping
 
-HIRMOS uses `REQUIREMENTS_BASELINE.md` to prevent requirement loss across long AI-assisted delivery runs.
+HIRMOS uses `REQUIREMENTS.md` to prevent requirement loss across long AI-assisted delivery runs.
 
 Raw inputs such as uploaded requirements, notes, prototypes, screenshots, UI notes, and conversation context are source material. They become governed requirements only after they are inventoried, classified, normalized, source-mapped, and either accepted into scope or explicitly marked non-goal, gated, blocked, deferred, duplicate, superseded, or not applicable.
 
 ## Main artifact
 
 ```text
-_hirmos/session/REQUIREMENTS_BASELINE.md
+_hirmos/session/REQUIREMENTS.md
 ```
 
 The active session baseline controls Design and Delivery Plan coverage.
@@ -15,7 +15,7 @@ The active session baseline controls Design and Delivery Plan coverage.
 Accepted cross-session baseline:
 
 ```text
-_hirmos/system/accepted-state/REQUIREMENTS_BASELINE.md
+_hirmos/system/accepted-state/REQUIREMENTS.md
 ```
 
 Future sessions read the accepted baseline with `CURRENT_SYSTEM_STATE.md` so they understand both current product truth and remaining requirement coverage.
@@ -30,7 +30,7 @@ Future sessions read the accepted baseline with `CURRENT_SYSTEM_STATE.md` so the
 
 ## Rule of thumb
 
-`REQUIREMENTS_BASELINE.md` answers what must be satisfied and where it is mapped.
+`REQUIREMENTS.md` answers what must be satisfied and where it is mapped.
 
 `CURRENT_SYSTEM_STATE.md` answers what is accepted current truth now.
 
@@ -57,7 +57,7 @@ When HIRMOS compares multiple runs, generated apps, prototypes, external spec-to
 
 Use this routing:
 
-- product coverage gaps → `REQUIREMENTS_BASELINE.md`;
+- product coverage gaps → `REQUIREMENTS.md`;
 - UX/operator-flow strengths → UI/UX requirement IDs, delivery-unit acceptance criteria, and role workflow smoke checks;
 - engineering strengths → `DESIGN.md` technical review and implementation-unit criteria;
 - testing strengths → stack evidence commands and role/workflow smoke checks;

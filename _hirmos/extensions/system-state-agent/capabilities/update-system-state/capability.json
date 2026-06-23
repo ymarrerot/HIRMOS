@@ -18,7 +18,7 @@
     "_hirmos/session/SESSION_EXECUTION.md"
   ],
   "produces_artifacts": [
-    "_hirmos/session/SESSION_EXECUTION.md close/update controls",
+    "_hirmos/session/SESSION_EXECUTION.md close/update control pointers",
     "_hirmos/session/SESSION_EXECUTION.md close controls",
     "_hirmos/system/history/sessions/<session-id>/",
     "_hirmos/system/accepted-state",

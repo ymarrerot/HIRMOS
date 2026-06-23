@@ -79,3 +79,6 @@ continue advances only when safe
 status observes without mutation
 close updates current state only when evidence and artifacts agree
 ```
+
+
+New governed sessions use `_hirmos/session/SESSION_SCOPE.md` as the active session authority. Durable multi-session work uses `_hirmos/system/delivery/DELIVERY_PLAN.md` plus `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` when needed.

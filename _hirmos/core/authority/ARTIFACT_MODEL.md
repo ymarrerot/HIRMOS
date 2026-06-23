@@ -6,7 +6,7 @@ Purpose: define artifact zones, ownership, strict necessity, and runtime meaning
 
 ## PROD-L canonical scope-authority direction
 
-HIRMOS is migrating toward a scope-centered authority model. The canonical target names for new work are:
+HIRMOS uses a scope-centered authority model. The canonical names are:
 
 ```text
 SESSION_SCOPE.md       # active session authority
@@ -15,9 +15,9 @@ REQUIREMENTS.md        # conditional independent requirements authority only
 DESIGN.md              # conditional independent design authority only
 ```
 
-As of PROD-L2, the active-session authority template is `SESSION_SCOPE.md`. Historical archives may retain older artifact names and must remain readable. The conditional requirements-authority target name is `REQUIREMENTS.md`; `REQUIREMENTS_BASELINE.md` remains legacy-compatible until the later requirements-authority migration phase.
+The active-session authority template is `SESSION_SCOPE.md`. `REQUIREMENTS.md` is conditional independent requirements authority and is not part of the default implementation-session surface.
 
-`DELIVERY_PLAN.md` is the durable project delivery roadmap/register. It must not be overwritten when later large greenfield, brownfield, or mixed work appears; new durable multi-session work adds or updates a delivery entry and creates/updates `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`.
+`DELIVERY_PLAN.md` is the durable project delivery roadmap/register. It must not be overwritten when later durable multi-session work appears; new durable multi-session work adds or updates a delivery entry and creates/updates `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`.
 
 ## Installed framework zones
 
@@ -61,7 +61,7 @@ SESSION_STATE.json
 SESSION_EXECUTION.md
 SESSION_SCOPE.md
 unresolved-items.md
-REQUIREMENTS_BASELINE.md      # conditional
+REQUIREMENTS.md      # conditional
 DESIGN.md                     # conditional
 EVIDENCE.md                   # conditional
 implementation-units/         # conditional
@@ -76,8 +76,8 @@ Each lifecycle responsibility owns its authority inside the smallest sufficient 
 - Understand System State records the current-state-first control in `SESSION_EXECUTION.md` and material state findings in `DESIGN.md` when they affect Design or Implementation.
 - Design / Contracting owns requirements, design, delivery/phase contracts, production-shaped engineering posture, and the active `SESSION_SCOPE.md`.
 - Implementation owns `implementation-units/IU-xx.md` artifacts and `EVIDENCE.md` when evidence is material.
-- Update System State owns accepted-state update and archive records through `SESSION_SCOPE.md` close verification, `SESSION_EXECUTION.md` close/archive/reset controls, `EVIDENCE.md` when needed, and accepted-state artifacts.
-- `SESSION_EXECUTION.md` owns the human-readable Current Continuation Snapshot, execution control, and append-only lifecycle history only; it does not own scope or acceptance criteria.
+- Update System State owns accepted-state update and archive records through `SESSION_SCOPE.md` close verification, `SESSION_EXECUTION.md` close/archive/reset control pointers, `EVIDENCE.md` when needed, and accepted-state artifacts.
+- `SESSION_EXECUTION.md` owns the human-readable Current Continuation Snapshot, execution-control ledger, and append-only lifecycle history only; it does not own scope or acceptance criteria.
 
 Later stages may reference earlier-stage authority, but must not silently rewrite it. If a later stage discovers a problem, it must route back to the owning stage.
 
@@ -88,7 +88,7 @@ Primary session authority:
 ```text
 SESSION_SCOPE.md scope, acceptance, delivery shape, production-shaped gate, close verification
 DESIGN.md current-state basis, source matrix, design authority, technical review, readiness rationale
-REQUIREMENTS_BASELINE.md requirements authority when material during transition; target name REQUIREMENTS.md
+REQUIREMENTS.md requirements authority when material; target name REQUIREMENTS.md
 unresolved-items.md governed decision/assumption/risk register
 EVIDENCE.md material validation/runtime/claim/close evidence
 SESSION_EXECUTION.md command and lifecycle execution-control spine
@@ -135,7 +135,7 @@ Multi-session delivery authority lives under `_hirmos/system/delivery/<delivery-
 Required durable delivery artifacts:
 
 ```text
-_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md
+_hirmos/system/delivery/DELIVERY_PLAN.md and _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md
 _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
 ```
 
@@ -150,3 +150,17 @@ Root session files must remain intentionally few and must be major/governed arti
 ## Accepted state and archive distinction
 
 Archive history is not accepted state by itself.
+
+
+## PROD-L3 delivery authority surface
+
+```text
+_hirmos/system/delivery/
+  DELIVERY_PLAN.md              # durable project delivery roadmap/register
+  <delivery-id>/
+    DELIVERY_SCOPE.md           # scoped authority for one delivery/release
+    phases/
+      PHASE-xx.md               # conditional phase contract
+```
+
+`DELIVERY_PLAN.md` is append/update-oriented and preserves delivery history. `DELIVERY_SCOPE.md` is the default combined delivery authority. Separate delivery-level `REQUIREMENTS.md` and `DESIGN.md` are optional only when independent authority is justified.

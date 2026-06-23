@@ -120,6 +120,8 @@ def write_delivery_artifacts(
     root: Path,
     *,
     include_plan: bool = True,
+    include_scope: bool = True,
+    use_legacy_per_delivery_plan: bool = False,
     current_state_matches: bool = True,
     close_transaction: bool = False,
     close_applied: bool = True,
@@ -138,9 +140,11 @@ def write_delivery_artifacts(
     activate_session(root, stage="close_ready" if close_transaction else "implementation_readiness", recommended="hirmos close" if close_transaction else "hirmos continue")
     session = root / "session"
     delivery_id = "fixture-delivery"
-    plan_path = f"_hirmos/system/delivery/{delivery_id}/DELIVERY_PLAN.md"
+    plan_path = f"_hirmos/system/delivery/{delivery_id}/DELIVERY_PLAN.md" if use_legacy_per_delivery_plan else "_hirmos/system/delivery/DELIVERY_PLAN.md"
+    scope_path = f"_hirmos/system/delivery/{delivery_id}/DELIVERY_SCOPE.md"
     phase_path = f"_hirmos/system/delivery/{delivery_id}/phases/PHASE-01.md"
-    css_plan = plan_path if current_state_matches else "_hirmos/system/delivery/other-delivery/DELIVERY_PLAN.md"
+    css_plan = plan_path if current_state_matches else "_hirmos/system/delivery/DELIVERY_PLAN.md"
+    css_scope = scope_path if current_state_matches else "_hirmos/system/delivery/other-delivery/DELIVERY_SCOPE.md"
     css_phase = phase_path if current_state_matches else "_hirmos/system/delivery/other-delivery/phases/PHASE-01.md"
 
     acceptance_execution = ""
@@ -228,7 +232,8 @@ Single-session safety justification: not applicable when YES.
 ## Active Durable Phase Adoption
 
 Adoption status: ADOPTED
-Delivery plan path: {plan_path}
+Delivery roadmap path: {plan_path}
+Delivery scope path: {scope_path}
 Active phase path: {phase_path}
 
 ## Phase Entry Gate Evidence
@@ -274,10 +279,16 @@ Exactly one recommended next command:
     (session / "unresolved-items.md").write_text("# unresolved-items.md\n")
     (session / "SESSION_SCOPE.md").write_text((session / "SESSION_SCOPE.md").read_text() + f"\n\n## Phase Entry Gate Review\nWas the Phase Entry Gate status PASS? YES\n\n## Phase Progress / Carry-Forward Review\nDid the session update or verify the durable Phase Progress Ledger? YES\nIf phase outcome is not ACCEPTED, are carry-forward obligations recorded? {cf_review_answer}\n{acceptance_review}\n")
 
-    delivery_dir = root / "system" / "delivery" / delivery_id
+    delivery_root = root / "system" / "delivery"
+    delivery_dir = delivery_root / delivery_id
     (delivery_dir / "phases").mkdir(parents=True, exist_ok=True)
     if include_plan:
-        (delivery_dir / "DELIVERY_PLAN.md").write_text("# DELIVERY_PLAN.md\n\n## Delivery Status Update Log\n")
+        if use_legacy_per_delivery_plan:
+            (delivery_dir / "DELIVERY_PLAN.md").write_text("# DELIVERY_PLAN.md\n\n## Legacy per-delivery plan\n")
+        else:
+            (delivery_root / "DELIVERY_PLAN.md").write_text("# DELIVERY_PLAN.md\n\n## Delivery Index\n\n## Delivery Status Update Log\n")
+    if include_scope:
+        (delivery_dir / "DELIVERY_SCOPE.md").write_text("# DELIVERY_SCOPE.md\n\n## Delivery Close Verification\n\n## Session Adoption Rules\n")
 
     lifecycle_line = f"Lifecycle status: {phase_status}\n" if phase_status is not None else ""
     greenfield_controls = """
@@ -356,7 +367,8 @@ Carry-forward status: {"RECORDED" if carry_forward_recorded else "NOT_APPLICABLE
 
 Delivery governance active: YES
 Active delivery ID: {delivery_id}
-Delivery plan: {css_plan}
+Delivery roadmap: {css_plan}
+Active delivery scope: {css_scope}
 Active phase: {css_phase}
 Active phase lifecycle status: {phase_status or 'UNKNOWN'}
 Active phase type: {phase_type}
@@ -375,7 +387,8 @@ Next governed command: hirmos continue
 ## Close-Time Delivery / Phase Status Transaction
 
 Transaction status: {status}
-Delivery plan path: {plan_path}
+Delivery roadmap path: {plan_path}
+Delivery scope path: {scope_path}
 Active phase path: {phase_path}
 New lifecycle status: {resulting_phase_status}
 
@@ -392,8 +405,8 @@ def mutate_none(root: Path) -> None:
     return None
 
 
-def mutate_idle_stale_contract(root: Path) -> None:
-    (root / "session" / "SESSION_SCOPE.md").write_text("# stale contract\n")
+def mutate_idle_stale_scope(root: Path) -> None:
+    (root / "session" / "SESSION_SCOPE.md").write_text("# stale scope\n")
 
 
 def mutate_active_missing_unresolved_items(root: Path) -> None:
@@ -425,6 +438,29 @@ def mutate_readiness_wrong_recommendation(root: Path) -> None:
 
 def mutate_delivery_governed_active_readiness(root: Path) -> None:
     write_delivery_artifacts(root)
+
+
+def mutate_single_session_not_applicable_readiness(root: Path) -> None:
+    activate_session(root, stage="implementation_readiness", recommended="hirmos continue")
+    session = root / "session"
+    (session / "SESSION_SCOPE.md").write_text("""# SESSION_SCOPE.md
+
+## Delivery Shape Decision
+
+Delivery governance active: NOT_APPLICABLE
+Selected delivery shape: SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS
+Single-session safety justification: fixture bounded scope.
+""")
+    (session / "SESSION_EXECUTION.md").write_text("# SESSION_EXECUTION.md\n\n## Runtime Route Record\nSelected route: SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS\n")
+    (session / "unresolved-items.md").write_text("# unresolved-items.md\n")
+
+
+def mutate_delivery_missing_delivery_scope(root: Path) -> None:
+    write_delivery_artifacts(root, include_scope=False)
+
+
+def mutate_delivery_legacy_per_delivery_plan_path(root: Path) -> None:
+    write_delivery_artifacts(root, use_legacy_per_delivery_plan=True)
 
 
 def mutate_phase_entry_gate_valid_brownfield(root: Path) -> None:
@@ -510,14 +546,33 @@ def mutate_legacy_capability_entrypoint_wrapper(root: Path) -> None:
     wrapper = root / "extensions" / "design-agent" / "capabilities" / "session-scope" / "entrypoint.md"
     wrapper.write_text("# legacy wrapper\n\nThis capability entrypoint has moved to `entrypoints/default.md`.\n")
 
+
+def mutate_accepted_state_legacy_per_delivery_plan_pointer(root: Path) -> None:
+    css = root / "system" / "accepted-state" / "CURRENT_SYSTEM_STATE.md"
+    body = css.read_text()
+    body += "\nLegacy bad pointer: _hirmos/system/delivery/fixture-delivery/DELIVERY_PLAN.md\n"
+    css.write_text(body)
+
+
+def mutate_archive_manifest_missing_normalization(root: Path) -> None:
+    manifest = root / "core" / "templates" / "system" / "history" / "sessions" / "ARCHIVE_MANIFEST.md"
+    body = manifest.read_text()
+    body = body.replace("## 6. Archived Session State Normalization", "## 6. Archived State")
+    manifest.write_text(body)
+
 # retained marker: accepted-state index reappears
 CASES = [
     Case("valid baseline", mutate_none, True, "PASS:"),
-    Case("idle stale SESSION_SCOPE", mutate_idle_stale_contract, False, "stale active-session"),
+    Case("idle stale SESSION_SCOPE", mutate_idle_stale_scope, False, "stale active-session"),
     Case("active missing unresolved-items", mutate_active_missing_unresolved_items, False, "missing canonical root artifact"),
     Case("unsupported legacy command", mutate_unsupported_legacy_command, False, "unsupported command"),
     Case("implementation readiness wrong recommendation", mutate_readiness_wrong_recommendation, False, "implementation_readiness"),
     Case("delivery governed active readiness passes", mutate_delivery_governed_active_readiness, True, "PASS:"),
+    Case("single-session NOT_APPLICABLE readiness passes", mutate_single_session_not_applicable_readiness, True, "PASS:"),
+    Case("delivery missing DELIVERY_SCOPE fails", mutate_delivery_missing_delivery_scope, False, "missing durable delivery scope"),
+    Case("delivery legacy per-delivery plan path fails", mutate_delivery_legacy_per_delivery_plan_path, False, "durable roadmap/register"),
+    Case("accepted-state legacy per-delivery plan pointer fails", mutate_accepted_state_legacy_per_delivery_plan_pointer, False, "legacy per-delivery plan path"),
+    Case("archive manifest missing normalization fails", mutate_archive_manifest_missing_normalization, False, "Archived Session State Normalization"),
     Case("phase entry gate valid brownfield passes", mutate_phase_entry_gate_valid_brownfield, True, "PASS:"),
     Case("phase entry gate valid mixed passes", mutate_phase_entry_gate_valid_mixed, True, "PASS:"),
     Case("phase lifecycle status report missing fields fails", mutate_phase_status_report_missing_required_fields, False, "Phase Lifecycle Status Report"),

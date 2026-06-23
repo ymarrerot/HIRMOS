@@ -47,7 +47,7 @@ _hirmos/
 | `tools/` | Framework validation and support tools shipped inside the framework payload. |
 | `hirmos.config.json` | Framework metadata and configuration, including the framework version. |
 | `CHANGELOG.md` | Release history. |
-| `UPGRADE_GUIDE.md` | User-facing upgrade and migration guidance. |
+| `UPGRADE_GUIDE.md` | Version-level operational notes. |
 
 ## Framework version metadata
 

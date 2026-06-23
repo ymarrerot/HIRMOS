@@ -113,7 +113,7 @@ For each material area, record the production-shaped default, the session decisi
 | Persistence / database | | Durable persistence; local mirrors intended production where practical | | | | |
 | Auth / authorization | | Server-side user/resource isolation for protected data/actions | | | | |
 | Background jobs / long-running work | | Job/worker/queue/cron shape for slow provider/file/AI work | | | | |
-| Credits / usage / billing / quotas | | Transactional, idempotent, or concurrency-safe accounting | | | | |
+| Usage / quotas / billing / quotas | | Transactional, idempotent, or concurrency-safe accounting | | | | |
 | Provider APIs / external services | | Provider boundary, env validation, failure posture | | | | |
 | File or object storage | | Validation, safe paths, retention/handoff hygiene | | | | |
 | Secrets and environment configuration | | `.env.example`; no secrets/runtime data in handoff/release | | | | |

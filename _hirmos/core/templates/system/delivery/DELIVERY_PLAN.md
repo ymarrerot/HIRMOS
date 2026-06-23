@@ -1,66 +1,42 @@
 # Delivery Plan
 
 Status: DRAFT | ACTIVE | COMPLETE | SUPERSEDED | BLOCKED
-Delivery ID:
-Project type: GREENFIELD | BROWNFIELD | MIXED | UNKNOWN
-Created from session:
 Last updated from session:
 
-## Authority
+## Purpose
 
-This is the durable multi-session delivery authority for the delivery ID above.
-
-For durable multi-session delivery, a Delivery Plan is needed. Separate phase files are required only when the selected delivery shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`.
+This file is the durable project delivery roadmap/register. It indexes one or more durable deliveries and preserves completed, active, planned, deferred, cancelled, superseded, and blocked delivery history.
 
 Canonical location:
 
 ```text
-_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md
+_hirmos/system/delivery/DELIVERY_PLAN.md
 ```
 
-Phase contracts live under:
+`DELIVERY_PLAN.md` is append/update-oriented. It must not be overwritten when new durable multi-session work appears later. New durable multi-session work adds a new delivery entry and creates a corresponding `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` while preserving prior delivery entries.
+
+## Authority Boundary
+
+`DELIVERY_PLAN.md` is the roadmap/register. It does not contain the full scoped authority for a delivery and does not authorize implementation by itself.
+
+Authority flows through:
 
 ```text
-_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
+CURRENT_SYSTEM_STATE.md
+→ _hirmos/system/delivery/DELIVERY_PLAN.md
+→ _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md
+→ _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when phase files are used
+→ _hirmos/session/SESSION_SCOPE.md
+→ implementation-units / EVIDENCE / SESSION_EXECUTION.md
 ```
-
-Session-local delivery artifacts are not canonical delivery authority.
-
-## Phase Lifecycle Vocabulary
-
-All phase rows in this Delivery Plan must use the canonical phase lifecycle status vocabulary from `_hirmos/core/protocol/PHASE_LIFECYCLE.md`:
-
-```text
-NOT_STARTED
-READY_FOR_ADOPTION
-ACTIVE
-BLOCKED
-PARTIAL
-READY_FOR_ACCEPTANCE
-ACCEPTED
-DEFERRED
-SUPERSEDED
-CANCELLED
-```
-
-All phase rows must declare one canonical phase type:
-
-```text
-GREENFIELD
-BROWNFIELD
-MIXED
-UNKNOWN
-```
-
-`UNKNOWN` phase type blocks implementation readiness until current-state understanding classifies the phase as `GREENFIELD`, `BROWNFIELD`, or `MIXED`.
 
 ## Delivery Shape Source
 
 Compatibility label: Delivery-Need Classification Source.
 
 - Delivery shape: SINGLE_SESSION_VERTICAL_SLICE | SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS | MULTI_SESSION_DELIVERY | MULTI_SESSION_DELIVERY_WITH_PHASE_FILES
-- Why this shape is necessary:
-- Why smaller shape was insufficient:
+- Why durable delivery governance is / is not necessary:
+- Why smaller shape was insufficient when delivery governance is active:
 - Why phase files are / are not needed:
 
 ## Delivery Shape Decision Source
@@ -70,84 +46,84 @@ Compatibility label: Delivery-Need Classification Source.
 - Greenfield triggers present:
 - Brownfield triggers present:
 - Universal triggers present:
-- Why durable delivery governance is required:
 - If adopted from prior work, source artifact/session:
 
-## Delivery Objective
+## Delivery Index
 
-- User-visible outcome:
-- Business/product/system objective:
-- Non-goals:
-- Success definition:
+| Delivery ID | Name | Status | Type | Scope file | Current/Final phase | Relationship |
+|---|---|---|---|---|---|---|
+| `<delivery-id>` | | planned / active / completed / partial / blocked / deferred / superseded / cancelled | MVP / release / hardening / migration / brownfield-change / other | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | none / `PHASE-xx` | initial / follows / supersedes / depends-on / blocks |
 
-## Governing Inputs
+## Delivery Relationships
 
-| Source | Type | Relevance | Coverage status |
-|---|---|---|---|
-| | requirements / current-state / user request / design / archive | | NOT_ASSESSED |
+- Sequence constraints:
+- Dependencies between deliveries:
+- Supersedes / follows / blocks relationships:
+- Shared constraints:
 
-## Delivery Decomposition
+## Accepted-State Pointers
 
-| Phase ID | Phase file | Phase title | Phase type | Lifecycle status | Objective | Depends on | Exit summary |
-|---|---|---|---|---|---|---|---|
-| PHASE-01 | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-01.md` | | GREENFIELD / BROWNFIELD / MIXED / UNKNOWN | NOT_STARTED | | | |
+- Current system state: `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`
+- Carry-forward: `_hirmos/system/accepted-state/CARRY_FORWARD.md`
+- Decision log: `_hirmos/system/accepted-state/DECISION_LOG.md`
 
-Lifecycle status compatibility:
+## Active Delivery
 
-- Implementation adoption may use only `READY_FOR_ADOPTION`, `ACTIVE`, or `PARTIAL`.
-- Review/close-only work may use `READY_FOR_ACCEPTANCE`.
-- `UNKNOWN`, `NOT_STARTED`, `BLOCKED`, `ACCEPTED`, `DEFERRED`, `SUPERSEDED`, or `CANCELLED` does not authorize implementation readiness.
-
-## Cross-Phase Constraints
-
-- Preservation constraints:
-- Architecture constraints:
-- Runtime/integration constraints:
-- UX/operator constraints:
-- Data/security/privacy constraints:
-- Validation strategy:
-
-## Delivery Coverage Matrix
-
-| Requirement / accepted-state need | Covered by phase(s) | Deferred? | Evidence / rationale |
-|---|---|---:|---|
-| | | NO | |
-
-## Active Development Context
-
-- Current active phase:
-- Current active phase lifecycle status:
-- Current active phase type:
+- Active delivery ID: none / `<delivery-id>`
+- Active delivery scope: none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
+- Current phase: none / `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`
 - Current/next session source:
 - Current blockers:
 - Carry-forward items:
 
+## Delivery Navigation
+
+This section makes delivery-to-delivery continuation explicit for future `hirmos start` runs. It is navigation metadata, not implementation authority.
+
+- Last accepted delivery: none / `<delivery-id>`
+- Active delivery: none / `<delivery-id>`
+- Active delivery scope: none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
+- Next recommended delivery: none / `<delivery-id>`
+- Next recommended delivery scope: none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
+- Selection rationale:
+- User override / unrelated-task rule: if the user provides an unrelated task, `hirmos start` must run current-state understanding before adopting this recommendation.
+
+## Delivery Coverage Matrix
+
+| Delivery / accepted-state need | Delivery scope | Covered by phase(s) | Deferred? | Evidence / rationale |
+|---|---|---|---:|---|
+| | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | none / `PHASE-xx` | NO | |
+
 ## Delivery Status Update Log
 
-| Date/session | Change | Phase affected | Previous lifecycle status | New lifecycle status | Evidence |
+| Date/session | Delivery | Change | Previous status | New status | Evidence |
 |---|---|---|---|---|---|
 | | | | | | |
 
-## Close / Acceptance Rules
+## Completion / Close Rules
 
-A phase may be marked `ACCEPTED` only when a closed session verifies its Session Scope, implementation units, evidence, unresolved items, and current-state update responsibilities.
-
-The Delivery Plan may recommend the next phase, but it does not authorize implementation by itself. Implementation authority flows through the active `SESSION_SCOPE.md` and implementation units.
+- A delivery is complete only when its `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` close verification passes.
+- Accepted-state files must point to completed and active deliveries when durable delivery governance exists.
+- New durable multi-session work must add or update a delivery entry rather than overwrite prior delivery history.
+- When a delivery completes and a planned follow-up delivery is related by `follows`, `depends-on`, or an explicit sequence constraint, close must refresh Delivery Navigation and `CURRENT_SYSTEM_STATE.md` next-delivery pointers.
+- The roadmap may recommend an active delivery or next phase, but implementation authority must be narrowed into `SESSION_SCOPE.md` before implementation.
 
 ## Close-Time Delivery Status Update Contract
 
-This section must be updated during `hirmos close` whenever a session accepts, partially accepts, blocks, supersedes, defers, cancels, or advances a phase in this Delivery Plan.
+This section must be updated during `hirmos close` whenever a session accepts, partially accepts, blocks, supersedes, defers, cancels, or advances a delivery in this roadmap/register.
 
-| Close session | Adopted phase | Phase type | Previous lifecycle status | New lifecycle status | Delivery status impact | Evidence / archive | Applied? |
-|---|---|---|---|---|---|---|---:|
-| | | GREENFIELD / BROWNFIELD / MIXED / UNKNOWN | | | | | yes / no / not_applicable |
 
-Required close-time checks:
+## Delivery Decomposition
 
-- The adopted phase row in `Delivery Decomposition` reflects the session outcome.
-- The `Delivery Status Update Log` records the close session and archive evidence.
-- The next recommended phase is updated or explicitly left unchanged with rationale.
-- Carry-forward items are mapped to the next phase, `CARRY_FORWARD.md`, or a blocked delivery note.
-- Current System State delivery pointers agree with this Delivery Plan.
+Compatibility section. Delivery decomposition is represented by Delivery Index entries, each delivery's DELIVERY_SCOPE.md Phase Plan, and conditional PHASE-xx.md files.
 
-Fail-closed rule: a governed delivery session must not claim normal close success if this Delivery Plan was required but its lifecycle status row, update log, next-phase recommendation, or carry-forward disposition is stale or missing.
+
+## Active Development Context
+
+- Active delivery:
+- Active delivery scope:
+- Current phase:
+- Next recommended delivery:
+- Next recommended delivery scope:
+- Next recommended phase:
+- Current blockers:

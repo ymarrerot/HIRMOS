@@ -54,9 +54,10 @@ Use canonical runtime posture values only. Use canonical evidence states only. P
 
 For multi-session work in any project type, `CURRENT_SYSTEM_STATE.md` must carry the active delivery pointer set: active delivery ID, Delivery Plan path, active Phase path, active phase status, last accepted phase/session, next recommended phase, and next governed command.
 
-These are pointers only. The durable Delivery Plan and Phase files remain the delivery authority under `_hirmos/system/delivery/<delivery-id>/`.
+These are pointers only. The durable Delivery Plan roadmap, Delivery Scope, and Phase files remain the delivery authority under `_hirmos/system/delivery/<delivery-id>/`.
 
-Future sessions must inspect these pointers before deciding a new request can safely run as a single-session effort.
+Future sessions must inspect these pointers before selecting a new delivery shape. If `Next recommended delivery` and `Next recommended delivery scope` are present, `hirmos start` should continue that planned delivery unless the user clearly asks for unrelated work.
+ before deciding a new request can safely run as a single-session effort.
 
 ## Delivery phase adoption pointer discipline
 

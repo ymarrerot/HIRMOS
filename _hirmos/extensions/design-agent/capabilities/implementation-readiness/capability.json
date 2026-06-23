@@ -1,7 +1,7 @@
 {
   "id": "implementation-readiness",
   "extension": "design-agent",
-  "summary": "Determine whether Design has produced enough authority, unresolved-item disposition, durable delivery coverage when required, technical reviewability, and Session Scope scope for Implementation to begin.",
+  "summary": "Verify that the selected capability route has produced enough scoped authority, unresolved-item disposition, delivery coverage when required, and evidence expectations for Implementation to begin. It preserves durable delivery coverage when required.",
   "lifecycle_stage": "design",
   "entrypoints": {
     "default": "entrypoints/default.md"
@@ -15,12 +15,12 @@
     ]
   },
   "requires_artifacts": [
-    "_hirmos/session/DESIGN.md",
     "_hirmos/session/SESSION_SCOPE.md",
+    "_hirmos/session/SESSION_EXECUTION.md",
     "_hirmos/session/unresolved-items.md",
-    "_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md when Delivery Shape Decision selects a durable delivery shape",
-    "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when Delivery Shape Decision selects a durable delivery shape",
-    "_hirmos/session/DESIGN.md technical review when applicable"
+    "_hirmos/system/delivery/DELIVERY_PLAN.md when Delivery Shape Decision selects a durable delivery shape",
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md when Delivery Shape Decision selects a durable delivery shape",
+    "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when Delivery Shape Decision selects MULTI_SESSION_DELIVERY_WITH_PHASE_FILES"
   ],
   "produces_artifacts": [
     "_hirmos/session/DESIGN.md readiness basis",
@@ -29,7 +29,7 @@
   "execution_controls": [
     "implementation-readiness control",
     "Delivery Shape Decision Gate",
-    "durable-delivery-source control",
+    "delivery-route authority-chain control",
     "snapshot-backed checkpoint control",
     "unresolved-item control"
   ],

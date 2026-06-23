@@ -15,7 +15,7 @@ Route the active Design lifecycle boundary to the installed `design-agent` capab
 
 For implementation-capable software work, Design must prefer production-shaped architecture by default. Do not treat demo/local shortcuts as equal options when a production-shaped local/default path is practical.
 
-Design must identify material engineering areas affected by the request, including persistence, auth, provider APIs, file/object storage, background jobs, credit/usage accounting, secrets/configuration, deployment assumptions, and validation evidence.
+Design must identify material engineering areas affected by the request, including persistence, auth, provider APIs, file/object storage, background jobs, usage/quota/accounting, secrets/configuration, deployment assumptions, and validation evidence.
 
 If Design authorizes a weaker prototype, fixture, local-only, or demo-only result, record the limitation explicitly in `DESIGN.md`, `SESSION_SCOPE.md`, and `unresolved-items.md` or carry-forward notes as appropriate.
 
@@ -53,7 +53,7 @@ If Design authorizes a weaker prototype, fixture, local-only, or demo-only resul
 
 ### Source input surfaces
 
-Design may inspect `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, `_hirmos/inputs/prototypes/`, and `_hirmos/inputs/references/`. These files are raw source material only and must be reconciled through `DESIGN.md` source matrix, `DESIGN.md` source matrix, `REQUIREMENTS_BASELINE.md`, `SESSION_SCOPE.md`, or `unresolved-items.md` before they become governed authority.
+Design may inspect `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, `_hirmos/inputs/prototypes/`, and `_hirmos/inputs/references/`. These files are raw source material only and must be reconciled through `DESIGN.md` source matrix, `DESIGN.md` source matrix, `REQUIREMENTS.md`, `SESSION_SCOPE.md`, or `unresolved-items.md` before they become governed authority.
 
 ### Operating sequence
 
@@ -118,9 +118,9 @@ Design should authorize safe local/default technical progress when this avoids u
 
 When local setup or role-workflow behavior affects readiness, Design must require the evidence artifacts governed by `LOCAL_TECHNICAL_SETUP_AND_ROLE_WORKFLOW_SMOKE_CHECKS.md`; tests/build/lint alone do not prove runtime or workflow readiness.
 
-### Requirements baseline design authority
+### Requirements design authority
 
-Material requirements must be normalized into `_hirmos/session/REQUIREMENTS_BASELINE.md` before Design or Delivery Plan mapping relies on them.
+Material requirements must be normalized into `_hirmos/session/REQUIREMENTS.md` before Design or Delivery Plan mapping relies on them.
 
 ### Cross-run synthesis responsibilities
 
@@ -129,3 +129,18 @@ When prior runs, accepted state, or carry-forward items affect scope, Design mus
 
 A Durable Delivery Plan remains the durable authority for multi-session delivery shapes.
 When the selected delivery shape uses phase files, Design uses durable `PHASE-xx.md` contracts.
+
+## PROD-L4 delivery route selection
+
+The design-agent default method must select capability routing from the Delivery Shape Decision and record the result in `SESSION_EXECUTION.md`.
+
+Canonical routes:
+
+```text
+SINGLE_SESSION_VERTICAL_SLICE → session-scope → implementation-readiness
+SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS → session-scope → implementation-readiness
+MULTI_SESSION_DELIVERY → delivery-design → session-scope → implementation-readiness
+MULTI_SESSION_DELIVERY_WITH_PHASE_FILES → delivery-design → phase-contracting → session-scope → implementation-readiness
+```
+
+The method must not activate `delivery-design` for safe single-session work, must not activate `phase-contracting` unless phase files are justified, and must not allow `implementation-readiness` to pass until the selected route's authority chain is satisfied.

@@ -1,13 +1,13 @@
 # First Real Run
 
-This page shows a realistic first HIRMOS run for a broad application slice: an AI-assisted content-processing web app with authentication, persistence, provider boundaries, usage limits, delayed processing, and user-facing results.
+This page shows a realistic first HIRMOS run for a broad application slice: a broad production-shaped web application slice with authentication, persistence, provider boundaries, usage limits, delayed processing, and user-facing results.
 
 The point of this example is not to show a finished implementation. The point is to show what a serious `hirmos start` run should produce before implementation begins.
 
 ## Example request
 
 ```text
-hirmos start "Build a production-shaped MVP for an AI-assisted content-processing web app. Users should be able to upload source material, extract structured items, generate representative outputs, view results on mobile, sign in, use a credit-like allowance, persist jobs/results, recover from failures, and use provider boundaries for external AI/provider services. Real payment checkout is not required in the first implementation."
+hirmos start "Build a production-shaped MVP slice for a web application. Users should be able to submit domain data, process it through a provider-backed workflow, view persisted results on mobile, sign in, use a bounded usage allowance, recover from failures, and preserve provider boundaries. External billing is not required in the first implementation."
 ```
 
 The request is intentionally broad. A strong HIRMOS run should not jump directly into code. It should first understand the current project state, identify design decisions that materially affect architecture or acceptance criteria, define a bounded session, and pause before implementation.
@@ -26,13 +26,13 @@ For this example, the source input says the MVP should include:
 - representative generated-output creation for recognized structured items;
 - a mobile results surface;
 - sign-up/sign-in;
-- usage/credit tracking;
+- usage allowance tracking;
 - persistent jobs, results, and recent history;
 - visible failure states and recovery where reasonable;
 - a real database;
 - environment variables for provider secrets;
 - isolated provider-specific logic;
-- no real payment checkout in the first implementation.
+- no external billing integration in the first implementation.
 
 A good run should preserve the important product truth that generated outputs are representative, not exact source-material replicas.
 
@@ -61,7 +61,7 @@ A strong run should not assume the project is greenfield merely because the requ
 
 Design owns governed requirements, system/application design, session scope, unresolved-item disposition, technical review information, and implementation readiness.
 
-For this example, the Design stage should recognize that the request is too large for careless one-shot implementation. It crosses product UX, auth, persistence, job processing, provider boundaries, usage/credits, error handling, and mobile UI.
+For this example, the Design stage should recognize that the request is too large for careless one-shot implementation. It crosses product UX, auth, persistence, job processing, provider boundaries, usage allowances, error handling, and mobile UI.
 
 A good Design result should decide whether the work can fit into one bounded session. For a broad application slice, a strong result should first evaluate a single governed session with implementation units before escalating to a multi-session delivery:
 
@@ -93,7 +93,7 @@ requirements-design: REQUIRED
 Reason: source input contains product requirements that must become governed requirements authority.
 
 system-design: REQUIRED
-Reason: auth, jobs, usage/credits, persistence, and provider boundaries require architecture decisions.
+Reason: auth, jobs, usage allowances, persistence, and provider boundaries require architecture decisions.
 
 delivery-design: CONDITIONAL
 Reason: the request is larger than a trivial change; choose the smallest sufficient governed delivery shape.
@@ -133,7 +133,7 @@ Default if resolved conservatively: persist job state and status; use the lighte
 
 GATED-4 — Database/runtime target
 Question: What database/runtime environment should this implementation target, and is a local database available for validation?
-Why it matters: the bounded slice requires users, jobs, usage/credits, and results to be persisted and validated.
+Why it matters: the bounded slice requires users, jobs, usage allowances, and results to be persisted and validated.
 Default if resolved conservatively: use the same database class locally that is recommended for production.
 
 GATED-5 — Processing limit
@@ -159,7 +159,7 @@ ASSUMPTION-2 — Representative output labeling
 Generated outputs must be labeled as representative and not exact source-material replicas.
 
 ASSUMPTION-3 — No real checkout in first implementation
-Usage/credit accounting is in scope, but real payment checkout is explicitly out of scope for the first implementation.
+Usage allowance accounting is in scope, but external billing integration is explicitly out of scope for the first implementation.
 
 ASSUMPTION-4 — Usage consumed per generated output
 Usage is consumed per generated output, with job-level accounting recorded for support.
@@ -187,7 +187,7 @@ Session Scope Status: BLOCKED_FOR_GATED_DECISIONS
 Authorized after gated decisions are resolved:
 - Mobile-first landing page and upload/capture entry point.
 - Signed-in user flow, if sign-in-before-upload is accepted.
-- Real database schema for users, jobs, results, usage ledger, and credits/allowance.
+- Real database schema for users, jobs, results, usage ledger, and usage allowance.
 - Durable job status that survives refresh.
 - Provider adapter interfaces for source interpretation and generated-output creation.
 - Safe fallback behavior when provider credentials are unavailable.
@@ -196,7 +196,7 @@ Authorized after gated decisions are resolved:
 - Visible failure and retry/recovery states where reasonable.
 
 Out of scope for the first implementation:
-- Real payment checkout.
+- External billing integration.
 - Full admin/support console.
 - Native mobile apps.
 - Production-grade moderation and retention policy beyond bounded-slice safeguards.
@@ -210,7 +210,7 @@ Even before implementation begins, HIRMOS should propose coherent implementation
 
 ```text
 IU-01 — App foundation, auth, and database schema
-Goal: establish signed-in user ownership, jobs, results, credits/allowance, and usage ledger.
+Goal: establish signed-in user ownership, jobs, results, usage allowance, and usage ledger.
 
 IU-02 — Upload/capture and durable job creation
 Goal: accept source material, create a persisted job, show loading/status, and survive refresh.
@@ -267,22 +267,18 @@ For the initial `hirmos start` example, Update System State is not reached yet b
 
 A strong first run should leave inspectable artifacts such as:
 
-- `SESSION_SCOPE.md` parent authority
-- `DESIGN.md` source matrix
-- `DESIGN.md` current-state basis
-- `REQUIREMENTS_BASELINE.md`
-- `DESIGN.md`
-- `SESSION_SCOPE.md`
-- `SESSION_EXECUTION.md`
-- `unresolved-items.md`
-- `SESSION_SCOPE.md` close verification when close verification is reached
+- `SESSION_SCOPE.md` as the active session authority
+- `SESSION_EXECUTION.md` with the Current Continuation Snapshot and command timeline
+- `unresolved-items.md` for gated, non-gating, and technical-review items
 - `EVIDENCE.md` when nontrivial evidence is needed
-- proposed `implementation-units/IU-xx.md` files or equivalent unit planning
+- `implementation-units/IU-xx.md` files when implementation units are justified
+- conditional `DESIGN.md` or `REQUIREMENTS.md` only when separate design or requirements authority is justified
 
 For larger work, also inspect:
 
-- `DELIVERY_PLAN.md`
-- `phases/PHASE-xx.md`
+- `_hirmos/system/delivery/DELIVERY_PLAN.md`
+- `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
+- `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` when phase files are used
 
 Do not count a checkpoint as trustworthy unless the referenced artifacts exist and contain non-placeholder content.
 

@@ -1,143 +1,34 @@
-# HIRMOS Upgrade Guide
+# HIRMOS Version Guide
 
-This guide explains how to think about upgrading or replacing an existing project’s HIRMOS framework payload.
+This file records version-level operational notes for the installed HIRMOS framework.
 
-The framework version source of truth is `_hirmos/hirmos.config.json` under `framework.version`.
+## Current baseline
 
-## Before upgrading or replacing `_hirmos/`
-
-1. Commit or back up your current project.
-2. Review active HIRMOS session artifacts under `_hirmos/session/`.
-3. Avoid replacing `_hirmos/` in the middle of an unresolved implementation session when possible.
-4. Review the changelog for user-visible framework changes.
-
-
-## Upgrading from 1.0.2 to 1.0.3
-
-HIRMOS 1.0.3 is a production-shaped doctrine, delivery-shape, and artifact-simplification update. It changes the expected shape of new HIRMOS sessions, but it does not require migration of existing archived sessions.
-
-Recommended posture:
-
-1. Finish or pause any active HIRMOS session before replacing `_hirmos/`.
-2. Commit or back up the current project.
-3. Install the newer framework payload with the CLI or by replacing `_hirmos/` from `hirmos-framework.zip`.
-4. For active sessions created under an older artifact model, either finish them with the old model or restart the session using the 1.0.3 session surface.
-5. For new implementation-capable work, expect HIRMOS to apply production-shaped engineering checks before implementation and at close.
-
-User-visible changes:
-
-- Production-shaped implementation is now a core HIRMOS posture, not only stack-specific advice.
-- Delivery-shape selection now prefers the smallest sufficient governed delivery shape across greenfield, brownfield, and mixed work.
-- The active session surface is simpler: continuation lives in `SESSION_EXECUTION.md`, machine state lives in `SESSION_STATE.json`, stack routing uses root `stack-resolution.json`, and the former `support/` and `checkpoints/` artifact models are removed.
-- Separate artifacts are justified only when they are strictly necessary for authority, machine state, evidence, gating, continuity, or audit/history.
-
-No archived-session migration is required. Existing projects may continue current sessions under their current artifact model, but new sessions should use the 1.0.3 model.
-
-## Upgrading from 1.0.1 to 1.0.2
-
-HIRMOS 1.0.2 is a documentation and release-note alignment update. It does not introduce a breaking framework migration.
-
-Recommended posture:
-
-1. Finish or pause any active HIRMOS session before replacing `_hirmos/`.
-2. Commit or back up the current project.
-3. Install the newer framework payload with the CLI or by replacing `_hirmos/` from `hirmos-framework.zip`.
-4. Use `_hirmos/docs/reference/cli-reference.md` for terminal CLI usage.
-5. Use `_hirmos/docs/reference/framework-command-reference.md` for AI-tool framework workflow commands.
-
-User-visible changes:
-
-- Public lifecycle wording is standardized as `User Request → Understand System State → Design → Implementation → Update System State`.
-- CLI usage now has a dedicated complete reference document.
-- Framework workflow commands and terminal CLI commands are documented separately.
-
-No session artifact migration is required.
-
-## Upgrading from 1.0.0 to 1.0.1
-
-HIRMOS 1.0.1 is a documentation, release-packaging, and CLI-publishing guidance update. It does not introduce a breaking framework migration.
-
-Recommended posture:
-
-1. Finish or pause any active HIRMOS session before replacing `_hirmos/`.
-2. Commit or back up the current project.
-3. Install the newer framework payload with the CLI or by replacing `_hirmos/` from `hirmos-framework.zip`.
-4. Review `_hirmos/CHANGELOG.md` for user-visible changes.
-
-CLI note: the framework version and npm CLI package version may differ. To update the terminal CLI, run:
-
-```bash
-npm install -g hirmos@latest
-```
-
-## Installing HIRMOS 1.0
-
-HIRMOS 1.0 is the initial public baseline. It is organized around current-state-first orchestration and governed session artifacts.
-
-Expect the framework payload to include:
-
-- `_hirmos/AGENTS.md`
-- `_hirmos/README.md`
-- `_hirmos/hirmos.config.json`
-- `_hirmos/CHANGELOG.md`
-- `_hirmos/UPGRADE_GUIDE.md`
-- `_hirmos/core/`
-- `_hirmos/docs/`
-- `_hirmos/extensions/`
-- `_hirmos/integrations/agent-tools/`
-- `_hirmos/inputs/`
-- `_hirmos/session/`
-- `_hirmos/system/accepted-state/`
-- `_hirmos/tools/validate.py`
-
-## Command model
-
-Use the terminal CLI for installation:
-
-```bash
-hirmos init
-```
-
-Use workflow commands inside the AI coding tool conversation:
+HIRMOS uses the scope-centered authority model:
 
 ```text
-hirmos start
-hirmos status
-hirmos continue
-hirmos close
+_hirmos/session/SESSION_SCOPE.md
+_hirmos/system/delivery/DELIVERY_PLAN.md
+_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md
+_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
+_hirmos/system/history/sessions/<session-id>/ARCHIVE_MANIFEST.md
 ```
 
-Those workflow commands are not terminal CLI commands.
+Default implementation sessions do not create separate requirements or design artifacts unless the work objective, delivery shape, audit need, or shared multi-session adoption need justifies separate authority.
 
-## Integration files
-
-`hirmos init` installs `_hirmos/` and generates integration files for the AI tools you select, such as `AGENTS.md`, `CLAUDE.md`, Cursor rules, Copilot instructions, Gemini instructions, Windsurf rules, and Kiro steering files.
-
-If an AI tool does not load the generated integration file, use the fallback bootstrap prompt:
+Conditional authority artifacts:
 
 ```text
-Read and follow _hirmos/AGENTS.md
+_hirmos/session/REQUIREMENTS.md
+_hirmos/session/DESIGN.md
+_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md
+_hirmos/system/delivery/<delivery-id>/DESIGN.md
 ```
 
-## Versioning model
+## CLI package
 
-HIRMOS does not use a separate `_hirmos/VERSION` file.
+The CLI package version remains unchanged when the framework content changes but terminal command behavior does not change.
 
-Use:
+## Framework package
 
-```text
-_hirmos/hirmos.config.json
-```
-
-for the framework version, and use:
-
-```text
-_hirmos/CHANGELOG.md
-_hirmos/UPGRADE_GUIDE.md
-```
-
-for release notes and migration guidance.
-
-## Recommended upgrade posture
-
-For existing projects, prefer installing HIRMOS into a clean branch, then compare generated `_hirmos/` files against the existing project before merging.
+Release packaging must ship only canonical runtime surfaces, templates, docs, validators, and examples. Framework files must remain project-agnostic except for clearly labeled examples.

@@ -13,7 +13,7 @@ This protocol is the authoritative command-legality model. Command files describ
 idle
 bootstrap
 system_state_understanding
-session_contract
+session_scope
 design
 implementation_readiness
 implementation
@@ -80,7 +80,7 @@ Prose such as `reply to proceed`, `tell me when ready`, `we can continue`, or `s
 | idle | idle | `hirmos start`, `hirmos status` | `hirmos start` unless the user asked for status |
 | active | bootstrap | `hirmos continue`, `hirmos status` | `hirmos continue` |
 | active | system_state_understanding | `hirmos continue`, `hirmos status` | `hirmos continue` unless blocked |
-| active | session_contract | `hirmos continue`, `hirmos status` | `hirmos continue` unless blocked |
+| active | session_scope | `hirmos continue`, `hirmos status` | `hirmos continue` unless blocked |
 | active | design | `hirmos continue`, `hirmos status` | `hirmos continue` unless blocked |
 | active | implementation_readiness | `hirmos continue`, `hirmos status` | `hirmos continue` |
 | active | implementation | `hirmos continue`, `hirmos status` | `hirmos continue` unless complete or blocked |
@@ -157,7 +157,7 @@ Required ledger invariants:
 - every `hirmos continue` appends a continuation pass record;
 - control status changes are appended to a control mutation ledger;
 - route-backs are recorded instead of silently rewriting earlier authority;
-- corrections and contract amendments preserve earlier implementation/evidence records;
+- corrections and scope amendments preserve earlier implementation/evidence records;
 - prior pass records may be corrected only with an explicit correction note;
 - `SESSION_STATE.json.continuation_pass` must match the latest continuation pass recorded in `SESSION_EXECUTION.md`;
 - implementation-complete and close claims require ledger integrity self-validation.

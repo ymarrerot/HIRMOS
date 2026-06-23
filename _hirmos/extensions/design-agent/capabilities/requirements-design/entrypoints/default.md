@@ -92,9 +92,9 @@ Record or consume `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` as
 
 Do not claim fixture/mock/boundary/local/production integration levels beyond what the active artifacts and evidence support.
 
-## Requirements baseline output
+## Requirements output
 
-Requirements Design must create or update `_hirmos/session/REQUIREMENTS_BASELINE.md` when material requirements exist.
+Requirements Design must create or update `_hirmos/session/REQUIREMENTS.md` when material requirements exist.
 
 Minimum required work:
 
@@ -105,4 +105,4 @@ Minimum required work:
 - record gated/unresolved requirements;
 - hand off requirement IDs to Delivery Plan mapping.
 
-Do not treat raw `requirements.txt`, prototype ingestion findings, or UI notes as Design authority until represented in `REQUIREMENTS_BASELINE.md`.
+Do not treat raw `requirements.txt`, prototype ingestion findings, or UI notes as Design authority until represented in `REQUIREMENTS.md`.

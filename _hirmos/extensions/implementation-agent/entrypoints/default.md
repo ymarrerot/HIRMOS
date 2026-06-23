@@ -15,7 +15,7 @@ Route the active Implementation lifecycle boundary to installed implementation-a
 
 Implementation must realize the accepted Design with production-shaped engineering defaults unless the Session Scope explicitly authorizes a weaker result.
 
-Do not satisfy a contract by choosing a shortcut that changes the architecture shape of the system, such as using synchronous request-time work for long-running provider operations, using non-durable storage for durable business data, or using preflight-only checks for credit/usage mutations.
+Do not satisfy a contract by choosing a shortcut that changes the architecture shape of the system, such as using synchronous request-time work for long-running provider operations, using non-durable storage for durable business data, or using preflight-only checks for metered-state mutations.
 
 When a production-shaped implementation cannot be completed in scope, Implementation must record the blocker or limitation, route back when required, and avoid close/completion claims beyond the supported evidence.
 

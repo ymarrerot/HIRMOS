@@ -36,7 +36,7 @@ Record verified posture for material runtime services, provider APIs, storage, b
 | Persistence / database | | | |
 | Auth / authorization | | | |
 | Background jobs / long-running work | | | |
-| Credits / usage / billing / quotas | | | |
+| Usage / quotas / billing / quotas | | | |
 | Provider APIs / external services | | | |
 | File or object storage | | | |
 | Secrets and environment configuration | | | |

@@ -1,17 +1,17 @@
-# REQUIREMENTS_BASELINE
+# REQUIREMENTS
 
 Status: accepted-state artifact.
 
 Purpose: durable accepted requirement universe and coverage map for future HIRMOS sessions.
 
-This file is the canonical accepted requirements baseline. It preserves normalized requirements, source mapping, non-goals, unresolved/gated requirements, delivery mapping, and coverage status across sessions.
+This file is the canonical accepted requirements. It preserves normalized requirements, source mapping, non-goals, unresolved/gated requirements, delivery mapping, and coverage status across sessions.
 
 It is not raw source input, not implementation design, not evidence review, and not the current system state.
 
 ## Accepted-State Artifact Invariants:
 
 - Preserve this invariant block during updates.
-- Use canonical requirement classes, scope statuses, and coverage statuses from `_hirmos/core/protocol/REQUIREMENTS_BASELINE.md`.
+- Use canonical requirement classes, scope statuses, and coverage statuses from `_hirmos/core/protocol/REQUIREMENTS.md`.
 - Do not use canonical evidence states as requirement coverage states.
 - Do not use runtime posture values as requirement coverage states.
 - Preserve source traceability to raw inputs, prototype-derived signals, UI notes, accepted decisions, or prior accepted requirements.

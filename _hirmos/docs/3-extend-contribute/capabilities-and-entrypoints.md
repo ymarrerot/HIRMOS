@@ -101,3 +101,6 @@ When adding or changing an extension or capability:
 8. Run regression fixtures.
 9. Confirm private/public parity.
 
+## Delivery route capability expectations
+
+Capabilities that participate in delivery routing must expose whether they are required, not applicable, blocked, satisfied, or route-back required for the active command boundary. Delivery-related capabilities must use the canonical route matrix from `CAPABILITY_ROUTING.md` and must not create alternate delivery authority surfaces.

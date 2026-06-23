@@ -8,7 +8,6 @@ Decide whether Design has produced enough governed authority for Implementation 
 
 ### Produces
 
-- `_hirmos/session/DESIGN.md`
 - `_hirmos/session/SESSION_EXECUTION.md readiness gate updates`
 - domain_expert or technical_supervisor checkpoint basis when readiness or blockers must be surfaced
 
@@ -29,13 +28,10 @@ Decide whether Design has produced enough governed authority for Implementation 
 
 ## Required inputs
 
-- `_hirmos/session/DESIGN.md`
-- `_hirmos/session/DESIGN.md`
 - `_hirmos/session/unresolved-items.md`
 - `_hirmos/session/SESSION_SCOPE.md`
-- `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md when required`
+- `_hirmos/system/delivery/DELIVERY_PLAN.md and _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md when required`
 - `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when required`
-- `_hirmos/session/DESIGN.md technical review when applicable`
 - `_hirmos/session/SESSION_EXECUTION.md`
 
 ## Execution controls contributed
@@ -105,8 +101,8 @@ Required behavior:
 1. Read and record the Delivery Shape Decision from `SESSION_EXECUTION.md` and `SESSION_SCOPE.md` when those artifacts exist.
 2. When the selected shape is `SINGLE_SESSION_VERTICAL_SLICE`, verify affirmative bounded-scope safety evidence.
 3. When the selected shape is `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS`, verify implementation-unit coverage for the Session Scope.
-4. When the selected shape is `MULTI_SESSION_DELIVERY`, require `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` before implementation readiness.
-5. When the selected shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, require both `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` and one adopted `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` before implementation readiness.
+4. When the selected shape is `MULTI_SESSION_DELIVERY`, require `_hirmos/system/delivery/DELIVERY_PLAN.md and _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` before implementation readiness.
+5. When the selected shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, require both `_hirmos/system/delivery/DELIVERY_PLAN.md and _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` and one adopted `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` before implementation readiness.
 6. When the selected shape is `UNCERTAIN`, set this capability result to `BLOCKED` or `ROUTE_BACK_REQUIRED`; do not authorize Implementation.
 7. Do not create or depend on session-local delivery authority artifacts.
 
@@ -115,3 +111,15 @@ Forbidden session-local delivery authorities:
 ```text
 legacy session-local delivery plan, phase plan, delivery status, phase contract, or delivery-unit contract files
 ```
+
+## PROD-L4 runtime route obligations
+
+This capability participates in the command-selected delivery route. Before claiming completion, it must ensure `SESSION_EXECUTION.md` records:
+
+- selected Delivery Shape Decision;
+- this capability decision and terminal state;
+- required authority artifacts for the selected route;
+- whether the route is satisfied, blocked, not applicable, or requires route-back;
+- exactly one next governed command when the route cannot proceed.
+
+The capability must not compensate for missing authority by creating legacy session-local delivery files or by duplicating full delivery authority inside `SESSION_SCOPE.md`.

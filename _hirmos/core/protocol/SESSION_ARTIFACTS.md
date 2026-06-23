@@ -6,9 +6,9 @@ Purpose: define active-session artifact templates, instantiation rules, ownershi
 
 ## PROD-L canonical naming decision
 
-The canonical active-session authority artifact is `SESSION_SCOPE.md`. The canonical target requirements artifact name is `REQUIREMENTS.md`, replacing `REQUIREMENTS_BASELINE.md` only where separate requirements authority remains justified.
+The canonical active-session authority artifact is `SESSION_SCOPE.md`. The canonical target requirements artifact name is `REQUIREMENTS.md`, replacing `REQUIREMENTS.md` only where separate requirements authority remains justified.
 
-This file documents the PROD-L2 runtime surface for active sessions. Historical archives may retain older artifact names and must remain readable. New framework wording should prefer:
+This file documents the canonical runtime surface for active sessions. Framework wording uses:
 
 ```text
 SESSION_SCOPE.md       # active session authority
@@ -16,7 +16,7 @@ REQUIREMENTS.md        # conditional independent requirements authority
 DELIVERY_SCOPE.md      # durable delivery/release authority
 ```
 
-Migration rule: do not create default session-level `REQUIREMENTS.md` or `DESIGN.md` for normal implementation sessions. Use `SESSION_SCOPE.md` as the combined scoped authority unless separate requirements/design authority is justified by the work objective, delivery shape, audit need, or shared multi-session adoption need.
+Rule: do not create default session-level `REQUIREMENTS.md` or `DESIGN.md` for normal implementation sessions. Use `SESSION_SCOPE.md` as the combined scoped authority unless separate requirements/design authority is justified by the work objective, delivery shape, audit need, or shared multi-session adoption need.
 
 ## Strict-necessity rule
 
@@ -52,7 +52,7 @@ _hirmos/session/
   SESSION_EXECUTION.md            # required for active governed sessions
   SESSION_SCOPE.md             # required before implementation authorization
   unresolved-items.md             # required for governed sessions
-  REQUIREMENTS_BASELINE.md        # legacy-compatible conditional requirements authority; target name REQUIREMENTS.md in later PROD-L phases
+  REQUIREMENTS.md        # conditional independent requirements authority
   DESIGN.md                       # conditional design / current-state / readiness authority
   EVIDENCE.md                     # conditional nontrivial evidence / claim reconciliation
   implementation-units/           # conditional for nontrivial implementation
@@ -67,10 +67,10 @@ _hirmos/session/
 | Artifact | Required when | Owns |
 |---|---|---|
 | `SESSION_STATE.json` | installed scaffold / active sessions | machine-readable command state |
-| `SESSION_EXECUTION.md` | any active governed session | Current Continuation Snapshot, command timeline, controls, route-backs, boundary log, close/archive/reset controls |
+| `SESSION_EXECUTION.md` | any active governed session | Current Continuation Snapshot, command timeline, controls, route-backs, boundary log, close/archive/reset control pointers |
 | `SESSION_SCOPE.md` | before implementation authorization and for scoped governed work | session scope, exclusions, acceptance criteria, production-shaped gate, delivery shape decision, close verification |
 | `unresolved-items.md` | governed sessions | gated items, assumptions, risks, decisions, dispositions, revalidation |
-| `REQUIREMENTS_BASELINE.md` | requirements materially govern scope during transition; target name `REQUIREMENTS.md` in later PROD-L phases | normalized requirements, source traceability, requirement coverage |
+| `REQUIREMENTS.md` | requirements materially govern scope; target name `REQUIREMENTS.md` | normalized requirements, source traceability, requirement coverage |
 | `DESIGN.md` | substantial design/current-state/technical-review/readiness work is needed | current-state basis, source matrix, design, technical review, implementation readiness basis |
 | `EVIDENCE.md` | nontrivial implementation or material claims/evidence exist | command evidence, runtime evidence, production-shaped evidence, claim reconciliation, close evidence handoff |
 | `implementation-units/IU-xx.md` | nontrivial implementation unit exists | unit contract, evidence, review, retry history, result |
@@ -92,7 +92,7 @@ The following former support-artifact responsibilities are now embedded in major
 | runtime integration readiness | `DESIGN.md` for planned posture and `EVIDENCE.md` for verified posture |
 | claim reconciliation | `EVIDENCE.md` claim reconciliation summary and `SESSION_SCOPE.md` close verification |
 | session scope review | `SESSION_SCOPE.md` close verification |
-| close checklist / system-state update / archive manifest | `SESSION_EXECUTION.md` close/archive/reset controls and accepted-state artifacts |
+| close checklist / system-state update / archive manifest | `SESSION_EXECUTION.md` close/archive/reset control pointers and accepted-state artifacts |
 
 Do not recreate those former major artifact sections for new sessions unless a future protocol explicitly reintroduces them.
 
@@ -102,7 +102,7 @@ Do not recreate those former major artifact sections for new sessions unless a f
 - `unresolved-items.md` owns unresolved-item details.
 - `DESIGN.md` owns design authority, current-state basis, technical review, and implementation-readiness rationale when those are material.
 - `EVIDENCE.md` owns material evidence and claim reconciliation for implementation/close claims.
-- `SESSION_EXECUTION.md` owns command/lifecycle execution control and archive/reset controls only.
+- `SESSION_EXECUTION.md` owns command/lifecycle execution control and archive/reset control pointers only.
 - `SESSION_STATE.json` owns machine-readable command state.
 - `CURRENT_SYSTEM_STATE.md` owns durable current system truth.
 
@@ -162,7 +162,7 @@ Must create or update `_hirmos/session/bootstrap/BOOTSTRAP_REPORT.md` for govern
 
 ### User Request / source intake
 
-Do not create separate intake support files by default. Record source coverage in `SESSION_SCOPE.md` and source interpretation in `DESIGN.md` or `REQUIREMENTS_BASELINE.md` when material.
+Do not create separate intake support files by default. Record source coverage in `SESSION_SCOPE.md` and source interpretation in `DESIGN.md` or `REQUIREMENTS.md` when material.
 
 ### Understand System State
 
@@ -174,13 +174,13 @@ Create only when Design responsibilities are active:
 
 - `_hirmos/session/DESIGN.md` when substantial design, current-state basis, technical review, or implementation-readiness rationale is needed;
 - `_hirmos/session/SESSION_SCOPE.md` before Implementation can be authorized;
-- `_hirmos/session/REQUIREMENTS_BASELINE.md` when requirements materially govern scope;
+- `_hirmos/session/REQUIREMENTS.md` when requirements materially govern scope;
 - `_hirmos/session/stack-resolution.json` when stack routing needs machine-readable state.
 
 Durable delivery planning artifacts for multi-session work are system artifacts:
 
 ```text
-_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md
+_hirmos/system/delivery/DELIVERY_PLAN.md and _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md
 _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
 ```
 
@@ -198,7 +198,7 @@ Implementation artifacts consume `SESSION_SCOPE.md` and `DESIGN.md`. They must n
 Do not create separate close-checklist, system-state-update, archive-manifest, claim-reconciliation, or session-scope-review support files for new sessions. Close uses:
 
 - `SESSION_SCOPE.md` close verification;
-- `SESSION_EXECUTION.md` close/archive/reset controls;
+- `SESSION_EXECUTION.md` close/archive/reset control pointers;
 - `EVIDENCE.md` when material evidence/claim reconciliation exists;
 - accepted-state artifacts under `_hirmos/system/accepted-state/`;
 - archive copy under `_hirmos/system/history/sessions/<session-id>/`.
@@ -210,7 +210,7 @@ HIRMOS uses the smallest sufficient governed delivery shape for greenfield, brow
 Durable delivery authority lives under:
 
 ```text
-_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md
+_hirmos/system/delivery/DELIVERY_PLAN.md and _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md
 _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
 ```
 
@@ -231,7 +231,7 @@ SESSION_STATE.json
 SESSION_SCOPE.md
 SESSION_EXECUTION.md
 unresolved-items.md
-REQUIREMENTS_BASELINE.md
+REQUIREMENTS.md
 DESIGN.md
 EVIDENCE.md
 ```
@@ -275,8 +275,22 @@ Runtime integration readiness artifact responsibilities now live in DESIGN.md an
 
 ## Close / archive integrity extension
 
-The strict-necessity model preserves close/archive integrity through SESSION_SCOPE.md close verification, SESSION_EXECUTION.md close/archive/reset controls, EVIDENCE.md when material, and accepted-state artifacts.
+The strict-necessity model preserves close/archive integrity through SESSION_SCOPE.md close verification, SESSION_EXECUTION.md close/archive/reset control pointers, EVIDENCE.md when material, and accepted-state artifacts.
 Archive history is not accepted state by itself.
 
 Claim reconciliation artifact responsibilities now live in EVIDENCE.md and SESSION_SCOPE.md close verification.
 Claim reconciliation may list final files in EVIDENCE.md when needed.
+
+
+## PROD-L3 delivery authority surface
+
+```text
+_hirmos/system/delivery/
+  DELIVERY_PLAN.md              # durable project delivery roadmap/register
+  <delivery-id>/
+    DELIVERY_SCOPE.md           # scoped authority for one delivery/release
+    phases/
+      PHASE-xx.md               # conditional phase contract
+```
+
+`DELIVERY_PLAN.md` is append/update-oriented and preserves delivery history. `DELIVERY_SCOPE.md` is the default combined delivery authority. Separate delivery-level `REQUIREMENTS.md` and `DESIGN.md` are optional only when independent authority is justified.

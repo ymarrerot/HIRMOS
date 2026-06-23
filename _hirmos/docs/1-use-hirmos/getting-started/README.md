@@ -123,3 +123,9 @@ For the first run, you do not need to study:
 - the full validation tool internals.
 
 Bootstrap and the active command should tell the agent what to read when it becomes necessary.
+
+
+New governed sessions use `_hirmos/session/SESSION_SCOPE.md` as the active session authority. Durable multi-session work uses `_hirmos/system/delivery/DELIVERY_PLAN.md` plus `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` when needed.
+
+
+Example: [Scope authority surfaces](../examples/scope-authority-surfaces.md).

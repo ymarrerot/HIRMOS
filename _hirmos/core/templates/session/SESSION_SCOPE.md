@@ -99,9 +99,12 @@ Answer: SINGLE_SESSION_VERTICAL_SLICE | SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS
 - Selected shape justification:
 - If `SINGLE_SESSION_VERTICAL_SLICE`, why is one bounded session safe without separate implementation units?
 - If `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS`, required implementation unit coverage plan:
-- If `MULTI_SESSION_DELIVERY`, required Delivery Plan: `_hirmos/system/delivery/DELIVERY_PLAN.md` and delivery scope: `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
+- If `MULTI_SESSION_DELIVERY`, required Delivery roadmap: `_hirmos/system/delivery/DELIVERY_PLAN.md` and delivery scope: `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
 - If `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, required Delivery Plan, delivery scope, and active phase path: `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`
 - Current System State delivery pointer basis: `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` Active Development Context and Delivery Pointers
+- Last accepted delivery:
+- Next recommended delivery:
+- Next recommended delivery scope:
 - Pointer consistency result: CONSISTENT | BLOCKED | NOT_APPLICABLE
 - If UNCERTAIN, what must be inspected before deciding?
 
@@ -124,7 +127,7 @@ Required for implementation-capable software sessions before implementation auth
 | Persistence / database | Durable business data uses durable persistence; local mirrors intended production where practical. | Design + implementation evidence | PENDING |
 | Auth / authorization | Protected resources have server-side user/resource isolation. | Code/evidence | PENDING |
 | Background jobs / long-running work | Long-running AI/provider/file work is outside synchronous request paths. | Architecture + runtime evidence | PENDING |
-| Credits / usage / billing / quotas | Mutations are transactional, concurrency-safe, idempotent, or explicitly limited. | Code/evidence | PENDING |
+| Usage / quotas / billing / quotas | Mutations are transactional, concurrency-safe, idempotent, or explicitly limited. | Code/evidence | PENDING |
 | Provider APIs / external services | Provider boundary, env validation, and failure posture are explicit. | Code/config/evidence | PENDING |
 | File or object storage | Uploads/generated assets use validation, safe paths, and handoff hygiene. | Code/package evidence | PENDING |
 | Secrets and environment configuration | `.env.example` exists when needed; secrets/runtime data are excluded from handoff/release outputs. | Packaging/handoff evidence | PENDING |
@@ -325,3 +328,18 @@ Does the actual completed work satisfy 100% of `SESSION_SCOPE.md`?
 - Accepted-state files updated:
 - Archive path:
 - Remaining obligations:
+
+## Delivery-Governed Adoption
+
+Required when delivery shape is `MULTI_SESSION_DELIVERY` or `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`.
+
+- Delivery roadmap: `_hirmos/system/delivery/DELIVERY_PLAN.md`
+- Delivery scope: `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
+- Active phase: `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` or `NOT_APPLICABLE`
+- Adopted delivery outcome:
+- Adopted delivery requirements:
+- Adopted delivery design/engineering decisions:
+- Session narrowing decision:
+- Out-of-scope delivery items preserved for later:
+
+Fail-closed rule: a delivery-governed session must not proceed to implementation unless the Session Scope adopts and narrows the governing `DELIVERY_SCOPE.md` and, when applicable, the selected `PHASE-xx.md`.

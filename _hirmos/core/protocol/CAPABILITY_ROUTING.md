@@ -258,3 +258,25 @@ At minimum, the capability must identify:
 - whether user-facing output is required.
 
 Capability completion cannot be claimed if its unresolved-item producer obligation is missing or contradictory.
+
+## PROD-L4 delivery-shape routing matrix
+
+Runtime commands must route delivery-related capabilities from the Delivery Shape Decision before they instantiate artifacts or claim implementation readiness.
+
+| Delivery shape | Required capability route | Required authority artifacts before implementation readiness |
+|---|---|---|
+| `SINGLE_SESSION_VERTICAL_SLICE` | `session-scope → implementation-readiness` | `_hirmos/session/SESSION_SCOPE.md` with affirmative single-session safety evidence |
+| `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` | `session-scope → implementation-readiness` | `_hirmos/session/SESSION_SCOPE.md` plus implementation-unit coverage plan |
+| `MULTI_SESSION_DELIVERY` | `delivery-design → session-scope → implementation-readiness` | `_hirmos/system/delivery/DELIVERY_PLAN.md` and `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` |
+| `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` | `delivery-design → phase-contracting → session-scope → implementation-readiness` | `_hirmos/system/delivery/DELIVERY_PLAN.md`, `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`, and exactly one adopted `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` |
+
+Routing guardrails:
+
+- `delivery-design` owns creation or append/update of the durable delivery roadmap/register and the active delivery's `DELIVERY_SCOPE.md`.
+- `phase-contracting` owns phase-file creation or update only after a delivery scope exists and only when phase files are justified.
+- `session-scope` adopts and narrows delivery/phase authority into the active session; it must not recreate the full delivery authority.
+- `implementation-readiness` verifies the shape-specific authority chain and blocks implementation when the required artifacts are missing, stale, contradictory, or placeholder-only.
+- Single-session shapes must not instantiate durable delivery artifacts just to satisfy governance; they must record why delivery governance is `NOT_APPLICABLE`.
+- Durable delivery shapes must not be downgraded to single-session routing merely because the current user message is short.
+
+Fail-closed rule: if the Delivery Shape Decision is `UNCERTAIN`, or if the selected route cannot satisfy its authority artifacts, the command must set the relevant capability decision to `BLOCKED` or `ROUTE_BACK_REQUIRED`, record the reason in `SESSION_EXECUTION.md`, and stop before implementation.

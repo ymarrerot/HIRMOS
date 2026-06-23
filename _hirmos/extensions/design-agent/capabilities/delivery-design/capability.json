@@ -1,7 +1,7 @@
 {
   "id": "delivery-design",
   "extension": "design-agent",
-  "summary": "Create or update the durable Delivery Plan when delivery-shape governance is required for any project type.",
+  "summary": "Select and maintain durable delivery routing by appending/updating the delivery roadmap/register and one delivery scope when multi-session governance is required.",
   "lifecycle_stage": "design",
   "entrypoints": {
     "default": "entrypoints/default.md"
@@ -10,28 +10,30 @@
     "default": "conditional",
     "triggers": [
       "Delivery Shape Decision selects a durable delivery shape",
-      "multi-session greenfield work",
-      "multi-session brownfield work",
-      "prototype-to-product delivery requires multiple sessions",
-      "request cannot be safely implemented as one bounded session",
-      "existing durable delivery plan must be updated"
+      "Delivery Shape Decision selects MULTI_SESSION_DELIVERY",
+      "Delivery Shape Decision selects MULTI_SESSION_DELIVERY_WITH_PHASE_FILES",
+      "durable multi-session work in any project context cannot be safely governed as one session",
+      "existing durable delivery roadmap/register must be appended or reconciled",
+      "Current System State delivery pointers indicate active delivery governance"
     ]
   },
   "requires_artifacts": [
-    "_hirmos/session/DESIGN.md current-state basis",
-    "_hirmos/session/DESIGN.md",
     "_hirmos/session/SESSION_EXECUTION.md",
-    "_hirmos/session/unresolved-items.md"
+    "_hirmos/session/SESSION_SCOPE.md when available",
+    "_hirmos/session/unresolved-items.md",
+    "_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md when present"
   ],
   "produces_artifacts": [
-    "_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md",
+    "_hirmos/system/delivery/DELIVERY_PLAN.md",
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md",
     "_hirmos/session/SESSION_EXECUTION.md",
     "_hirmos/session/unresolved-items.md when delivery blockers are found"
   ],
   "execution_controls": [
     "Delivery Shape Decision Gate",
-    "durable-delivery-plan control",
-    "coverage-to-requirements control",
+    "delivery-route control",
+    "durable-delivery-roadmap control",
+    "delivery-scope authority control",
     "unresolved-item control when needed"
   ],
   "unresolved_items": {

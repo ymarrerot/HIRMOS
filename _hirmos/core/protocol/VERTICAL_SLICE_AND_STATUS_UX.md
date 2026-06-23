@@ -193,7 +193,7 @@ For internal workflow applications, a vertical slice is incomplete if the user c
 
 Cross-run UX lessons should be integrated into existing Phases / delivery slices by updating:
 
-- `REQUIREMENTS_BASELINE.md` for UI/UX requirement coverage;
+- `REQUIREMENTS.md` for UI/UX requirement coverage;
 - `DELIVERY_PLAN.md` for user-journey sequencing;
 - `SESSION_SCOPE.md` for authorized UX work;
 - `EVIDENCE.md` for operator journey checks;

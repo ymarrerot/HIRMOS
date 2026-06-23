@@ -1,4 +1,4 @@
-# REQUIREMENTS_BASELINE
+# REQUIREMENTS
 
 ## 1. Baseline Identity
 
@@ -222,7 +222,7 @@ Use this section when the session compares multiple candidate implementations, p
 
 | Candidate / source | Source type | Useful coverage lessons | Missing / weaker areas | Salvage destination | Requirement IDs affected |
 |---|---|---|---|---|---|
-| | HIRMOS run / external spec-tool run / prototype / external app-builder output / UX note / other | | | REQUIREMENTS_BASELINE / DELIVERY_PLAN / TECHNICAL_REVIEW / ROLE_WORKFLOW_SMOKE_CHECKS / CARRY_FORWARD | |
+| | HIRMOS run / external spec-tool run / prototype / external app-builder output / UX note / other | | | REQUIREMENTS / DELIVERY_PLAN / TECHNICAL_REVIEW / ROLE_WORKFLOW_SMOKE_CHECKS / CARRY_FORWARD | |
 
 Coverage claim gate:
 
@@ -235,4 +235,4 @@ Coverage claim gate:
 | Any candidate lessons rejected or marked not applicable? | yes / no |
 | Coverage claim reconciled in EVIDENCE.md claim reconciliation? | yes / no / not_applicable |
 
-Firm rule: candidate comparison output cannot substitute for updating this requirements baseline when the comparison reveals missing, partial, deferred, or newly clarified requirements.
+Firm rule: candidate comparison output cannot substitute for updating this requirements when the comparison reveals missing, partial, deferred, or newly clarified requirements.

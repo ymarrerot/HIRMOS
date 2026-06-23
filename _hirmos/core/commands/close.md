@@ -282,21 +282,33 @@ when framework files changed, accepted-state invariants were touched, generated 
 
 If any applicable invariant group fails, the terminal state is `Close Blocked`. Do not claim normal close success, do not bury the failure in carry-forward only, and do not present failed validation as a successful close with caveats.
 
-## Requirements baseline and coverage invariant
+## Requirements and coverage invariant
 
-Normal close must update requirement coverage when `_hirmos/session/REQUIREMENTS_BASELINE.md` exists or when requirements were material to the session.
+Normal close must update requirement coverage when `_hirmos/session/REQUIREMENTS.md` exists or when requirements were material to the session.
 
 Close must verify:
 
-- `_hirmos/session/REQUIREMENTS_BASELINE.md` exists for material requirements work;
+- `_hirmos/session/REQUIREMENTS.md` exists for material requirements work;
 - every material in-scope requirement has a coverage status;
 - every material requirement is mapped to delivered work, carry-forward, gated/unresolved state, blocked state, rejection, or explicit not-applicable rationale;
-- `_hirmos/system/accepted-state/REQUIREMENTS_BASELINE.md` is created or updated when requirements remain relevant across sessions;
-- `CURRENT_SYSTEM_STATE.md` references the accepted requirements baseline and summarizes coverage posture without replacing the requirement catalog.
+- `_hirmos/system/accepted-state/REQUIREMENTS.md` is created or updated when requirements remain relevant across sessions;
+- `CURRENT_SYSTEM_STATE.md` references the accepted requirements and summarizes coverage posture without replacing the requirement catalog.
 
 If requirements coverage is incomplete or contradictory, terminal state is `Close Blocked` unless the incomplete coverage is explicitly accepted as carry-forward, deferred, blocked, or out of scope.
 
 ## Durable Delivery Pointer Close Requirement
+
+
+When close accepts, partially accepts, blocks, defers, cancels, supersedes, or advances a delivery, update delivery navigation in both `_hirmos/system/delivery/DELIVERY_PLAN.md` and `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`.
+
+If the accepted delivery has a planned follow-up delivery in the Delivery Index, record:
+
+- Last accepted delivery
+- Next recommended delivery
+- Next recommended delivery scope
+- Next governed command: `hirmos start`
+
+Close is blocked if delivery navigation is applicable but left stale, contradictory, or missing without an explicit not-applicable rationale.
 
 When a session creates, updates, accepts, blocks, supersedes, or advances durable delivery artifacts, `hirmos close` must update or explicitly verify unchanged the Active Development Context and Delivery Pointers in `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`.
 
@@ -315,7 +327,7 @@ Close requires:
 
 - one adopted phase in `SESSION_SCOPE.md`;
 - direct review of the durable `PHASE-xx.md` in `SESSION_SCOPE.md` close verification;
-- accepted, partial, blocked, or superseded phase result recorded in `SESSION_EXECUTION.md` close/update controls;
+- accepted, partial, blocked, or superseded phase result recorded in `SESSION_EXECUTION.md` close/update control pointers;
 - Delivery Plan status and Current System State delivery pointers updated or explicitly verified unchanged.
 
 Close is blocked if phase adoption is missing, multiple phases are claimed, phase result is not reconciled, or accepted-state pointers would become stale.
@@ -328,9 +340,9 @@ When delivery governance was active, required, created, changed, accepted, block
 Required behavior:
 
 1. Read the adopted durable phase from `SESSION_SCOPE.md` Active Durable Phase Adoption.
-2. Read the parent `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` and active `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`.
+2. Read the parent `_hirmos/system/delivery/DELIVERY_PLAN.md and _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` and active `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`.
 3. Reconcile `SESSION_SCOPE.md` close verification, implementation-unit reviews, unresolved-items dispositions, and evidence against the adopted phase exit criteria.
-4. Complete `SESSION_EXECUTION.md` close/update controls Close-Time Delivery / Phase Status Transaction.
+4. Complete `SESSION_EXECUTION.md` close/update control pointers Close-Time Delivery / Phase Status Transaction.
 5. Update or explicitly verify unchanged the adopted `PHASE-xx.md` Close-Time Phase Status Update Contract.
 6. Update the parent `DELIVERY_PLAN.md` Delivery Decomposition row and Delivery Status Update Log.
 7. Refresh `CURRENT_SYSTEM_STATE.md` Active Development Context and Delivery Pointers.
@@ -338,7 +350,7 @@ Required behavior:
 
 Close is blocked if Delivery Plan status, Phase status, Session Scope adoption, SESSION_SCOPE.md close-verification verdict, implementation-unit review results, Current System State delivery pointers, and carry-forward obligations cannot be reconciled.
 
-The archive manifest may record the transaction, but it does not substitute for updating the durable Delivery Plan and Phase file.
+The archive manifest may record the transaction, but it does not substitute for updating the durable Delivery Plan roadmap, Delivery Scope, and Phase file.
 
 ## Phase Entry Gate Enforcement
 
@@ -382,10 +394,40 @@ Before normal close, `hirmos close` must review the Production-Shaped Engineerin
 Required close checks:
 
 - “async/background job” claims are supported by an actual background/worker/queue/cron processing path, not only persisted status fields;
-- credit/usage/billing claims are supported by transactional, idempotent, concurrency-safe, or explicitly constrained code/evidence;
+- metered-state/billing claims are supported by transactional, idempotent, concurrency-safe, or explicitly constrained code/evidence;
 - provider-integration claims match the actual provider mode and environment posture;
 - durable data claims match the actual local/production persistence posture;
 - secrets, runtime uploads, generated outputs, local databases, caches, and OS metadata are excluded from handoff/release packages unless explicitly attached as evidence;
 - critical-flow evidence exists in `EVIDENCE.md` or a not-run/not-applicable rationale is accepted.
 
 If any check fails, close must downgrade the accepted claim, route back, or preserve the limitation as carry-forward. Do not accept production-shaped outcomes contradicted by implementation evidence.
+
+## PROD-L4 delivery-route close reconciliation
+
+`hirmos close` must reconcile the route actually used during the session before accepting, partially accepting, blocking, or failing the close.
+
+Required behavior:
+
+1. Read the active capability routing records in `SESSION_EXECUTION.md`.
+2. Verify that the route matches the Delivery Shape Decision and `SESSION_SCOPE.md` authority chain.
+3. For single-session routes, verify that no unnecessary durable delivery artifacts were created as close authority.
+4. For delivery routes, verify `DELIVERY_PLAN.md`, `DELIVERY_SCOPE.md`, any adopted `PHASE-xx.md`, `SESSION_SCOPE.md`, and Current System State pointers are concordant.
+5. Verify blocked or route-back capability outcomes have either been resolved or carried forward.
+6. Block close success if the route claims and durable artifacts disagree.
+
+Close may archive the routing evidence, but archive metadata does not replace updating durable delivery scope, delivery roadmap, phase status, unresolved items, and accepted-state pointers when those artifacts are active.
+
+
+## PROD-L6 accepted-state/history/archive alignment
+
+During normal close, `hirmos close` must create or update the archived `ARCHIVE_MANIFEST.md` under `_hirmos/system/history/sessions/<session-id>/` and verify that it agrees with `SESSION_EXECUTION.md` close controls, `SESSION_SCOPE.md` close verification, active-session reset, and accepted-state files.
+
+For durable delivery work, the command must refresh Current System State delivery pointers using the PROD-L model:
+
+```text
+Delivery roadmap: _hirmos/system/delivery/DELIVERY_PLAN.md
+Active delivery scope: _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md
+Active phase: _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
+```
+
+The archive manifest may record the transaction, but it does not substitute for updating the durable delivery roadmap/register, active delivery scope, phase file, and Current System State delivery pointers.

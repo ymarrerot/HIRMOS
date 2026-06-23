@@ -44,7 +44,7 @@ Use focused server-side modules for:
 - database access;
 - provider calls;
 - file/storage operations;
-- credit/usage accounting;
+- usage/quota/accounting;
 - job processing.
 
 This keeps implementation replaceable and evidence easier to inspect.
@@ -55,7 +55,7 @@ Before accepting a Next.js implementation, HIRMOS should be able to answer:
 
 1. Does local infrastructure mirror intended production infrastructure where practical?
 2. Are long-running operations outside synchronous request paths?
-3. Are credit/usage/billing mutations safe under concurrency or explicitly limited?
+3. Are metered-state/billing mutations safe under concurrency or explicitly limited?
 4. Are provider boundaries and environment requirements clear?
 5. Are secrets/runtime artifacts excluded from handoff/release outputs?
 6. Is there evidence for the critical user flow, not only a build passing?

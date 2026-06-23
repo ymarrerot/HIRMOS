@@ -19,7 +19,7 @@ Production-shaped means:
 - local/dev infrastructure mirrors intended production infrastructure where practical;
 - durable business data uses durable persistence;
 - long-running provider, AI, image, video, import/export, billing, or batch work is not hidden inside synchronous request paths;
-- credit, usage, quota, billing, inventory, and account-balance mutations are concurrency-safe or explicitly limited;
+- usage, quota, billing, inventory, account-balance, and other metered-state mutations are concurrency-safe or explicitly limited;
 - secrets, environment variables, generated runtime data, and handoff/release packages have a safe posture;
 - limitations are explicit in Design, the Session Scope, evidence, and accepted-state updates.
 

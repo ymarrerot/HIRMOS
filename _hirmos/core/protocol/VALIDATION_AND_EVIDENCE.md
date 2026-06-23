@@ -101,7 +101,7 @@ Close evidence must prove a state transaction, not merely a user-facing summary.
 
 Required close evidence includes:
 
-- `SESSION_EXECUTION.md` close/update controls accepted/rejected/evidence-only/carry-forward classification;
+- `SESSION_EXECUTION.md` close/update control pointers accepted/rejected/evidence-only/carry-forward classification;
 - `SESSION_EXECUTION.md` close controls close readiness and integrity checks;
 - archive manifest under `_hirmos/system/history/sessions/<session-id>/`;
 - current-state latest-close metadata and carry-forward updates;

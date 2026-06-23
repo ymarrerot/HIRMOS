@@ -12,7 +12,7 @@ Use this surface for material such as:
 - prototype or proof-of-concept artifacts;
 - domain notes and reference documents.
 
-HIRMOS may read these files during intake and design, but governed artifacts such as `REQUIREMENTS_BASELINE.md`, `SESSION_SCOPE.md`, and `unresolved-items.md` decide what becomes authorized work.
+HIRMOS may read these files during intake and design, but governed artifacts such as `REQUIREMENTS.md`, `SESSION_SCOPE.md`, and `unresolved-items.md` decide what becomes authorized work.
 
 ## Folders
 

@@ -88,7 +88,7 @@ It still requires:
 - Session Scope;
 - Implementation authorization when project files will change.
 
-### Large or multi-session delivery shape
+### Durable multi-session delivery shape
 
 Large or multi-session work requires governed delivery decomposition when it cannot be safely implemented as one bounded session. This applies to any project type: greenfield, brownfield, mixed, prototype-to-product, and other delivery paths.
 

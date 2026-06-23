@@ -16,6 +16,6 @@ When implementing Next.js TypeScript work:
 - prefer production-shaped local defaults over demo shortcuts;
 - do not implement long-running AI/provider/image work as hidden awaited request-time work unless explicitly authorized;
 - do not use SQLite/local file persistence as the default when PostgreSQL is the recommended production database, unless explicitly authorized;
-- do not claim credit/usage/billing safety from preflight checks alone when concurrent requests are possible;
+- do not claim metered-state/billing safety from preflight checks alone when concurrent requests are possible;
 - add or run critical-flow smoke evidence when the session changes the main product path;
 - record any production-shape limitation before close.

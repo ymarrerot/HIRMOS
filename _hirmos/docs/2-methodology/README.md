@@ -68,5 +68,8 @@ These pages provide more detail after the first onboarding pass:
 - [Vertical Slice and Status UX](vertical-slice-and-status-ux.md)
 - [Close, Archive, and Accepted State](close-archive-and-accepted-state.md)
 - [Implementation Evidence and Claim Reconciliation](implementation-evidence-and-claim-reconciliation.md)
-- [Requirements Baseline and Coverage Mapping](requirements-baseline-and-coverage.md)
+- [Requirements and Coverage Mapping](requirements-and-coverage.md)
 - [Local Technical Setup and Role Workflow Smoke Checks](local-technical-setup-and-role-workflow-smoke-checks.md)
+
+
+Scope authority is consolidated by default: `SESSION_SCOPE.md` governs the active session, while durable multi-session work uses `DELIVERY_SCOPE.md` under the delivery roadmap/register.

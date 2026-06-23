@@ -30,4 +30,4 @@ When the selected delivery shape requires durable delivery, Design must route th
 delivery-design → phase-contracting → session-scope → implementation-readiness
 ```
 
-The durable Delivery Plan and Phase files live under `_hirmos/system/delivery/<delivery-id>/`. The active session consumes them through `SESSION_SCOPE.md`; it does not create session-local delivery authority.
+The durable Delivery Plan roadmap, Delivery Scope, and Phase files live under `_hirmos/system/delivery/<delivery-id>/`. The active session consumes them through `SESSION_SCOPE.md`; it does not create session-local delivery authority.

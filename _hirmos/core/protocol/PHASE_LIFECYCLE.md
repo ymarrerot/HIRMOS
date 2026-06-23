@@ -1,7 +1,7 @@
 # Phase Lifecycle Protocol
 
 Status: core protocol.
-Purpose: define canonical lifecycle status, phase type, and template requirements for multi-session delivery phases across greenfield, brownfield, and mixed projects.
+Purpose: define canonical lifecycle status, phase type, and template requirements for multi-session delivery phases across project contexts.
 
 ## Current-State-First Principle
 
@@ -298,7 +298,7 @@ Before `PHASE-xx.md` may record `Lifecycle status: ACCEPTED`, HIRMOS must verify
 - all adopted Session Scope items are reviewed;
 - every implementation unit has execution evidence and unit review;
 - `SESSION_SCOPE.md` close verification records phase coverage and acceptance verdict;
-- `SESSION_EXECUTION.md` close/update controls records the accepted phase transaction;
+- `SESSION_EXECUTION.md` close/update control pointers records the accepted phase transaction;
 - Delivery Plan and Phase file status are updated;
 - `CURRENT_SYSTEM_STATE.md` delivery pointers are refreshed;
 - unresolved, partial, blocked, or deferred work is reconciled before acceptance.

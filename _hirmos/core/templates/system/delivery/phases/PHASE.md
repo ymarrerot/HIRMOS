@@ -5,7 +5,8 @@ Phase type: GREENFIELD | BROWNFIELD | MIXED | UNKNOWN
 Delivery ID:
 Phase ID:
 Phase title:
-Source Delivery Plan: `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md`
+Source Delivery Roadmap: `_hirmos/system/delivery/DELIVERY_PLAN.md`
+Source Delivery Scope: `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
 Created from session:
 Last updated from session:
 Last session/archive pointer:
@@ -13,7 +14,7 @@ Next recommended action:
 
 ## Authority
 
-This is the durable phase contract for one bounded phase of a multi-session delivery.
+This is the durable phase contract for one bounded phase of a delivery governed by `DELIVERY_SCOPE.md`.
 
 Canonical location:
 
@@ -21,7 +22,7 @@ Canonical location:
 _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
 ```
 
-This phase may source a future `SESSION_SCOPE.md`, but it does not authorize implementation by itself. A session must still create or adopt a Session Scope and implementation units before implementation.
+A phase may source a future `SESSION_SCOPE.md`, but it does not authorize implementation by itself. A session must still create or adopt a Session Scope and implementation units before implementation.
 
 ## Phase Lifecycle State Model
 
@@ -72,7 +73,8 @@ HIRMOS is current-state-first. Record the inspected current state that justifies
 | Phase type | GREENFIELD / BROWNFIELD / MIXED / UNKNOWN | PENDING |
 | Lifecycle status | NOT_STARTED / READY_FOR_ADOPTION / ACTIVE / BLOCKED / PARTIAL / READY_FOR_ACCEPTANCE / ACCEPTED / DEFERRED / SUPERSEDED / CANCELLED | PENDING |
 | Current-state basis | | PENDING |
-| Delivery Plan pointer | `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` | PENDING |
+| Delivery Roadmap pointer | `_hirmos/system/delivery/DELIVERY_PLAN.md` | PENDING |
+| Delivery Scope pointer | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | PENDING |
 | Entry criteria | | PENDING |
 | Exit criteria | | PENDING |
 | Scope included | | PENDING |
@@ -88,7 +90,7 @@ HIRMOS is current-state-first. Record the inspected current state that justifies
 
 ## Source Coverage
 
-| Delivery Plan item / requirement / accepted-state need | Covered by this phase? | Evidence / rationale |
+| Delivery Scope item / requirement / accepted-state need | Covered by this phase? | Evidence / rationale |
 |---|---:|---|
 | | YES / NO / PARTIAL | |
 
@@ -109,7 +111,7 @@ HIRMOS is current-state-first. Record the inspected current state that justifies
 
 | Item | Source | Acceptance expectation |
 |---|---|---|
-| | | |
+| | `DELIVERY_SCOPE.md` / accepted state / user request | |
 
 ## Scope Excluded
 
@@ -123,6 +125,7 @@ HIRMOS is current-state-first. Record the inspected current state that justifies
 - Review-only adoption lifecycle status: READY_FOR_ACCEPTANCE.
 - Implementation must not adopt NOT_STARTED, BLOCKED, ACCEPTED, DEFERRED, SUPERSEDED, CANCELLED, or UNKNOWN-type phases.
 - Session adoption must map phase items to `SESSION_SCOPE.md` and implementation units.
+- Phase adoption must preserve the governing `DELIVERY_SCOPE.md` boundaries.
 
 ## Greenfield Controls
 
@@ -136,210 +139,109 @@ Required when `Phase type` is `GREENFIELD` or `MIXED`.
 - Validation level required:
 - Production-readiness claim allowed: YES / NO / PARTIAL
 
-Greenfield acceptance guard:
-
-- Implemented slice must match the phase objective.
-- Prototype/scaffold/demo status must not be represented as production-ready.
-- Architecture/design claims must match actual implementation.
-- Known gaps must be carried forward or explicitly deferred.
-
 ## Brownfield Controls
 
 Required when `Phase type` is `BROWNFIELD` or `MIXED`.
 
-- Preservation baseline:
-- Affected existing surfaces:
-- Regression-sensitive behavior:
-- Do-not-touch boundaries:
-- Compatibility constraints:
-- Data/migration safety constraints:
-- Rollback/recovery considerations:
-- Regression evidence required:
-
-Brownfield acceptance guard:
-
-- Existing behavior preservation must have evidence or risk must be explicitly recorded.
-- Regression-sensitive areas must be tested, reviewed, or explicitly carried as risk.
-- Data/migration safety must be reviewed when relevant.
-- Do-not-touch boundaries must be respected or deviations reviewed.
+- Accepted-state preservation boundary:
+- Regression-sensitive areas:
+- Migration / compatibility obligations:
+- Existing behavior that must not change:
+- Rollback / recovery consideration:
+- Validation level required:
 
 ## Mixed Phase Rule
 
-Required when `Phase type` is `MIXED`.
-
-A mixed phase must satisfy both the Greenfield Controls and Brownfield Controls sections. It may segment controls by workstream, but acceptance must reconcile both sides before `ACCEPTED` is allowed.
-
-## Open Items
-
-| Item | Blocking? | Disposition | Owner/source |
-|---|---:|---|---|
-| | YES / NO | OPEN / DEFERRED / RESOLVED | |
-
-## Deferred Items
-
-| Item | Reason deferred | Target phase/session | Accepted risk? |
-|---|---|---|---:|
-| | | | YES / NO |
-
-## Carry-Forward Items
-
-| Item | Why it remains | Required next action | Target artifact |
-|---|---|---|---|
-| | | | `CARRY_FORWARD.md` / next phase / future session |
-
-## Session Handoff
-
-- Intended Session Scope scope:
-- Required implementation unit boundaries:
-- Required direct reads before implementation:
-- Blockers that must stop `hirmos start` or `hirmos continue`:
-
-## Phase Acceptance Review
-
-- Session(s) that completed this phase:
-- Evidence summary:
-- Unresolved items resolved:
-- Carry-forward to next phase:
-- Type-specific controls satisfied: GREENFIELD / BROWNFIELD / BOTH_FOR_MIXED / NOT_APPLICABLE / NO
-- Final phase verdict: ACCEPTED | PARTIAL | FAILED | BLOCKED | NOT_REVIEWED
-
-## Close-Time Phase Status Update Contract
-
-This section must be completed during `hirmos close` for the adopted durable phase.
-
-| Close session | Phase type | Previous lifecycle status | New lifecycle status | Verdict basis | Evidence / archive | Applied? |
-|---|---|---|---|---|---|---:|
-| | GREENFIELD / BROWNFIELD / MIXED / UNKNOWN | | ACCEPTED / PARTIAL / BLOCKED / DEFERRED / SUPERSEDED / CANCELLED / UNCHANGED_WITH_RATIONALE | | | yes / no / not_applicable |
-
-Required close-time checks:
-
-- Phase Acceptance Review records the closed session, evidence summary, unresolved items, carry-forward obligations, and final phase verdict.
-- Every Binary Exit Criterion is classified as satisfied, partial, failed, blocked, deferred, or not applicable.
-- Partial or blocked results identify what remains for the next phase or future session.
-- The parent `DELIVERY_PLAN.md` status row agrees with this phase status.
-- `CURRENT_SYSTEM_STATE.md` delivery pointers agree with the resulting active/next phase state.
-
-Fail-closed rule: if this phase was adopted by `SESSION_SCOPE.md`, normal close is blocked until the Phase status update is recorded here or explicitly verified unchanged with rationale.
+A mixed phase must satisfy both Greenfield Controls and Brownfield Controls. If either side is incomplete, the phase cannot be implementation-ready.
 
 ## Phase Entry Gate
 
-This section must be completed before this phase can be adopted by an implementation-capable session.
-
-| Entry gate check | Required result | Actual result | Evidence / pointer |
-|---|---|---|---|
-| Phase file exists | PASS | PENDING | |
-| Delivery Plan pointer exists | PASS | PENDING | |
-| Current System State pointer concordance | PASS | PENDING | |
-| Lifecycle status supports adoption | READY_FOR_ADOPTION / ACTIVE / PARTIAL | PENDING | |
-| Phase type supports implementation | GREENFIELD / BROWNFIELD / MIXED | PENDING | |
-| Entry criteria explicit and satisfied | PASS | PENDING | |
-| Exit criteria reviewable | PASS | PENDING | |
-| Blocking open items absent/resolved | PASS | PENDING | |
-| Adoption constraints satisfied | PASS | PENDING | |
-| Correct next phase according to Delivery Plan and Current System State | PASS | PENDING | |
-
 Entry gate status: PENDING / PASS / BLOCKED / UNCERTAIN
-
-Fail-closed rule: implementation readiness is blocked unless `Entry gate status` is `PASS`.
 
 ### Greenfield Entry Gate Controls
 
-Required when `Phase type` is `GREENFIELD` or `MIXED`.
-
-| Greenfield entry control | Required result | Actual result | Evidence / pointer |
-|---|---|---|---|
-| MVP boundary is explicit | PASS | PENDING | |
-| Primary user/workflow slice is explicit | PASS | PENDING | |
-| Architecture dependency status is resolved enough for this phase | PASS | PENDING | |
-| Prototype vs production intent is explicit | PASS | PENDING | |
-| Out-of-scope expansion guard is explicit | PASS | PENDING | |
+- MVP/slice boundary is explicit.
+- Required architecture decisions are recorded in `DELIVERY_SCOPE.md` or `SESSION_SCOPE.md`.
+- Validation level is identified.
 
 ### Brownfield Entry Gate Controls
 
-Required when `Phase type` is `BROWNFIELD` or `MIXED`.
-
-| Brownfield entry control | Required result | Actual result | Evidence / pointer |
-|---|---|---|---|
-| Preservation baseline is explicit | PASS | PENDING | |
-| Affected existing surfaces are identified | PASS | PENDING | |
-| Regression-sensitive behavior is identified | PASS | PENDING | |
-| Do-not-touch boundaries are explicit | PASS | PENDING | |
-| Compatibility and data/migration safety constraints are considered when relevant | PASS | PENDING | |
+- Current accepted state was inspected.
+- Preservation constraints are recorded.
+- Regression evidence expectations are identified.
 
 ## Phase Progress Ledger
 
-Append one row per session that adopts or materially reviews this phase.
-
-| Session/archive | Adopted scope | Completed items | Partial items | Blocked items | Deferred items | Evidence pointer | Resulting lifecycle status |
-|---|---|---|---|---|---|---|---|
-| | | | | | | | NOT_STARTED / READY_FOR_ADOPTION / ACTIVE / BLOCKED / PARTIAL / READY_FOR_ACCEPTANCE / ACCEPTED / DEFERRED / SUPERSEDED / CANCELLED |
-
-Progress ledger rule: previous rows must not be erased. Corrections must be appended or explicitly marked as corrections.
+| Session/archive | Work completed | Evidence | Remaining work | Status impact |
+|---|---|---|---|---|
+| | | | | |
 
 ## Carry-Forward Enforcement
 
-Required when this phase is not fully accepted.
-
-| Remaining item | Classification | Required next action | Carry-forward target | Blocking? | Owner/source |
-|---|---|---|---|---:|---|
-| | OPEN / PARTIAL / BLOCKED / DEFERRED / SUPERSEDED / CANCELLED | | same phase / next phase / CARRY_FORWARD.md / future session / cancellation rationale | YES / NO | |
-
 Carry-forward status: NONE / RECORDED / BLOCKED / NOT_APPLICABLE
 
-Fail-closed rule: if the resulting lifecycle status is `PARTIAL`, `BLOCKED`, or `DEFERRED`, `Carry-forward status` must be `RECORDED` or the close is blocked.
+- Carry-forward target:
+- Revalidation point:
+- Blocking unresolved items:
 
 ### Greenfield Progress Controls
 
-Required when `Phase type` is `GREENFIELD` or `MIXED`.
-
-| Control | Completed | Partial / remaining | Carry-forward target |
-|---|---:|---|---|
-| MVP boundary items | YES / NO / PARTIAL | | |
-| Prototype-vs-production posture | YES / NO / PARTIAL | | |
-| Architecture gaps | YES / NO / PARTIAL | | |
-| Out-of-scope expansion guard | YES / NO / PARTIAL | | |
+- Scope expansion checked.
+- MVP boundary preserved.
 
 ### Brownfield Progress Controls
 
-Required when `Phase type` is `BROWNFIELD` or `MIXED`.
-
-| Control | Completed | Partial / remaining | Carry-forward target |
-|---|---:|---|---|
-| Preservation baseline obligations | YES / NO / PARTIAL | | |
-| Affected existing surfaces | YES / NO / PARTIAL | | |
-| Regression-sensitive behavior | YES / NO / PARTIAL | | |
-| Do-not-touch boundaries | YES / NO / PARTIAL | | |
-| Migration/data-safety obligations | YES / NO / PARTIAL | | |
-
+- Preservation evidence checked.
+- Regressions/blockers recorded.
 
 ## Phase Acceptance Evidence Gate
 
-- Acceptance gate status: PENDING / PASS / BLOCKED / NOT_APPLICABLE
-- Phase acceptance evidence status: PENDING / COMPLETE / INCOMPLETE / BLOCKED / NOT_APPLICABLE
-- All exit criteria satisfied or explicitly deferred/excluded: yes / no / not_applicable
-- `SESSION_SCOPE.md` close verification review acceptance verdict: ACCEPTED / PARTIAL / BLOCKED / FAILED / NOT_REVIEWED
-- Implementation Unit evidence complete: yes / no / not_applicable
-- Unresolved adopted work remaining: yes / no / not_applicable
-- Delivery Plan status updated: yes / no / not_applicable
-- Current System State pointers refreshed: yes / no / not_applicable
+Acceptance gate status: PENDING / PASS / BLOCKED / PARTIAL
 
 ### Greenfield Acceptance Evidence
 
-- Greenfield acceptance evidence: PENDING / COMPLETE / INCOMPLETE / BLOCKED / NOT_APPLICABLE
-- MVP slice verified against phase objective: yes / no / not_applicable
-- Architecture-to-implementation claims reconciled: yes / no / not_applicable
-- Prototype-vs-production claims controlled: yes / no / not_applicable
-- Known gaps carried forward or explicitly deferred: yes / no / not_applicable
+- User-visible slice evidence:
+- Build/test/smoke evidence:
+- Deferred scope:
 
 ### Brownfield Acceptance Evidence
 
-- Brownfield acceptance evidence: PENDING / COMPLETE / INCOMPLETE / BLOCKED / NOT_APPLICABLE
-- Preservation evidence complete: yes / no / not_applicable
-- Affected surfaces reviewed: yes / no / not_applicable
-- Regression-sensitive behavior reviewed: yes / no / not_applicable
-- Compatibility/data-safety constraints reviewed: yes / no / not_applicable
-- Do-not-touch boundaries respected: yes / no / not_applicable
+- Preservation evidence:
+- Regression evidence:
+- Migration evidence when applicable:
 
 ### Mixed Acceptance Evidence
 
-Mixed phase acceptance requires both Greenfield acceptance evidence and Brownfield acceptance evidence to be COMPLETE before final `ACCEPTED` lifecycle status is allowed.
+- Greenfield evidence result:
+- Brownfield evidence result:
+- Combined risk decision:
+
+## Session Handoff
+
+- Next recommended session:
+- Next recommended phase:
+- Required adopted scope:
+- Required evidence to inspect:
+- Known blockers:
+
+## Close-Time Phase Status Update Contract
+
+This section must be updated during `hirmos close` whenever a session accepts, partially accepts, blocks, supersedes, defers, cancels, or advances this phase.
+
+## Phase Acceptance Review
+
+The phase may be marked `ACCEPTED` only when the Phase Acceptance Evidence Gate is complete and the closed session records the accepted outcome, evidence, unresolved/carry-forward disposition, and accepted-state update.
+
+## Close Verification
+
+- The parent `DELIVERY_SCOPE.md` status and phase table agree with this phase status.
+- The parent `DELIVERY_PLAN.md` delivery index / active delivery pointer agrees with this delivery status.
+- Binary Exit Criterion rows are resolved or carried forward.
+- Phase Acceptance Review records the closed session before `ACCEPTED` status is used.
+
+
+## Carry-Forward Items
+
+- Carry-forward item:
+- Target delivery/phase/session:
+- Revalidation point:

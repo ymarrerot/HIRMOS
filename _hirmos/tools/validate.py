@@ -45,10 +45,10 @@ required = [
     'core/protocol/VERTICAL_SLICE_AND_STATUS_UX.md',
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md',
     'core/protocol/CURRENT_SYSTEM_STATE.md',
-    'core/protocol/REQUIREMENTS_BASELINE.md',
-    'core/templates/session/REQUIREMENTS_BASELINE.md',
-    'system/accepted-state/REQUIREMENTS_BASELINE.md',
-    'docs/2-methodology/requirements-baseline-and-coverage.md',
+    'core/protocol/REQUIREMENTS.md',
+    'core/templates/session/REQUIREMENTS.md',
+    'system/accepted-state/REQUIREMENTS.md',
+    'docs/2-methodology/requirements-and-coverage.md',
     'core/protocol/AUTONOMOUS_TECHNICAL_PROGRESS.md',
     'core/protocol/LOCAL_TECHNICAL_SETUP_AND_ROLE_WORKFLOW_SMOKE_CHECKS.md',
     'core/templates/session/EVIDENCE.md',
@@ -64,7 +64,9 @@ required = [
     'core/templates/session/implementation-units/IU.md',
     'core/templates/system/CURRENT_SYSTEM_STATE.md',
     'core/templates/system/delivery/DELIVERY_PLAN.md',
+    'core/templates/system/delivery/DELIVERY_SCOPE.md',
     'core/templates/system/delivery/phases/PHASE.md',
+    'core/templates/system/history/sessions/ARCHIVE_MANIFEST.md',
     'core/templates/session/stack-resolution.json',
     'core/templates/session/bootstrap/BOOTSTRAP_REPORT.md',
     'core/templates/session/DESIGN.md',
@@ -306,7 +308,7 @@ LEGAL_TRANSITIONS = {
     ('idle', 'idle'): {'hirmos start', 'hirmos status'},
     ('active', 'bootstrap'): {'hirmos continue', 'hirmos status'},
     ('active', 'system_state_understanding'): {'hirmos continue', 'hirmos status'},
-    ('active', 'session_contract'): {'hirmos continue', 'hirmos status'},
+    ('active', 'session_scope'): {'hirmos continue', 'hirmos status'},
     ('active', 'design'): {'hirmos continue', 'hirmos status'},
     ('active', 'implementation_readiness'): {'hirmos continue', 'hirmos status'},
     ('active', 'implementation'): {'hirmos continue', 'hirmos status'},
@@ -358,6 +360,9 @@ DEPRECATED_SESSION_SURFACES = {
 }
 
 DEPRECATED_REFERENCE_MARKERS = {
+    'SESSION_CONTRACT.md',
+    'SESSION_CONTRACT',
+    'session_contract',
     'SESSION_SCOPE_CONTRACT',
     'SESSION_SCOPE_REVIEW',
     'CURRENT_STATE_INTAKE',
@@ -441,7 +446,7 @@ def _validate_session_state_semantics(state_path: Path, active_session_dir: Path
     if status not in {'idle', 'active', 'blocked'}:
         print(f'FAIL: {state_path.relative_to(root)} status must be idle, active, or blocked')
         sys.exit(1)
-    if stage not in {'idle','bootstrap','system_state_understanding','session_contract','design','implementation_readiness','implementation','implementation_complete','correction_requested','close_ready','closed','blocked'}:
+    if stage not in {'idle','bootstrap','system_state_understanding','session_scope','design','implementation_readiness','implementation','implementation_complete','correction_requested','close_ready','closed','blocked'}:
         print(f'FAIL: {state_path.relative_to(root)} lifecycle_stage is not canonical: {stage!r}')
         sys.exit(1)
     if not isinstance(allowed, list) or not allowed:
@@ -765,15 +770,15 @@ def _validate_delivery_governance_active_session(active_session_dir: Path) -> No
         return
 
     stage = state_obj.get('lifecycle_stage')
-    session_contract = _read_optional_text(active_session_dir / 'SESSION_SCOPE.md')
+    session_scope = _read_optional_text(active_session_dir / 'SESSION_SCOPE.md')
     current_state = _read_optional_text(root / 'system/accepted-state/CURRENT_SYSTEM_STATE.md')
     session_execution = _read_optional_text(active_session_dir / 'SESSION_EXECUTION.md')
     evidence_text = _read_optional_text(active_session_dir / 'EVIDENCE.md')
-    session_review = session_contract
-    close_controls = '\n'.join([session_execution, evidence_text, session_contract])
+    session_review = session_scope
+    close_controls = '\n'.join([session_execution, evidence_text, session_scope])
 
-    classification_yes = bool(re.search(r'(Answer|Classification answer|Delivery governance active)\s*:\s*YES', session_contract, re.I))
-    classification_uncertain = bool(re.search(r'(Answer|Classification answer|Delivery governance active)\s*:\s*UNCERTAIN', session_contract, re.I))
+    classification_yes = bool(re.search(r'(Answer|Classification answer|Delivery governance active)\s*:\s*YES', session_scope, re.I))
+    classification_uncertain = bool(re.search(r'(Answer|Classification answer|Delivery governance active)\s*:\s*UNCERTAIN', session_scope, re.I))
 
     if stage == 'implementation_readiness' and classification_uncertain:
         print('FAIL: Delivery-Need Classification UNCERTAIN cannot reach implementation_readiness')
@@ -782,20 +787,29 @@ def _validate_delivery_governance_active_session(active_session_dir: Path) -> No
     if not classification_yes:
         return
 
-    if 'Active Durable Phase Adoption' not in session_contract or not re.search(r'Adoption status\s*:\s*ADOPTED|Phase adoption\s*:\s*ADOPTED|ADOPTED', session_contract, re.I):
+    if 'Active Durable Phase Adoption' not in session_scope or not re.search(r'Adoption status\s*:\s*ADOPTED|Phase adoption\s*:\s*ADOPTED|ADOPTED', session_scope, re.I):
         print('FAIL: delivery-governed active session missing adopted durable phase evidence in SESSION_SCOPE.md')
         sys.exit(1)
 
-    plan_text_path = _extract_hirmos_path(session_contract, r'_hirmos/system/delivery/[A-Za-z0-9._-]+/DELIVERY_PLAN\.md')
-    phase_text_path = _extract_hirmos_path(session_contract, r'_hirmos/system/delivery/[A-Za-z0-9._-]+/phases/PHASE-[A-Za-z0-9._-]+\.md')
+    if re.search(r'_hirmos/system/delivery/[A-Za-z0-9._-]+/DELIVERY_PLAN\.md', session_scope):
+        print('FAIL: delivery-governed active session cites legacy per-delivery DELIVERY_PLAN.md; use durable roadmap/register _hirmos/system/delivery/DELIVERY_PLAN.md')
+        sys.exit(1)
+
+    plan_text_path = _extract_hirmos_path(session_scope, r'_hirmos/system/delivery/DELIVERY_PLAN\.md')
+    scope_text_path = _extract_hirmos_path(session_scope, r'_hirmos/system/delivery/[A-Za-z0-9._-]+/DELIVERY_SCOPE\.md')
+    phase_text_path = _extract_hirmos_path(session_scope, r'_hirmos/system/delivery/[A-Za-z0-9._-]+/phases/PHASE-[A-Za-z0-9._-]+\.md')
     plan_rel = _canonicalize_hirmos_path(plan_text_path)
+    scope_rel = _canonicalize_hirmos_path(scope_text_path)
     phase_rel = _canonicalize_hirmos_path(phase_text_path)
 
-    if plan_rel is None or phase_rel is None:
-        print('FAIL: delivery-governed active session must cite durable Delivery Plan and Phase paths')
+    if plan_rel is None or scope_rel is None or phase_rel is None:
+        print('FAIL: delivery-governed active session must cite durable Delivery Plan, Delivery Scope, and Phase paths')
         sys.exit(1)
     if not (root / plan_rel).exists():
         print(f'FAIL: delivery-governed active session missing durable plan: {plan_text_path}')
+        sys.exit(1)
+    if not (root / scope_rel).exists():
+        print(f'FAIL: delivery-governed active session missing durable delivery scope: {scope_text_path}')
         sys.exit(1)
     if not (root / phase_rel).exists():
         print(f'FAIL: delivery-governed active session missing durable phase: {phase_text_path}')
@@ -806,7 +820,7 @@ def _validate_delivery_governance_active_session(active_session_dir: Path) -> No
     _validate_phase_progress_carry_forward(phase_rel, stage, close_controls, session_execution, session_review)
     _validate_phase_acceptance_enforcement(phase_rel, stage, close_controls, session_execution, session_review)
 
-    if plan_text_path not in current_state or phase_text_path not in current_state:
+    if plan_text_path not in current_state or scope_text_path not in current_state or phase_text_path not in current_state:
         print('FAIL: delivery pointer mismatch between SESSION_SCOPE.md and CURRENT_SYSTEM_STATE.md')
         sys.exit(1)
 
@@ -938,15 +952,16 @@ if 'allowed_next_commands' not in state or 'recommended_next_command' not in sta
 
 # durable delivery governance checks
 for rel, phrases in {
-    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'Single-session eligibility'],
-    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Decomposition', 'Delivery Coverage Matrix', 'Status Update Log'],
-    'core/templates/system/delivery/phases/PHASE.md': ['Phase Contract', 'Source Delivery Plan', 'Binary Exit Criteria', 'Session Handoff'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'DELIVERY_SCOPE.md'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Index', 'Delivery Coverage Matrix', 'Status Update Log'],
+    'core/templates/system/delivery/DELIVERY_SCOPE.md': ['Authorized Outcome', 'Scoped Requirements', 'Production-Shaped Engineering Gate', 'Delivery Close Verification'],
+    'core/templates/system/delivery/phases/PHASE.md': ['Phase Contract', 'Source Delivery Scope', 'Binary Exit Criteria', 'Session Handoff'],
     'core/templates/session/SESSION_SCOPE.md': ['Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Selected shape justification'],
     'core/templates/session/SESSION_EXECUTION.md': ['Delivery Shape Decision Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
     'core/protocol/PROJECT_TYPES.md': ['Delivery shape fields', 'Delivery governance required: YES / NO / UNCERTAIN'],
     'core/protocol/COMMAND_STATE_MACHINE.md': ['Delivery Shape Decision state gate', 'must not recommend `hirmos continue`'],
     'core/commands/start.md': ['Delivery Shape Decision Gate', 'smallest governed delivery shape'],
-    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Active Development Context', 'Delivery plan:', 'Active phase:'],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Active Development Context', 'Delivery roadmap:', 'Active delivery scope:', 'Active phase:'],
 }.items():
     body = (root/rel).read_text()
     for phrase in phrases:
@@ -966,8 +981,8 @@ for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery / Phase Capability Routing', 'delivery-design → phase-contracting → session-scope → implementation-readiness', 'single-session safety evidence'],
     'extensions/design-agent/extension.json': ['phase-contracting', 'session-scope'],
     'extensions/design-agent/entrypoints/default.md': ['Durable Delivery / Phase Capability Rewire', 'delivery-design', 'phase-contracting', 'session-scope', 'implementation-readiness'],
-    'extensions/design-agent/capabilities/delivery-design/capability.json': ['Delivery Shape Decision selects a durable delivery shape', '_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md'],
-    'extensions/design-agent/capabilities/phase-contracting/capability.json': ['_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md', 'session-scope source-readiness control'],
+    'extensions/design-agent/capabilities/delivery-design/capability.json': ['Delivery Shape Decision selects a durable delivery shape', '_hirmos/system/delivery/DELIVERY_PLAN.md', '_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md'],
+    'extensions/design-agent/capabilities/phase-contracting/capability.json': ['_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md', '_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md', 'session-scope source-readiness control'],
     'extensions/design-agent/capabilities/session-scope/capability.json': ['durable phase', 'single-session safety evidence'],
     'extensions/design-agent/capabilities/implementation-readiness/capability.json': ['durable delivery coverage when required', 'Delivery Shape Decision gate'],
     'core/templates/session/SESSION_EXECUTION.md': ['Delivery / Phase Capability Routing Log', 'delivery-design', 'phase-contracting', 'session-scope', 'implementation-readiness'],
@@ -1001,16 +1016,16 @@ print('PASS: HIRMOS delivery / phase capability rewire static check')
 
 # Current System State delivery pointer integration checks
 for rel, phrases in {
-    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Active Development Context and Delivery Pointers', 'Delivery governance active', 'Active phase lifecycle status', 'Active phase type', 'Next recommended phase', 'Pointer update rules'],
-    'system/accepted-state/CURRENT_SYSTEM_STATE.md': ['Active Development Context and Delivery Pointers', 'Delivery governance active', 'Active phase lifecycle status', 'Active phase type', 'Next recommended phase'],
-    'core/protocol/CURRENT_SYSTEM_STATE.md': ['Active Development Context and Delivery Pointers', 'Required pointer fields', 'Future sessions must read these pointers'],
-    'core/protocol/DELIVERY_GOVERNANCE.md': ['Current System State pointer rule', 'Required pointer fields', 'Close-time pointer update is mandatory', 'hirmos start` and Understand System State must inspect these pointers'],
-    'core/templates/session/SESSION_SCOPE.md': ['Current System State delivery pointer basis', 'Pointer consistency result'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Current System State Delivery Pointer Concordance', 'delivery-governed implementation must not proceed'],
-    'core/commands/start.md': ['Current System State Delivery Pointer Precheck', 'must not default to a single-session path'],
-    'core/commands/status.md': ['Durable Delivery Pointer Reporting', 'Status Blocked By Delivery Pointer Conflict'],
-    'core/commands/continue.md': ['Durable Delivery Pointer Concordance', 'delivery governance reconciliation'],
-    'core/commands/close.md': ['Durable Delivery Pointer Close Requirement', 'Close is blocked if'],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Active Development Context and Delivery Pointers', 'Delivery governance active', 'Active phase lifecycle status', 'Active phase type', 'Next recommended delivery', 'Next recommended delivery scope', 'Next recommended phase', 'Pointer update rules'],
+    'system/accepted-state/CURRENT_SYSTEM_STATE.md': ['Active Development Context and Delivery Pointers', 'Delivery governance active', 'Active phase lifecycle status', 'Active phase type', 'Next recommended delivery', 'Next recommended delivery scope', 'Next recommended phase'],
+    'core/protocol/CURRENT_SYSTEM_STATE.md': ['Active Development Context and Delivery Pointers', 'Required pointer fields', 'Next recommended delivery', 'Future sessions must read these pointers'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['Current System State pointer rule', 'Required pointer fields', 'Next recommended delivery', 'Close-time pointer update is mandatory', 'hirmos start` and Understand System State must inspect these pointers', 'project-type neutral'],
+    'core/templates/session/SESSION_SCOPE.md': ['Current System State delivery pointer basis', 'Next recommended delivery', 'Pointer consistency result'],
+    'core/templates/session/SESSION_EXECUTION.md': ['Current System State Delivery Pointer Concordance', 'Next recommended delivery', 'delivery-governed implementation must not proceed'],
+    'core/commands/start.md': ['Current System State Delivery Pointer Precheck', 'Next recommended delivery', 'must not default to a single-session path'],
+    'core/commands/status.md': ['Durable Delivery Pointer Reporting', 'Next recommended delivery', 'Status Blocked By Delivery Pointer Conflict'],
+    'core/commands/continue.md': ['Durable Delivery Pointer Concordance', 'Next recommended delivery', 'delivery governance reconciliation'],
+    'core/commands/close.md': ['Durable Delivery Pointer Close Requirement', 'Next recommended delivery', 'Close is blocked if'],
     'docs/2-methodology/durable-current-system-state.md': ['Active delivery pointers', 'Future sessions must inspect these pointers'],
 }.items():
     body = (root/rel).read_text()
@@ -1043,7 +1058,8 @@ print('PASS: HIRMOS session scope phase adoption enforcement static check')
 # Close-time Delivery Plan / Phase status update enforcement checks
 for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Close-Time Delivery Plan / Phase Status Update Enforcement', 'Required close-time status authority chain', 'Close is blocked if Delivery Plan status'],
-    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Close-Time Delivery Status Update Contract', 'Delivery Status Update Log', 'next recommended phase is updated'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Close-Time Delivery Status Update Contract', 'Delivery Status Update Log'],
+    'core/templates/system/delivery/DELIVERY_SCOPE.md': ['Delivery Close Verification', 'Session Adoption Rules', 'Phase Plan'],
     'core/templates/system/delivery/phases/PHASE.md': ['Close-Time Phase Status Update Contract', 'Phase Acceptance Review records the closed session', 'Binary Exit Criterion'],
     'core/templates/session/SESSION_EXECUTION.md': [' Close-Time Delivery Status Execution Log', 'durable delivery status updates remain pending'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': [' Close-Time Delivery Pointer Refresh Rule', 'explicitly verified unchanged'],
@@ -1065,7 +1081,7 @@ print('PASS: HIRMOS close-time delivery plan / phase status update enforcement s
 for rel, phrases in {
     'core/protocol/PHASE_LIFECYCLE.md': ['Current-State-First Principle', 'Canonical Phase Lifecycle Statuses', 'Canonical Phase Types', 'UNKNOWN` blocks implementation readiness', 'Universal Phase Lifecycle Fields', 'Type-Specific Control Groups', ' Fail-Closed Rules'],
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Phase Lifecycle State Model', 'Lifecycle status: NOT_STARTED | READY_FOR_ADOPTION | ACTIVE | BLOCKED | PARTIAL | READY_FOR_ACCEPTANCE | ACCEPTED | DEFERRED | SUPERSEDED | CANCELLED', 'Phase type: GREENFIELD | BROWNFIELD | MIXED | UNKNOWN', 'Greenfield phases activate', 'Brownfield phases activate', 'Mixed phases activate both control groups'],
-    'core/templates/system/delivery/DELIVERY_PLAN.md': [' Phase Lifecycle Vocabulary', 'Phase type', 'Lifecycle status', 'READY_FOR_ADOPTION', 'READY_FOR_ACCEPTANCE', 'DEFERRED', 'CANCELLED', 'UNKNOWN` phase type blocks implementation readiness'],
+    'core/templates/system/delivery/DELIVERY_SCOPE.md': ['Phase Plan', 'READY_FOR_ADOPTION', 'READY_FOR_ACCEPTANCE', 'DEFERRED', 'CANCELLED'],
     'core/templates/system/delivery/phases/PHASE.md': [' Phase Lifecycle State Model', 'Current-State Basis', 'Universal Lifecycle Requirements', 'Greenfield Controls', 'Brownfield Controls', 'Mixed Phase Rule', 'Carry-Forward Items', 'Lifecycle status: NOT_STARTED'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': [' Phase Lifecycle Pointer Rule', 'Active phase lifecycle status', 'Active phase type', 'UNKNOWN phase type must not support implementation readiness'],
     'system/accepted-state/CURRENT_SYSTEM_STATE.md': [' Phase Lifecycle Pointer Rule', 'Active phase lifecycle status', 'Active phase type', 'UNKNOWN phase type must not support implementation readiness'],
@@ -1270,15 +1286,16 @@ if 'allowed_next_commands' not in state or 'recommended_next_command' not in sta
 
 # durable delivery governance checks
 for rel, phrases in {
-    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'Single-session eligibility'],
-    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Decomposition', 'Delivery Coverage Matrix', 'Status Update Log'],
-    'core/templates/system/delivery/phases/PHASE.md': ['Phase Contract', 'Source Delivery Plan', 'Binary Exit Criteria', 'Session Handoff'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'DELIVERY_SCOPE.md'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Index', 'Delivery Coverage Matrix', 'Status Update Log'],
+    'core/templates/system/delivery/DELIVERY_SCOPE.md': ['Authorized Outcome', 'Scoped Requirements', 'Production-Shaped Engineering Gate', 'Delivery Close Verification'],
+    'core/templates/system/delivery/phases/PHASE.md': ['Phase Contract', 'Source Delivery Scope', 'Binary Exit Criteria', 'Session Handoff'],
     'core/templates/session/SESSION_SCOPE.md': ['Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Selected shape justification'],
     'core/templates/session/SESSION_EXECUTION.md': ['Delivery Shape Decision Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
     'core/protocol/PROJECT_TYPES.md': ['Delivery shape fields', 'Delivery governance required: YES / NO / UNCERTAIN'],
     'core/protocol/COMMAND_STATE_MACHINE.md': ['Delivery Shape Decision state gate', 'must not recommend `hirmos continue`'],
     'core/commands/start.md': ['Delivery Shape Decision Gate', 'smallest governed delivery shape'],
-    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Active Development Context', 'Delivery plan:', 'Active phase:'],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Active Development Context', 'Delivery roadmap:', 'Active delivery scope:', 'Active phase:'],
 }.items():
     body = (root/rel).read_text()
     for phrase in phrases:
@@ -1298,8 +1315,8 @@ for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery / Phase Capability Routing', 'delivery-design → phase-contracting → session-scope → implementation-readiness', 'single-session safety evidence'],
     'extensions/design-agent/extension.json': ['phase-contracting', 'session-scope'],
     'extensions/design-agent/entrypoints/default.md': ['Durable Delivery / Phase Capability Rewire', 'delivery-design', 'phase-contracting', 'session-scope', 'implementation-readiness'],
-    'extensions/design-agent/capabilities/delivery-design/capability.json': ['Delivery Shape Decision selects a durable delivery shape', '_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md'],
-    'extensions/design-agent/capabilities/phase-contracting/capability.json': ['_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md', 'session-scope source-readiness control'],
+    'extensions/design-agent/capabilities/delivery-design/capability.json': ['Delivery Shape Decision selects a durable delivery shape', '_hirmos/system/delivery/DELIVERY_PLAN.md', '_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md'],
+    'extensions/design-agent/capabilities/phase-contracting/capability.json': ['_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md', '_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md', 'session-scope source-readiness control'],
     'extensions/design-agent/capabilities/session-scope/capability.json': ['durable phase', 'single-session safety evidence'],
     'extensions/design-agent/capabilities/implementation-readiness/capability.json': ['durable delivery coverage when required', 'Delivery Shape Decision gate'],
     'core/templates/session/SESSION_EXECUTION.md': ['Delivery / Phase Capability Routing Log', 'delivery-design', 'phase-contracting', 'session-scope', 'implementation-readiness'],
@@ -1613,14 +1630,14 @@ for phrase in [
         print(f'FAIL: canonical unresolved-items.md template missing item detail field: {phrase}')
         sys.exit(1)
 
-session_contract_template = (root/'core/templates/session/SESSION_SCOPE.md').read_text()
+session_scope_template = (root/'core/templates/session/SESSION_SCOPE.md').read_text()
 for phrase in [
     'This section is only a control summary',
     'HIRMOS must not infer unresolved-item details from this summary',
     'This summary must not contain item-level detail rows',
     'Last direct register review boundary',
 ]:
-    if phrase not in session_contract_template:
+    if phrase not in session_scope_template:
         print(f'FAIL: SESSION_SCOPE.md unresolved control missing governance phrase: {phrase}')
         sys.exit(1)
 
@@ -1772,7 +1789,7 @@ for field in ['active_stack','selection_source','confidence','evidence','stack_p
 i9_template_checks = {
     'implementation-units/IU.md': ['Stack Context', 'Cross-stack unit'],
     'EVIDENCE.md': ['Evidence by Stack Context', 'repository evidence first'],
-    '../system/delivery/DELIVERY_PLAN.md': ['Delivery-Need Classification Source', 'Cross-Phase Constraints', 'Delivery Coverage Matrix'],
+    '../system/delivery/DELIVERY_PLAN.md': ['Delivery-Need Classification Source', 'Delivery Coverage Matrix'],
     'SESSION_EXECUTION.md': ['Project Context / Stack Summary'],
 }
 for name, phrases in i9_template_checks.items():
@@ -1907,11 +1924,14 @@ for rel, phrases in {
     'core/templates/system/delivery/DELIVERY_PLAN.md': [
         'Delivery Decomposition',
         'Active Development Context',
+        'Delivery Navigation',
+        'Next recommended delivery',
         'Delivery Status Update Log',
     ],
     'core/templates/session/SESSION_EXECUTION.md': [
         'Vertical Slice / Delivery Status Summary',
         'Command Output Summary',
+        'Next recommended delivery',
         'Next recommended phase',
     ],
     'core/protocol/COMMANDS.md': [
@@ -2168,7 +2188,7 @@ for phrase in [
         fail(f'CURRENT_SYSTEM_STATE.md missing accepted-state navigation/current-state phrase: {phrase}')
 
 # Session close verification must be embedded in the Session Scope under the strict-necessity model.
-session_contract = (root / 'core/templates/session/SESSION_SCOPE.md').read_text()
+session_scope = (root / 'core/templates/session/SESSION_SCOPE.md').read_text()
 execution_template = (root / 'core/templates/session/SESSION_EXECUTION.md').read_text()
 for phrase in [
     'Session Satisfaction Review and Close Verification',
@@ -2178,7 +2198,7 @@ for phrase in [
     'Does the actual completed work satisfy 100% of `SESSION_SCOPE.md`?',
     'Fail-closed result',
 ]:
-    if phrase.lower() not in session_contract.lower():
+    if phrase.lower() not in session_scope.lower():
         fail(f'SESSION_SCOPE.md missing embedded close verification phrase: {phrase}')
 for phrase in [
     'Close / Archive / Reset Invariant Controls',
@@ -2202,7 +2222,7 @@ for phrase in [
     'HIRMOS must not infer unresolved-item details from this summary',
     'This summary must not contain item-level detail rows',
 ]:
-    if phrase not in session_contract:
+    if phrase not in session_scope:
         fail(f'SESSION_SCOPE.md unresolved control summary too weak/missing phrase: {phrase}')
 
 # Implementation-unit consolidation must be structural.
@@ -2350,3 +2370,185 @@ for manifest in root.glob('extensions/*-agent/capabilities/*/capability.json'):
         sys.exit(1)
 
 print('PASS: HIRMOS canonical entrypoint surface cleanup static check')
+
+# PROD-L4 runtime command / capability routing checks
+for rel, phrases in {
+    'core/protocol/CAPABILITY_ROUTING.md': ['PROD-L4 delivery-shape routing matrix', 'delivery-design → session-scope → implementation-readiness', 'delivery-design → phase-contracting → session-scope → implementation-readiness', 'Fail-closed rule: if the Delivery Shape Decision is `UNCERTAIN`'],
+    'core/protocol/COMMANDS.md': ['PROD-L4 command-to-capability routing behavior', 'hirmos start` must perform Delivery Shape Decision routing', 'hirmos close` must reconcile the route'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['PROD-L4 runtime command and capability route binding', 'session-scope → implementation-readiness', 'implementation-readiness` must fail closed'],
+    'core/commands/start.md': ['PROD-L4 delivery-route runtime behavior', 'must not create a per-delivery `DELIVERY_PLAN.md`'],
+    'core/commands/continue.md': ['PROD-L4 delivery-route continuation behavior', 'must not expand delivery scope silently'],
+    'core/commands/status.md': ['PROD-L4 delivery-route status reporting', 'Status Blocked By Delivery Route Conflict'],
+    'core/commands/close.md': ['PROD-L4 delivery-route close reconciliation', 'route claims and durable artifacts disagree'],
+    'extensions/design-agent/entrypoints/default.md': ['PROD-L4 delivery route selection', 'MULTI_SESSION_DELIVERY_WITH_PHASE_FILES → delivery-design → phase-contracting → session-scope → implementation-readiness'],
+    'extensions/design-agent/capabilities/delivery-design/entrypoints/default.md': ['PROD-L4 runtime route obligations', 'must not compensate for missing authority'],
+    'extensions/design-agent/capabilities/phase-contracting/entrypoints/default.md': ['PROD-L4 runtime route obligations', 'must not compensate for missing authority'],
+    'extensions/design-agent/capabilities/session-scope/entrypoints/default.md': ['PROD-L4 runtime route obligations', 'must not compensate for missing authority'],
+    'extensions/design-agent/capabilities/implementation-readiness/entrypoints/default.md': ['PROD-L4 runtime route obligations', 'must not compensate for missing authority'],
+    'docs/reference/runtime-surfaces.md': ['PROD-L4 runtime command and capability routing', 'hirmos status` reports route readiness'],
+}.items():
+    body = (root/rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            print(f'FAIL: PROD-L4 runtime routing {rel} missing {phrase}')
+            sys.exit(1)
+print('PASS: HIRMOS PROD-L4 runtime command / capability routing static check')
+
+# PROD-L5 validator and regression fixture migration checks
+command_state_protocol = (root/'core/protocol/COMMAND_STATE_MACHINE.md').read_text(errors='ignore')
+for phrase in [
+    'session_scope',
+    '| active | session_scope | `hirmos continue`, `hirmos status` |',
+]:
+    if phrase not in command_state_protocol:
+        print(f'FAIL: PROD-L5 command-state lifecycle migration missing phrase: {phrase}')
+        sys.exit(1)
+if 'session_contract' in command_state_protocol:
+    print('FAIL: PROD-L5 command-state lifecycle migration still references session_contract')
+    sys.exit(1)
+
+regression_text = (root/'tools/test_validator_regressions.py').read_text(errors='ignore')
+for phrase in [
+    'single-session NOT_APPLICABLE readiness passes',
+    'delivery missing DELIVERY_SCOPE fails',
+    'delivery legacy per-delivery plan path fails',
+]:
+    if phrase not in regression_text:
+        print(f'FAIL: PROD-L5 regression suite missing migrated fixture: {phrase}')
+        sys.exit(1)
+
+validator_text = (root/'tools/validate.py').read_text(errors='ignore')
+for phrase in [
+    'missing durable delivery scope',
+    'legacy per-delivery DELIVERY_PLAN.md',
+    'durable roadmap/register _hirmos/system/delivery/DELIVERY_PLAN.md',
+]:
+    if phrase not in validator_text:
+        print(f'FAIL: PROD-L5 validator missing delivery-scope migration guard: {phrase}')
+        sys.exit(1)
+
+print('PASS: HIRMOS PROD-L5 validator and regression fixture migration static check')
+
+# PROD-L6 accepted-state and history/archive alignment checks
+for rel, phrases in {
+    'core/templates/system/history/sessions/ARCHIVE_MANIFEST.md': ['history-only archive manifest', 'Archived Session State Normalization', 'Active-Session Reset Verification', 'Post-Close Concordance'],
+    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L6 accepted-state/history alignment', 'ARCHIVE_MANIFEST.md is history-only', 'Current System State delivery pointers refreshed'],
+    'core/protocol/CURRENT_SYSTEM_STATE.md': ['PROD-L6 accepted-state delivery pointer model', 'Delivery roadmap: `_hirmos/system/delivery/DELIVERY_PLAN.md`', 'Active delivery scope:', 'Archive manifest concordance'],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Delivery roadmap: none / `_hirmos/system/delivery/DELIVERY_PLAN.md`', 'Active delivery scope: none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`', 'Archive manifest concordance'],
+    'system/accepted-state/CURRENT_SYSTEM_STATE.md': ['Delivery roadmap: none / `_hirmos/system/delivery/DELIVERY_PLAN.md`', 'Active delivery scope: none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`', 'Archive manifest concordance'],
+    'core/commands/status.md': ['Delivery roadmap path', 'Active delivery scope path', 'Status Blocked By Delivery Pointer Conflict'],
+    'core/commands/close.md': ['PROD-L6 accepted-state/history/archive alignment', 'ARCHIVE_MANIFEST.md', 'Current System State delivery pointers'],
+    'docs/2-methodology/close-archive-and-accepted-state.md': ['ARCHIVE_MANIFEST.md', 'history-only archive manifest', 'accepted-state concordance'],
+    'docs/reference/artifact-model.md': ['ARCHIVE_MANIFEST.md', 'Delivery roadmap/register', 'Delivery scope authority'],
+}.items():
+    body = (root/rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            print(f'FAIL: PROD-L6 accepted-state/history alignment {rel} missing {phrase}')
+            sys.exit(1)
+
+for rel in ['core/templates/system/CURRENT_SYSTEM_STATE.md', 'system/accepted-state/CURRENT_SYSTEM_STATE.md']:
+    body = (root/rel).read_text(errors='ignore')
+    if '_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md' in body or re.search(r'_hirmos/system/delivery/[A-Za-z0-9._-]+/DELIVERY_PLAN\.md', body):
+        print(f'FAIL: PROD-L6 accepted-state delivery pointer model has legacy per-delivery plan path in {rel}')
+        sys.exit(1)
+
+regression_text = (root/'tools/test_validator_regressions.py').read_text(errors='ignore')
+for phrase in ['accepted-state legacy per-delivery plan pointer fails', 'archive manifest missing normalization fails']:
+    if phrase not in regression_text:
+        print(f'FAIL: PROD-L6 regression suite missing fixture: {phrase}')
+        sys.exit(1)
+
+print('PASS: HIRMOS PROD-L6 accepted-state and history/archive alignment static check')
+
+
+# PROD-L8 legacy surface removal and first-version alignment checks
+first_version_forbidden_markers = [
+    'REQUIREMENTS_BASELINE.md',
+    'REQUIREMENTS_BASELINE',
+    'SESSION_CONTRACT.md',
+    'SESSION_CONTRACT',
+    'session_contract',
+    'legacy-compatible',
+    'During PROD-L migration',
+    'PROD-L scope-authority transition',
+    'current artifact model',
+    'Existing archived sessions do not need migration',
+    'No breaking framework migration',
+]
+project_specific_forbidden_markers = [
+    'MenuGen',
+    'SAM.gov',
+    'Hermes',
+    'OpenSpec',
+    'AI-assisted content-processing',
+    'content-processing web app',
+    'payment checkout',
+    'credit/usage',
+    'credits/usage',
+    'credit-like allowance',
+]
+first_version_excluded = {
+    'tools/validate.py',
+    'tools/test_validator_regressions.py',
+}
+text_suffixes = {'.md', '.json', '.txt', '.yml', '.yaml'}
+for candidate in root.rglob('*'):
+    if not candidate.is_file():
+        continue
+    rel = str(candidate.relative_to(root))
+    if rel in first_version_excluded:
+        continue
+    if candidate.suffix not in text_suffixes:
+        continue
+    body = candidate.read_text(errors='ignore')
+    for marker in first_version_forbidden_markers + project_specific_forbidden_markers:
+        if marker in body:
+            fail(f'PROD-L8 first-version/project-agnostic surface contains forbidden marker {marker!r}: {rel}')
+for legacy_path in [
+    root/'core/protocol/REQUIREMENTS_BASELINE.md',
+    root/'core/templates/session/REQUIREMENTS_BASELINE.md',
+    root/'system/accepted-state/REQUIREMENTS_BASELINE.md',
+    root/'core/templates/session/SESSION_CONTRACT.md',
+]:
+    if legacy_path.exists():
+        fail(f'PROD-L8 legacy artifact path still exists: {legacy_path.relative_to(root)}')
+for required_path in [
+    root/'core/protocol/REQUIREMENTS.md',
+    root/'core/templates/session/REQUIREMENTS.md',
+    root/'system/accepted-state/REQUIREMENTS.md',
+    root/'docs/2-methodology/requirements-and-coverage.md',
+]:
+    if not required_path.exists():
+        fail(f'PROD-L8 canonical requirements path missing: {required_path.relative_to(root)}')
+print('PASS: HIRMOS PROD-L8 legacy surface removal and first-version alignment static check')
+
+
+# PROD-L8.5 session execution ledger slimming and responsibility realignment checks
+execution_template = (root / 'core/templates/session/SESSION_EXECUTION.md').read_text()
+execution_lines = execution_template.splitlines()
+if len(execution_lines) > 575:
+    fail(f'PROD-L8.5 SESSION_EXECUTION.md is too large for the slim ledger model: {len(execution_lines)} lines')
+for phrase in [
+    'active-session execution ledger',
+    'must not own scope, requirements, design decisions, evidence details, unresolved-item details, accepted-state truth, or archive transaction details',
+    'Pointer-only summary',
+    'Pointers only. Evidence details belong in `EVIDENCE.md`',
+    'Detailed archive transaction belongs in `ARCHIVE_MANIFEST.md`',
+    'Use this only when a separate `REQUIREMENTS.md` authority exists',
+]:
+    if phrase not in execution_template:
+        fail(f'PROD-L8.5 SESSION_EXECUTION.md missing slim-ledger phrase: {phrase}')
+for forbidden in [
+    '## Requirements Baseline Controls',
+    '## Production-Shaped Engineering Gate Execution',
+    '## Material Artifact References',
+    '## Evidence Log\n\n| Seq | Evidence type',
+]:
+    if forbidden in execution_template:
+        fail(f'PROD-L8.5 SESSION_EXECUTION.md retains broad/duplicative authority section: {forbidden}')
+if execution_template.count('## Phase Progress / Carry-Forward Record') != 1:
+    fail('PROD-L8.5 SESSION_EXECUTION.md must contain exactly one Phase Progress / Carry-Forward Record section')
+if execution_template.count('## Phase Acceptance Enforcement Record') != 1:
+    fail('PROD-L8.5 SESSION_EXECUTION.md must contain exactly one Phase Acceptance Enforcement Record section')
+print('PASS: HIRMOS PROD-L8.5 session execution ledger slimming static check')

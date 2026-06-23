@@ -45,7 +45,7 @@ A good regression case is useful when a bug could come back silently, such as:
 - package/init mismatch;
 - artifact surfaces drifting from the current model.
 
-## CLI compatibility
+## CLI validation
 
 The terminal CLI is an installer utility. Its most important responsibility is `hirmos init`.
 
