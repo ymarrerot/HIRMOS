@@ -13,7 +13,7 @@ Route the active Implementation lifecycle boundary to installed implementation-a
 
 ## Production-shaped Implementation obligation
 
-Implementation must realize the accepted Design with production-shaped engineering defaults unless the Session Contract explicitly authorizes a weaker result.
+Implementation must realize the accepted Design with production-shaped engineering defaults unless the Session Scope explicitly authorizes a weaker result.
 
 Do not satisfy a contract by choosing a shortcut that changes the architecture shape of the system, such as using synchronous request-time work for long-running provider operations, using non-durable storage for durable business data, or using preflight-only checks for credit/usage mutations.
 
@@ -38,21 +38,21 @@ When a production-shaped implementation cannot be completed in scope, Implementa
 4. Read each selected capability entrypoint before running that capability.
 5. Record capability decisions in `_hirmos/session/SESSION_EXECUTION.md`.
 6. Do not claim capability completion until expected artifacts/evidence exist or are explicitly not applicable with rationale.
-7. Do not allow implementation capabilities to silently rewrite Design authority, Session Contract, or accepted system state.
+7. Do not allow implementation capabilities to silently rewrite Design authority, Session Scope, or accepted system state.
 
 ## Shared Extension Method
 
 ### Core Principle
 
-Implementation is governed realization of accepted Design, not merely code editing. Implementation must execute only what the active Session Contract and approved Implementation Unit artifacts authorize.
+Implementation is governed realization of accepted Design, not merely code editing. Implementation must execute only what the active Session Scope and approved Implementation Unit artifacts authorize.
 
 ### Required Inputs Before Implementation
 
-Implementation requires a ready `_hirmos/session/SESSION_CONTRACT.md`, resolved gated items in `_hirmos/session/unresolved-items.md`, current project evidence, and active execution controls in `_hirmos/session/SESSION_EXECUTION.md`.
+Implementation requires a ready `_hirmos/session/SESSION_SCOPE.md`, resolved gated items in `_hirmos/session/unresolved-items.md`, current project evidence, and active execution controls in `_hirmos/session/SESSION_EXECUTION.md`.
 
 ### Implementation Unit Discipline
 
-An Implementation Unit is an execution contract, not a generic task or prompt. The Session Contract Implementation Unit Plan must cover 100% of authorized implementation scope before execution begins. Each `IU-xx.md` must state scope, files/areas, acceptance checks, validation expectations, evidence requirements, and route-back triggers.
+An Implementation Unit is an execution contract, not a generic task or prompt. The Session Scope Implementation Unit Plan must cover 100% of authorized implementation scope before execution begins. Each `IU-xx.md` must state scope, files/areas, acceptance checks, validation expectations, evidence requirements, and route-back triggers.
 
 ### Implementation Execution Discipline
 
@@ -64,7 +64,7 @@ Implementation is incomplete without evidence. Record validation commands, outco
 
 ### Unit Review and Session Implementation Review
 
-Unit review is local, specific, and evidence-based. Session implementation review aggregates unit results against the Session Contract, validation evidence, unresolved items, and scope coverage before Update System State readiness is claimed.
+Unit review is local, specific, and evidence-based. Session implementation review aggregates unit results against the Session Scope, validation evidence, unresolved items, and scope coverage before Update System State readiness is claimed.
 
 ### Retry and Escalation Discipline
 

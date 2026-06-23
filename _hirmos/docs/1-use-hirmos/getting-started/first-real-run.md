@@ -98,7 +98,7 @@ Reason: auth, jobs, usage/credits, persistence, and provider boundaries require 
 delivery-design: CONDITIONAL
 Reason: the request is larger than a trivial change; choose the smallest sufficient governed delivery shape.
 
-session-contract: REQUIRED
+session-scope: REQUIRED
 Reason: implementation must be bounded before `hirmos continue`.
 
 implementation-readiness: BLOCKED
@@ -177,12 +177,12 @@ ASSUMPTION-8 — Provider details remain configurable
 Provider credentials, model names, callback URLs, rate limits, and production launch settings remain behind environment variables and provider adapters.
 ```
 
-### Example bounded `SESSION_CONTRACT.md` outcome
+### Example bounded `SESSION_SCOPE.md` outcome
 
 A strong run should define a bounded contract rather than treating the whole product description as one implementation task.
 
 ```text
-Session Contract Status: BLOCKED_FOR_GATED_DECISIONS
+Session Scope Status: BLOCKED_FOR_GATED_DECISIONS
 
 Authorized after gated decisions are resolved:
 - Mobile-first landing page and upload/capture entry point.
@@ -238,7 +238,7 @@ A correct checkpoint would say something like:
 
 ```text
 Implementation Status: NOT_STARTED
-Reason: `hirmos start` completed Understand System State and Design planning, but implementation is not authorized until gated decisions are resolved and the Session Contract is accepted.
+Reason: `hirmos start` completed Understand System State and Design planning, but implementation is not authorized until gated decisions are resolved and the Session Scope is accepted.
 ```
 
 A good implementation run later should use bounded implementation units. Each unit should define:
@@ -267,15 +267,15 @@ For the initial `hirmos start` example, Update System State is not reached yet b
 
 A strong first run should leave inspectable artifacts such as:
 
-- `SESSION_CONTRACT.md` parent authority
+- `SESSION_SCOPE.md` parent authority
 - `DESIGN.md` source matrix
 - `DESIGN.md` current-state basis
 - `REQUIREMENTS_BASELINE.md`
 - `DESIGN.md`
-- `SESSION_CONTRACT.md`
+- `SESSION_SCOPE.md`
 - `SESSION_EXECUTION.md`
 - `unresolved-items.md`
-- `SESSION_CONTRACT.md` section 11 when close verification is reached
+- `SESSION_SCOPE.md` close verification when close verification is reached
 - `EVIDENCE.md` when nontrivial evidence is needed
 - proposed `implementation-units/IU-xx.md` files or equivalent unit planning
 

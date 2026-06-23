@@ -10,7 +10,7 @@ Core owns:
 
 - command routing;
 - lifecycle boundaries;
-- session contract authority;
+- session scope authority;
 - unresolved-item governance;
 - execution-control requirements;
 - evidence and close rules;
@@ -68,10 +68,10 @@ Capabilities may produce artifacts, findings, evidence, draft decisions, impleme
 
 They must not silently replace the authority of:
 
-- `SESSION_CONTRACT.md`;
+- `SESSION_SCOPE.md`;
 - `SESSION_EXECUTION.md`;
 - `unresolved-items.md`;
-- `SESSION_CONTRACT.md` section 11;
+- `SESSION_SCOPE.md` close verification;
 - `CURRENT_SYSTEM_STATE.md`.
 
 A capability that finds an issue should contribute it to the appropriate governed artifact rather than hiding it in narrative text.

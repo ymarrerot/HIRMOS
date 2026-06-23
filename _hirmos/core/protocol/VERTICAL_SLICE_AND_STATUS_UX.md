@@ -3,7 +3,7 @@
 Status: core protocol.
 Purpose: keep HIRMOS delivery momentum clear and simple while preserving lifecycle, execution-control, unresolved-item, evidence, and accepted-state governance.
 
-This protocol governs how HIRMOS turns Delivery Plans, Delivery Plans, Phases, Session Contracts, Implementation Units, checkpoints, status, and close output into a clear user experience.
+This protocol governs how HIRMOS turns Delivery Plans, Delivery Plans, Phases, Session Scopes, Implementation Units, checkpoints, status, and close output into a clear user experience.
 
 ## Core rule
 
@@ -21,7 +21,7 @@ In HIRMOS, a vertical slice is represented by one of these governed sources:
 
 - a Phase Contract;
 - a Phase Contract;
-- a Session Contract for small targeted work;
+- a Session Scope for small targeted work;
 - an explicitly reviewed implementation-continuation scope.
 
 A vertical slice is not a casual task list item.
@@ -48,9 +48,9 @@ SUPERSEDED
 Status meanings:
 
 - `PROPOSED`: the unit exists as a proposed delivery segment but is not ready to authorize a session.
-- `READY_FOR_SESSION_SCOPE`: the unit has enough Design authority to source a Session Contract.
+- `READY_FOR_SESSION_SCOPE`: the unit has enough Design authority to source a Session Scope.
 - `ACTIVE_SESSION_SCOPE`: the current session is governed by this unit or a bounded subset of it.
-- `IMPLEMENTING`: Implementation has started for the active Session Contract scope.
+- `IMPLEMENTING`: Implementation has started for the active Session Scope scope.
 - `IMPLEMENTATION_COMPLETE`: Implementation and required reviews are complete, but accepted state has not necessarily been updated.
 - `UPDATE_STATE_READY`: reviewed outcomes are ready for Update System State.
 - `CLOSED_ACCEPTED`: outcomes were accepted and archived through Update System State.
@@ -178,7 +178,7 @@ If later evidence shows that a selected Phase, status, or next recommendation wa
 HIRMOS must not:
 
 - treat a Phase title as implementation authority;
-- skip Session Contract because a slice sounds obvious;
+- skip Session Scope because a slice sounds obvious;
 - use status output to satisfy pending controls;
 - claim a unit is complete without implementation/evidence review;
 - claim a unit is closed without Update System State;
@@ -195,7 +195,7 @@ Cross-run UX lessons should be integrated into existing Phases / delivery slices
 
 - `REQUIREMENTS_BASELINE.md` for UI/UX requirement coverage;
 - `DELIVERY_PLAN.md` for user-journey sequencing;
-- `SESSION_CONTRACT.md` for authorized UX work;
+- `SESSION_SCOPE.md` for authorized UX work;
 - `EVIDENCE.md` for operator journey checks;
 - `EVIDENCE.md` claim reconciliation before claiming workflow readiness.
 

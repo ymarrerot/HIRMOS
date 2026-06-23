@@ -70,7 +70,7 @@ Typical chain:
 ```text
 Durable Delivery Plan
 → PHASE-xx.md
-→ Session Contract
+→ Session Scope
 → Implementation Units
 ```
 
@@ -78,14 +78,14 @@ Implementation must not begin from raw requirements alone.
 
 ### Brownfield targeted change
 
-A targeted brownfield change may skip durable Delivery Plan governance only when focused system-state understanding proves the change can be safely governed by one Session Contract and the Delivery Shape Decision Gate records affirmative single-session safety evidence.
+A targeted brownfield change may skip durable Delivery Plan governance only when focused system-state understanding proves the change can be safely governed by one Session Scope and the Delivery Shape Decision Gate records affirmative single-session safety evidence.
 
 It still requires:
 
 - focused affected-area understanding;
 - preservation constraints;
 - regression evidence expectations;
-- Session Contract;
+- Session Scope;
 - Implementation authorization when project files will change.
 
 ### Large or multi-session delivery shape
@@ -97,7 +97,7 @@ Use the Delivery Unit model:
 ```text
 Durable Delivery Plan
 → PHASE-xx.md
-→ Session Contract
+→ Session Scope
 → Implementation Units
 ```
 
@@ -119,7 +119,7 @@ These requests may be satisfied in Design and proceed to Update System State wit
 
 ### Implementation continuation
 
-Implementation continuation must verify that existing Design authority, Session Contract, stack/project-type evidence, and execution controls remain valid before continuing Implementation.
+Implementation continuation must verify that existing Design authority, Session Scope, stack/project-type evidence, and execution controls remain valid before continuing Implementation.
 
 ### Validation or review only
 
@@ -137,7 +137,7 @@ Route back or block when:
 - project type was misclassified;
 - large or multi-session work lacks governed delivery decomposition;
 - prototype/POC input was material but prototype ingestion was skipped;
-- greenfield delivery lacks delivery/phase/session-contract authority before Implementation;
+- greenfield delivery lacks delivery/phase/session-scope authority before Implementation;
 - brownfield work lacks preservation or regression evidence strategy;
 - implementation continuation lacks valid upstream Design authority;
 - Update System State relies on stale or invalid project-type assumptions.

@@ -273,7 +273,7 @@ Required refresh inputs:
 - `SESSION_EXECUTION.md` close/update controls Close-Time Delivery / Phase Status Transaction;
 - parent `DELIVERY_PLAN.md` Delivery Status Update Log;
 - adopted `PHASE-xx.md` Close-Time Phase Status Update Contract;
-- session archive manifest and SESSION_CONTRACT.md close-verification verdict.
+- session archive manifest and SESSION_SCOPE.md close-verification verdict.
 
 If no pointer value changed, record that the value was explicitly verified unchanged. Missing or stale delivery pointers block normal close.
 

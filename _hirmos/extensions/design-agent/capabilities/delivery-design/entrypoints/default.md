@@ -25,7 +25,7 @@ Decide whether delivery decomposition is needed and produce a Delivery Plan when
 
 - greenfield project needs staged delivery
 - large, multi-session, or prototype-to-product work cannot be safely governed as one session
-- Design needs delivery decomposition before phase/session-contract work
+- Design needs delivery decomposition before phase/session-scope work
 
 ## Required inputs
 
@@ -75,11 +75,11 @@ Record full item fields in `unresolved-items.md`, including current status, down
 
 ## Project-type / stack requirements
 
-Use `DESIGN.md` / `SESSION_CONTRACT.md` for material project-type decisions and `stack-resolution.json` only when machine-readable stack routing is required by controls.
+Use `DESIGN.md` / `SESSION_SCOPE.md` for material project-type decisions and `stack-resolution.json` only when machine-readable stack routing is required by controls.
 
 For large or multi-session work in any project type, require governed Delivery Units or Phases when one bounded session cannot safely govern the change.
 
-When stack contexts are active, carry in-scope/out-of-scope contexts into the Session Contract and Implementation Readiness decision.
+When stack contexts are active, carry in-scope/out-of-scope contexts into the Session Scope and Implementation Readiness decision.
 
 
 ## durable delivery capability obligations
@@ -88,10 +88,10 @@ This capability must apply `_hirmos/core/protocol/DELIVERY_GOVERNANCE.md` before
 
 Required behavior:
 
-1. Read and record the Delivery Shape Decision from `SESSION_EXECUTION.md` and `SESSION_CONTRACT.md` when those artifacts exist.
+1. Read and record the Delivery Shape Decision from `SESSION_EXECUTION.md` and `SESSION_SCOPE.md` when those artifacts exist.
 2. When the selected shape is `MULTI_SESSION_DELIVERY` or `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, use only durable delivery authority under `_hirmos/system/delivery/<delivery-id>/`.
 3. When the selected shape is `MULTI_SESSION_DELIVERY`, require `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md`; when the selected shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, require both the Delivery Plan and an adopted `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` before implementation readiness.
-4. When the selected shape is a single-session shape, verify the active Session Contract contains affirmative bounded-scope safety evidence and implementation-unit coverage when required.
+4. When the selected shape is a single-session shape, verify the active Session Scope contains affirmative bounded-scope safety evidence and implementation-unit coverage when required.
 5. When the selected shape is `UNCERTAIN`, set this capability result to `BLOCKED` or `ROUTE_BACK_REQUIRED`; do not authorize Implementation.
 6. Do not create or depend on session-local delivery authority artifacts.
 

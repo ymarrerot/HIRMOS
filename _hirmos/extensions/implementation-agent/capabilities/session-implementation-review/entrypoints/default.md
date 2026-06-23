@@ -4,20 +4,20 @@
 
 ### Purpose
 
-Review all implementation units together against the Session Contract, delivery/phase criteria, validation evidence, and remaining blockers.
+Review all implementation units together against the Session Scope, delivery/phase criteria, validation evidence, and remaining blockers.
 
 ### Produces
 
-- `_hirmos/session/SESSION_CONTRACT.md` section 11 updates
-- `_hirmos/session/SESSION_CONTRACT.md` final-verdict mirror updates
+- `_hirmos/session/SESSION_SCOPE.md` close verification updates
+- `_hirmos/session/SESSION_SCOPE.md` final-verdict mirror updates
 - `_hirmos/session/SESSION_EXECUTION.md` implementation-completion gate
 
 ### Terminal States
 
-- IMPLEMENTATION_COMPLETE — all required units and evidence satisfy the Session Contract.
+- IMPLEMENTATION_COMPLETE — all required units and evidence satisfy the Session Scope.
 - COMPLETE_WITH_LIMITATIONS — implementation is acceptable with explicit non-gating limitations.
 - BLOCKED — one or more units, reviews, evidence records, or unresolved items are incomplete.
-- FAILED — implementation does not satisfy the Session Contract.
+- FAILED — implementation does not satisfy the Session Scope.
 - ROUTE_BACK_REQUIRED — review exposes design/scope/system-state inconsistency.
 - NOT_APPLICABLE — implementation was not active for this session.
 
@@ -29,16 +29,16 @@ Review all implementation units together against the Session Contract, delivery/
 
 ## Required inputs
 
-- `_hirmos/session/SESSION_CONTRACT.md`
+- `_hirmos/session/SESSION_SCOPE.md`
 - `_hirmos/session/unresolved-items.md`
-- `_hirmos/session/SESSION_CONTRACT.md` section 11
+- `_hirmos/session/SESSION_SCOPE.md` close verification
 - all applicable `_hirmos/session/implementation-units/IU-xx.md` artifacts
 - validation/evidence appendices when applicable
 
 ## Execution controls contributed
 
 - session implementation review control
-- `SESSION_CONTRACT.md` section 11 review completion control
+- `SESSION_SCOPE.md` close verification review completion control
 - Update System State readiness contribution
 
 ## Method
@@ -49,12 +49,12 @@ Session implementation review is the aggregate review above local unit review. I
 
 1. Inspect every applicable IU artifact.
 2. Confirm every completed unit contains execution evidence and a Unit Review verdict.
-3. Confirm the combined units satisfy 100% of `SESSION_CONTRACT.md`, or record exact gaps/deferred items/blockers.
-4. Complete `_hirmos/session/SESSION_CONTRACT.md` section 11 promised-vs-verified coverage.
+3. Confirm the combined units satisfy 100% of `SESSION_SCOPE.md`, or record exact gaps/deferred items/blockers.
+4. Complete `_hirmos/session/SESSION_SCOPE.md` close verification promised-vs-verified coverage.
 5. Reconcile unresolved items by direct review of `_hirmos/session/unresolved-items.md`.
 6. Decide whether implementation completion may be claimed or must fail closed.
 
-Implementation completion cannot be claimed merely because all individual units passed; the combined implementation must satisfy the Session Contract or explicitly fail/partial/defer under the `SESSION_CONTRACT.md` section 11 review rules.
+Implementation completion cannot be claimed merely because all individual units passed; the combined implementation must satisfy the Session Scope or explicitly fail/partial/defer under the `SESSION_SCOPE.md` close verification review rules.
 
 
 

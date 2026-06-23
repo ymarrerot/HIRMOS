@@ -20,7 +20,7 @@ Delivery Units give HIRMOS a simple user-facing rhythm while preserving Design a
 ```text
 Delivery Plan
 → Phase / Phase Contract
-→ Session Contract
+→ Session Scope
 → Implementation Units
 → Evidence Review
 → Update System State
@@ -42,7 +42,7 @@ If something blocks progress, HIRMOS should show the blocker instead of hiding i
 
 ## Rigorous underneath
 
-A status summary is not authority. HIRMOS must still use execution controls, unresolved-item governance, Session Contracts, implementation reviews, evidence records, and Update System State.
+A status summary is not authority. HIRMOS must still use execution controls, unresolved-item governance, Session Scopes, implementation reviews, evidence records, and Update System State.
 
 ## Progressive disclosure
 

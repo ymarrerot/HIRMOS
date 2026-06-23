@@ -28,7 +28,7 @@ Review one completed implementation unit against its own `IU-xx.md` Unit Contrac
 
 ## Required inputs
 
-- `_hirmos/session/SESSION_CONTRACT.md`
+- `_hirmos/session/SESSION_SCOPE.md`
 - `_hirmos/session/unresolved-items.md`
 - target `_hirmos/session/implementation-units/IU-xx.md` with Execution Record and Evidence sections
 

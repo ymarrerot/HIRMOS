@@ -98,7 +98,7 @@ If command legality is unclear or contradictory, the command must stop at a bloc
 
 ## Mandatory start pause rule
 
-`hirmos start` must not go directly into implementation. For implementation-capable sessions, it must stop at implementation readiness after creating the Session Contract, unresolved-item register, session-contract review scaffold, execution spine, and implementation-unit plan when applicable. The next governed command is `hirmos continue`.
+`hirmos start` must not go directly into implementation. For implementation-capable sessions, it must stop at implementation readiness after creating the Session Scope, unresolved-item register, session-scope review scaffold, execution spine, and implementation-unit plan when applicable. The next governed command is `hirmos continue`.
 
 ## Cumulative continue pass rule
 
@@ -135,7 +135,7 @@ At minimum, capability routing is material when:
 - deciding whether Design can reach implementation-readiness;
 - deciding whether Implementation may begin, continue, retry, or complete;
 - deciding whether Update System State may accept outcomes, archive, or close;
-- selecting requirements, system-design, delivery-design, phase-contracting, session-contract, technical-review, implementation-readiness, implementation, validation, evidence, or update-state capabilities;
+- selecting requirements, system-design, delivery-design, phase-contracting, session-scope, technical-review, implementation-readiness, implementation, validation, evidence, or update-state capabilities;
 - a required artifact or execution control names a capability, extension, or entrypoint;
 - unresolved items, project type, stack evidence, delivery governance, runtime services, or current-state evidence affects which specialized work must run;
 - a capability may produce or update artifacts required for a readiness claim, completion claim, blocker, route-back, or user-facing checkpoint.

@@ -50,7 +50,7 @@ Synchronize reviewed accepted outcomes into durable system state, preserve sessi
 
 1. Read `SESSION_EXECUTION.md` and confirm the session has a valid current state and no required controls in `PENDING` or `BLOCKED` unless the close is an abort close.
 2. Confirm whether the session has reviewed outcomes eligible for accepted-state update.
-3. Confirm applicable evidence: Design readiness, implementation-unit reviews, `EVIDENCE.md` when present, unresolved-item dispositions, `SESSION_CONTRACT.md` section 11, and `SESSION_EXECUTION.md` close/update controls.
+3. Confirm applicable evidence: Design readiness, implementation-unit reviews, `EVIDENCE.md` when present, unresolved-item dispositions, `SESSION_SCOPE.md` close verification, and `SESSION_EXECUTION.md` close/update controls.
 4. Separate outcomes into accepted outcomes, rejected/not-applied outcomes, evidence-only artifacts, and carry-forward items.
 5. Create or update `_hirmos/session/SESSION_EXECUTION.md` with the update decision and evidence basis.
 6. Create or update `_hirmos/session/SESSION_EXECUTION.md` with archive readiness and active-session reset requirements.

@@ -105,7 +105,7 @@ The User Request starts and focuses the work. It is not governed requirements, D
 
 Understand System State is mandatory for governed software work. It grounds the session in current project truth through both general system-state understanding and request-focused system-state understanding.
 
-Design owns governed requirements, design, delivery planning, durable delivery plans, phase contracts, Session Contracts, decisions, completion criteria, and implementation authorization.
+Design owns governed requirements, design, delivery planning, durable delivery plans, phase contracts, Session Scopes, decisions, completion criteria, and implementation authorization.
 
 Implementation owns governed realization of accepted Design, including implementation-unit planning, project-file changes, validation, review, retry, and evidence. It realizes accepted Design with evidence; it is not only coding.
 
@@ -247,7 +247,7 @@ The central active-session artifact is:
 _hirmos/session/unresolved-items.md
 ```
 
-`SESSION_CONTRACT.md` may contain only a compact unresolved-items control summary. It is not sufficient for review, implementation, continuation, continuation checkpointing, or close. HIRMOS must read and apply `_hirmos/session/unresolved-items.md` directly before every lifecycle boundary.
+`SESSION_SCOPE.md` may contain only a compact unresolved-items control summary. It is not sufficient for review, implementation, continuation, continuation checkpointing, or close. HIRMOS must read and apply `_hirmos/session/unresolved-items.md` directly before every lifecycle boundary.
 
 Minimum classifications:
 
@@ -379,7 +379,7 @@ Answer every question in the bootstrap report. This is an open-book quiz. When a
 6. From `ARTIFACT_MODEL.md`: Why are source inputs not governed requirements authority?
 7. From `CURRENT_SYSTEM_STATE.md`: What is canonical merged current truth, and why are session archives not current state by themselves?
 8. From `EXECUTION_CONTROL_GOVERNANCE.md`: Which execution-control statuses block readiness, completion, or close claims?
-9. From `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`: What are the allowed producer outcomes, what is the difference between `GATED` and `NON_GATING`, and why is the `SESSION_CONTRACT.md` unresolved summary not sufficient?
+9. From `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`: What are the allowed producer outcomes, what is the difference between `GATED` and `NON_GATING`, and why is the `SESSION_SCOPE.md` unresolved summary not sufficient?
 10. From `COMMANDS.md`: What does `hirmos start` authorize, and what does it not authorize?
 11. From `CAPABILITY_ROUTING.md`: What is the canonical routing path from active lifecycle boundary to capability entrypoint, and where are capability decisions recorded?
 12. From `VALIDATION_AND_EVIDENCE.md`: What distinction must evidence preserve between observed, inferred, assumed, unknown, blocked, not run, and not applicable?

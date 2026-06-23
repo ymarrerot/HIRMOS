@@ -10,7 +10,7 @@ The lifecycle responsibility that establishes general and request-focused curren
 
 ## Design
 
-The lifecycle responsibility that turns source inputs and system-state findings into governed requirements, design, delivery structure, Session Contract scope, decisions, and implementation readiness.
+The lifecycle responsibility that turns source inputs and system-state findings into governed requirements, design, delivery structure, Session Scope scope, decisions, and implementation readiness.
 
 ## Implementation
 
@@ -36,7 +36,7 @@ An unresolved item that can be carried forward as an explicit assumption or cons
 
 A governed decomposition unit for delivery. A phase is the default Delivery Unit type when ordered staged delivery is natural.
 
-## Session Contract
+## Session Scope
 
 The Design-owned authority that defines what the current session may and may not do, and what Implementation is authorized to realize.
 

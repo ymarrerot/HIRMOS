@@ -55,7 +55,7 @@ Runs Update System State when the session is ready to close.
 
 It should not repair missing Design or Implementation work. If close readiness is not satisfied, HIRMOS should block close and explain which owning stage must be revisited.
 
-A safe close should reconcile session-contract review, unresolved items, implementation evidence, accepted outcomes, archive/reset behavior, and durable current system state.
+A safe close should reconcile session-scope review, unresolved items, implementation evidence, accepted outcomes, archive/reset behavior, and durable current system state.
 
 ## What commands must not do
 

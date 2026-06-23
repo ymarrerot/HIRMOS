@@ -11,7 +11,7 @@ The central active-session artifact is:
 _hirmos/session/unresolved-items.md
 ```
 
-This register is the authoritative active-session source for unresolved-item details. Summaries in `SESSION_CONTRACT.md`, checkpoints, `SESSION_EXECUTION.md`, or user-facing responses are control summaries only and are never sufficient substitutes for reading and applying `_hirmos/session/unresolved-items.md` directly.
+This register is the authoritative active-session source for unresolved-item details. Summaries in `SESSION_SCOPE.md`, checkpoints, `SESSION_EXECUTION.md`, or user-facing responses are control summaries only and are never sufficient substitutes for reading and applying `_hirmos/session/unresolved-items.md` directly.
 
 ## Required lifecycle
 
@@ -194,7 +194,7 @@ Design cannot claim implementation authorization while gated Design items remain
 
 Implementation-readiness cannot pass while an affected gated unresolved item remains unresolved or blocked.
 
-Implementation cannot proceed when a gated item affects the Session Contract, Implementation Unit contract, validation evidence, or preservation constraint.
+Implementation cannot proceed when a gated item affects the Session Scope, Implementation Unit contract, validation evidence, or preservation constraint.
 
 Update System State and close cannot proceed when a gated item affects accepted outcomes, rejected outcomes, carry-forward status, or archive readiness.
 
@@ -212,7 +212,7 @@ Runtime or close-time validators should fail when:
 
 - `_hirmos/session/unresolved-items.md` is missing during an active governed session;
 - a lifecycle boundary is claimed without a direct unresolved-register review;
-- `SESSION_CONTRACT.md` contains unresolved-item details instead of only the compact control summary;
+- `SESSION_SCOPE.md` contains unresolved-item details instead of only the compact control summary;
 - a producer obligation omits the protocol reference;
 - item records lack required minimum fields;
 - non-gating assumptions lack revalidation points;

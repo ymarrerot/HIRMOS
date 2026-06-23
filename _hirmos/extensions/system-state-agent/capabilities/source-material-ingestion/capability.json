@@ -13,7 +13,7 @@
     ]
   },
   "requires_artifacts": [
-    "_hirmos/session/SESSION_CONTRACT.md parent authority"
+    "_hirmos/session/SESSION_SCOPE.md parent authority"
   ],
   "produces_artifacts": [
     "_hirmos/session/DESIGN.md source matrix",

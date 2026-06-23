@@ -1,20 +1,20 @@
-# session-contract
+# session-scope
 
 ## Execution Contract
 
 ### Purpose
 
-Create the Session Contract that authorizes exactly what the active session may do.
+Create the Session Scope that authorizes exactly what the active session may do.
 
 ### Produces
 
-- `_hirmos/session/SESSION_CONTRACT.md`
+- `_hirmos/session/SESSION_SCOPE.md`
 - `_hirmos/session/unresolved-items.md updates`
-- `_hirmos/session/SESSION_EXECUTION.md session-contract control updates`
+- `_hirmos/session/SESSION_EXECUTION.md session-scope control updates`
 
 ### Terminal States
 
-- COMPLETED — ready Session Contract exists and can authorize downstream work if readiness passes.
+- COMPLETED — ready Session Scope exists and can authorize downstream work if readiness passes.
 - NEEDS_USER_DECISION — scope boundary needs user decision.
 - BLOCKED — required source contracts or unresolved dispositions are missing.
 - ROUTE_BACK_REQUIRED — scope creation exposes missing Design or system-state evidence.
@@ -38,7 +38,7 @@ Create the Session Contract that authorizes exactly what the active session may 
 
 ## Execution controls contributed
 
-- session-contract control
+- session-scope control
 - implementation-authorization control
 - unresolved-item control
 
@@ -77,11 +77,11 @@ Record full item fields in `unresolved-items.md`, including current status, down
 
 ## Project-type / stack requirements
 
-Use `DESIGN.md` / `SESSION_CONTRACT.md` for material project-type decisions and `stack-resolution.json` only when machine-readable stack routing is required by controls.
+Use `DESIGN.md` / `SESSION_SCOPE.md` for material project-type decisions and `stack-resolution.json` only when machine-readable stack routing is required by controls.
 
 For large or multi-session work in any project type, require governed Delivery Units or Phases when one bounded session cannot safely govern the change.
 
-When stack contexts are active, carry in-scope/out-of-scope contexts into the Session Contract and Implementation Readiness decision.
+When stack contexts are active, carry in-scope/out-of-scope contexts into the Session Scope and Implementation Readiness decision.
 
 
 ## Runtime integration responsibilities
@@ -99,10 +99,10 @@ This capability must apply `_hirmos/core/protocol/DELIVERY_GOVERNANCE.md` before
 
 Required behavior:
 
-1. Read and record the Delivery Shape Decision from `SESSION_EXECUTION.md` and `SESSION_CONTRACT.md` when those artifacts exist.
+1. Read and record the Delivery Shape Decision from `SESSION_EXECUTION.md` and `SESSION_SCOPE.md` when those artifacts exist.
 2. When the selected shape is `MULTI_SESSION_DELIVERY` or `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, use only durable delivery authority under `_hirmos/system/delivery/<delivery-id>/`.
 3. When the selected shape is `MULTI_SESSION_DELIVERY`, require `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md`; when the selected shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, require both the Delivery Plan and an adopted `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` before implementation readiness.
-4. When the selected shape is a single-session shape, verify the active Session Contract contains affirmative bounded-scope safety evidence and implementation-unit coverage when required.
+4. When the selected shape is a single-session shape, verify the active Session Scope contains affirmative bounded-scope safety evidence and implementation-unit coverage when required.
 5. When the selected shape is `UNCERTAIN`, set this capability result to `BLOCKED` or `ROUTE_BACK_REQUIRED`; do not authorize Implementation.
 6. Do not create or depend on session-local delivery authority artifacts.
 

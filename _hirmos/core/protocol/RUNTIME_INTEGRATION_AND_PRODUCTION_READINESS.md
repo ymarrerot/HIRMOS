@@ -5,14 +5,14 @@ Purpose: prevent HIRMOS from silently substituting fixture-backed, mock-only, or
 
 ## Core rule
 
-HIRMOS must not claim an integration is implemented, production-ready, or release-ready unless the active Design authority, Session Contract, Implementation evidence, and Update System State records identify the integration level and support the claim.
+HIRMOS must not claim an integration is implemented, production-ready, or release-ready unless the active Design authority, Session Scope, Implementation evidence, and Update System State records identify the integration level and support the claim.
 
-HIRMOS may use local-safe defaults and defer production-provider decisions when that preserves progress, but local defaults should preserve the production architecture shape where practical. Weaker demo/local substitutions are allowed only when explicitly authorized by Design and the Session Contract, then preserved at close as limitations or carry-forward items.
+HIRMOS may use local-safe defaults and defer production-provider decisions when that preserves progress, but local defaults should preserve the production architecture shape where practical. Weaker demo/local substitutions are allowed only when explicitly authorized by Design and the Session Scope, then preserved at close as limitations or carry-forward items.
 
 
 ## Production-shaped default
 
-For implementation-capable sessions, HIRMOS must prefer production-shaped engineering defaults unless the Session Contract explicitly authorizes a weaker result.
+For implementation-capable sessions, HIRMOS must prefer production-shaped engineering defaults unless the Session Scope explicitly authorizes a weaker result.
 
 Production-shaped means:
 
@@ -21,7 +21,7 @@ Production-shaped means:
 - long-running provider, AI, image, video, import/export, billing, or batch work is not hidden inside synchronous request paths;
 - credit, usage, quota, billing, inventory, and account-balance mutations are concurrency-safe or explicitly limited;
 - secrets, environment variables, generated runtime data, and handoff/release packages have a safe posture;
-- limitations are explicit in Design, the Session Contract, evidence, and accepted-state updates.
+- limitations are explicit in Design, the Session Scope, evidence, and accepted-state updates.
 
 ## User-facing commitment levels
 
@@ -88,7 +88,7 @@ Design must identify material integration areas and record:
 - whether the item is a domain decision, technical review item, non-gating assumption, gated item, or production-readiness blocker;
 - what Implementation is authorized to deliver now.
 
-Design may authorize fixture/demo or boundary work only when the Session Contract and implementation-readiness checkpoint say so explicitly.
+Design may authorize fixture/demo or boundary work only when the Session Scope and implementation-readiness checkpoint say so explicitly.
 
 ## Domain Expert visibility rule
 

@@ -62,7 +62,7 @@ Closes a session only when close conditions are satisfied.
 
 Expected behavior:
 
-- verify session contract completion;
+- verify session scope completion;
 - reconcile unresolved items;
 - preserve evidence in history;
 - update durable current system state;

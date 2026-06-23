@@ -1,7 +1,7 @@
 # design-agent
 
 Status: bundled extension.
-Purpose: support the Design lifecycle stage with governed requirements, system/application design, durable delivery planning, phase contracts, Session Contracts, technical review, and implementation-readiness capabilities.
+Purpose: support the Design lifecycle stage with governed requirements, system/application design, durable delivery planning, phase contracts, Session Scopes, technical review, and implementation-readiness capabilities.
 
 Read `entrypoints/default.md` before running any design-agent capability; it contains the shared Design method and routing contract.
 
@@ -11,7 +11,7 @@ Read `entrypoints/default.md` before running any design-agent capability; it con
 - `system-design`
 - `delivery-design`
 - `phase-contracting`
-- `session-contract`
+- `session-scope`
 - `technical-review`
 - `implementation-readiness`
 
@@ -27,7 +27,7 @@ Design outputs are authority for downstream Implementation only when they are re
 When the selected delivery shape requires durable delivery, Design must route through:
 
 ```text
-delivery-design → phase-contracting → session-contract → implementation-readiness
+delivery-design → phase-contracting → session-scope → implementation-readiness
 ```
 
-The durable Delivery Plan and Phase files live under `_hirmos/system/delivery/<delivery-id>/`. The active session consumes them through `SESSION_CONTRACT.md`; it does not create session-local delivery authority.
+The durable Delivery Plan and Phase files live under `_hirmos/system/delivery/<delivery-id>/`. The active session consumes them through `SESSION_SCOPE.md`; it does not create session-local delivery authority.

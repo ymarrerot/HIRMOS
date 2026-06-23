@@ -28,7 +28,7 @@ Execute one approved implementation unit using its self-contained `IU-xx.md` art
 
 ## Required inputs
 
-- `_hirmos/session/SESSION_CONTRACT.md`
+- `_hirmos/session/SESSION_SCOPE.md`
 - `_hirmos/session/unresolved-items.md`
 - one approved `_hirmos/session/implementation-units/IU-xx.md` with a complete Unit Contract
 - stack/project context and required files
@@ -46,7 +46,7 @@ Execution must:
 
 1. Read the target `IU-xx.md` artifact directly.
 2. Confirm the Unit Contract is non-placeholder and approved for execution.
-3. Confirm the Session Contract still authorizes the unit.
+3. Confirm the Session Scope still authorizes the unit.
 4. Confirm `unresolved-items.md` has no gated blocker for the unit.
 5. Inspect current project files before editing.
 6. Modify only files/areas authorized by the IU artifact; modify only files/areas authorized.

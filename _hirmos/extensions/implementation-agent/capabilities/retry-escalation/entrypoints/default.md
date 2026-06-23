@@ -27,7 +27,7 @@ Define a bounded retry, escalation, or route-back after a failed, partial, block
 
 ## Required inputs
 
-- `_hirmos/session/SESSION_CONTRACT.md`
+- `_hirmos/session/SESSION_SCOPE.md`
 - `_hirmos/session/unresolved-items.md`
 - failed/partial/blocked `_hirmos/session/implementation-units/IU-xx.md`
 

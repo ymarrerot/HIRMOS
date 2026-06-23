@@ -17,7 +17,7 @@ For implementation-capable software work, Design must prefer production-shaped a
 
 Design must identify material engineering areas affected by the request, including persistence, auth, provider APIs, file/object storage, background jobs, credit/usage accounting, secrets/configuration, deployment assumptions, and validation evidence.
 
-If Design authorizes a weaker prototype, fixture, local-only, or demo-only result, record the limitation explicitly in `DESIGN.md`, `SESSION_CONTRACT.md`, and `unresolved-items.md` or carry-forward notes as appropriate.
+If Design authorizes a weaker prototype, fixture, local-only, or demo-only result, record the limitation explicitly in `DESIGN.md`, `SESSION_SCOPE.md`, and `unresolved-items.md` or carry-forward notes as appropriate.
 
 - Unresolved-item contributions when Design discovers material uncertainty.
 - Route-back records when Design lacks safe system-state evidence.
@@ -38,22 +38,22 @@ If Design authorizes a weaker prototype, fixture, local-only, or demo-only resul
 4. Read each selected capability entrypoint before running that capability.
 5. Record each capability decision in `_hirmos/session/SESSION_EXECUTION.md`.
 6. Do not claim Design completion or Implementation readiness until expected artifacts/evidence exist and required controls are satisfied or explicitly not applicable.
-7. Do not start Implementation from raw inputs, prototype findings, Delivery Plan alone, or incomplete Session Contract.
+7. Do not start Implementation from raw inputs, prototype findings, Delivery Plan alone, or incomplete Session Scope.
 
 ## Shared Extension Method
 
 ### Shared invariants
 
 1. Requirement inputs are source material, not requirements authority.
-2. Design owns governed requirements, system/application design, delivery structure, technical review, Session Contract, and implementation readiness.
+2. Design owns governed requirements, system/application design, delivery structure, technical review, Session Scope, and implementation readiness.
 3. Design may satisfy requirements/design/planning requests without activating Implementation.
 4. Design may route back to Understand System State when evidence is missing, stale, contradictory, or too narrow.
-5. Design may authorize Implementation only through a ready Session Contract and Implementation Readiness decision.
+5. Design may authorize Implementation only through a ready Session Scope and Implementation Readiness decision.
 6. Interaction modes change visibility, not Design authority.
 
 ### Source input surfaces
 
-Design may inspect `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, `_hirmos/inputs/prototypes/`, and `_hirmos/inputs/references/`. These files are raw source material only and must be reconciled through `DESIGN.md` source matrix, `DESIGN.md` source matrix, `REQUIREMENTS_BASELINE.md`, `SESSION_CONTRACT.md`, or `unresolved-items.md` before they become governed authority.
+Design may inspect `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, `_hirmos/inputs/prototypes/`, and `_hirmos/inputs/references/`. These files are raw source material only and must be reconciled through `DESIGN.md` source matrix, `DESIGN.md` source matrix, `REQUIREMENTS_BASELINE.md`, `SESSION_SCOPE.md`, or `unresolved-items.md` before they become governed authority.
 
 ### Operating sequence
 
@@ -63,7 +63,7 @@ Design may inspect `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, `_hi
 4. Produce system/application design from governed requirements plus system-state evidence.
 5. Decide the smallest sufficient governed delivery shape using `DELIVERY_GOVERNANCE.md`; do not equate broad greenfield or brownfield work with automatic multi-session delivery.
 6. Produce technical review material when assumptions, risks, or reviewer inspection paths exist.
-7. Produce a Session Contract and Implementation Readiness before Implementation can begin.
+7. Produce a Session Scope and Implementation Readiness before Implementation can begin.
 8. Record Design capability results, route-backs, unresolved-item producer outcomes, and readiness gates in `SESSION_EXECUTION.md`.
 
 ### Durable Delivery / Phase Capability Rewire
@@ -73,25 +73,25 @@ This section now implements Delivery Shape Capability Routing.
 Use `_hirmos/core/protocol/DELIVERY_GOVERNANCE.md` to select the smallest sufficient governed delivery shape.
 
 ```text
-SINGLE_SESSION_VERTICAL_SLICE → session-contract → implementation-readiness
-SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS → session-contract → implementation-readiness
-MULTI_SESSION_DELIVERY → delivery-design → session-contract → implementation-readiness
-MULTI_SESSION_DELIVERY_WITH_PHASE_FILES → delivery-design → phase-contracting → session-contract → implementation-readiness
+SINGLE_SESSION_VERTICAL_SLICE → session-scope → implementation-readiness
+SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS → session-scope → implementation-readiness
+MULTI_SESSION_DELIVERY → delivery-design → session-scope → implementation-readiness
+MULTI_SESSION_DELIVERY_WITH_PHASE_FILES → delivery-design → phase-contracting → session-scope → implementation-readiness
 ```
 
-Design must explain why the selected shape is safer than smaller alternatives and why larger alternatives would add unnecessary governance overhead. For a single-session shape, the Session Contract must record affirmative bounded-scope safety evidence.
+Design must explain why the selected shape is safer than smaller alternatives and why larger alternatives would add unnecessary governance overhead. For a single-session shape, the Session Scope must record affirmative bounded-scope safety evidence.
 
 ### Design authority rules
 
 - Governed requirements must preserve source evidence, requirement statement, decision/assumption status, acceptance criteria, unresolved effects, and downstream Design or Implementation effect.
 - Raw inputs, prototypes, screenshots, notes, tickets, and prior documents remain evidence until reconciled by Design.
-- The Session Contract is downstream implementation authority and must be used by implementation unit planning, implementation unit review, session implementation review, and Update System State readiness.
+- The Session Scope is downstream implementation authority and must be used by implementation unit planning, implementation unit review, session implementation review, and Update System State readiness.
 - Design must use project type, active stack, and stack contexts as routing/evidence inputs, not unchecked authority.
 
 ### Interaction-mode visibility
 
 - `domain_expert`: surface user-owned decisions, recommended baseline, blockers, implementation-readiness summary, and concise artifact/reviewer pointers.
-- `technical_supervisor`: surface artifact status, technical assumptions, readiness rationale, delivery/phase/session-contract mapping, and evidence implications.
+- `technical_supervisor`: surface artifact status, technical assumptions, readiness rationale, delivery/phase/session-scope mapping, and evidence implications.
 - `framework_diagnostics`: surface routing, controls, artifact instantiation, unresolved-item contributions, route-backs, and validation/evidence details.
 
 ### Terminal outcomes
@@ -124,7 +124,7 @@ Material requirements must be normalized into `_hirmos/session/REQUIREMENTS_BASE
 
 ### Cross-run synthesis responsibilities
 
-When prior runs, accepted state, or carry-forward items affect scope, Design must reconcile them into governed requirements, Design, Session Contract, or unresolved items instead of relying on chat memory.
+When prior runs, accepted state, or carry-forward items affect scope, Design must reconcile them into governed requirements, Design, Session Scope, or unresolved items instead of relying on chat memory.
 
 
 A Durable Delivery Plan remains the durable authority for multi-session delivery shapes.

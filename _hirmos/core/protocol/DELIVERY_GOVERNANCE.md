@@ -3,6 +3,25 @@
 Status: core protocol.
 Purpose: define how HIRMOS chooses the smallest sufficient governed delivery shape for greenfield, brownfield, and mixed work.
 
+
+## PROD-L delivery scope direction
+
+HIRMOS is migrating durable delivery governance to this canonical structure:
+
+```text
+_hirmos/system/delivery/
+  DELIVERY_PLAN.md              # durable project delivery roadmap/register
+
+  <delivery-id>/
+    DELIVERY_SCOPE.md           # scoped authority for one delivery/release
+    phases/
+      PHASE-xx.md
+```
+
+`DELIVERY_PLAN.md` is append/update-oriented. It preserves completed, active, deferred, cancelled, and superseded deliveries. When later large greenfield, brownfield, or mixed work requires a new durable delivery, HIRMOS must add a new delivery entry and folder rather than overwrite the roadmap/register.
+
+During the PROD-L migration, older per-delivery `DELIVERY_PLAN.md` layouts remain legacy-compatible. Later PROD-L phases will migrate templates, validators, and docs to the `DELIVERY_PLAN.md` + `<delivery-id>/DELIVERY_SCOPE.md` model.
+
 ## Core rule
 
 HIRMOS must use the smallest governed delivery shape that preserves engineering quality, implementation truth, continuity, validation, and accepted-state integrity.
@@ -34,7 +53,7 @@ Fail-closed rules:
 
 - `UNCERTAIN` blocks implementation readiness until the uncertainty is resolved.
 - `SINGLE_SESSION_VERTICAL_SLICE` requires affirmative evidence that one bounded vertical slice can be designed, implemented, validated, reviewed, and closed safely.
-- `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` requires a Session Contract plus implementation units that collectively cover the authorized scope.
+- `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` requires a Session Scope plus implementation units that collectively cover the authorized scope.
 - `MULTI_SESSION_DELIVERY` requires a durable Delivery Plan under `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md`.
 - `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` requires a durable Delivery Plan and separate phase files under `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`.
 - Missing delivery-shape decision is a fail-closed condition for implementation readiness.
@@ -45,7 +64,7 @@ Compatibility note: older artifacts may call this the `Delivery Shape Decision G
 
 ### SINGLE_SESSION_VERTICAL_SLICE
 
-Use when the request has one bounded objective, a narrow inspectable scope, low continuity risk, and can be completed with one Session Contract without separate implementation-unit decomposition.
+Use when the request has one bounded objective, a narrow inspectable scope, low continuity risk, and can be completed with one Session Scope without separate implementation-unit decomposition.
 
 ### SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS
 
@@ -84,7 +103,7 @@ Avoid multi-session delivery or phase files when:
 - implementation units can provide enough internal structure;
 - phase files would split one architecture decision across multiple sessions unnecessarily;
 - the user would pay governance overhead without better evidence or safer accepted state;
-- the next session would mostly reconstruct context that could have stayed in one Session Contract.
+- the next session would mostly reconstruct context that could have stayed in one Session Scope.
 
 ## Greenfield considerations
 
@@ -125,11 +144,11 @@ A request may proceed without a durable Delivery Plan only when all conditions a
 
 1. The request has a bounded objective or coherent vertical slice.
 2. The affected area is inspectable enough to govern safely.
-3. Requirements fit into one Session Contract.
+3. Requirements fit into one Session Scope.
 4. Implementation can be decomposed into implementation units if needed.
 5. Validation and review can be completed before close.
 6. No durable carry-forward boundary is needed before implementation begins.
-7. Preservation/regression risk is low or fully covered by the Session Contract and evidence plan.
+7. Preservation/regression risk is low or fully covered by the Session Scope and evidence plan.
 8. HIRMOS can explain why Delivery Plan/phase governance would add overhead without improving safety.
 
 If any condition is false or uncertain, classification must not select a smaller shape without route-back or additional inspection.
@@ -153,12 +172,12 @@ The decision must cite concrete boundedness, risk, validation, continuity, and a
 The delivery-shape decision must appear in:
 
 ```text
-_hirmos/session/SESSION_CONTRACT.md
+_hirmos/session/SESSION_SCOPE.md
 _hirmos/session/SESSION_EXECUTION.md
-_hirmos/session/SESSION_CONTRACT.md section 11
+_hirmos/session/SESSION_SCOPE.md close verification
 ```
 
-`SESSION_CONTRACT.md` contains the active session delivery-shape authority. `SESSION_EXECUTION.md` records that the decision gate was executed. `SESSION_CONTRACT.md` section 11 reviews whether the selected shape safely prevented both underplanning and overplanning.
+`SESSION_SCOPE.md` contains the active session delivery-shape authority. `SESSION_EXECUTION.md` records that the decision gate was executed. `SESSION_SCOPE.md` close verification reviews whether the selected shape safely prevented both underplanning and overplanning.
 
 ## Durable delivery artifacts
 
@@ -183,7 +202,7 @@ When the selected delivery shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, e
 _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
 ```
 
-The adoption must be explicit in `_hirmos/session/SESSION_CONTRACT.md`; implicit references, chat statements, status summaries, or Current System State pointers are not enough.
+The adoption must be explicit in `_hirmos/session/SESSION_SCOPE.md`; implicit references, chat statements, status summaries, or Current System State pointers are not enough.
 
 Required adoption fields:
 
@@ -206,7 +225,7 @@ Fail-closed rules:
 - `ADOPTED` is required before implementation readiness for phase-governed implementation work.
 - `NOT_APPLICABLE` is allowed only for non-implementation delivery-design or phase-contracting sessions that explicitly state no implementation is authorized.
 - `BLOCKED`, missing adoption fields, multiple adopted active phase files, or mismatch with Current System State delivery pointers blocks implementation readiness.
-- If adoption is partial, the Session Contract must record deferred or blocked phase items and must not claim full phase completion.
+- If adoption is partial, the Session Scope must record deferred or blocked phase items and must not claim full phase completion.
 
 ## Current System State pointer rule
 
@@ -236,19 +255,19 @@ Close-time pointer update is mandatory when a session creates, updates, accepts,
 When the selected delivery shape is `SINGLE_SESSION_VERTICAL_SLICE` or `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS`, Design may route directly through:
 
 ```text
-session-contract → implementation-readiness
+session-scope → implementation-readiness
 ```
 
 When the selected delivery shape is `MULTI_SESSION_DELIVERY`, Design must route through:
 
 ```text
-delivery-design → session-contract → implementation-readiness
+delivery-design → session-scope → implementation-readiness
 ```
 
 When the selected delivery shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, Design must route through:
 
 ```text
-delivery-design → phase-contracting → session-contract → implementation-readiness
+delivery-design → phase-contracting → session-scope → implementation-readiness
 ```
 
 ## Application vertical-slice reference target

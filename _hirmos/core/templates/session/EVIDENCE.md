@@ -8,7 +8,7 @@ Use this artifact for implementation-capable sessions where build/test/lint/runt
 ## Evidence Scope
 
 - Session ID:
-- Session Contract:
+- Session Scope:
 - Design authority:
 - Implementation units covered:
 - Evidence owner / command pass:

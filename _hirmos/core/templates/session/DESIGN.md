@@ -85,7 +85,7 @@ Summarize gated, non-gating, and technical-review items from `unresolved-items.m
 
 State what must exist before Implementation can begin:
 
-- Session Contract;
+- Session Scope;
 - delivery/phase/delivery-unit source, if applicable;
 - Implementation Readiness;
 - technical review path, if applicable;
@@ -119,9 +119,9 @@ For each material area, record the production-shaped default, the session decisi
 | Secrets and environment configuration | | `.env.example`; no secrets/runtime data in handoff/release | | | | |
 | Critical-flow tests / smoke evidence | | Test/smoke/runtime evidence plan for critical paths | | | | |
 
-Implementation is not authorized while any material area is `BLOCKS implementation = YES`, unless the Session Contract explicitly changes scope to exclude that area.
+Implementation is not authorized while any material area is `BLOCKS implementation = YES`, unless the Session Scope explicitly changes scope to exclude that area.
 
-If any item uses a prototype, fixture, demo-only, local-only, or non-production-shaped posture, the limitation must also appear in the Session Contract and unresolved/carry-forward controls as appropriate.
+If any item uses a prototype, fixture, demo-only, local-only, or non-production-shaped posture, the limitation must also appear in the Session Scope and unresolved/carry-forward controls as appropriate.
 
 ## Runtime Integration and Production Readiness Design
 
@@ -138,7 +138,7 @@ Design must distinguish:
 - production provider integration;
 - blocked decisions, credentials, or accounts.
 
-Do not authorize Implementation to claim more than the posture recorded here and in the Session Contract.
+Do not authorize Implementation to claim more than the posture recorded here and in the Session Scope.
 
 - Material Integration Areas:
 - Recommended Production Options:
@@ -159,7 +159,7 @@ Use this section for reviewer-facing technical assumptions, production-shaped en
 | Unresolved-item gate | | | PENDING |
 | Implementation readiness | READY / BLOCKED / NEEDS_ROUTE_BACK / NOT_APPLICABLE | | PENDING |
 
-Implementation may proceed only when `SESSION_CONTRACT.md`, unresolved-item status, production-shaped engineering gate, and this readiness basis agree that implementation is authorized.
+Implementation may proceed only when `SESSION_SCOPE.md`, unresolved-item status, production-shaped engineering gate, and this readiness basis agree that implementation is authorized.
 
 ## Project-Type / Stack / Delivery Routing Context
 

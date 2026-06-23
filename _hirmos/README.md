@@ -55,7 +55,7 @@ A HIRMOS-installed project includes a governed framework payload under `_hirmos/
 - giving supported AI-tool integrations a thin bootstrap path into `_hirmos/AGENTS.md`;
 - understanding the current project state before acting;
 - separating raw input from accepted design authority;
-- creating a `SESSION_CONTRACT.md` for the work;
+- creating a `SESSION_SCOPE.md` for the work;
 - tracking gated decisions, assumptions, blockers, and carry-forward items in `unresolved-items.md`;
 - recording execution progress and evidence in `SESSION_EXECUTION.md`;
 - using bounded implementation units when implementation is in scope;

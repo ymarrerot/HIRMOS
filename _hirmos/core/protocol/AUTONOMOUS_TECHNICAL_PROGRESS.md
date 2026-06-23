@@ -27,7 +27,7 @@ This posture does not weaken governance. It means HIRMOS should do the safe work
 
 ## Safe autonomous actions
 
-HIRMOS may perform or recommend these actions when authorized by the active command, Session Contract, stack guidance, and repository evidence:
+HIRMOS may perform or recommend these actions when authorized by the active command, Session Scope, stack guidance, and repository evidence:
 
 - inspect project files, package scripts, framework config, env examples, migrations, seeds, tests, and docs;
 - inspect local non-sensitive service availability when tools/environment permit it;

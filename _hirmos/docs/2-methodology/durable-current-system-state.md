@@ -60,4 +60,4 @@ Future sessions must inspect these pointers before deciding a new request can sa
 
 ## Delivery phase adoption pointer discipline
 
-When delivery governance is active, Current System State pointers identify the durable Delivery Plan and active Phase. A session may implement only after `SESSION_CONTRACT.md` adopts exactly one durable `PHASE-xx.md` and maps that phase scope into authorized session work. Future sessions must treat the Current System State pointer as a discovery aid, not as a replacement for directly reading the Delivery Plan and Phase file.
+When delivery governance is active, Current System State pointers identify the durable Delivery Plan and active Phase. A session may implement only after `SESSION_SCOPE.md` adopts exactly one durable `PHASE-xx.md` and maps that phase scope into authorized session work. Future sessions must treat the Current System State pointer as a discovery aid, not as a replacement for directly reading the Delivery Plan and Phase file.

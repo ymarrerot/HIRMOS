@@ -1,7 +1,7 @@
 {
-  "id": "session-contract",
+  "id": "session-scope",
   "extension": "design-agent",
-  "summary": "Create the active Session Contract from governed Design authority and, when applicable, a durable phase contract; require single-session safety evidence when delivery governance is not used.",
+  "summary": "Create the active Session Scope from governed Design authority and, when applicable, a durable phase contract; require single-session safety evidence when delivery governance is not used.",
   "lifecycle_stage": "design",
   "entrypoints": {
     "default": "entrypoints/default.md"
@@ -24,12 +24,12 @@
     "_hirmos/session/SESSION_EXECUTION.md"
   ],
   "produces_artifacts": [
-    "_hirmos/session/SESSION_CONTRACT.md",
+    "_hirmos/session/SESSION_SCOPE.md",
     "_hirmos/session/SESSION_EXECUTION.md",
     "_hirmos/session/unresolved-items.md when contract blockers are found"
   ],
   "execution_controls": [
-    "session-contract control",
+    "session-scope control",
     "delivery-source-adoption control",
     "implementation-authorization control",
     "unresolved-item control"

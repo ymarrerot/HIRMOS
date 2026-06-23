@@ -50,7 +50,7 @@ Before advancing work, `hirmos continue` must apply `_hirmos/core/protocol/COMMA
 - `_hirmos/session/SESSION_STATE.json` exists and is valid;
 - `status` is `active`;
 - `hirmos continue` is legal for the current `lifecycle_stage` and `allowed_next_commands`;
-- required active-session artifacts exist: `SESSION_CONTRACT.md`, `SESSION_EXECUTION.md`, `unresolved-items.md`, and `SESSION_CONTRACT.md` section 11;
+- required active-session artifacts exist: `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, `unresolved-items.md`, and `SESSION_SCOPE.md` close verification;
 - no gated unresolved item blocks the requested boundary;
 - if `lifecycle_stage = implementation_complete`, a bare `hirmos continue` is rejected unless `pending_correction = true` or the command includes a correction/contract-amendment request.
 
@@ -97,17 +97,17 @@ The command must not reset `continuation_pass` or rewrite prior continuation pas
 
 ## Cumulative continuation pass model
 
-Every `hirmos continue` invocation must append a new continuation pass record to `SESSION_EXECUTION.md`. It must not overwrite prior pass history, evidence, unresolved-item dispositions, session-contract review results, or implementation-unit reviews.
+Every `hirmos continue` invocation must append a new continuation pass record to `SESSION_EXECUTION.md`. It must not overwrite prior pass history, evidence, unresolved-item dispositions, session-scope review results, or implementation-unit reviews.
 
 Continuation pass types:
 
 - Initial implementation pass
-- Corrective pass inside the existing Session Contract
+- Corrective pass inside the existing Session Scope
 - Contract amendment pass when the user expands scope
 - Validation-only pass
 - Route-back pass
 
-If the user requests work outside the current Session Contract, HIRMOS must amend `SESSION_CONTRACT.md` before implementation. If the request is a correction inside existing scope, HIRMOS must record it as a corrective continuation pass. Bare `hirmos continue` after `implementation_complete` is illegal unless `SESSION_STATE.json.pending_correction` is true or `SESSION_EXECUTION.md` Current Continuation Snapshot explicitly recommended `hirmos continue`.
+If the user requests work outside the current Session Scope, HIRMOS must amend `SESSION_SCOPE.md` before implementation. If the request is a correction inside existing scope, HIRMOS must record it as a corrective continuation pass. Bare `hirmos continue` after `implementation_complete` is illegal unless `SESSION_STATE.json.pending_correction` is true or `SESSION_EXECUTION.md` Current Continuation Snapshot explicitly recommended `hirmos continue`.
 
 ## Session artifact update rules
 
@@ -174,7 +174,7 @@ Required behavior:
 
 - classify project type from evidence, not User Request label alone;
 - select stack from repository evidence first, then accepted state, request/config preference, prototype evidence, installed packages, or `generic` fallback;
-- record material project-type decisions in `DESIGN.md` / `SESSION_CONTRACT.md`, record machine-readable stack routing in `stack-resolution.json` when needed, and record command controls in `SESSION_EXECUTION.md`;
+- record material project-type decisions in `DESIGN.md` / `SESSION_SCOPE.md`, record machine-readable stack routing in `stack-resolution.json` when needed, and record command controls in `SESSION_EXECUTION.md`;
 - activate stack contexts only when evidence shows multiple bounded stack areas;
 - block or route back when project type, stack, or stack context uncertainty affects authority or evidence.
 
@@ -218,22 +218,22 @@ Firm rule: do not continue meaningful Design or Implementation while current-sys
 
 ## Durable Delivery Pointer Concordance
 
-Before advancing implementation on a delivery-governed session, `hirmos continue` must verify that `SESSION_CONTRACT.md` delivery authority agrees with Current System State active delivery pointers and the durable Delivery Plan / Phase file.
+Before advancing implementation on a delivery-governed session, `hirmos continue` must verify that `SESSION_SCOPE.md` delivery authority agrees with Current System State active delivery pointers and the durable Delivery Plan / Phase file.
 
-If the session contract, current-state pointer, Delivery Plan, and active Phase file disagree, `hirmos continue` must fail closed and route to delivery governance reconciliation before implementation proceeds.
+If the session scope, current-state pointer, Delivery Plan, and active Phase file disagree, `hirmos continue` must fail closed and route to delivery governance reconciliation before implementation proceeds.
 
 ## Durable Phase Adoption Continuation Check
 
-Before executing delivery-governed implementation, `hirmos continue` must verify that the active Session Contract still adopts exactly one durable phase and that the adopted phase path still exists.
+Before executing delivery-governed implementation, `hirmos continue` must verify that the active Session Scope still adopts exactly one durable phase and that the adopted phase path still exists.
 
-A continuation may amend the adopted phase only through a Contract Amendment in `SESSION_CONTRACT.md`. The amendment must record whether it is a same-phase scope correction, a partial-adoption clarification, or a blocked attempt to switch phases.
+A continuation may amend the adopted phase only through a Contract Amendment in `SESSION_SCOPE.md`. The amendment must record whether it is a same-phase scope correction, a partial-adoption clarification, or a blocked attempt to switch phases.
 
-Fail-closed rule: `hirmos continue` must not silently switch to a different phase, combine multiple phases into one session, or implement phase items not adopted into the Session Contract.
+Fail-closed rule: `hirmos continue` must not silently switch to a different phase, combine multiple phases into one session, or implement phase items not adopted into the Session Scope.
 
 
 ## Delivery Status Continuation Guard
 
-Before a continuation pass advances or corrects delivery-governed work, `hirmos continue` must verify that the active Session Contract, Current System State delivery pointers, Delivery Plan, and adopted Phase status still agree.
+Before a continuation pass advances or corrects delivery-governed work, `hirmos continue` must verify that the active Session Scope, Current System State delivery pointers, Delivery Plan, and adopted Phase status still agree.
 
 If a prior close or continuation left the Delivery Plan or Phase status stale, `hirmos continue` must route back to delivery status reconciliation before authorizing more implementation work.
 
@@ -274,11 +274,11 @@ If the ledger was overwritten or an earlier detail block was removed, restore th
 
 ## Production-shaped engineering continuation gate
 
-When implementation is active for software work, `hirmos continue` must preserve the Production-Shaped Engineering Gate from `DESIGN.md`, `SESSION_CONTRACT.md`, and `SESSION_EXECUTION.md`.
+When implementation is active for software work, `hirmos continue` must preserve the Production-Shaped Engineering Gate from `DESIGN.md`, `SESSION_SCOPE.md`, and `SESSION_EXECUTION.md`.
 
 Required behavior:
 
-- do not implement shortcuts that contradict the gate unless the Session Contract is amended first;
+- do not implement shortcuts that contradict the gate unless the Session Scope is amended first;
 - record route-back when implementation evidence invalidates the production-shaped design or delivery shape;
 - materialize `EVIDENCE.md` when command/runtime/provider/storage/database evidence becomes nontrivial;
 - do not claim implementation completion when code evidence contradicts production-shaped claims.

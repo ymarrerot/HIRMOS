@@ -29,7 +29,7 @@ Convert User Request inputs, source materials, prototype findings, and system-st
 
 ## Required inputs
 
-- `_hirmos/session/SESSION_CONTRACT.md`
+- `_hirmos/session/SESSION_SCOPE.md`
 - `_hirmos/session/DESIGN.md source matrix when source inputs exist`
 - `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, when raw source files are present`
 - `_hirmos/session/DESIGN.md source matrix when prototype/POC inputs exist`

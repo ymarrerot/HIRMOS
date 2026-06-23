@@ -22,10 +22,10 @@ Close-Time Delivery / Phase Status Transaction enforcement.
 The delivery-governance cases intentionally verify that:
 
 - a delivery-governed active readiness fixture passes when its durable Delivery Plan,
-  Phase file, Session Contract, and Current System State pointers agree;
+  Phase file, Session Scope, and Current System State pointers agree;
 - a missing durable Delivery Plan fails closed;
 - an UNCERTAIN Delivery-Need Classification cannot reach implementation readiness;
-- a Session Contract / Current System State delivery pointer mismatch fails closed;
+- a Session Scope / Current System State delivery pointer mismatch fails closed;
 - a delivery-governed close without a Close-Time Delivery / Phase Status Transaction fails;
 - a delivery-governed close with `DELIVERY_STATUS_UPDATE_APPLIED` passes.
 

@@ -8,9 +8,9 @@ Purpose: provide the linear execution-control spine for the current HIRMOS sessi
 Authoritative references:
 
 - Machine state: `_hirmos/session/SESSION_STATE.json`
-- Session contract: `_hirmos/session/SESSION_CONTRACT.md`
+- Session contract: `_hirmos/session/SESSION_SCOPE.md`
 - Unresolved items register: `_hirmos/session/unresolved-items.md`
-- Session close verification: `_hirmos/session/SESSION_CONTRACT.md` section 11
+- Session close verification: `_hirmos/session/SESSION_SCOPE.md` close verification
 - Current system state: `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`
 - Implementation units: `_hirmos/session/implementation-units/`
 
@@ -26,8 +26,8 @@ This section is the required human-readable continuation surface. It must stay n
 | Current lifecycle stage | | `SESSION_STATE.json` / Lifecycle Progress |
 | Current terminal state | | `SESSION_STATE.json` / Terminal State |
 | Current status | | `SESSION_STATE.json` |
-| Active contract | | `SESSION_CONTRACT.md` |
-| Active delivery / phase / unit | | `SESSION_CONTRACT.md` / `DESIGN.md` / implementation units |
+| Active contract | | `SESSION_SCOPE.md` |
+| Active delivery / phase / unit | | `SESSION_SCOPE.md` / `DESIGN.md` / implementation units |
 | Authoritative artifacts reviewed | | Artifact Instantiation Log / Material Artifact References |
 | Completed since session start | | Command Timeline / Evidence Log |
 | In progress | | Continuation Pass Register / implementation units |
@@ -101,7 +101,7 @@ Required controls applied here:
 - clear execution controls for each lifecycle boundary;
 - strict local self-validation before surfacing readiness, implementation-completion, close-readiness, blocked, or close-success claims;
 - append-only command, evidence, continuation-pass, route-back, and control-mutation records;
-- fail-closed behavior when the ledger, machine state, unresolved-item register, Session Contract close verification, or evidence cannot support the claim.
+- fail-closed behavior when the ledger, machine state, unresolved-item register, Session Scope close verification, or evidence cannot support the claim.
 
 HIRMOS must not claim a lifecycle boundary complete merely because the intended work was described clearly. It may claim the boundary only when this execution spine self-validates that the required controls were actually satisfied and recorded.
 
@@ -128,10 +128,10 @@ Execution controls apply clear-specification discipline: clear specs, self-valid
 | Command control | Relevant command spec read and terminal states understood | PENDING | |
 | Working-copy control | Project root and `_hirmos/` installation verified | PENDING | |
 | Current-system-state-first control | `CURRENT_SYSTEM_STATE.md` read before meaningful work or absence recorded | PENDING | |
-| Session contract control | `SESSION_CONTRACT.md` exists, is non-placeholder, and defines scope/criteria | PENDING | |
+| Session contract control | `SESSION_SCOPE.md` exists, is non-placeholder, and defines scope/criteria | PENDING | |
 | Unresolved-items control | `_hirmos/session/unresolved-items.md` directly reviewed and reconciled | PENDING | |
-| Session Contract close verification control | `_hirmos/session/SESSION_CONTRACT.md` section 11 directly completed before implementation-completion, close-readiness, or close claims | PENDING | |
-| Implementation-unit coverage control | Planned units collectively cover `SESSION_CONTRACT.md` or are not applicable | PENDING | |
+| Session Scope close verification control | `_hirmos/session/SESSION_SCOPE.md` close verification directly completed before implementation-completion, close-readiness, or close claims | PENDING | |
+| Implementation-unit coverage control | Planned units collectively cover `SESSION_SCOPE.md` or are not applicable | PENDING | |
 | Implementation authorization control | Session contract authorizes implementation | PENDING | |
 | Validation/evidence control | Claimed validation evidence is recorded | PENDING | |
 | Continuation snapshot control | User-facing continuation/readiness output is backed by `Current Continuation Snapshot` and real artifacts | PENDING | |
@@ -150,7 +150,7 @@ NOT_APPLICABLE
 
 ## Unresolved Register Direct Review Log
 
-This log proves that HIRMOS reviewed `_hirmos/session/unresolved-items.md` directly. The `SESSION_CONTRACT.md` unresolved summary is not sufficient for these boundaries.
+This log proves that HIRMOS reviewed `_hirmos/session/unresolved-items.md` directly. The `SESSION_SCOPE.md` unresolved summary is not sufficient for these boundaries.
 
 | Boundary | Register reviewed directly? | Blocking status | Gated count | Non-gating count | Technical-review count | Reviewer notes |
 |---|---|---|---:|---:|---:|---|
@@ -186,9 +186,9 @@ Before each lifecycle boundary claim, answer:
 | Does the user-facing claim match artifact evidence? | YES | | |
 | Is the next command governed and legal? | YES | | |
 
-## Session Contract Section 11 Review Control
+## Session Scope Section 11 Review Control
 
-The root `_hirmos/session/SESSION_CONTRACT.md` section 11 artifact is the governed promised-vs-verified review surface. HIRMOS must not rely on chat summaries or `SESSION_CONTRACT.md` summaries alone for implementation-completion, close-readiness, or close claims.
+The root `_hirmos/session/SESSION_SCOPE.md` close verification artifact is the governed promised-vs-verified review surface. HIRMOS must not rely on chat summaries or `SESSION_SCOPE.md` summaries alone for implementation-completion, close-readiness, or close claims.
 
 ## Ledger Integrity Self-Validation
 
@@ -210,11 +210,11 @@ Allowed answers: `YES`, `NO`, `NOT_APPLICABLE`, `NOT_CHECKED`. A `NO` answer blo
 HIRMOS must fail closed and must not claim readiness, implementation completion, or close when any of these conditions is true:
 
 - `SESSION_STATE.json` and `SESSION_EXECUTION.md` disagree on active status or lifecycle stage.
-- `SESSION_CONTRACT.md` is missing, placeholder-only, or not reviewed when implementation or close is claimed.
+- `SESSION_SCOPE.md` is missing, placeholder-only, or not reviewed when implementation or close is claimed.
 - `_hirmos/session/unresolved-items.md` is missing or has unresolved gated items blocking the boundary.
-- `_hirmos/session/SESSION_CONTRACT.md` section 11 is missing, placeholder-only, not directly reviewed, or has a fail-closed result of `FAIL` when implementation completion, close readiness, or close success is claimed.
+- `_hirmos/session/SESSION_SCOPE.md` close verification is missing, placeholder-only, not directly reviewed, or has a fail-closed result of `FAIL` when implementation completion, close readiness, or close success is claimed.
 - User-facing continuation/readiness output references artifacts that do not exist, are placeholders, or contradict the Current Continuation Snapshot.
-- Implementation units are individually complete but the combined units do not cover the Session Contract.
+- Implementation units are individually complete but the combined units do not cover the Session Scope.
 - Validation evidence is claimed without recorded command output, inspection evidence, or explicit not-run rationale.
 - Close is claimed while stale active-session artifacts remain after reset.
 - If any prior continuation pass row is missing, collapsed, or overwritten without a correction note.
@@ -224,9 +224,9 @@ HIRMOS must fail closed and must not claim readiness, implementation completion,
 | Artifact | Role | Required? | Current status |
 |---|---|---:|---|
 | `_hirmos/session/SESSION_STATE.json` | machine command state | yes | |
-| `_hirmos/session/SESSION_CONTRACT.md` | session scope and acceptance authority | yes | |
+| `_hirmos/session/SESSION_SCOPE.md` | session scope and acceptance authority | yes | |
 | `_hirmos/session/unresolved-items.md` | governed unresolved-item register | yes | |
-| `_hirmos/session/SESSION_CONTRACT.md` section 11 | governed promised-vs-verified contract review | yes | |
+| `_hirmos/session/SESSION_SCOPE.md` close verification | governed promised-vs-verified scope review | yes | |
 | `_hirmos/session/implementation-units/` | implementation unit contracts/reviews | conditional | |
 | `_hirmos/session/bootstrap/` | startup/bootstrap evidence infrastructure | yes | |
 | `_hirmos/session/EVIDENCE.md` | consolidated nontrivial evidence surface | conditional | |
@@ -272,7 +272,7 @@ Continuation pass append requirements:
 - assign the next integer pass number from `SESSION_STATE.json.continuation_pass + 1`;
 - record the exact user command or correction/amendment request;
 - classify pass type and scope effect;
-- identify affected Session Contract sections and implementation units;
+- identify affected Session Scope sections and implementation units;
 - record artifacts changed and evidence produced;
 - record whether prior pass records were preserved;
 - update `SESSION_STATE.json.continuation_pass` to match the latest appended pass;
@@ -288,7 +288,7 @@ Use one block per pass when the row is not enough.
 - User command:
 - Reason:
 - Scope effect: same-contract correction | contract amendment | validation only | route-back
-- Session Contract impact:
+- Session Scope impact:
 - Implementation units affected:
 - Unresolved items affected:
 - Files/artifacts changed:
@@ -313,7 +313,7 @@ Record when a later stage discovers a problem owned by an earlier stage.
 
 | Gate | Required before | Status | Evidence |
 |---|---|---|---|
-| `SESSION_CONTRACT.md` section 11 review | Implementation-completion, close-readiness, and close claims | PENDING | `_hirmos/session/SESSION_CONTRACT.md` section 11 |
+| `SESSION_SCOPE.md` close verification review | Implementation-completion, close-readiness, and close claims | PENDING | `_hirmos/session/SESSION_SCOPE.md` close verification |
 | Unresolved Items Reconciliation | Every lifecycle boundary | PENDING | `_hirmos/session/unresolved-items.md` |
 | Implementation Unit Coverage | Implementation start / close | PENDING | `_hirmos/session/implementation-units/` |
 | Validation Evidence | Implementation complete / close | PENDING | evidence log / major artifacts / evidence |
@@ -385,7 +385,7 @@ These controls are mandatory before normal close can be claimed. They apply even
 
 | Invariant | Required evidence | Status |
 |---|---|---|
-| Session Contract close verification completed | `_hirmos/session/SESSION_CONTRACT.md` section 11 final verdict supports close | PENDING |
+| Session Scope close verification completed | `_hirmos/session/SESSION_SCOPE.md` close verification final verdict supports close | PENDING |
 | Unresolved register reconciled | `_hirmos/session/unresolved-items.md` directly reviewed; no blocking gated item remains | PENDING |
 | Accepted state updated | `CURRENT_SYSTEM_STATE.md`, active-only `CARRY_FORWARD.md`, and `DECISION_LOG.md` updated or verified unchanged | PENDING |
 | Archive complete | archive path contains all active session artifacts and `SESSION_EXECUTION.md` archive controls | PENDING |
@@ -504,8 +504,8 @@ Required when the selected delivery shape is `MULTI_SESSION_DELIVERY` or `MULTI_
 | --- | --- | --- | --- | --- |
 | delivery-design | `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` | PENDING | | |
 | phase-contracting | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` when phase files are selected | PENDING | | |
-| session-contract | `_hirmos/session/SESSION_CONTRACT.md` adopts the active phase | PENDING | | |
-| implementation-readiness | `DESIGN.md` readiness basis and `SESSION_CONTRACT.md` authorize implementation | PENDING | | |
+| session-scope | `_hirmos/session/SESSION_SCOPE.md` adopts the active phase | PENDING | | |
+| implementation-readiness | `DESIGN.md` readiness basis and `SESSION_SCOPE.md` authorize implementation | PENDING | | |
 
 Fail closed if this log is missing, incomplete, or contradicted by artifacts while the selected delivery shape requires durable delivery artifacts.
 
@@ -519,14 +519,14 @@ Required before implementation readiness whenever the selected delivery shape is
 
 | Check | Required result | Evidence artifact | Actual result |
 |---|---|---|---|
-| Exactly one durable phase adopted | SATISFIED | `SESSION_CONTRACT.md` Active Durable Phase Adoption | PENDING |
+| Exactly one durable phase adopted | SATISFIED | `SESSION_SCOPE.md` Active Durable Phase Adoption | PENDING |
 | Adopted phase path exists | SATISFIED | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` | PENDING |
 | Delivery Plan path exists | SATISFIED | `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` | PENDING |
 | Current System State pointer matches adopted phase | SATISFIED | `CURRENT_SYSTEM_STATE.md` Active Development Context and Delivery Pointers | PENDING |
-| Phase items mapped to Session Contract items | SATISFIED | `SESSION_CONTRACT.md` Adopted phase scope | PENDING |
-| Partial adoption has explicit deferrals | SATISFIED / NOT_APPLICABLE | `SESSION_CONTRACT.md` Phase exclusions / deferrals | PENDING |
+| Phase items mapped to Session Scope items | SATISFIED | `SESSION_SCOPE.md` Adopted phase scope | PENDING |
+| Partial adoption has explicit deferrals | SATISFIED / NOT_APPLICABLE | `SESSION_SCOPE.md` Phase exclusions / deferrals | PENDING |
 
-Fail-closed rule: implementation readiness is blocked if no durable phase is adopted, if more than one phase is treated as active for the same session, if the adopted phase path is missing, or if adopted phase scope is not mapped into authorized Session Contract items.
+Fail-closed rule: implementation readiness is blocked if no durable phase is adopted, if more than one phase is treated as active for the same session, if the adopted phase path is missing, or if adopted phase scope is not mapped into authorized Session Scope items.
 
 
 Record this before implementation readiness and again before close when delivery governance is active or potentially applicable.
@@ -536,10 +536,10 @@ Record this before implementation readiness and again before close when delivery
 | Current System State delivery pointers read | SATISFIED / BLOCKED / NOT_APPLICABLE | `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` | |
 | Delivery Plan pointer exists when required | SATISFIED / BLOCKED / NOT_APPLICABLE | `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` | |
 | Active Phase pointer exists when required | SATISFIED / BLOCKED / NOT_APPLICABLE | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` | |
-| Session Contract adopts the same delivery/phase authority | SATISFIED / BLOCKED / NOT_APPLICABLE | `SESSION_CONTRACT.md` | |
+| Session Scope adopts the same delivery/phase authority | SATISFIED / BLOCKED / NOT_APPLICABLE | `SESSION_SCOPE.md` | |
 | Next phase / next command concordance checked | SATISFIED / BLOCKED / NOT_APPLICABLE | `DELIVERY_PLAN.md`, `SESSION_STATE.json` | |
 
-Fail-closed rule: delivery-governed implementation must not proceed while Current System State delivery pointers contradict the durable Delivery Plan, active Phase file, or Session Contract.
+Fail-closed rule: delivery-governed implementation must not proceed while Current System State delivery pointers contradict the durable Delivery Plan, active Phase file, or Session Scope.
 
 
 ## Close-Time Delivery Status Execution Log
@@ -598,7 +598,7 @@ This record is required before a delivery-governed close may mark the adopted du
 | Acceptance control | Status | Evidence pointer | Notes |
 |---|---|---|---|
 | Phase Acceptance Evidence Gate inspected | PENDING / PASS / BLOCKED / NOT_APPLICABLE | | |
-| All adopted Session Contract items reviewed | PENDING / PASS / BLOCKED / NOT_APPLICABLE | | |
+| All adopted Session Scope items reviewed | PENDING / PASS / BLOCKED / NOT_APPLICABLE | | |
 | Implementation Unit evidence complete | PENDING / PASS / BLOCKED / NOT_APPLICABLE | | |
 | Greenfield acceptance evidence complete when applicable | PENDING / PASS / BLOCKED / NOT_APPLICABLE | | |
 | Brownfield acceptance evidence complete when applicable | PENDING / PASS / BLOCKED / NOT_APPLICABLE | | |

@@ -4,30 +4,30 @@
 
 ### Purpose
 
-Decompose the implementation scope authorized by `_hirmos/session/SESSION_CONTRACT.md` into bounded implementation units, and create one self-contained unit artifact per unit under `_hirmos/session/implementation-units/`.
+Decompose the implementation scope authorized by `_hirmos/session/SESSION_SCOPE.md` into bounded implementation units, and create one self-contained unit artifact per unit under `_hirmos/session/implementation-units/`.
 
 ### Produces
 
-- `_hirmos/session/SESSION_CONTRACT.md` Implementation Unit Plan section updates
+- `_hirmos/session/SESSION_SCOPE.md` Implementation Unit Plan section updates
 - `_hirmos/session/implementation-units/IU-xx.md` artifacts
 - `_hirmos/session/SESSION_EXECUTION.md` implementation-unit planning control
 
 ### Terminal States
 
-- COMPLETE — implementation units are explicit, bounded, and collectively cover the Session Contract or explicitly record uncovered scope.
+- COMPLETE — implementation units are explicit, bounded, and collectively cover the Session Scope or explicitly record uncovered scope.
 - BLOCKED — required design/scope/current-state input is missing or contradictory.
 - ROUTE_BACK_REQUIRED — planning exposes invalid design, missing scope authority, or impossible acceptance criteria.
 - NOT_APPLICABLE — implementation is not active for this session.
 
 ## Activation triggers
 
-- the Session Contract authorizes implementation
+- the Session Scope authorizes implementation
 - implementation is non-trivial, multi-file, risky, or delegated to an implementation agent
 - implementation-readiness requires unit decomposition
 
 ## Required inputs
 
-- `_hirmos/session/SESSION_CONTRACT.md`
+- `_hirmos/session/SESSION_SCOPE.md`
 - `_hirmos/session/unresolved-items.md`
 - current system state and relevant design/delivery/phase/requirements artifacts
 - stack/project evidence when implementation touches project files
@@ -35,7 +35,7 @@ Decompose the implementation scope authorized by `_hirmos/session/SESSION_CONTRA
 ## Execution controls contributed
 
 - implementation-unit planning control
-- Session Contract unit coverage control
+- Session Scope unit coverage control
 
 ## Method
 
@@ -43,15 +43,15 @@ This capability inherits shared extension rules from `_hirmos/extensions/impleme
 
 Planning must:
 
-1. Read the Session Contract directly.
+1. Read the Session Scope directly.
 2. Read `unresolved-items.md` directly and fail closed if a gated item blocks implementation planning.
 3. Create one self-contained `implementation-units/IU-xx.md` artifact per unit from `_hirmos/core/templates/session/implementation-units/IU.md`.
 4. Fill each IU artifact's Unit Contract sections before execution begins.
-5. Update the Session Contract Implementation Unit Plan table with the unit list and coverage mapping.
-6. Literally answer in `SESSION_CONTRACT.md`: `Do all planned implementation units collectively cover 100% of SESSION_CONTRACT.md?`
+5. Update the Session Scope Implementation Unit Plan table with the unit list and coverage mapping.
+6. Literally answer in `SESSION_SCOPE.md`: `Do all planned implementation units collectively cover 100% of SESSION_SCOPE.md?`
 7. Record the capability decision and evidence in `SESSION_EXECUTION.md`.
 
-Do not create standalone `SESSION_CONTRACT.md Implementation Unit Plan`, `implementation-units/IU-xx.md`, `implementation-units/IU-xx.md`, `implementation-units/IU-xx.md`, or `implementation-units/IU-xx.md` artifacts. Unit request, execution, review, and retry content live inside each `IU-xx.md` artifact.
+Do not create standalone `SESSION_SCOPE.md Implementation Unit Plan`, `implementation-units/IU-xx.md`, `implementation-units/IU-xx.md`, `implementation-units/IU-xx.md`, or `implementation-units/IU-xx.md` artifacts. Unit request, execution, review, and retry content live inside each `IU-xx.md` artifact.
 
 ## Required behavior
 

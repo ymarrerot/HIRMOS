@@ -29,7 +29,7 @@ Run or inspect stack/project validation evidence and decide whether evidence pro
 
 ## Required inputs
 
-- `_hirmos/session/SESSION_CONTRACT.md`
+- `_hirmos/session/SESSION_SCOPE.md`
 - implementation evidence or review target
 - stack/project validation commands when available
 
@@ -48,7 +48,7 @@ It must:
 
 - record each command/check, context, result, and output/log location;
 - record not-run or not-applicable checks with risk and rationale;
-- map evidence to Session Contract and implementation units;
+- map evidence to Session Scope and implementation units;
 - preserve limitations rather than converting them into success;
 - block readiness/completion when evidence is missing for required scope.
 

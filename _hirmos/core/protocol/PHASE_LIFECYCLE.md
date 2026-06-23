@@ -131,7 +131,7 @@ Mixed phases must include and satisfy both greenfield and brownfield control gro
 
 ## Phase Entry Gate Enforcement
 
-A durable phase cannot be adopted for implementation merely because it exists. HIRMOS must run a Phase Entry Gate before `SESSION_CONTRACT.md` adopts a phase and before `SESSION_STATE.json` reaches `implementation_readiness`.
+A durable phase cannot be adopted for implementation merely because it exists. HIRMOS must run a Phase Entry Gate before `SESSION_SCOPE.md` adopts a phase and before `SESSION_STATE.json` reaches `implementation_readiness`.
 
 The Phase Entry Gate is current-state-first. It verifies that the phase is the correct next governed unit of work based on `CURRENT_SYSTEM_STATE.md`, the durable `DELIVERY_PLAN.md`, and the inspected `PHASE-xx.md` file. The gate applies to greenfield, brownfield, and mixed phases.
 
@@ -193,13 +193,13 @@ For `MIXED` phases, both the greenfield and brownfield entry gates apply. The ph
 - Missing or unsatisfied entry criteria block implementation readiness.
 - Missing greenfield MVP/scope/architecture entry controls block greenfield or mixed phase adoption.
 - Missing brownfield preservation/regression entry controls block brownfield or mixed phase adoption.
-- Pointer disagreement between Current System State, Delivery Plan, Phase file, and Session Contract blocks implementation readiness.
+- Pointer disagreement between Current System State, Delivery Plan, Phase file, and Session Scope blocks implementation readiness.
 
 ## Phase Progress / Carry-Forward Enforcement
 
 A durable phase may span multiple sessions. HIRMOS must preserve phase progress across session boundaries instead of treating each session as a disconnected attempt to finish the whole phase.
 
-This enforcement is current-state-first and applies to `GREENFIELD`, `BROWNFIELD`, and `MIXED` phases. Before any continuation or close claim, HIRMOS must compare the adopted phase, the session contract, implementation-unit reviews, unresolved items, and Current System State delivery pointers.
+This enforcement is current-state-first and applies to `GREENFIELD`, `BROWNFIELD`, and `MIXED` phases. Before any continuation or close claim, HIRMOS must compare the adopted phase, the session scope, implementation-unit reviews, unresolved items, and Current System State delivery pointers.
 
 ### Phase Progress Ledger
 
@@ -238,7 +238,7 @@ Every `OPEN`, `PARTIAL`, `BLOCKED`, or `DEFERRED` item must have a carry-forward
 same PHASE-xx.md
 next PHASE-xx.md
 _hirmos/system/accepted-state/CARRY_FORWARD.md
-future session contract
+future session scope
 explicit cancellation/supersession rationale
 ```
 
@@ -295,9 +295,9 @@ A phase may move to `ACCEPTED` only through a close-time Phase Acceptance Eviden
 Before `PHASE-xx.md` may record `Lifecycle status: ACCEPTED`, HIRMOS must verify:
 
 - all phase exit criteria are satisfied or explicitly deferred/excluded with rationale;
-- all adopted Session Contract items are reviewed;
+- all adopted Session Scope items are reviewed;
 - every implementation unit has execution evidence and unit review;
-- `SESSION_CONTRACT.md` section 11 records phase coverage and acceptance verdict;
+- `SESSION_SCOPE.md` close verification records phase coverage and acceptance verdict;
 - `SESSION_EXECUTION.md` close/update controls records the accepted phase transaction;
 - Delivery Plan and Phase file status are updated;
 - `CURRENT_SYSTEM_STATE.md` delivery pointers are refreshed;
@@ -348,7 +348,7 @@ Mixed phase status UX must report both greenfield and brownfield status groups a
 
 ### Status Blockers
 
-`hirmos status` must explicitly report `Status Blocked By Phase Lifecycle Conflict` when phase lifecycle status, phase type, Current System State pointers, Delivery Plan, active Phase file, or Session Contract adoption are missing or contradictory.
+`hirmos status` must explicitly report `Status Blocked By Phase Lifecycle Conflict` when phase lifecycle status, phase type, Current System State pointers, Delivery Plan, active Phase file, or Session Scope adoption are missing or contradictory.
 
 Status must not imply that a phase can be accepted unless the Phase Acceptance Evidence Gate is complete and close-time delivery status reconciliation is ready.
 

@@ -18,7 +18,7 @@ This is an ordered governance lifecycle, not a waterfall and not a loose capabil
 
 ## Production-shaped implementation posture
 
-HIRMOS implementation aims to produce production-shaped software by default. A session may intentionally produce a prototype, demo, fixture, local-only result, or throwaway experiment, but that limitation must be explicitly authorized in `SESSION_CONTRACT.md`, reflected in Design when Design is active, and preserved during Update System State.
+HIRMOS implementation aims to produce production-shaped software by default. A session may intentionally produce a prototype, demo, fixture, local-only result, or throwaway experiment, but that limitation must be explicitly authorized in `SESSION_SCOPE.md`, reflected in Design when Design is active, and preserved during Update System State.
 
 Production-shaped does not mean enterprise-grade, cloud-only, overbuilt, or fully deployed. It means the implementation should follow the architecture shape that would reasonably support production use for the requested system: durable data where durability matters, production-aligned local infrastructure where practical, real integration boundaries, safe secret/configuration handling, long-running work outside synchronous request paths, and evidence for critical flows.
 
@@ -80,7 +80,7 @@ It owns:
 - delivery-unit or phase contracts;
 - preservation contract when needed;
 - regression evidence strategy when needed;
-- session contract;
+- session scope;
 - unresolved-item disposition for Design decisions;
 - technical review pointer;
 - completion criteria;
@@ -108,7 +108,7 @@ It owns:
 - session implementation review;
 - implementation completion decision.
 
-Implementation does not own requirements authority, design authority, session-contract authority, or accepted system-state mutation.
+Implementation does not own requirements authority, design authority, session-scope authority, or accepted system-state mutation.
 
 If Implementation discovers that Design or system-state evidence is wrong, incomplete, or unsafe, it must record the blocker and route back to the owning stage. It must not silently rewrite Design authority.
 

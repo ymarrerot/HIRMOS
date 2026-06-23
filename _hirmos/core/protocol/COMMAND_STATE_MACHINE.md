@@ -103,11 +103,11 @@ Illegal transitions fail closed. In particular:
 For implementation-capable sessions, `hirmos start` must stop at `implementation_readiness` after creating or updating:
 
 - `_hirmos/session/SESSION_STATE.json`
-- `_hirmos/session/SESSION_CONTRACT.md`
+- `_hirmos/session/SESSION_SCOPE.md`
 - `_hirmos/session/SESSION_EXECUTION.md`
 - `_hirmos/session/unresolved-items.md`
-- `_hirmos/session/SESSION_CONTRACT.md` section 11 initialized for later review
-- implementation unit plan in `SESSION_CONTRACT.md` when implementation is expected
+- `_hirmos/session/SESSION_SCOPE.md` close verification initialized for later review
+- implementation unit plan in `SESSION_SCOPE.md` when implementation is expected
 
 The user-facing result must explain:
 
@@ -135,16 +135,16 @@ Continuation pass types:
 |---|---|---|
 | Initial implementation pass | first implementation continuation after start/readiness | execute authorized implementation units |
 | Corrective pass | user identifies a bug, gap, or issue inside current session scope before close | append correction pass, update affected IU/review/evidence |
-| Contract amendment pass | user requests new work outside the existing Session Contract | amend `SESSION_CONTRACT.md` before implementation |
+| Contract amendment pass | user requests new work outside the existing Session Scope | amend `SESSION_SCOPE.md` before implementation |
 | Validation-only pass | user asks to rerun or complete validation | append validation evidence and update review surfaces |
 | Route-back pass | later evidence invalidates earlier authority | record route-back and reset affected controls |
 
 Scope rules:
 
 - Same-contract corrections do not rewrite the Authorized Scope; they append correction records.
-- Scope expansions require a `Contract Amendment` section in `SESSION_CONTRACT.md` before implementation.
+- Scope expansions require a `Contract Amendment` section in `SESSION_SCOPE.md` before implementation.
 - `unresolved-items.md` dispositions must be appended, not deleted.
-- `SESSION_CONTRACT.md` section 11 must add review passes, not replace prior reviews.
+- `SESSION_SCOPE.md` close verification must add review passes, not replace prior reviews.
 - `implementation-units/IU-xx.md` must append attempts/retries/reviews.
 
 ## SESSION_EXECUTION append-only ledger requirements
@@ -230,7 +230,7 @@ Before an implementation-capable session may enter `implementation_readiness`, H
 Required state effect:
 
 - `SINGLE_SESSION_VERTICAL_SLICE` requires bounded-scope safety evidence;
-- `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` requires implementation-unit coverage for the Session Contract;
+- `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` requires implementation-unit coverage for the Session Scope;
 - `MULTI_SESSION_DELIVERY` requires a durable Delivery Plan before implementation readiness;
 - `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` requires a durable Delivery Plan and adopted phase file before implementation readiness;
 - `UNCERTAIN` keeps the session blocked or in Design/system-state understanding;
@@ -240,7 +240,7 @@ The exactly-one-next-command rule must not recommend `hirmos continue` for imple
 
 ## Production-Shaped Engineering state gate
 
-Before an implementation-capable session may enter `implementation_readiness`, HIRMOS must record the Production-Shaped Engineering Gate in `DESIGN.md`, `SESSION_CONTRACT.md`, and `SESSION_EXECUTION.md`.
+Before an implementation-capable session may enter `implementation_readiness`, HIRMOS must record the Production-Shaped Engineering Gate in `DESIGN.md`, `SESSION_SCOPE.md`, and `SESSION_EXECUTION.md`.
 
 Before a session may enter `close_ready` or `closed`, HIRMOS must verify that implementation evidence supports the exact production-shaped claims being accepted. If evidence contradicts a claim, the claim must be downgraded, routed back, or preserved as a limitation/carry-forward item.
 

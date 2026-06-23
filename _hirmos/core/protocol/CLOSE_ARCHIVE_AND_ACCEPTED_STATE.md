@@ -7,7 +7,7 @@ Purpose: ensure `hirmos close` is a governed state transaction, not a chat summa
 
 `hirmos close` is not complete until four surfaces agree:
 
-1. **Session contract truth** — `_hirmos/session/SESSION_CONTRACT.md`, especially section 11, shows what was promised, what was verified, unresolved-item disposition, and the final fail-closed verdict.
+1. **Session contract truth** — `_hirmos/session/SESSION_SCOPE.md`, especially close verification, shows what was promised, what was verified, unresolved-item disposition, and the final fail-closed verdict.
 2. **Execution truth** — `_hirmos/session/SESSION_EXECUTION.md` records the close command, execution controls, evidence log, archive/reset controls, and exactly one legal next command or action.
 3. **Accepted current truth** — `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`, active-only `CARRY_FORWARD.md`, and `DECISION_LOG.md` reflect only accepted outcomes and durable decisions.
 4. **Archive/reset truth** — the archive records archived artifacts and post-close verification, while active `_hirmos/session/` is reset to idle scaffolding. Archive manifest information belongs in `SESSION_EXECUTION.md` archive controls; do not create a separate active-session archive manifest support file.
@@ -22,7 +22,7 @@ Close is an integrity-sensitive operation. HIRMOS must not claim close success, 
 
 A normal close is a transaction with seven ordered parts:
 
-1. **Readiness verification** — verify `SESSION_CONTRACT.md` including section 11, `unresolved-items.md`, `SESSION_EXECUTION.md`, implementation-unit reviews, `EVIDENCE.md` when present, and active execution controls.
+1. **Readiness verification** — verify `SESSION_SCOPE.md` including close verification, `unresolved-items.md`, `SESSION_EXECUTION.md`, implementation-unit reviews, `EVIDENCE.md` when present, and active execution controls.
 2. **Accepted-state decision** — classify every material session outcome as accepted, superseded, rejected / not applied, evidence-only, carry-forward, or blocked.
 3. **Accepted-state application** — update `_hirmos/system/accepted-state/` only for accepted outcomes, durable decisions, and active carry-forward items.
 4. **Archive preservation** — copy the complete active session artifact set to `_hirmos/system/history/sessions/<session-id>/` and create `SESSION_EXECUTION.md` archive controls there.
@@ -36,8 +36,8 @@ If any required part fails, HIRMOS must stop at `Close Blocked` or use explicit 
 
 Before normal close can be claimed, these active-session authorities must exist and contain non-placeholder content:
 
-- `_hirmos/session/SESSION_CONTRACT.md` — scope, completion criteria, and close-verification mirror;
-- `_hirmos/session/SESSION_CONTRACT.md` section 11 — governed promised-vs-verified review and final verdict;
+- `_hirmos/session/SESSION_SCOPE.md` — scope, completion criteria, and close-verification mirror;
+- `_hirmos/session/SESSION_SCOPE.md` close verification — governed promised-vs-verified review and final verdict;
 - `_hirmos/session/unresolved-items.md` — governed unresolved-item register and disposition history;
 - `_hirmos/session/SESSION_EXECUTION.md` — close execution controls, evidence log, and reset controls.
 
@@ -45,9 +45,9 @@ Implementation sessions also require:
 
 - `_hirmos/session/implementation-units/IU-xx.md` for each planned implementation unit; each unit must include contract, evidence, unit review, and result.
 
-Evidence beyond implementation-unit records is required only when the claim family is active and cannot be captured clearly in the relevant implementation-unit artifact. In that case, use root `EVIDENCE.md` as the consolidated evidence surface. Do not create separate runtime-readiness, local-runtime-evidence, role-workflow-smoke, claim-reconciliation, close-checklist, archive-manifest, or session-contract-review support files for new sessions.
+Evidence beyond implementation-unit records is required only when the claim family is active and cannot be captured clearly in the relevant implementation-unit artifact. In that case, use root `EVIDENCE.md` as the consolidated evidence surface. Do not create separate runtime-readiness, local-runtime-evidence, role-workflow-smoke, claim-reconciliation, close-checklist, archive-manifest, or session-scope-review support files for new sessions.
 
-`SESSION_EXECUTION.md` close/update controls, implementation-unit reviews, `EVIDENCE.md`, and `SESSION_CONTRACT.md` section 11 are the close evidence surfaces in the strict-necessity model. Close authority comes from `SESSION_CONTRACT.md`, `SESSION_EXECUTION.md`, `unresolved-items.md`, implementation-unit artifacts, `EVIDENCE.md` when present, and accepted-state files.
+`SESSION_EXECUTION.md` close/update controls, implementation-unit reviews, `EVIDENCE.md`, and `SESSION_SCOPE.md` close verification are the close evidence surfaces in the strict-necessity model. Close authority comes from `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, `unresolved-items.md`, implementation-unit artifacts, `EVIDENCE.md` when present, and accepted-state files.
 
 ## Accepted-state records
 
@@ -96,8 +96,8 @@ Normal close requires all checks below to pass:
 
 | Check | Required result |
 |---|---|
-| Session identity consistency | `SESSION_CONTRACT.md`, `SESSION_CONTRACT.md` section 11, `SESSION_EXECUTION.md`, archive path, and `SESSION_STATE.json` reference the same session id or explain why not applicable. |
-| Contract review | `SESSION_CONTRACT.md` section 11 directly reviews `SESSION_CONTRACT.md`, `unresolved-items.md`, implementation units, validation/evidence appendices, and current system state as applicable. |
+| Session identity consistency | `SESSION_SCOPE.md`, `SESSION_SCOPE.md` close verification, `SESSION_EXECUTION.md`, archive path, and `SESSION_STATE.json` reference the same session id or explain why not applicable. |
+| Scope review | `SESSION_SCOPE.md` close verification directly reviews `SESSION_SCOPE.md`, `unresolved-items.md`, implementation units, validation/evidence appendices, and current system state as applicable. |
 | Execution controls | no required control remains `PENDING`, `UNSATISFIED`, or `BLOCKED`. |
 | Unresolved items | gated items are resolved, rejected, deferred with approval, or close is blocked; non-gating items are accepted as assumptions or carried forward. |
 | Evidence claims | every accepted outcome has evidence or is explicitly accepted as documentation/design-only. |
@@ -126,7 +126,7 @@ _hirmos/session/implementation-units/.gitkeep
 The following are stale after normal close and must block close success if they remain active:
 
 ```text
-SESSION_CONTRACT.md
+SESSION_SCOPE.md
 SESSION_EXECUTION.md
 unresolved-items.md
 REQUIREMENTS_BASELINE.md
@@ -140,7 +140,7 @@ stack-resolution.json
 
 Close must be blocked when:
 
-- `SESSION_CONTRACT.md` section 11 is missing, placeholder-only, or not directly grounded in the session contract;
+- `SESSION_SCOPE.md` close verification is missing, placeholder-only, or not directly grounded in the session scope;
 - accepted outcomes and evidence are not reconciled;
 - gated unresolved items remain undecided;
 - implementation was active but implementation units lack unit review or result sections;
@@ -280,7 +280,7 @@ Before normal close, HIRMOS must scan generated session and accepted-state artif
 - `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` when present;
 - `_hirmos/session/EVIDENCE.md` when present;
 - `_hirmos/session/EVIDENCE.md` when present;
-- `_hirmos/session/SESSION_CONTRACT.md`;
+- `_hirmos/session/SESSION_SCOPE.md`;
 - `_hirmos/session/SESSION_EXECUTION.md`;
 - `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`;
 - `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` accepted-state navigation/latest-close section;

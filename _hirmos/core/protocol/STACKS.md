@@ -14,7 +14,7 @@ Project-wide `active_stack` is the normal path. Stack contexts are optional and 
 
 ## Production-shaped stack use
 
-Stack packages are not passive suggestions. When a selected stack has engineering standards, HIRMOS must use them to preserve production-shaped implementation unless repository evidence or the Session Contract authorizes a weaker local/demo shape.
+Stack packages are not passive suggestions. When a selected stack has engineering standards, HIRMOS must use them to preserve production-shaped implementation unless repository evidence or the Session Scope authorizes a weaker local/demo shape.
 
 Stack standards should influence Design, implementation-unit planning, validation requirements, and close review for material architecture decisions. If the stack standard says a risk area is material, HIRMOS must either satisfy it, mark it not applicable with rationale, or record an authorized limitation/blocker.
 

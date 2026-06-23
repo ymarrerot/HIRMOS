@@ -1,7 +1,7 @@
 {
   "id": "implementation-readiness",
   "extension": "design-agent",
-  "summary": "Determine whether Design has produced enough authority, unresolved-item disposition, durable delivery coverage when required, technical reviewability, and Session Contract scope for Implementation to begin.",
+  "summary": "Determine whether Design has produced enough authority, unresolved-item disposition, durable delivery coverage when required, technical reviewability, and Session Scope scope for Implementation to begin.",
   "lifecycle_stage": "design",
   "entrypoints": {
     "default": "entrypoints/default.md"
@@ -16,7 +16,7 @@
   },
   "requires_artifacts": [
     "_hirmos/session/DESIGN.md",
-    "_hirmos/session/SESSION_CONTRACT.md",
+    "_hirmos/session/SESSION_SCOPE.md",
     "_hirmos/session/unresolved-items.md",
     "_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md when Delivery Shape Decision selects a durable delivery shape",
     "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when Delivery Shape Decision selects a durable delivery shape",

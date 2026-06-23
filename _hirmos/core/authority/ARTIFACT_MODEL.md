@@ -3,6 +3,22 @@
 Status: core authority.
 Purpose: define artifact zones, ownership, strict necessity, and runtime meaning.
 
+
+## PROD-L canonical scope-authority direction
+
+HIRMOS is migrating toward a scope-centered authority model. The canonical target names for new work are:
+
+```text
+SESSION_SCOPE.md       # active session authority
+DELIVERY_SCOPE.md      # one durable delivery/release authority
+REQUIREMENTS.md        # conditional independent requirements authority only
+DESIGN.md              # conditional independent design authority only
+```
+
+As of PROD-L2, the active-session authority template is `SESSION_SCOPE.md`. Historical archives may retain older artifact names and must remain readable. The conditional requirements-authority target name is `REQUIREMENTS.md`; `REQUIREMENTS_BASELINE.md` remains legacy-compatible until the later requirements-authority migration phase.
+
+`DELIVERY_PLAN.md` is the durable project delivery roadmap/register. It must not be overwritten when later large greenfield, brownfield, or mixed work appears; new durable multi-session work adds or updates a delivery entry and creates/updates `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`.
+
 ## Installed framework zones
 
 ```text
@@ -43,7 +59,7 @@ A governed session is active only after `_hirmos/session/SESSION_EXECUTION.md` e
 ```text
 SESSION_STATE.json
 SESSION_EXECUTION.md
-SESSION_CONTRACT.md
+SESSION_SCOPE.md
 unresolved-items.md
 REQUIREMENTS_BASELINE.md      # conditional
 DESIGN.md                     # conditional
@@ -58,9 +74,9 @@ stack-resolution.json           # conditional machine-readable stack routing onl
 Each lifecycle responsibility owns its authority inside the smallest sufficient artifact set:
 
 - Understand System State records the current-state-first control in `SESSION_EXECUTION.md` and material state findings in `DESIGN.md` when they affect Design or Implementation.
-- Design / Contracting owns requirements, design, delivery/phase contracts, production-shaped engineering posture, and the active `SESSION_CONTRACT.md`.
+- Design / Contracting owns requirements, design, delivery/phase contracts, production-shaped engineering posture, and the active `SESSION_SCOPE.md`.
 - Implementation owns `implementation-units/IU-xx.md` artifacts and `EVIDENCE.md` when evidence is material.
-- Update System State owns accepted-state update and archive records through `SESSION_CONTRACT.md` close verification, `SESSION_EXECUTION.md` close/archive/reset controls, `EVIDENCE.md` when needed, and accepted-state artifacts.
+- Update System State owns accepted-state update and archive records through `SESSION_SCOPE.md` close verification, `SESSION_EXECUTION.md` close/archive/reset controls, `EVIDENCE.md` when needed, and accepted-state artifacts.
 - `SESSION_EXECUTION.md` owns the human-readable Current Continuation Snapshot, execution control, and append-only lifecycle history only; it does not own scope or acceptance criteria.
 
 Later stages may reference earlier-stage authority, but must not silently rewrite it. If a later stage discovers a problem, it must route back to the owning stage.
@@ -70,9 +86,9 @@ Later stages may reference earlier-stage authority, but must not silently rewrit
 Primary session authority:
 
 ```text
-SESSION_CONTRACT.md scope, acceptance, delivery shape, production-shaped gate, close verification
+SESSION_SCOPE.md scope, acceptance, delivery shape, production-shaped gate, close verification
 DESIGN.md current-state basis, source matrix, design authority, technical review, readiness rationale
-REQUIREMENTS_BASELINE.md requirements authority when material
+REQUIREMENTS_BASELINE.md requirements authority when material during transition; target name REQUIREMENTS.md
 unresolved-items.md governed decision/assumption/risk register
 EVIDENCE.md material validation/runtime/claim/close evidence
 SESSION_EXECUTION.md command and lifecycle execution-control spine
@@ -129,7 +145,7 @@ For durable multi-session delivery, a Delivery Plan is needed. Separate phase fi
 
 ## Root session filename discipline
 
-Root session files must remain intentionally few and must be major/governed artifacts only. New auxiliary/evidence artifacts must not be introduced unless they satisfy strict necessity and cannot safely live in `SESSION_CONTRACT.md`, `DESIGN.md`, `EVIDENCE.md`, `SESSION_EXECUTION.md`, or `implementation-units/IU-xx.md`.
+Root session files must remain intentionally few and must be major/governed artifacts only. New auxiliary/evidence artifacts must not be introduced unless they satisfy strict necessity and cannot safely live in `SESSION_SCOPE.md`, `DESIGN.md`, `EVIDENCE.md`, `SESSION_EXECUTION.md`, or `implementation-units/IU-xx.md`.
 
 ## Accepted state and archive distinction
 

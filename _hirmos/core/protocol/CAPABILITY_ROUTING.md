@@ -28,7 +28,7 @@ At minimum, routing is required when:
 - deciding whether Design can reach implementation-readiness;
 - deciding whether Implementation may begin, continue, retry, or complete;
 - deciding whether Update System State may accept outcomes, archive, or close;
-- selecting requirements, system-design, delivery-design, phase-contracting, session-contract, technical-review, implementation-readiness, implementation, validation, evidence, or update-state capabilities;
+- selecting requirements, system-design, delivery-design, phase-contracting, session-scope, technical-review, implementation-readiness, implementation, validation, evidence, or update-state capabilities;
 - a required artifact or execution control names a capability, extension, or entrypoint;
 - unresolved items, project type, stack evidence, delivery governance, runtime services, or current-state evidence affects which specialized work must run;
 - a capability may produce or update artifacts required for a readiness claim, completion claim, blocker, route-back, or user-facing checkpoint.
@@ -57,7 +57,7 @@ Routing must consider:
 11. Installed extension manifests.
 12. Installed capability manifests.
 
-Project type and stack decisions recorded in `DESIGN.md`, `SESSION_CONTRACT.md`, `stack-resolution.json`, and `SESSION_EXECUTION.md` may require, skip, or shape capabilities. They do not replace lifecycle authority.
+Project type and stack decisions recorded in `DESIGN.md`, `SESSION_SCOPE.md`, `stack-resolution.json`, and `SESSION_EXECUTION.md` may require, skip, or shape capabilities. They do not replace lifecycle authority.
 
 Rules:
 

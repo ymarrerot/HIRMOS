@@ -173,7 +173,7 @@ When delivery governance is active, `hirmos status` must report:
 
 - the Delivery Plan path;
 - the single adopted active Phase path, if a session is active;
-- whether Session Contract phase adoption is complete, partial, blocked, or not applicable;
+- whether Session Scope phase adoption is complete, partial, blocked, or not applicable;
 - whether Current System State pointers agree with the adopted phase;
 - whether the next governed command is blocked by phase-adoption defects.
 

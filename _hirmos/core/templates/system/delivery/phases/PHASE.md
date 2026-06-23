@@ -21,7 +21,7 @@ Canonical location:
 _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
 ```
 
-This phase may source a future `SESSION_CONTRACT.md`, but it does not authorize implementation by itself. A session must still create or adopt a Session Contract and implementation units before implementation.
+This phase may source a future `SESSION_SCOPE.md`, but it does not authorize implementation by itself. A session must still create or adopt a Session Scope and implementation units before implementation.
 
 ## Phase Lifecycle State Model
 
@@ -122,7 +122,7 @@ HIRMOS is current-state-first. Record the inspected current state that justifies
 - Allowed adoption lifecycle statuses: READY_FOR_ADOPTION, ACTIVE, PARTIAL.
 - Review-only adoption lifecycle status: READY_FOR_ACCEPTANCE.
 - Implementation must not adopt NOT_STARTED, BLOCKED, ACCEPTED, DEFERRED, SUPERSEDED, CANCELLED, or UNKNOWN-type phases.
-- Session adoption must map phase items to `SESSION_CONTRACT.md` and implementation units.
+- Session adoption must map phase items to `SESSION_SCOPE.md` and implementation units.
 
 ## Greenfield Controls
 
@@ -189,7 +189,7 @@ A mixed phase must satisfy both the Greenfield Controls and Brownfield Controls 
 
 ## Session Handoff
 
-- Intended Session Contract scope:
+- Intended Session Scope scope:
 - Required implementation unit boundaries:
 - Required direct reads before implementation:
 - Blockers that must stop `hirmos start` or `hirmos continue`:
@@ -219,7 +219,7 @@ Required close-time checks:
 - The parent `DELIVERY_PLAN.md` status row agrees with this phase status.
 - `CURRENT_SYSTEM_STATE.md` delivery pointers agree with the resulting active/next phase state.
 
-Fail-closed rule: if this phase was adopted by `SESSION_CONTRACT.md`, normal close is blocked until the Phase status update is recorded here or explicitly verified unchanged with rationale.
+Fail-closed rule: if this phase was adopted by `SESSION_SCOPE.md`, normal close is blocked until the Phase status update is recorded here or explicitly verified unchanged with rationale.
 
 ## Phase Entry Gate
 
@@ -317,7 +317,7 @@ Required when `Phase type` is `BROWNFIELD` or `MIXED`.
 - Acceptance gate status: PENDING / PASS / BLOCKED / NOT_APPLICABLE
 - Phase acceptance evidence status: PENDING / COMPLETE / INCOMPLETE / BLOCKED / NOT_APPLICABLE
 - All exit criteria satisfied or explicitly deferred/excluded: yes / no / not_applicable
-- `SESSION_CONTRACT.md` section 11 review acceptance verdict: ACCEPTED / PARTIAL / BLOCKED / FAILED / NOT_REVIEWED
+- `SESSION_SCOPE.md` close verification review acceptance verdict: ACCEPTED / PARTIAL / BLOCKED / FAILED / NOT_REVIEWED
 - Implementation Unit evidence complete: yes / no / not_applicable
 - Unresolved adopted work remaining: yes / no / not_applicable
 - Delivery Plan status updated: yes / no / not_applicable

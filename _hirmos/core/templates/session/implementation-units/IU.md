@@ -9,8 +9,8 @@ An Implementation Unit is an execution contract, not a generic task or prompt.
 
 - Unit ID:
 - Name:
-- Governing Session Contract: `_hirmos/session/SESSION_CONTRACT.md`
-- Session Contract scope item(s):
+- Governing Session Scope: `_hirmos/session/SESSION_SCOPE.md`
+- Session Scope scope item(s):
 - Related requirements / delivery / phase source:
 - Primary stack context:
 - Root path:
@@ -73,7 +73,7 @@ The unit must not silently substitute fixture/mock/boundary-only work for a requ
 | Check | Result | Evidence / notes |
 |---|---|---|
 | Unit contract is non-placeholder | | |
-| Session Contract still governs this unit | | |
+| Session Scope still governs this unit | | |
 | unresolved-items.md has no gated blocker for this unit | | |
 | Target files inspected before editing | | |
 | Required dependencies/context available | | |
@@ -92,7 +92,7 @@ List concrete actions performed.
 
 ### Scope Conformance Notes
 
-State how execution stayed within this Implementation Unit and the Session Contract.
+State how execution stayed within this Implementation Unit and the Session Scope.
 
 ### Validation / Checks Performed During Execution
 
@@ -202,10 +202,10 @@ Append retry sections here when a retry is required. Do not create a separate re
 
 ## 7. Handoff
 
-- Session Contract coverage item(s) satisfied:
+- Session Scope coverage item(s) satisfied:
 - Remaining gaps:
 - Carry-forward candidates:
-- `SESSION_CONTRACT.md` section 11 review impact:
+- `SESSION_SCOPE.md` close verification review impact:
 
 
 ## Phase Acceptance Evidence Contribution

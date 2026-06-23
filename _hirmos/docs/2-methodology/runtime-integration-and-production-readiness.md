@@ -34,4 +34,4 @@ Examples:
 - make credit/usage/billing mutations transactional, idempotent, or explicitly limited;
 - keep secrets and runtime-generated files out of release or handoff packages.
 
-If a session intentionally uses a prototype, fixture, demo-only, or local-only shortcut, the limitation must be authorized in the Session Contract and preserved at close.
+If a session intentionally uses a prototype, fixture, demo-only, or local-only shortcut, the limitation must be authorized in the Session Scope and preserved at close.

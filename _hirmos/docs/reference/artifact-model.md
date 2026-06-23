@@ -2,6 +2,20 @@
 
 HIRMOS uses a strict-necessity, contract-centered artifact model.
 
+
+## PROD-L scope-authority transition
+
+The canonical target names for new authority surfaces are:
+
+```text
+SESSION_SCOPE.md       # active session authority
+DELIVERY_SCOPE.md      # one durable delivery/release authority
+REQUIREMENTS.md        # conditional independent requirements authority only
+DESIGN.md              # conditional independent design authority only
+```
+
+Current installed versions may still contain `SESSION_SCOPE.md` and `REQUIREMENTS_BASELINE.md` during migration. Those names are legacy-compatible until later PROD-L phases update templates, validators, fixtures, and command behavior.
+
 ## Active session artifacts
 
 Active session artifacts are governed by the strict-necessity surface below.
@@ -22,7 +36,7 @@ If content is useful but does not need to exist as a separate artifact, keep it 
 ```text
 _hirmos/session/
   SESSION_STATE.json
-  SESSION_CONTRACT.md        # includes section 11 close verification
+  SESSION_SCOPE.md        # includes close verification
   SESSION_EXECUTION.md
   unresolved-items.md
   REQUIREMENTS_BASELINE.md   # conditional requirements authority
@@ -36,7 +50,7 @@ _hirmos/session/
 ## Major artifacts
 
 - `SESSION_STATE.json`: minimal machine-readable command/lifecycle state only; it does not carry narrative continuation handoff content.
-- `SESSION_CONTRACT.md`: active session scope, accepted constraints, completion criteria, production-shaped engineering gate, and section 11 close verification.
+- `SESSION_SCOPE.md`: active session scope, accepted constraints, completion criteria, production-shaped engineering gate, and close verification.
 - `SESSION_EXECUTION.md`: human-readable Current Continuation Snapshot, append-only execution-control spine, command timeline, evidence ledger, close/update controls, and next-action discipline.
 - `unresolved-items.md`: governed register for gated items, non-gating assumptions, technical-review items, dispositions, and revalidation.
 - `REQUIREMENTS_BASELINE.md`: conditional governed requirements and coverage authority.
@@ -46,7 +60,7 @@ _hirmos/session/
 - `bootstrap/BOOTSTRAP_REPORT.md`: required bootstrap report for governed session startup and new-chat continuity.
 - `stack-resolution.json`: conditional machine-readable stack-routing state only.
 
-Former separate support files such as request intake, source materials, technical review, implementation readiness, runtime evidence, close checklist, claim reconciliation, archive manifest, and session-contract review are not part of the default active-session model. Their responsibilities belong in the major artifacts above.
+Former separate support files such as request intake, source materials, technical review, implementation readiness, runtime evidence, close checklist, claim reconciliation, archive manifest, and session-scope review are not part of the default active-session model. Their responsibilities belong in the major artifacts above.
 
 ## Source inputs
 

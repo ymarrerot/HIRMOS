@@ -54,8 +54,8 @@ Before normal close, `hirmos close` must apply `_hirmos/core/protocol/COMMAND_ST
 - `_hirmos/session/SESSION_STATE.json` exists and is valid;
 - `status` is `active`;
 - `hirmos close` is legal for the current `lifecycle_stage` and `allowed_next_commands`;
-- `SESSION_CONTRACT.md`, `SESSION_EXECUTION.md`, `unresolved-items.md`, and `SESSION_CONTRACT.md` section 11 exist and are non-placeholder;
-- `SESSION_CONTRACT.md` section 11 has a final coverage verdict compatible with close;
+- `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, `unresolved-items.md`, and `SESSION_SCOPE.md` close verification exist and are non-placeholder;
+- `SESSION_SCOPE.md` close verification has a final coverage verdict compatible with close;
 - no gated unresolved item remains open unless explicitly deferred/carried with user approval;
 - implementation-unit reviews are complete when implementation occurred.
 
@@ -183,7 +183,7 @@ Before normal close success can be surfaced, HIRMOS must verify the complete clo
 
 Required checks:
 
-- `SESSION_CONTRACT.md` and `SESSION_CONTRACT.md` section 11 classify promised work, verified work, gaps, deferred items, and final verdict.
+- `SESSION_SCOPE.md` and `SESSION_SCOPE.md` close verification classify promised work, verified work, gaps, deferred items, and final verdict.
 - `unresolved-items.md` has no unresolved gated item blocking close, and all non-gating assumptions are accepted, resolved, or carried forward.
 - implementation units in `implementation-units/` are reviewed when Implementation was active.
 - `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` and active-only `CARRY_FORWARD.md` are updated only with accepted and carried outcomes.
@@ -191,7 +191,7 @@ Required checks:
 - archived `SESSION_STATE.json` is normalized to closed/history state, not active.
 - active `_hirmos/session/SESSION_STATE.json` is reset to idle after normal close.
 - active `_hirmos/session/` contains only allowed idle scaffolding: `SESSION_STATE.json`, `.gitkeep`, `bootstrap/.gitkeep`, and `implementation-units/.gitkeep`.
-- `SESSION_EXECUTION.md`, `SESSION_CONTRACT.md` section 11, the archive manifest, and accepted-state records do not contradict each other.
+- `SESSION_EXECUTION.md`, `SESSION_SCOPE.md` close verification, the archive manifest, and accepted-state records do not contradict each other.
 
 If any check fails, the terminal state is `Close Blocked`, not `Closed / Archived`.
 
@@ -221,7 +221,7 @@ If archive/session-state integrity fails, the terminal state is `Close Blocked`.
 Required behavior:
 
 1. Read existing `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`.
-2. Classify material outcomes in `SESSION_CONTRACT.md` section 11 close-verification record as accepted, superseded, rejected / not applied, evidence-only, carry-forward, or blocked.
+2. Classify material outcomes in `SESSION_SCOPE.md` close verification close-verification record as accepted, superseded, rejected / not applied, evidence-only, carry-forward, or blocked.
 3. Merge accepted and superseded truth into `CURRENT_SYSTEM_STATE.md`.
 4. Update `DECISION_LOG.md` for durable decisions.
 5. Update `CARRY_FORWARD.md` for unresolved or future-session obligations.
@@ -313,8 +313,8 @@ When delivery governance is active, `hirmos close` must verify the adopted durab
 
 Close requires:
 
-- one adopted phase in `SESSION_CONTRACT.md`;
-- direct review of the durable `PHASE-xx.md` in `SESSION_CONTRACT.md` section 11;
+- one adopted phase in `SESSION_SCOPE.md`;
+- direct review of the durable `PHASE-xx.md` in `SESSION_SCOPE.md` close verification;
 - accepted, partial, blocked, or superseded phase result recorded in `SESSION_EXECUTION.md` close/update controls;
 - Delivery Plan status and Current System State delivery pointers updated or explicitly verified unchanged.
 
@@ -327,16 +327,16 @@ When delivery governance was active, required, created, changed, accepted, block
 
 Required behavior:
 
-1. Read the adopted durable phase from `SESSION_CONTRACT.md` Active Durable Phase Adoption.
+1. Read the adopted durable phase from `SESSION_SCOPE.md` Active Durable Phase Adoption.
 2. Read the parent `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` and active `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`.
-3. Reconcile `SESSION_CONTRACT.md` section 11, implementation-unit reviews, unresolved-items dispositions, and evidence against the adopted phase exit criteria.
+3. Reconcile `SESSION_SCOPE.md` close verification, implementation-unit reviews, unresolved-items dispositions, and evidence against the adopted phase exit criteria.
 4. Complete `SESSION_EXECUTION.md` close/update controls Close-Time Delivery / Phase Status Transaction.
 5. Update or explicitly verify unchanged the adopted `PHASE-xx.md` Close-Time Phase Status Update Contract.
 6. Update the parent `DELIVERY_PLAN.md` Delivery Decomposition row and Delivery Status Update Log.
 7. Refresh `CURRENT_SYSTEM_STATE.md` Active Development Context and Delivery Pointers.
 8. Record carry-forward delivery obligations in `CARRY_FORWARD.md` or the next phase contract.
 
-Close is blocked if Delivery Plan status, Phase status, Session Contract adoption, SESSION_CONTRACT.md close-verification verdict, implementation-unit review results, Current System State delivery pointers, and carry-forward obligations cannot be reconciled.
+Close is blocked if Delivery Plan status, Phase status, Session Scope adoption, SESSION_SCOPE.md close-verification verdict, implementation-unit review results, Current System State delivery pointers, and carry-forward obligations cannot be reconciled.
 
 The archive manifest may record the transaction, but it does not substitute for updating the durable Delivery Plan and Phase file.
 
@@ -372,7 +372,7 @@ Required status terms: Phase Progress Ledger, Carry-Forward Items, partial phase
 
 Before claiming close success, reconcile stale active-session checkpoint text against current resolved state. If older sections still say gated items are unresolved, implementation is blocked, or delivery adoption is pending after later passes resolved those controls, close must either update the stale active-session text before archive or record the discrepancy as a blocked close issue.
 
-The archive must not preserve unresolved/blocking claims as active truth when `SESSION_STATE.json`, `SESSION_EXECUTION.md`, `unresolved-items.md`, `SESSION_CONTRACT.md` section 11, and accepted-state records show they were resolved.
+The archive must not preserve unresolved/blocking claims as active truth when `SESSION_STATE.json`, `SESSION_EXECUTION.md`, `unresolved-items.md`, `SESSION_SCOPE.md` close verification, and accepted-state records show they were resolved.
 
 
 ## Production-shaped engineering close gate

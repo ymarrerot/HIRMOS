@@ -31,7 +31,7 @@
   "execution_controls": [
     "phase-contracting control",
     "delivery-plan coverage control",
-    "session-contract source-readiness control",
+    "session-scope source-readiness control",
     "unresolved-item control when needed"
   ],
   "unresolved_items": {

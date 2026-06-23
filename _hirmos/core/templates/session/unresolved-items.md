@@ -3,7 +3,7 @@
 Status: active-session governed register artifact.
 Purpose: capture, classify, reconcile, dispose, carry, and revalidate every gated item, non-gating assumption, technical-review item, blocker, and material uncertainty discovered during the active session.
 
-This register is authoritative for unresolved-item details. Summaries in `SESSION_CONTRACT.md`, checkpoints, `SESSION_EXECUTION.md`, or user-facing responses are not sufficient substitutes.
+This register is authoritative for unresolved-item details. Summaries in `SESSION_SCOPE.md`, checkpoints, `SESSION_EXECUTION.md`, or user-facing responses are not sufficient substitutes.
 
 Protocol authority: `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`
 

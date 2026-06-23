@@ -7,7 +7,7 @@ Stack guidance is not repository authority. Repository evidence and accepted HIR
 
 ## Core posture
 
-Next.js TypeScript work should be production-shaped by default. Demo-only, fixture-only, local-only, or throwaway implementation is allowed only when explicitly authorized by the Session Contract and preserved at close.
+Next.js TypeScript work should be production-shaped by default. Demo-only, fixture-only, local-only, or throwaway implementation is allowed only when explicitly authorized by the Session Scope and preserved at close.
 
 Production-shaped does not require deployment, cloud services, or enterprise architecture in every session. It requires that local implementation choices preserve the architecture shape needed for production where practical.
 

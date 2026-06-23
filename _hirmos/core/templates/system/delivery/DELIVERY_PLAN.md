@@ -130,9 +130,9 @@ Lifecycle status compatibility:
 
 ## Close / Acceptance Rules
 
-A phase may be marked `ACCEPTED` only when a closed session verifies its Session Contract, implementation units, evidence, unresolved items, and current-state update responsibilities.
+A phase may be marked `ACCEPTED` only when a closed session verifies its Session Scope, implementation units, evidence, unresolved items, and current-state update responsibilities.
 
-The Delivery Plan may recommend the next phase, but it does not authorize implementation by itself. Implementation authority flows through the active `SESSION_CONTRACT.md` and implementation units.
+The Delivery Plan may recommend the next phase, but it does not authorize implementation by itself. Implementation authority flows through the active `SESSION_SCOPE.md` and implementation units.
 
 ## Close-Time Delivery Status Update Contract
 

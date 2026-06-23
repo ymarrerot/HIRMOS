@@ -27,7 +27,7 @@ Produce general and User Request-focused system-state understanding before Desig
 
 ## Required inputs
 
-- `_hirmos/session/SESSION_CONTRACT.md`
+- `_hirmos/session/SESSION_SCOPE.md`
 - `_hirmos/session/DESIGN.md` when source materials exist
 - `_hirmos/session/DESIGN.md` when prototype/POC inputs exist
 - repository/project evidence when a codebase exists
@@ -92,7 +92,7 @@ Record full item fields in `unresolved-items.md`, including current status, down
 
 ## Project Context and Stack Classification
 
-When this capability encounters project-type or stack evidence, record material findings in `DESIGN.md` / `SESSION_CONTRACT.md`, `stack-resolution.json` for machine-readable stack routing, or `SESSION_EXECUTION.md` as required by active controls.
+When this capability encounters project-type or stack evidence, record material findings in `DESIGN.md` / `SESSION_SCOPE.md`, `stack-resolution.json` for machine-readable stack routing, or `SESSION_EXECUTION.md` as required by active controls.
 
 User Request labels and prototype technology signals are focus evidence, not final classification authority.
 

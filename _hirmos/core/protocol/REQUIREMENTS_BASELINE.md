@@ -156,7 +156,7 @@ Acceptable source references include:
 - source materials artifact section;
 - accepted prior requirements baseline ID;
 - user-approved decision/Current Continuation Snapshot;
-- conversation-derived request, when recorded in `SESSION_CONTRACT.md` parent authority.
+- conversation-derived request, when recorded in `SESSION_SCOPE.md` parent authority.
 
 Do not silently promote prototype behavior, UI design notes, research-backed defaults, or model assumptions into confirmed requirements.
 
