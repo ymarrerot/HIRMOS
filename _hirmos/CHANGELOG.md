@@ -6,10 +6,31 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 ## Unreleased
 
+No unreleased changes yet.
+
+## 1.0.4 — Scope authority simplification and delivery navigation hardening
+
+### Added
+
+- Added the scope-centered authority model as the canonical first-version model: `SESSION_SCOPE.md`, top-level `DELIVERY_PLAN.md`, per-delivery `DELIVERY_SCOPE.md`, phase files, and history-level `ARCHIVE_MANIFEST.md`.
+- Added explicit delivery navigation fields for `Last accepted delivery`, `Next recommended delivery`, and `Next recommended delivery scope`.
+- Added project-type-neutral multi-session delivery guidance: durable multi-session delivery applies when justified by governance need, regardless of whether the project is greenfield, brownfield, or mixed.
+
 ### Changed
 
-- Aligned documentation, examples, and CLI/release payload guidance with the PROD-L scope-authority model: `SESSION_SCOPE.md`, top-level `DELIVERY_PLAN.md`, per-delivery `DELIVERY_SCOPE.md`, and history-level `ARCHIVE_MANIFEST.md`.
+- Made `SESSION_SCOPE.md` the active session authority and constrained `SESSION_EXECUTION.md` to a compact continuation handoff and append-only command/control ledger.
+- Changed `DELIVERY_PLAN.md` into a durable roadmap/register that is updated or appended when future deliveries are planned, rather than overwritten.
+- Made `DELIVERY_SCOPE.md` the default combined authority for a durable delivery or release.
+- Renamed canonical independent requirements authority to `REQUIREMENTS.md` and kept `REQUIREMENTS.md` / `DESIGN.md` conditional rather than default implementation-session artifacts.
+- Aligned documentation, examples, validators, regression fixtures, accepted-state surfaces, archive surfaces, command routing guidance, and release payload guidance with the scope-authority model.
+- Generalized framework-facing language so shipped framework files remain project-agnostic except for clearly labeled examples.
 - Clarified that CLI package versioning is independent from framework payload documentation/template changes when terminal CLI behavior is unchanged.
+
+### Removed
+
+- Removed shipped support for legacy scope-authority surfaces and replaced them with the canonical scope-authority model.
+- Removed legacy per-delivery `DELIVERY_PLAN.md` authority guidance in favor of top-level roadmap/register plus per-delivery `DELIVERY_SCOPE.md`.
+- Removed migration/compatibility framing from shipped framework guidance so 1.0.4 presents the simplified model as canonical.
 
 ## 1.0.3 — Production-shaped doctrine, delivery shape, and artifact simplification
 

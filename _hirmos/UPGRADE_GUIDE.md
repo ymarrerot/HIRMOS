@@ -4,6 +4,11 @@ This file records version-level operational notes for the installed HIRMOS frame
 
 ## Current baseline
 
+## HIRMOS 1.0.4 baseline
+
+HIRMOS 1.0.4 is the canonical scope-authority baseline for the framework payload. It presents the simplified authority model as the first-version model and does not preserve legacy authority filenames as supported runtime surfaces.
+
+
 HIRMOS uses the scope-centered authority model:
 
 ```text

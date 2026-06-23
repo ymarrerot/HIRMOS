@@ -209,7 +209,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.0.3'
+expected_version = '1.0.4'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
