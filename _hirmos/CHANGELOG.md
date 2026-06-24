@@ -8,6 +8,16 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 No unreleased changes yet.
 
+## 1.0.7 — Delivery-baseline session-surface minimality and dogfood stabilization
+
+### Changed
+
+- Hardened `delivery_baseline` focus so the active session remains a runtime envelope while delivery-level authority stays under `_hirmos/system/delivery/<delivery-id>/`.
+- Clarified that delivery-baseline work must use `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` and `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` as the active delivery authority and unresolved register.
+- Tightened command, routing, checkpoint, and execution-ledger guidance so session-level `SESSION_SCOPE.md` and `unresolved-items.md` are not created before phase/session baseline authority exists.
+- Updated validators and regression expectations to preserve the delivery/session boundary before delivery-baseline acceptance.
+- Completed final dogfood-readiness stabilization for the focus-aware delivery/session model.
+
 ## 1.0.6 — Focus-aware delivery baseline and multi-session authority hardening
 
 ### Added

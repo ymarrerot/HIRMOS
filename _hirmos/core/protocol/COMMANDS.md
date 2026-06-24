@@ -261,7 +261,7 @@ close
 status
 ```
 
-`SESSION_SCOPE.md` is required when the session focus has a bounded phase/session work scope or implementation authority. It is not required during `delivery_baseline` focus; in that state the active authority is `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` and delivery-level unresolved items are recorded in `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`.
+`SESSION_SCOPE.md` is required when the session focus has a bounded phase/session work scope or implementation authority. It is not required during `delivery_baseline` focus; in that state the active authority is `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` and delivery-level unresolved items are recorded in `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`. During `delivery_baseline`, `_hirmos/session/unresolved-items.md` is `NOT_APPLICABLE` and must not be created as an empty placeholder.
 
 Commands must update `SESSION_STATE.json.active_authority`, `active_delivery_id`, `active_delivery_scope`, and `active_phase` when those fields apply. User-facing output must name the active focus and explain what `hirmos continue` will accept or advance.
 
@@ -270,3 +270,10 @@ SESSION_SCOPE.md is required when the session focus has a bounded phase/session 
 ## PROD-L8.9E/F Checkpoint Template Enforcement
 
 `hirmos start` must select the governed checkpoint template from `START_CHECKPOINT_OUTPUT.md` after resolving `session_focus`. `delivery_baseline` pauses with `Delivery Baseline — Review or Change`. `session_baseline` and `phase_session_baseline` pause with `Session Baseline — Review or Change`. `hirmos continue` must preserve this acceptance boundary and must not skip from delivery-baseline acceptance directly into implementation.
+
+
+## PROD-L8.10 delivery-baseline session-surface minimality
+
+During `session_focus = delivery_baseline`, commands must preserve a minimal session runtime surface: `SESSION_STATE.json` and `SESSION_EXECUTION.md` only. Delivery-level authority and unresolved items live under `_hirmos/system/delivery/<delivery-id>/`. Do not create `_hirmos/session/SESSION_SCOPE.md` or `_hirmos/session/unresolved-items.md` until the flow advances to `phase_session_baseline` or another bounded session-scope focus. `hirmos status` must report session unresolved as `NOT_APPLICABLE` in delivery-baseline focus and point reviewers to `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`.
+
+L8.10 explicit prohibition: during `session_focus = delivery_baseline`, HIRMOS must not create `_hirmos/session/unresolved-items.md`; delivery unresolved items belong only in `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` until a bounded session baseline exists.

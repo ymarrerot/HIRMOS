@@ -8,8 +8,9 @@ Purpose: provide the compact continuation handoff and append-only command/contro
 Authoritative references:
 
 - Machine state: `_hirmos/session/SESSION_STATE.json`
-- Session scope authority: `_hirmos/session/SESSION_SCOPE.md`
-- Unresolved-item details: `_hirmos/session/unresolved-items.md`
+- Session scope authority when bounded session scope exists: `_hirmos/session/SESSION_SCOPE.md`
+- Session unresolved-item details when session-level items exist: `_hirmos/session/unresolved-items.md`
+- Delivery unresolved-item details during delivery baseline: `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`
 - Evidence details: `_hirmos/session/EVIDENCE.md` and implementation-unit records when present
 - Delivery authority when active: `_hirmos/system/delivery/DELIVERY_PLAN.md`, `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`, and `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`
 - Accepted state: `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, and `DECISION_LOG.md`
@@ -34,15 +35,15 @@ This is the required human-readable resume surface. Keep it near the top and upd
 | Completed since session start | | Command Timeline / Evidence Handoff |
 | In progress | | Continuation Pass Register / implementation units |
 | Blocked | | Fail-Closed Conditions / `unresolved-items.md` |
-| Gated unresolved items | | `unresolved-items.md` pointer only |
-| Non-gating unresolved items | | `unresolved-items.md` pointer only |
-| Technical-review items | | `unresolved-items.md` pointer only |
+| Gated unresolved items | | focus-appropriate unresolved register pointer only; session unresolved is `NOT_APPLICABLE` during delivery_baseline |
+| Non-gating unresolved items | | focus-appropriate unresolved register pointer only; session unresolved is `NOT_APPLICABLE` during delivery_baseline |
+| Technical-review items | | focus-appropriate unresolved register pointer only; session unresolved is `NOT_APPLICABLE` during delivery_baseline |
 | Evidence status | | `EVIDENCE.md` pointer only |
 | Next safe governed command | | `SESSION_STATE.json.recommended_next_command` |
 | What the next model must not do | | Boundary Control Checklist / Terminal State |
 | Resume instructions | | This snapshot + backing artifacts |
 
-Fail-closed rule: if this snapshot is missing, placeholder-only, or contradicts `SESSION_STATE.json`, `SESSION_SCOPE.md`, `unresolved-items.md`, or the append-only ledger, HIRMOS must reconcile it or stop at `Blocked / Fail-Closed` before surfacing continuation, readiness, completion, or close claims.
+Fail-closed rule: if this snapshot is missing, placeholder-only, or contradicts `SESSION_STATE.json`, the active authority, the focus-appropriate unresolved register, or the append-only ledger, HIRMOS must reconcile it or stop at `Blocked / Fail-Closed` before surfacing continuation, readiness, completion, or close claims. During `delivery_baseline`, `_hirmos/session/unresolved-items.md` must be recorded as `NOT_APPLICABLE`; delivery unresolved details are in `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`.
 
 ## Command Resolution
 
@@ -104,7 +105,7 @@ This checklist records whether owning artifacts were reviewed at each lifecycle 
 | Working-copy control | project root / `_hirmos/` | meaningful mutation | PENDING | |
 | Current-system-state-first control | `CURRENT_SYSTEM_STATE.md` | design / implementation | PENDING | |
 | Session scope control | `SESSION_SCOPE.md` | session_baseline / implementation readiness / close | PENDING / NOT_APPLICABLE during delivery_baseline | |
-| Unresolved-items control | `unresolved-items.md` | every boundary | PENDING | |
+| Session unresolved-items control | `_hirmos/session/unresolved-items.md` | session_baseline / phase_session_baseline / implementation when session-level unresolved items exist | PENDING / NOT_APPLICABLE during delivery_baseline | |
 | Delivery baseline control | `DELIVERY_PLAN.md` / `DELIVERY_SCOPE.md` / delivery `unresolved-items.md` | delivery_baseline checkpoint | NOT_APPLICABLE | |
 | Delivery/phase control | `DELIVERY_PLAN.md` / `DELIVERY_SCOPE.md` / `PHASE-xx.md` when instantiated | delivery-governed readiness / close | NOT_APPLICABLE | |
 | Implementation-unit coverage control | `implementation-units/` | implementation-unit sessions | NOT_APPLICABLE | |
@@ -149,7 +150,7 @@ Every material control-state change must be appended here. Do not overwrite earl
 | Gate | Required before | Status | Evidence pointer |
 |---|---|---|---|
 | Session Scope review | implementation readiness / close | PENDING | `SESSION_SCOPE.md` |
-| Unresolved Items Reconciliation | every lifecycle boundary | PENDING | `unresolved-items.md` |
+| Unresolved Items Reconciliation | every lifecycle boundary | PENDING | focus-appropriate unresolved register; session unresolved `NOT_APPLICABLE` during delivery_baseline |
 | Implementation Unit Coverage | implementation start / close | NOT_APPLICABLE | `implementation-units/` |
 | Validation Evidence | completion / close | PENDING | `EVIDENCE.md` / unit reviews |
 
@@ -185,7 +186,7 @@ HIRMOS must fail closed and must not claim readiness, implementation completion,
 
 - `SESSION_STATE.json` and `SESSION_EXECUTION.md` disagree on active status, lifecycle stage, continuation pass, or next governed command.
 - `SESSION_SCOPE.md` is missing, placeholder-only, stale, or not reviewed when implementation or close is claimed.
-- `_hirmos/session/unresolved-items.md` is missing or has gated items blocking the boundary.
+- The focus-appropriate unresolved register is missing or has gated items blocking the boundary. During `delivery_baseline`, `_hirmos/session/unresolved-items.md` must not exist and delivery unresolved items must be stored under `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`.
 - Evidence is claimed without a pointer to `EVIDENCE.md`, unit review, command output, inspection note, or explicit not-run rationale.
 - Delivery-governed work lacks the required `DELIVERY_PLAN.md`, `DELIVERY_SCOPE.md`, active `PHASE-xx.md`, or accepted-state pointer concordance.
 - User-facing continuation/readiness output references artifacts that do not exist, are placeholders, or contradict this ledger.
@@ -266,7 +267,7 @@ Record created, read, or updated artifacts without duplicating their content.
 |---|---|---:|---|---|
 | `_hirmos/session/SESSION_STATE.json` | machine command state | yes | | |
 | `_hirmos/session/SESSION_SCOPE.md` | session scope authority | yes | | |
-| `_hirmos/session/unresolved-items.md` | unresolved-item register | yes | | |
+| `_hirmos/session/unresolved-items.md` | session unresolved-item register | no during delivery_baseline; yes only when session-level unresolved authority exists | | |
 | `_hirmos/session/implementation-units/` | implementation unit records | conditional | | |
 | `_hirmos/session/bootstrap/` | startup/bootstrap evidence | yes | | |
 | `_hirmos/session/EVIDENCE.md` | detailed evidence surface | conditional | | |
@@ -552,3 +553,17 @@ Required controls applied here:
 - fail-closed behavior when the ledger, machine state, unresolved-item register, Session Scope close verification, evidence pointers, or archive manifest cannot support the claim.
 
 HIRMOS must not claim a lifecycle boundary complete merely because intended work was described clearly. It may claim the boundary only when this execution ledger self-validates that required controls were satisfied and recorded.
+
+
+## PROD-L8.10 Delivery-Baseline Session Surface Minimality Record
+
+When `session_focus = delivery_baseline`, record:
+
+| Check | Expected value | Actual value | Status | Evidence pointer |
+|---|---|---|---|---|
+| Session unresolved register | NOT_APPLICABLE / absent | | PENDING | |
+| Delivery unresolved register | `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` exists and was reviewed | | PENDING | |
+| Session Scope | NOT_APPLICABLE / absent | | PENDING | |
+| Active authority | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | | PENDING | |
+
+A delivery-baseline checkpoint must point to the delivery unresolved register and must not create an empty session unresolved placeholder.

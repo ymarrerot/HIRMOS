@@ -213,7 +213,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.0.6'
+expected_version = '1.0.7'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -2761,3 +2761,23 @@ for rel, phrases in {
         if phrase not in text:
             fail(f'PROD-L8.9E/F {rel} missing phrase: {phrase}')
 print('PASS: HIRMOS PROD-L8.9E/F checkpoint template and focus-aware validator static check')
+
+
+# PROD-L8.10 delivery-baseline session-surface minimality and validator concordance checks
+for rel, phrases in {
+    'core/protocol/COMMANDS.md': ['PROD-L8.10 delivery-baseline session-surface minimality', 'session unresolved as `NOT_APPLICABLE`', 'must not create `_hirmos/session/unresolved-items.md`'],
+    'core/protocol/CAPABILITY_ROUTING.md': ['PROD-L8.10 Delivery-Baseline Surface Minimality Routing', 'must not create `_hirmos/session/unresolved-items.md`', 'Status and checkpoints must report session unresolved as `NOT_APPLICABLE`'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['PROD-L8.10 Delivery-Baseline Surface Minimality', '_hirmos/session/SESSION_SCOPE.md` and `_hirmos/session/unresolved-items.md` are not applicable', 'project-agnostic'],
+    'core/commands/start.md': ['PROD-L8.10 delivery-baseline surface rule', 'must not create `_hirmos/session/SESSION_SCOPE.md` or `_hirmos/session/unresolved-items.md`'],
+    'core/commands/continue.md': ['PROD-L8.10 delivery-baseline continuation surface rule', 'session-level unresolved items remain `NOT_APPLICABLE`'],
+    'core/commands/status.md': ['PROD-L8.10 delivery-baseline unresolved reporting', 'session-level unresolved register in this focus is a surface-minimality conflict'],
+    'core/commands/close.md': ['PROD-L8.10 delivery-baseline close guard', 'presence of `_hirmos/session/unresolved-items.md` during delivery-baseline focus is a concordance defect'],
+    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.10 Delivery-Baseline Session Surface Minimality Record', 'Session unresolved register', 'Delivery unresolved register'],
+    'core/templates/checkpoints/DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md': ['Surface Minimality Requirement', 'Do not list `_hirmos/session/unresolved-items.md`'],
+}.items():
+    body = (root/rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.10 delivery-baseline minimality {rel} missing phrase: {phrase}')
+
+print('PASS: HIRMOS PROD-L8.10 delivery-baseline session-surface minimality static check')

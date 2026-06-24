@@ -442,3 +442,8 @@ If a session-level unresolved item invalidates a delivery-level decision or assu
 ## PROD-L8.9E/F Focus-Aware Close Guard
 
 `hirmos close` must not claim implementation completion from a delivery-baseline session. Delivery-baseline close can only record delivery-baseline acceptance/amendment/blockage and the next governed phase/session command.
+
+
+## PROD-L8.10 delivery-baseline close guard
+
+A delivery-baseline runtime session must not be closed as implementation-complete work. If `session_focus = delivery_baseline`, close may only record delivery-baseline acceptance/blockage and runtime-session reset after authority reconciliation. The presence of `_hirmos/session/unresolved-items.md` during delivery-baseline focus is a concordance defect that must be corrected before normal close success.

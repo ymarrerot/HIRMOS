@@ -328,3 +328,8 @@ When `session_focus = session_baseline` or `phase_session_baseline`, `hirmos con
 ## PROD-L8.9E/F Baseline Acceptance Boundary
 
 If the prior checkpoint was `Delivery Baseline — Review or Change`, `hirmos continue` accepts or amends delivery authority, then prepares the next phase/session baseline and pauses again. It must not implement directly from the delivery-baseline checkpoint. If the prior checkpoint was `Session Baseline — Review or Change`, `hirmos continue` accepts or amends the session baseline before implementation-unit artifacts are instantiated.
+
+
+## PROD-L8.10 delivery-baseline continuation surface rule
+
+When continuing from `session_focus = delivery_baseline`, session-level unresolved items remain `NOT_APPLICABLE` until `hirmos continue` advances into `phase_session_baseline` and creates a bounded `SESSION_SCOPE.md`. The command must not create `_hirmos/session/unresolved-items.md` as a placeholder while still in delivery-baseline acceptance. If a delivery decision becomes blocked or amended, update `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` and the delivery authority, not the session unresolved register.

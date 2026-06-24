@@ -291,3 +291,8 @@ Runtime commands must use this binding when deciding which artifacts to instanti
 `session-scope` must adopt and narrow accepted delivery/phase authority. It must not duplicate full delivery authority inside the active session.
 
 `implementation-readiness` must fail closed when the selected focus route's authority chain is missing, contradictory, placeholder-only, or not accepted/amended.
+
+
+## PROD-L8.10 Delivery-Baseline Surface Minimality
+
+Delivery-baseline planning uses the runtime session envelope but delivery authority owns the governed content. During `session_focus = delivery_baseline`, `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` is the active authority and `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` is the unresolved register. `_hirmos/session/SESSION_SCOPE.md` and `_hirmos/session/unresolved-items.md` are not applicable and must not be created as placeholders. This rule is project-agnostic and applies to any durable delivery, regardless of domain, project type, or feature set.

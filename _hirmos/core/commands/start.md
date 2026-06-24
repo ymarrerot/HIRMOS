@@ -138,7 +138,7 @@ At every user-facing checkpoint, `allowed_next_commands` must include only safe 
 
 ## Mandatory implementation-readiness pause
 
-`hirmos start` must stop before implementation. For single-session work, it stops after creating/updating the required session baseline artifacts and surfacing a governed first-review checkpoint using `_hirmos/core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md`. For durable delivery work, it stops after creating/updating delivery-baseline artifacts and surfacing `Delivery Baseline — Review or Change`; `SESSION_SCOPE.md`, `PHASE-xx.md`, and implementation-unit artifacts are not created by default before delivery-baseline acceptance.
+`hirmos start` must stop before implementation. For single-session work, it stops after creating/updating the required session baseline artifacts and surfacing a governed first-review checkpoint using `_hirmos/core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md`. For durable delivery work, it stops after creating/updating delivery-baseline artifacts and surfacing `Delivery Baseline — Review or Change`; `SESSION_SCOPE.md`, `_hirmos/session/unresolved-items.md`, `PHASE-xx.md`, and implementation-unit artifacts are not created by default before delivery-baseline acceptance.
 
 The checkpoint heading must be:
 
@@ -152,8 +152,8 @@ Before returning control to the user, `hirmos start` must explain:
 - what HIRMOS is going to do;
 - what HIRMOS is not going to do;
 - recommended delivery shape and why it was selected;
-- gated unresolved items from `_hirmos/session/unresolved-items.md#Current Checkpoint Feed`;
-- non-gating assumptions from `_hirmos/session/unresolved-items.md#Current Checkpoint Feed`;
+- gated unresolved items from the focus-appropriate unresolved register (`_hirmos/system/delivery/<delivery-id>/unresolved-items.md#Current Checkpoint Feed` during `delivery_baseline`, `_hirmos/session/unresolved-items.md#Current Checkpoint Feed` during session/phase-session baselines when created);
+- non-gating assumptions from the focus-appropriate unresolved register;
 - material technical-review items and where to inspect them;
 - artifacts worth reviewing before continuation;
 - what `hirmos continue` will do;
@@ -179,7 +179,7 @@ Record these controls in `SESSION_EXECUTION.md` at minimum:
 | Snapshot-backed checkpoint control | always | user-facing checkpoint references missing/placeholders |
 | System-state control | always for governed software work | current-state evidence missing or insufficient |
 | Current-system-state-first control | always for governed software work | `CURRENT_SYSTEM_STATE.md` exists but was not read first, missing status was not recorded, or accepted-state contradictions were not classified |
-| Unresolved-item control | always for governed sessions | `_hirmos/session/unresolved-items.md` missing, not directly reviewed, gated items unresolved, or classification missing |
+| Unresolved-item control | when focus has unresolved-item authority | focus-appropriate unresolved register missing, not directly reviewed, gated items unresolved, or classification missing; during `delivery_baseline`, session-level unresolved is `NOT_APPLICABLE` and delivery unresolved is required |
 | Session Scope control | before Implementation or close | `SESSION_SCOPE.md` missing, placeholder, incomplete, or not coverage-reviewed |
 | Delivery Shape Decision control | before Implementation Readiness for implementation-capable sessions | shape missing, UNCERTAIN, unsafe smaller shape, or selected durable-delivery shape without required artifacts |
 | Production-Shaped Engineering Gate control | before Implementation Readiness for implementation-capable software sessions | gate missing, material area blocked, or weaker posture not explicitly authorized |
@@ -211,7 +211,7 @@ Do not claim `Ready for Implementation` unless:
 - Understand System State controls are satisfied;
 - Design controls are satisfied;
 - unresolved gated items are resolved or the command stops at `Needs User Decision`;
-- `_hirmos/session/unresolved-items.md` was directly reviewed, not inferred from the Session Scope summary;
+- the focus-appropriate unresolved register was directly reviewed, not inferred from a summary;
 - `SESSION_SCOPE.md` exists, covers authorized scope, and authorizes Implementation;
 - implementation authorization is recorded;
 - the Production-Shaped Engineering Gate is complete for material areas or explicitly not applicable;
@@ -230,8 +230,8 @@ Common instantiation sequence before the first review checkpoint:
 
 1. `SESSION_EXECUTION.md` always.
 2. `_hirmos/session/SESSION_STATE.json#run_context` before timestamped artifacts are written.
-3. `unresolved-items.md` always for governed sessions.
-4. `SESSION_SCOPE.md` before Implementation can be authorized or close can be claimed.
+3. `unresolved-items.md` only when the active focus has session-level unresolved-item authority; during `delivery_baseline`, do not create `_hirmos/session/unresolved-items.md` and use `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` instead.
+4. `SESSION_SCOPE.md` before Implementation can be authorized or close can be claimed; during `delivery_baseline`, do not create `SESSION_SCOPE.md` before bounded phase/session scope exists.
 5. `REQUIREMENTS.md` or `DESIGN.md` only when separate authority is justified, and `SESSION_SCOPE.md` must record the separate authority justification.
 6. Durable delivery artifacts under `_hirmos/system/delivery/<delivery-id>/` only when the selected delivery shape requires them.
 7. Implementation-shape preview may be recorded in `SESSION_SCOPE.md` only when it helps the user accept or change the baseline.
@@ -401,3 +401,8 @@ Required behavior:
 ## PROD-L8.9E/F Focus-Aware Checkpoint Output
 
 After `session_focus` is resolved, `hirmos start` must use `START_CHECKPOINT_OUTPUT.md` to select either `DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md` or `SESSION_BASELINE_CHECKPOINT_OUTPUT.md`. A delivery-baseline pause must not create `_hirmos/session/SESSION_SCOPE.md`, concrete future phase files, or implementation-unit artifacts.
+
+
+## PROD-L8.10 delivery-baseline surface rule
+
+When `hirmos start` selects `session_focus = delivery_baseline`, the session runtime surface must remain minimal: `SESSION_STATE.json` and `SESSION_EXECUTION.md`. The command must create or update `_hirmos/system/delivery/DELIVERY_PLAN.md`, `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`, and `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`; optional delivery-level `REQUIREMENTS.md` and `DESIGN.md` are created only when justified. It must not create `_hirmos/session/SESSION_SCOPE.md` or `_hirmos/session/unresolved-items.md` during this focus.

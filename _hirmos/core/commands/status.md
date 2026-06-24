@@ -321,3 +321,8 @@ If `session_focus = delivery_baseline`, status must not report missing `SESSION_
 ## PROD-L8.9E/F Checkpoint Status Reporting
 
 `hirmos status` must report the active checkpoint type, active authority, unresolved register path, baseline acceptance status, and whether phase files or implementation-unit files have been prematurely instantiated.
+
+
+## PROD-L8.10 delivery-baseline unresolved reporting
+
+When `session_focus = delivery_baseline`, status must report `_hirmos/session/unresolved-items.md` as `NOT_APPLICABLE` and must point to `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` for gated delivery items, non-gating delivery assumptions, and technical-review delivery items. A session-level unresolved register in this focus is a surface-minimality conflict and must be reported as blocked.

@@ -142,3 +142,8 @@ Stop / do not continue
 - Do not create or reference concrete future `PHASE-xx.md` paths unless those files exist.
 - Do not instantiate implementation-unit artifacts from the delivery baseline checkpoint.
 - Recommend exactly one next governed command when the delivery baseline is acceptable: `hirmos continue`.
+
+
+## Surface Minimality Requirement
+
+During `delivery_baseline`, do not list `_hirmos/session/unresolved-items.md` or `_hirmos/session/SESSION_SCOPE.md` as review artifacts. They are `NOT_APPLICABLE` until a bounded phase/session baseline exists. Delivery unresolved items must be sourced from `_hirmos/system/delivery/<delivery-id>/unresolved-items.md#Current Checkpoint Feed`.

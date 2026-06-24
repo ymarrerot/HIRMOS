@@ -295,3 +295,8 @@ Legacy route labels are history only. Runtime routing uses `DELIVERY_BASELINE / 
 ## PROD-L8.9E/F Checkpoint and Validation Routing
 
 Checkpoint template selection is focus-aware. `delivery_baseline` must use `DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md` and delivery-level unresolved items. `session_baseline` and `phase_session_baseline` must use `SESSION_BASELINE_CHECKPOINT_OUTPUT.md` and session-level unresolved items when created. Validators must fail closed when a delivery baseline creates `SESSION_SCOPE.md`, instantiates `PHASE-xx.md` before baseline acceptance, or stores delivery-level unresolved items in `_hirmos/session/unresolved-items.md`.
+
+
+## PROD-L8.10 Delivery-Baseline Surface Minimality Routing
+
+When the selected route is `DELIVERY_BASELINE / delivery_baseline`, capability producers must write delivery-level uncertainty to `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`. They must not create `_hirmos/session/unresolved-items.md` or `_hirmos/session/SESSION_SCOPE.md` until the route advances to `DELIVERY_PHASE_SESSION / phase_session_baseline` or another bounded session-scope focus. Status and checkpoints must report session unresolved as `NOT_APPLICABLE` during delivery-baseline focus.
