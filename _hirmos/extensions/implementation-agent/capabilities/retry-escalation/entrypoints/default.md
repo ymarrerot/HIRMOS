@@ -45,7 +45,7 @@ Retry is not a second attempt at arbitrary implementation. It must route back in
 Retry must:
 
 1. Use evidence from the failed attempt.
-2. Preserve the original Unit Contract.
+2. Preserve the original Unit Scope.
 3. Append a bounded retry section inside the same `IU-xx.md`.
 4. State allowed retry scope and forbidden work.
 5. State verification and escalation conditions.
@@ -62,7 +62,7 @@ Do not create standalone `implementation-units/IU-xx.md` artifacts.
 2. Instantiate or update only the canonical artifacts required by the active request path.
 3. Produce non-placeholder content before claiming completion.
 4. Preserve lifecycle ownership boundaries; route back in `SESSION_EXECUTION.md` when evidence invalidates an earlier stage.
-5. Apply the extension method and this capability-specific contract; do not execute from chat summaries or raw inputs alone.
+5. Apply the extension method and this capability-specific execution surface; do not execute from chat summaries or raw inputs alone.
 
 ## Interaction-mode visibility
 

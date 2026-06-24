@@ -131,7 +131,7 @@ No mode may claim production readiness when material integration posture is bloc
 Interaction modes affect how much vertical-slice status is shown.
 
 - `domain_expert`: show active slice, plain-language outcome, blockers, recommendation, and next command/action.
-- `technical_supervisor`: also show source contracts, evidence status, runtime integration posture, and unresolved-item disposition.
+- `technical_supervisor`: also show source authority artifacts, evidence status, runtime integration posture, and unresolved-item disposition.
 - `framework_diagnostics`: also show Delivery Unit status table, capability decisions, controls, route-backs, and artifact pointers.
 
 Interaction modes must not change Delivery Unit status, Session Scope authority, or evidence requirements.

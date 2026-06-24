@@ -22,7 +22,7 @@ Rule: do not create default session-level `REQUIREMENTS.md` or `DESIGN.md` for n
 
 HIRMOS must not create an active-session artifact merely because a template exists, a topic was discussed, or the model wants a place to think. A separate active-session artifact is justified only when it is strictly necessary for at least one of these reasons:
 
-1. **Authority** — it owns scope, requirements, design, implementation-unit contract, unresolved-item status, or accepted-state update obligations.
+1. **Authority** — it owns scope, requirements, design, implementation-unit authority record, unresolved-item status, or accepted-state update obligations.
 2. **Machine state** — it records command/lifecycle state that must be machine-readable or fail-closed.
 3. **Evidence** — it preserves validation, runtime, production-shaped engineering, or claim evidence that is material to implementation or close.
 4. **Gating** — it controls whether implementation, continuation, close, or update-state may proceed.
@@ -73,7 +73,7 @@ _hirmos/session/
 | `REQUIREMENTS.md` | requirements materially govern scope; target name `REQUIREMENTS.md` | normalized requirements, source traceability, requirement coverage |
 | `DESIGN.md` | substantial design/current-state/technical-review/readiness work is needed | current-state basis, source matrix, design, technical review, implementation readiness basis |
 | `EVIDENCE.md` | nontrivial implementation or material claims/evidence exist | command evidence, runtime evidence, production-shaped evidence, claim reconciliation, close evidence handoff |
-| `implementation-units/IU-xx.md` | nontrivial implementation unit exists | unit contract, evidence, review, retry history, result |
+| `implementation-units/IU-xx.md` | nontrivial implementation unit exists | unit authority record, evidence, review, retry history, result |
 | `bootstrap/BOOTSTRAP_REPORT.md` | governed session startup / new chat bootstrap | bootstrap findings and initialization evidence |
 | `stack-resolution.json` | stack selection materially affects routing/evidence | machine-readable stack resolution only |
 
@@ -168,7 +168,7 @@ Do not create separate intake support files by default. Record source coverage i
 
 Record current-state-first completion in `SESSION_EXECUTION.md`. Put material current-state findings in `DESIGN.md` when they affect Design or Implementation. Unknowns, contradictions, assumptions, risks, blockers, or user-owned decisions must be captured in `unresolved-items.md`.
 
-### Design / Contracting
+### Design / Scope Authority
 
 Create only when Design responsibilities are active:
 
@@ -191,7 +191,7 @@ Create only when Implementation responsibilities are active:
 - `_hirmos/session/implementation-units/IU-xx.md` for nontrivial implementation units;
 - `_hirmos/session/EVIDENCE.md` for material command, runtime, production-shaped engineering, claim-reconciliation, or close evidence.
 
-Implementation artifacts consume `SESSION_SCOPE.md` and `DESIGN.md`. They must not silently rewrite `SESSION_SCOPE.md`, durable delivery contracts, or accepted current system state.
+Implementation artifacts consume `SESSION_SCOPE.md` and `DESIGN.md`. They must not silently rewrite `SESSION_SCOPE.md`, durable delivery scopes, or accepted current system state.
 
 ### Update System State / Close
 
@@ -220,7 +220,7 @@ Every implementation-capable session must record the Delivery Shape Decision in 
 
 ## Session Scope and Implementation Unit rule
 
-Every implementation session must have a governed `SESSION_SCOPE.md`. Every non-trivial implementation unit must use one self-contained `implementation-units/IU-xx.md` artifact that includes the unit contract, evidence, review, result, and retries when needed.
+Every implementation session must have a governed `SESSION_SCOPE.md`. Every non-trivial implementation unit must use one self-contained `implementation-units/IU-xx.md` artifact that includes the unit authority record, evidence, review, result, and retries when needed.
 
 ## Naming rules
 
@@ -290,7 +290,22 @@ _hirmos/system/delivery/
   <delivery-id>/
     DELIVERY_SCOPE.md           # scoped authority for one delivery/release
     phases/
-      PHASE-xx.md               # conditional phase contract
+      PHASE-xx.md               # conditional phase scope
 ```
 
 `DELIVERY_PLAN.md` is append/update-oriented and preserves delivery history. `DELIVERY_SCOPE.md` is the default combined delivery authority. Separate delivery-level `REQUIREMENTS.md` and `DESIGN.md` are optional only when independent authority is justified.
+
+
+## Runtime timestamp context
+
+`_hirmos/session/SESSION_STATE.json` → `run_context` records the reliable machine-readable runtime timestamp source for the session. Timestamped session artifacts must derive session dates/timestamps from this state field rather than model memory. `BOOTSTRAP_REPORT.md` records human-readable timestamp capture evidence; it is not the canonical timestamp source.
+
+
+## Pre-implementation baseline boundary
+
+Before the session scope baseline has been accepted or amended, implementation-unit artifacts must not be created. HIRMOS may record only a compact implementation-shape preview in `SESSION_SCOPE.md` when needed for review. Full implementation-unit artifacts belong only in `_hirmos/session/implementation-units/` after baseline acceptance/amendment.
+
+
+## Complete active session authority
+
+`SESSION_SCOPE.md` is the complete active session authority and close-verification root. Optional `REQUIREMENTS.md` and `DESIGN.md` may provide detailed sub-authority only for IDs or sections explicitly adopted by `SESSION_SCOPE.md`; they must not create independent session obligations.

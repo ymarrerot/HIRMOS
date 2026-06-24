@@ -93,7 +93,7 @@ _hirmos/system/delivery/
       PHASE-xx.md
 ```
 
-`DELIVERY_PLAN.md` is the durable roadmap/register. It is updated, not overwritten, when later durable multi-session work adds another delivery. Each `DELIVERY_SCOPE.md` is the scoped authority for one delivery/release. Phase files are conditional and are used only when separate phase contracts improve continuity, evidence, or reviewability.
+`DELIVERY_PLAN.md` is the durable roadmap/register. It is updated, not overwritten, when later durable multi-session work adds another delivery. Each `DELIVERY_SCOPE.md` is the scoped authority for one delivery/release. Phase files are conditional and are used only when separate phase scopes improve continuity, evidence, or reviewability.
 
 ## Runtime behavior after PROD-L4
 

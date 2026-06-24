@@ -1,4 +1,4 @@
-# Phase Contract
+# Phase Scope
 
 Lifecycle status: NOT_STARTED | READY_FOR_ADOPTION | ACTIVE | BLOCKED | PARTIAL | READY_FOR_ACCEPTANCE | ACCEPTED | DEFERRED | SUPERSEDED | CANCELLED
 Phase type: GREENFIELD | BROWNFIELD | MIXED | UNKNOWN
@@ -14,7 +14,7 @@ Next recommended action:
 
 ## Authority
 
-This is the durable phase contract for one bounded phase of a delivery governed by `DELIVERY_SCOPE.md`.
+This is the durable phase scope for one bounded phase of a delivery governed by `DELIVERY_SCOPE.md`.
 
 Canonical location:
 
@@ -224,7 +224,7 @@ Acceptance gate status: PENDING / PASS / BLOCKED / PARTIAL
 - Required evidence to inspect:
 - Known blockers:
 
-## Close-Time Phase Status Update Contract
+## Close-Time Phase Status Update
 
 This section must be updated during `hirmos close` whenever a session accepts, partially accepts, blocks, supersedes, defers, cancels, or advances this phase.
 

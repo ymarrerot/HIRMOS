@@ -168,7 +168,7 @@ Required behavior:
 - identify the active Delivery Unit / Phase when one exists;
 - keep `SESSION_EXECUTION.md` aligned with the active slice status;
 - recommend exactly one primary next command/action unless blocked;
-- do not imply the next Delivery Unit is authorized unless its governing contract and controls support it.
+- do not imply the next Delivery Unit is authorized unless its governing authority and controls support it.
 
 
 ## Command-state close transition
@@ -343,10 +343,10 @@ Required behavior:
 2. Read the parent `_hirmos/system/delivery/DELIVERY_PLAN.md and _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` and active `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`.
 3. Reconcile `SESSION_SCOPE.md` close verification, implementation-unit reviews, unresolved-items dispositions, and evidence against the adopted phase exit criteria.
 4. Complete `SESSION_EXECUTION.md` close/update control pointers Close-Time Delivery / Phase Status Transaction.
-5. Update or explicitly verify unchanged the adopted `PHASE-xx.md` Close-Time Phase Status Update Contract.
+5. Update or explicitly verify unchanged the adopted `PHASE-xx.md` Close-Time Phase Status Update.
 6. Update the parent `DELIVERY_PLAN.md` Delivery Decomposition row and Delivery Status Update Log.
 7. Refresh `CURRENT_SYSTEM_STATE.md` Active Development Context and Delivery Pointers.
-8. Record carry-forward delivery obligations in `CARRY_FORWARD.md` or the next phase contract.
+8. Record carry-forward delivery obligations in `CARRY_FORWARD.md` or the next phase scope.
 
 Close is blocked if Delivery Plan status, Phase status, Session Scope adoption, SESSION_SCOPE.md close-verification verdict, implementation-unit review results, Current System State delivery pointers, and carry-forward obligations cannot be reconciled.
 

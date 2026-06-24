@@ -18,12 +18,12 @@ It is not raw source input, not implementation design, not evidence review, and 
 - Do not promote prototype observations, UI notes, or research-backed defaults into confirmed requirements without classification.
 - `CURRENT_SYSTEM_STATE.md` may reference this file, but must not replace this requirement catalog.
 
-## Baseline Identity
+## Requirements Identity
 
 | Field | Value |
 |---|---|
-| Baseline version | `0` |
-| Baseline status | `INITIAL_BASELINE` |
+| Requirements version | `0` |
+| Requirements status | `INITIAL_BASELINE` |
 | Source | `No accepted product requirements yet` |
 | Last accepted close | `None` |
 

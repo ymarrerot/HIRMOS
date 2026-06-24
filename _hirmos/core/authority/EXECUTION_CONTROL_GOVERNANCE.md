@@ -58,7 +58,7 @@ Every advancing command must establish relevant controls before claiming progres
 - unresolved-item control when decisions or assumptions exist;
 - validation/evidence control when evidence is claimed.
 
-Conditional controls may be added for request intake, system-state understanding, Design, stack selection, delivery planning, phase/delivery-unit contracts, session scope, Implementation, retry, Update System State, and archive.
+Conditional controls may be added for request intake, system-state understanding, Design, stack selection, delivery planning, phase/delivery-unit authority records, session scope, Implementation, retry, Update System State, and archive.
 
 ## Evidence rule
 

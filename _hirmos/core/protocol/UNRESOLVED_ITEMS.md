@@ -194,7 +194,7 @@ Design cannot claim implementation authorization while gated Design items remain
 
 Implementation-readiness cannot pass while an affected gated unresolved item remains unresolved or blocked.
 
-Implementation cannot proceed when a gated item affects the Session Scope, Implementation Unit contract, validation evidence, or preservation constraint.
+Implementation cannot proceed when a gated item affects the Session Scope, Implementation Unit authority record, validation evidence, or preservation constraint.
 
 Update System State and close cannot proceed when a gated item affects accepted outcomes, rejected outcomes, carry-forward status, or archive readiness.
 
@@ -217,3 +217,8 @@ Runtime or close-time validators should fail when:
 - item records lack required minimum fields;
 - non-gating assumptions lack revalidation points;
 - resolved items lack disposition history.
+
+
+## Start checkpoint disclosure rule
+
+The `hirmos start` implementation-readiness pause must source gated items, non-gating assumptions, and technical-review pointers from `_hirmos/session/unresolved-items.md#Current Checkpoint Feed` and render them through `_hirmos/core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md`. The user-facing checkpoint must not summarize unresolved items from memory or hide material non-gating assumptions.

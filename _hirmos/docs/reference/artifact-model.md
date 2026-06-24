@@ -42,7 +42,7 @@ _hirmos/session/
   REQUIREMENTS.md   # conditional requirements authority
   DESIGN.md                  # conditional design authority
   EVIDENCE.md                # conditional nontrivial evidence surface
-  implementation-units/      # conditional implementation-unit contracts/reviews
+  implementation-units/      # conditional implementation-unit authority records/reviews
   bootstrap/                 # required session infrastructure; bootstrap report required for governed session startup
   stack-resolution.json       # conditional machine-readable stack routing only
 ```
@@ -107,7 +107,7 @@ _hirmos/system/delivery/
   <delivery-id>/
     DELIVERY_SCOPE.md           # scoped authority for one delivery/release
     phases/
-      PHASE-xx.md               # conditional phase contract
+      PHASE-xx.md               # conditional phase scope
 ```
 
 `DELIVERY_PLAN.md` is append/update-oriented and preserves delivery history. `DELIVERY_SCOPE.md` is the default combined delivery authority. Separate delivery-level `REQUIREMENTS.md` and `DESIGN.md` are optional only when independent authority is justified.

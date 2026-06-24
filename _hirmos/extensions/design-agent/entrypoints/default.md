@@ -128,7 +128,7 @@ When prior runs, accepted state, or carry-forward items affect scope, Design mus
 
 
 A Durable Delivery Plan remains the durable authority for multi-session delivery shapes.
-When the selected delivery shape uses phase files, Design uses durable `PHASE-xx.md` contracts.
+When the selected delivery shape uses phase files, Design uses durable `PHASE-xx.md` phase scopes.
 
 ## PROD-L4 delivery route selection
 

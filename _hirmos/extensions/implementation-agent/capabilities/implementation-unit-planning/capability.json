@@ -1,7 +1,7 @@
 {
   "id": "implementation-unit-planning",
   "extension": "implementation-agent",
-  "summary": "Turn an authorized Session Scope, Phase Contract, or Phase Contract into tailored implementation units.",
+  "summary": "Turn an authorized Session Scope, Phase Scope, or Phase Scope into tailored implementation units.",
   "lifecycle_stage": "implementation",
   "entrypoints": {
     "default": "entrypoints/default.md"

@@ -6,7 +6,7 @@ Core owns lifecycle authority, command routing, interaction modes, execution con
 
 ## Shared method
 
-Read `entrypoints/default.md` before running implementation-agent capabilities; it contains the shared Implementation method and routing contract.
+Read `entrypoints/default.md` before running implementation-agent capabilities; it contains the shared Implementation method and routing authority.
 
 ## Supported lifecycle stage
 

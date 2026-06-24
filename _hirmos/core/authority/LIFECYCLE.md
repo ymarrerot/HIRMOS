@@ -77,8 +77,8 @@ It owns:
 - system and application design;
 - delivery plan;
 - delivery-unit or phase planning;
-- delivery-unit or phase contracts;
-- preservation contract when needed;
+- delivery-unit or phase scopes;
+- preservation scope when needed;
 - regression evidence strategy when needed;
 - session scope;
 - unresolved-item disposition for Design decisions;

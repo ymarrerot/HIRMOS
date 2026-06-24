@@ -52,7 +52,7 @@ Implementation requires a ready `_hirmos/session/SESSION_SCOPE.md`, resolved gat
 
 ### Implementation Unit Discipline
 
-An Implementation Unit is an execution contract, not a generic task or prompt. The Session Scope Implementation Unit Plan must cover 100% of authorized implementation scope before execution begins. Each `IU-xx.md` must state scope, files/areas, acceptance checks, validation expectations, evidence requirements, and route-back triggers.
+An Implementation Unit is a bounded execution authority record, not a generic task or prompt. The Session Scope Implementation Unit Plan must cover 100% of authorized implementation scope before execution begins. Each `IU-xx.md` must state scope, files/areas, acceptance checks, validation expectations, evidence requirements, and route-back triggers.
 
 ### Implementation Execution Discipline
 

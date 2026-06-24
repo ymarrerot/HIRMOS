@@ -14,7 +14,7 @@ Produce durable phase files under one selected delivery scope when the chosen ro
 
 ### Terminal States
 
-- COMPLETED — required phase or delivery-unit contracts are ready.
+- COMPLETED — required phase or delivery-unit authority records are ready.
 - NEEDS_USER_DECISION — phase/delivery boundary needs user input.
 - BLOCKED — Delivery Plan or Design authority is missing.
 - ROUTE_BACK_REQUIRED — phase planning exposes weak requirements/design/system-state evidence.
@@ -24,7 +24,7 @@ Produce durable phase files under one selected delivery scope when the chosen ro
 
 - Delivery Plan requires phases
 - greenfield, brownfield, or mixed implementation needs phase files
-- large or multi-session decomposition needs bounded delivery contracts
+- large or multi-session decomposition needs bounded delivery scopes
 
 ## Required inputs
 
@@ -48,7 +48,7 @@ This capability inherits shared extension rules from `_hirmos/extensions/design-
 2. Instantiate or update only the canonical artifacts required by the active request path.
 3. Produce non-placeholder content before claiming completion.
 4. Preserve lifecycle ownership boundaries; route back in `SESSION_EXECUTION.md` when evidence invalidates an earlier stage.
-5. Apply the extension method and this capability-specific contract; do not execute from chat summaries or raw inputs alone.
+5. Apply the extension method and this capability-specific execution surface; do not execute from chat summaries or raw inputs alone.
 
 ## Interaction-mode visibility
 
@@ -91,7 +91,7 @@ Required behavior:
 Forbidden session-local delivery authorities:
 
 ```text
-legacy session-local delivery plan, phase plan, delivery status, phase contract, or delivery-unit contract files
+legacy session-local delivery plan, phase plan, delivery status, phase scope, or delivery-unit authority record files
 ```
 
 ## PROD-L4 runtime route obligations
@@ -107,4 +107,4 @@ This capability participates in the command-selected delivery route. Before clai
 The capability must not compensate for missing authority by creating legacy session-local delivery files or by duplicating full delivery authority inside `SESSION_SCOPE.md`.
 
 
-Compatibility note: Phase Contract language now means durable `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` adopted from `DELIVERY_SCOPE.md`.
+Compatibility note: Phase Scope language now means durable `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` adopted from `DELIVERY_SCOPE.md`.

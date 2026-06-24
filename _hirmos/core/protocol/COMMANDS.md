@@ -82,7 +82,7 @@ Required command-state discipline for all commands:
 | Response discipline | Surface exactly one primary next governed command that is legal under the updated `SESSION_STATE.json`. |
 | Fail closed | If legality, artifacts, or state are contradictory, stop before lifecycle work and recommend exactly one governed recovery command. |
 
-Command-specific files must use this protocol as their local command contract.
+Command-specific files must use this protocol as their local command authority.
 
 Every command must apply `_hirmos/core/protocol/COMMAND_STATE_MACHINE.md` before recommending or executing a next command. `SESSION_STATE.json` is the machine-readable command-state authority. `SESSION_EXECUTION.md` explains execution history but must not override `SESSION_STATE.json`.
 
@@ -98,7 +98,11 @@ If command legality is unclear or contradictory, the command must stop at a bloc
 
 ## Mandatory start pause rule
 
-`hirmos start` must not go directly into implementation. For implementation-capable sessions, it must stop at implementation readiness after creating the Session Scope, unresolved-item register, session-scope review scaffold, execution spine, and implementation-unit plan when applicable. The next governed command is `hirmos continue`.
+`hirmos start` must not go directly into implementation. For implementation-capable sessions, it must stop at implementation readiness after creating the Session Scope, unresolved-item register, execution ledger, runtime timestamp context, and any conditional requirements/design/delivery authority justified by the selected route.
+
+The user-facing pause must use `_hirmos/core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md` and surface `Recommended Baseline — Review or Change` before implementation begins. If the user runs `hirmos continue`, HIRMOS treats the baseline as accepted unless the user requested changes first.
+
+Full implementation-unit artifacts must not be instantiated before the session scope baseline has been accepted or amended. The next governed command is `hirmos continue`.
 
 ## Cumulative continue pass rule
 

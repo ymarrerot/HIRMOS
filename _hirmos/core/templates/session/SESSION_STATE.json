@@ -11,6 +11,12 @@
   ],
   "recommended_next_command": "hirmos start",
   "blocking_reason": null,
+  "run_context": {
+    "run_started_at_utc": null,
+    "run_started_date_utc": null,
+    "timezone_basis": null,
+    "source": null
+  },
   "created_at": null,
   "updated_at": null
 }

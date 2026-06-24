@@ -105,7 +105,7 @@ The User Request starts and focuses the work. It is not governed requirements, D
 
 Understand System State is mandatory for governed software work. It grounds the session in current project truth through both general system-state understanding and request-focused system-state understanding.
 
-Design owns governed requirements, design, delivery planning, durable delivery plans, phase contracts, Session Scopes, decisions, completion criteria, and implementation authorization.
+Design owns governed requirements, design, delivery planning, durable delivery plans, phase scopes, Session Scopes, decisions, completion criteria, and implementation authorization.
 
 Implementation owns governed realization of accepted Design, including implementation-unit planning, project-file changes, validation, review, retry, and evidence. It realizes accepted Design with evidence; it is not only coding.
 

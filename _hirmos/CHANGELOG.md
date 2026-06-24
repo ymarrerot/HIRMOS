@@ -8,6 +8,28 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 No unreleased changes yet.
 
+## 1.0.5 — Dogfood-ready start checkpoint and authority hardening
+
+### Added
+
+- Added a governed start checkpoint output for `hirmos start`: `Recommended Baseline — Review or Change`.
+- Added explicit first-review behavior so users can accept, change, mark uncertain, request technical review, or stop before implementation begins.
+- Added machine-readable `SESSION_STATE.json.run_context` as the canonical runtime timestamp source for session artifacts.
+
+### Changed
+
+- Delayed full implementation-unit artifact creation until after the session scope baseline is accepted or amended.
+- Hardened `unresolved-items.md` as the canonical register for gated items, non-gating assumptions, technical-review items, blockers, and material uncertainties.
+- Clarified that `SESSION_SCOPE.md` remains the complete active session authority and close-verification root, while optional `REQUIREMENTS.md` and `DESIGN.md` are subordinate detail authorities only when explicitly adopted.
+- Tightened responsibility boundaries for `REQUIREMENTS.md`, `DESIGN.md`, `SESSION_EXECUTION.md`, implementation-unit records, delivery scopes, and phase scopes.
+- Consolidated runtime timestamp context into `SESSION_STATE.json` and kept timestamp capture evidence in `BOOTSTRAP_REPORT.md`.
+- Restricted project-agnostic marker checks to shipped framework surfaces so generated project artifacts may mention project-specific names and features.
+- Removed residual scope-authority wording that used legacy contract/baseline terminology in shipped framework surfaces.
+
+### Removed
+
+- Removed the separate `RUN_CONTEXT.json` template; runtime context now lives in `SESSION_STATE.json.run_context`.
+
 ## 1.0.4 — Scope authority simplification and delivery navigation hardening
 
 ### Added

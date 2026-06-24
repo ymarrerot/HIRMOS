@@ -1,11 +1,44 @@
 # Design
 
-Status: active-session Design authority artifact.
-Purpose: convert User Request, source inputs, prototype findings, system-state findings, and unresolved-item dispositions into governed requirements, system/application design, delivery structure, technical review inputs, and implementation authorization inputs.
+Status: conditional active-session design authority artifact.
+Purpose: record material technical decisions, architecture constraints, integration boundaries, alternatives, and technical-review points when separate design authority is justified by `SESSION_SCOPE.md`.
 
-Design can satisfy requirements/design/planning requests. Implementation is not required unless the active request needs governed realization of accepted Design.
+`DESIGN.md` is subordinate to `SESSION_SCOPE.md`. It does not define session scope by itself. Only design decisions or sections explicitly adopted in `SESSION_SCOPE.md` govern implementation and close verification.
 
-## Design Source Matrix
+## 1. Design Identity
+
+| Field | Value |
+|---|---|
+| Session ID | `<session-id>` |
+| Design version | `<v0>` |
+| Design status | `DRAFT / READY_FOR_IMPLEMENTATION / ACCEPTED / SUPERSEDED` |
+| Governing session scope | `_hirmos/session/SESSION_SCOPE.md` |
+| Requirements authority, if any | `_hirmos/session/REQUIREMENTS.md` or `NOT_APPLICABLE` |
+| Optional authority justification | `_hirmos/session/SESSION_SCOPE.md#optional-authority-artifact-justification-and-adoption` |
+
+## 2. Responsibility Boundary
+
+This artifact owns:
+
+- architecture decisions;
+- data and persistence decisions;
+- provider and external-service boundaries;
+- runtime/job-processing design;
+- security, privacy, and operational decisions;
+- technical assumptions, alternatives, risks, and technical-review points.
+
+This artifact does not own:
+
+- authorized session outcome or final scope;
+- normalized requirement catalog;
+- delivery shape authority except as design input;
+- implementation-unit plans before baseline acceptance;
+- evidence details or implementation claims;
+- accepted-state truth.
+
+Those responsibilities belong to `SESSION_SCOPE.md`, `REQUIREMENTS.md`, `implementation-units/`, `EVIDENCE.md`, and accepted-state artifacts as applicable.
+
+## 3. Design Source Matrix
 
 | Input | Source artifact | Authority status | Used for | Notes |
 |---|---|---|---|---|
@@ -24,7 +57,7 @@ rejected
 
 ## Current-State Basis
 
-Record material current-system-state findings here when they affect Design or Implementation. Do not create a separate `DESIGN.md` current-state basis artifact for new sessions.
+Record material current-system-state findings here when they affect Design or Implementation.
 
 - `CURRENT_SYSTEM_STATE.md` read status: READ | MISSING | NOT_APPLICABLE | BLOCKED
 - Accepted-state records reviewed:
@@ -35,78 +68,30 @@ Record material current-system-state findings here when they affect Design or Im
 
 ## Governed Requirements
 
-State the governed requirements produced by Design. Separate them from raw requirement inputs.
+Summarize only the requirement IDs or scope sections that `SESSION_SCOPE.md` adopted and that materially affect design. Do not recreate the full requirement catalog here.
 
-For each material requirement, include:
+| Requirement / scope reference | Design implication | Notes |
+|---|---|---|
+| `<REQ-ID or SESSION_SCOPE section>` | `<implication>` | `<notes>` |
 
-- requirement ID;
-- requirement statement;
-- source evidence;
-- system-state evidence;
-- decision / assumption status;
-- acceptance criteria;
-- affected lifecycle responsibility;
-- unresolved items affecting the requirement.
+## System / Application Design Decisions
 
-## System / Application Design
-
-Describe the architecture, workflows, data model, integration approach, permissions, UX/API boundaries, stack implications, preservation requirements, and operational constraints relevant to the active request.
-
-## Delivery Shape Decision
-
-This section is the Delivery Structure Decision for the current session and records the selected delivery shape.
-
-State the smallest sufficient governed delivery shape:
-
-```text
-SINGLE_SESSION_VERTICAL_SLICE
-SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS
-MULTI_SESSION_DELIVERY
-MULTI_SESSION_DELIVERY_WITH_PHASE_FILES
-UNCERTAIN
-```
-
-Explain why this is the smallest shape that preserves engineering quality, implementation truth, reviewability, validation, continuity, and accepted-state integrity. Also explain why smaller and larger shapes were rejected.
-
-## Delivery / Slice / Phase / Implementation-Unit Mapping
-
-| Governed requirement or design item | Delivery shape item | Slice / phase / implementation unit | Contract artifact | Notes |
-|---|---|---|---|---|
-
-## Technical Assumptions and Review Notes
-
-List technical assumptions, tradeoffs, risks, alternatives considered, and review points. Reference `DESIGN.md` technical review when separate reviewer-facing detail exists.
-
-## Unresolved Item Disposition
-
-Summarize gated, non-gating, and technical-review items from `unresolved-items.md`. Do not claim implementation readiness while gated items remain unresolved.
-
-## Implementation Authorization Inputs
-
-State what must exist before Implementation can begin:
-
-- Session Scope;
-- delivery/phase/delivery-unit source, if applicable;
-- Implementation Readiness;
-- technical review path, if applicable;
-- required evidence criteria;
-- active execution controls satisfied.
-
-## Not Authorized
-
-List work that Design does not authorize.
-
-## Route-Back Conditions
-
-List conditions that require returning to Understand System State or regenerating Design.
+| Decision ID | Area | Decision | Rationale / evidence | Adopted by SESSION_SCOPE? | Review status |
+|---|---|---|---|---|---|
+| SD-001 | Architecture | `<decision>` | `<rationale>` | `YES / NO / PARTIAL` | `PENDING / REVIEWED / CHANGED` |
 
 
+## Delivery Structure Decision
 
-## Production-Shaped Engineering Gate — Design Decision
+Delivery Shape Decision note: Design may record technical implications of the delivery shape selected in `SESSION_SCOPE.md`, but `SESSION_SCOPE.md` owns delivery shape authority. Do not create delivery or implementation-unit obligations here.
 
-Required for implementation-capable software sessions before implementation authorization.
+- Selected delivery shape from `SESSION_SCOPE.md`:
+- Technical implications:
+- Design risks created by this shape:
 
-For each material area, record the production-shaped default, the session decision, whether weaker posture is explicitly authorized, and whether implementation is blocked.
+## Production-Shaped Engineering Decisions
+
+Required for implementation-capable software sessions before implementation authorization. Decisions here provide technical detail for the Production-Shaped Engineering Gate in `SESSION_SCOPE.md`; they do not replace it.
 
 | Area | Material? | Production-shaped default | Session decision | If weaker, why allowed? | Blocks implementation? | Evidence required |
 |---|---:|---|---|---|---:|---|
@@ -119,16 +104,21 @@ For each material area, record the production-shaped default, the session decisi
 | Secrets and environment configuration | | `.env.example`; no secrets/runtime data in handoff/release | | | | |
 | Critical-flow tests / smoke evidence | | Test/smoke/runtime evidence plan for critical paths | | | | |
 
-Implementation is not authorized while any material area is `BLOCKS implementation = YES`, unless the Session Scope explicitly changes scope to exclude that area.
-
-If any item uses a prototype, fixture, demo-only, local-only, or non-production-shaped posture, the limitation must also appear in the Session Scope and unresolved/carry-forward controls as appropriate.
+Implementation is not authorized while any material area is `Blocks implementation = YES`, unless `SESSION_SCOPE.md` explicitly changes scope to exclude that area.
 
 ## Runtime Integration and Production Readiness Design
 
-Identify material runtime integration areas created or affected by this Design.
+Identify material runtime integration areas created or affected by this design.
 
 | Area | Material? | Current / planned posture | Production recommendation | Decision owner | Surface to Domain Expert now? |
 |---|---:|---|---|---|---:|
+
+
+- Material Integration Areas:
+- Recommended Production Options:
+- Current-Session Authorization:
+- Production Readiness Checkpoint Basis:
+- Update System State Carry-Forward:
 
 Design must distinguish:
 
@@ -138,17 +128,17 @@ Design must distinguish:
 - production provider integration;
 - blocked decisions, credentials, or accounts.
 
-Do not authorize Implementation to claim more than the posture recorded here and in the Session Scope.
+## Technical Assumptions and Review Notes
 
-- Material Integration Areas:
-- Recommended Production Options:
-- Current-Session Authorization:
-- Production Readiness Checkpoint Basis:
-- Update System State Carry-Forward:
+List technical assumptions, tradeoffs, risks, alternatives considered, and review points. Material items must also appear in `_hirmos/session/unresolved-items.md` as gated, non-gating, or technical-review items.
+
+| Item ID | Assumption / decision / risk | Why it matters | Review path | Status |
+|---|---|---|---|---|
+| TD-001 | `<item>` | `<why>` | `<artifact/path or reviewer>` | `PENDING / REVIEWED / CARRIED` |
 
 ## Technical Review and Implementation Readiness Basis
 
-Use this section for reviewer-facing technical assumptions, production-shaped engineering posture, risk decisions, and implementation-readiness rationale. Do not create separate `DESIGN.md` technical review or `DESIGN.md` readiness basis artifacts for new sessions.
+Use this section for reviewer-facing technical readiness rationale. Do not create implementation-unit files or detailed implementation-unit plans here before baseline acceptance.
 
 | Area | Decision / finding | Evidence | Status |
 |---|---|---|---|
@@ -161,11 +151,41 @@ Use this section for reviewer-facing technical assumptions, production-shaped en
 
 Implementation may proceed only when `SESSION_SCOPE.md`, unresolved-item status, production-shaped engineering gate, and this readiness basis agree that implementation is authorized.
 
+
+## Implementation Authorization Inputs
+
+State what must exist before implementation can begin. `SESSION_SCOPE.md` owns authorization; this section records design-side readiness inputs only.
+
+- Session Scope complete and non-placeholder:
+- Adopted requirements/design decisions aligned:
+- Unresolved-item gate clear or explicitly handled:
+- Production-shaped engineering decisions aligned with `SESSION_SCOPE.md`:
+- Implementation-unit artifacts deferred until baseline acceptance/amendment:
+
+## Not Authorized
+
+List work that this design does not authorize.
+
+## Route-Back Conditions
+
+List conditions that require returning to Understand System State, Requirements, Session Scope, or Design.
+
+
 ## Project-Type / Stack / Delivery Routing Context
 
-Former project-context support-artifact content lives here under the strict-necessity model.
+Record technical routing context only when it affects design. `SESSION_SCOPE.md` owns delivery shape authority.
 
 - Project-Type Classification:
 - Stack Classification:
 - Stack Contexts:
 - Delivery Routing Impact:
+
+## Design Self-Check
+
+- [ ] `SESSION_SCOPE.md` justifies why separate design authority exists.
+- [ ] This design records technical decisions only; it does not redefine session scope.
+- [ ] Only decisions adopted by `SESSION_SCOPE.md` are treated as implementation obligations.
+- [ ] Any separate `REQUIREMENTS.md` is referenced as requirement authority, not duplicated.
+- [ ] No full implementation-unit artifacts or detailed implementation-unit plans are created here before baseline acceptance.
+- [ ] Material technical assumptions and review points are mirrored in `unresolved-items.md`.
+- [ ] The production-shaped engineering decisions agree with `SESSION_SCOPE.md`.

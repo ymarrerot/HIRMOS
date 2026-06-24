@@ -83,7 +83,7 @@ Future sessions must read `CURRENT_SYSTEM_STATE.md` before treating archived ses
 
 ### Active Development Context and Delivery Pointers
 
-This is the canonical pointer surface for durable delivery governance. It records only pointers and current delivery navigation. It must not duplicate the Delivery Plan, Delivery Scope, Phase contract, or session-local scope content.
+This is the canonical pointer surface for durable delivery governance. It records only pointers and current delivery navigation. It must not duplicate the Delivery Plan, Delivery Scope, Phase scope, or session-local scope content.
 
 | Field | Value | Source / evidence |
 |---|---|---|
@@ -292,7 +292,7 @@ Required refresh inputs:
 
 - `SESSION_EXECUTION.md` close/update control pointers Close-Time Delivery / Phase Status Transaction;
 - parent `DELIVERY_PLAN.md` roadmap/register Delivery Status Update Log and `DELIVERY_SCOPE.md` close verification;
-- adopted `PHASE-xx.md` Close-Time Phase Status Update Contract;
+- adopted `PHASE-xx.md` Close-Time Phase Status Update;
 - session `ARCHIVE_MANIFEST.md` and `SESSION_SCOPE.md` close-verification verdict.
 - Current System State delivery pointers refreshed or explicitly verified unchanged.
 
@@ -312,7 +312,7 @@ When a phase becomes `ACCEPTED`, Current System State must update active deliver
 
 `hirmos status` must read this accepted-state pointer section before reporting active delivery work and must surface a Phase Lifecycle Status Report with phase lifecycle status, phase type, Phase Entry Gate status, Phase Progress Ledger status, Carry-Forward Items status, Phase Acceptance Evidence Gate status, pointer concordance, blocked controls, and exactly one recommended next command.
 
-Current System State must remain pointer-only: it may point to Delivery Plan, Phase, archive, and evidence locations, but must not duplicate the detailed phase contract or acceptance evidence.
+Current System State must remain pointer-only: it may point to Delivery Plan, Phase, archive, and evidence locations, but must not duplicate the detailed phase scope or acceptance evidence.
 
 
 ## Archive Manifest Concordance Rule

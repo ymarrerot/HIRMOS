@@ -71,7 +71,7 @@ Rules:
 
 See [`managed-blocks.md`](./managed-blocks.md) for the exact update behavior.
 
-See [`docs/hirmos-init-cli-design.md`](./docs/hirmos-init-cli-design.md) for the `hirmos init` CLI implementation design and behavior contract.
+See [`docs/hirmos-init-cli-design.md`](./docs/hirmos-init-cli-design.md) for the `hirmos init` CLI implementation design and behavior specification.
 
 ## Shared target rule
 

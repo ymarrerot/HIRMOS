@@ -43,7 +43,7 @@ The public framework payload owns the integration registry and templates consume
 _hirmos/integrations/agent-tools/
 ```
 
-The CLI implementation source is maintained outside the public repository surface. Public docs should describe the CLI behavior contract, not local maintainer source paths.
+The CLI implementation source is maintained outside the public repository surface. Public docs should describe the CLI behavior specification, not local maintainer source paths.
 
 Do not place CLI implementation authority under:
 

@@ -37,6 +37,22 @@ When the command reaches Design, Implementation, or close/update-state for softw
 ## Required behavior
 
 
+## First continuation after start checkpoint
+
+When `hirmos continue` is the first continuation after a `Recommended Baseline — Review or Change` start checkpoint, it accepts the recommended baseline unless the user requested changes before continuing.
+
+Before implementation begins, `hirmos continue` must:
+
+- verify that `SESSION_SCOPE.md` exists and records the accepted or amended session scope baseline;
+- verify that `_hirmos/session/unresolved-items.md#Current Checkpoint Feed` has no unresolved gated item blocking Implementation;
+- apply any user-requested baseline changes before proceeding;
+- instantiate implementation-unit artifacts when the accepted Session Scope requires them;
+- record the baseline acceptance, amendments, and created implementation-unit artifacts in `SESSION_EXECUTION.md`;
+- stop or route back if the baseline is uncertain, contradicted, or missing required review items.
+
+Full implementation-unit artifacts must be created in `_hirmos/session/implementation-units/` only after this acceptance/amendment boundary. Do not treat a pre-acceptance implementation-shape preview as implementation-unit authority.
+
+
 ### Beyond Clear Specs execution-control subset
 
 This command applies the execution-control subset of `_hirmos/core/authority/BEYOND_CLEAR_SPECS.md` through `SESSION_EXECUTION.md`: clear command/boundary controls, strict self-validation before surfaced claims, append-only evidence/control records, and fail-closed behavior when the active artifacts do not support the claim.
@@ -103,7 +119,7 @@ Continuation pass types:
 
 - Initial implementation pass
 - Corrective pass inside the existing Session Scope
-- Contract amendment pass when the user expands scope
+- Scope amendment pass when the user expands scope
 - Validation-only pass
 - Route-back pass
 
@@ -199,7 +215,7 @@ Required behavior:
 - identify the active Delivery Unit / Phase when one exists;
 - keep `SESSION_EXECUTION.md` aligned with the active slice status;
 - recommend exactly one primary next command/action unless blocked;
-- do not imply the next Delivery Unit is authorized unless its governing contract and controls support it.
+- do not imply the next Delivery Unit is authorized unless its governing authority and controls support it.
 
 ## Claim reconciliation behavior
 
@@ -229,7 +245,7 @@ If the session scope, current-state pointer, Delivery Plan, and active Phase fil
 
 Before executing delivery-governed implementation, `hirmos continue` must verify that the active Session Scope still adopts exactly one durable phase and that the adopted phase path still exists.
 
-A continuation may amend the adopted phase only through a Contract Amendment in `SESSION_SCOPE.md`. The amendment must record whether it is a same-phase scope correction, a partial-adoption clarification, or a blocked attempt to switch phases.
+A continuation may amend the adopted phase only through a Scope Amendment in `SESSION_SCOPE.md`. The amendment must record whether it is a same-phase scope correction, a partial-adoption clarification, or a blocked attempt to switch phases.
 
 Fail-closed rule: `hirmos continue` must not silently switch to a different phase, combine multiple phases into one session, or implement phase items not adopted into the Session Scope.
 

@@ -25,6 +25,13 @@ Answer the bootstrap quiz from `_hirmos/core/bootstrap.md`. Include enough detai
 
 Record any missing, contradictory, or unclear bootstrap evidence.
 
+## Runtime Context
+
+- Session-state runtime context path: `_hirmos/session/SESSION_STATE.json#run_context`
+- Runtime timestamp source captured? YES | NO
+- Runtime timestamp source type: cli | shell-date | user-provided | other
+- Date command/evidence when not CLI-provided:
+
 ## Allowed Next Action
 
 State the next allowed action after bootstrap.

@@ -4,7 +4,7 @@
 
 ### Purpose
 
-Review one completed implementation unit against its own `IU-xx.md` Unit Contract, scope, validation, and evidence.
+Review one completed implementation unit against its own `IU-xx.md` Unit Scope, scope, validation, and evidence.
 
 ### Produces
 
@@ -14,9 +14,9 @@ Review one completed implementation unit against its own `IU-xx.md` Unit Contrac
 
 ### Terminal States
 
-- PASS — implementation satisfies 100% of the unit contract.
+- PASS — implementation satisfies 100% of the unit authority record.
 - PASS_WITH_LIMITATIONS — implementation is acceptable with explicit limitations.
-- FAIL — implementation does not satisfy the unit contract.
+- FAIL — implementation does not satisfy the unit authority record.
 - BLOCKED — review cannot complete due to missing evidence or blocker.
 - ROUTE_BACK_REQUIRED — review exposes invalid design/scope/current-state assumptions.
 - NOT_APPLICABLE — no unit review is required.
@@ -47,7 +47,7 @@ Unit review is local, specific, and evidence-based. A unit is not complete until
 The review must literally answer inside the IU artifact:
 
 ```text
-Does the actual implementation satisfy 100% of this implementation unit contract?
+Does the actual implementation satisfy 100% of this implementation unit authority record?
 Answer: YES / NO / PARTIAL.
 Evidence:
 Gaps:
@@ -56,7 +56,7 @@ Deferred items:
 
 The review must compare:
 
-- Unit Contract requirements to actual result;
+- Unit Scope requirements to actual result;
 - in-scope / out-of-scope conformance;
 - validation requirements to actual evidence;
 - requested runtime posture to delivered posture;
@@ -73,7 +73,7 @@ Retry decisions must be recorded in the same `IU-xx.md` artifact under `## 6. Re
 2. Instantiate or update only the canonical artifacts required by the active request path.
 3. Produce non-placeholder content before claiming completion.
 4. Preserve lifecycle ownership boundaries; route back in `SESSION_EXECUTION.md` when evidence invalidates an earlier stage.
-5. Apply the extension method and this capability-specific contract; do not execute from chat summaries or raw inputs alone.
+5. Apply the extension method and this capability-specific execution surface; do not execute from chat summaries or raw inputs alone.
 
 ## Interaction-mode visibility
 

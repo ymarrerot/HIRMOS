@@ -14,7 +14,7 @@ _hirmos/system/delivery/
   <delivery-id>/
     DELIVERY_SCOPE.md           # scoped authority for one delivery/release
     phases/
-      PHASE-xx.md               # conditional phase contract when phase files are selected
+      PHASE-xx.md               # conditional phase scope when phase files are selected
 
     REQUIREMENTS.md             # optional independent requirements authority only when justified
     DESIGN.md                   # optional independent design authority only when justified
@@ -78,7 +78,7 @@ Use when the work needs more than one accepted session, but separate phase files
 
 ### MULTI_SESSION_DELIVERY_WITH_PHASE_FILES
 
-Use when separate phase contracts materially improve safety, reviewability, or continuity. Phase files have a high threshold. They are justified when each phase needs its own durable contract, acceptance criteria, blockers, and close/update-state boundary.
+Use when separate phase scopes materially improve safety, reviewability, or continuity. Phase files have a high threshold. They are justified when each phase needs its own durable contract, acceptance criteria, blockers, and close/update-state boundary.
 
 ## Escalation criteria
 
@@ -158,7 +158,7 @@ Sessions may not silently expand a delivery. Material additions must update `DEL
 
 ## Phase rules
 
-`PHASE-xx.md` is optional and conditional. It is used only when separate phase contracts materially improve continuity, acceptance, or evidence.
+`PHASE-xx.md` is optional and conditional. It is used only when separate phase scopes materially improve continuity, acceptance, or evidence.
 
 A phase must adopt from `DELIVERY_SCOPE.md`, not from a per-delivery `DELIVERY_PLAN.md`. The phase file records entry criteria, exit criteria, included/excluded scope, adoption constraints, evidence requirements, carry-forward, and close-time status transaction.
 

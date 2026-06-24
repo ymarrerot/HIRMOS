@@ -1,7 +1,7 @@
 # Governed Checkpoints Protocol
 
 Status: core protocol.
-Purpose: define how HIRMOS surfaces user-facing checkpoints without heavy output-contract machinery.
+Purpose: define how HIRMOS surfaces user-facing checkpoints without heavy output-governance machinery.
 
 Governed checkpoints are user-facing outputs that can affect continuation. They must be concise for the active interaction mode and backed by existing session artifacts.
 
@@ -134,3 +134,8 @@ Required artifacts when applicable:
 - `_hirmos/session/EVIDENCE.md` reconciles whether the claim may be surfaced.
 
 Firm rule: tests/build/lint alone do not prove local runtime readiness or role workflow readiness.
+
+
+## Start checkpoint output
+
+For the first implementation-readiness pause produced by `hirmos start`, use `_hirmos/core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md`. This checkpoint is the user's opportunity to accept or change the session scope baseline, unresolved gated items, non-gating assumptions, and material technical-review items before implementation-unit artifacts are instantiated.

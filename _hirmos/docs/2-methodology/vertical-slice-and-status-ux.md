@@ -19,7 +19,7 @@ Delivery Units give HIRMOS a simple user-facing rhythm while preserving Design a
 
 ```text
 Delivery Plan
-→ Phase / Phase Contract
+→ Phase / Phase Scope
 → Session Scope
 → Implementation Units
 → Evidence Review

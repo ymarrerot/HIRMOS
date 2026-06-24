@@ -19,8 +19,8 @@ A vertical slice is a bounded user-valuable or system-valuable delivery segment 
 
 In HIRMOS, a vertical slice is represented by one of these governed sources:
 
-- a Phase Contract;
-- a Phase Contract;
+- a Phase Scope;
+- a Phase Scope;
 - a Session Scope for small targeted work;
 - an explicitly reviewed implementation-continuation scope.
 
@@ -130,7 +130,7 @@ The recommendation must include:
 - required command to start or continue it;
 - whether it needs Design refresh before Implementation.
 
-Do not imply the next phase is authorized unless its source contract is ready and current.
+Do not imply the next phase is authorized unless its source authority artifact is ready and current.
 
 ## Status command rule
 

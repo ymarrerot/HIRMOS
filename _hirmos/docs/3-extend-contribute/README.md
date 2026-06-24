@@ -66,7 +66,7 @@ Core owns:
 - validation and evidence rules;
 - accepted-state update safety.
 
-## Capability entrypoint contract
+## Capability entrypoint execution surface
 
 Runnable extension and capability entrypoints expose a minimal execution contract:
 

@@ -30,7 +30,7 @@ Execute one approved implementation unit using its self-contained `IU-xx.md` art
 
 - `_hirmos/session/SESSION_SCOPE.md`
 - `_hirmos/session/unresolved-items.md`
-- one approved `_hirmos/session/implementation-units/IU-xx.md` with a complete Unit Contract
+- one approved `_hirmos/session/implementation-units/IU-xx.md` with a complete Unit Scope
 - stack/project context and required files
 
 ## Execution controls contributed
@@ -45,7 +45,7 @@ This capability inherits shared extension rules from `_hirmos/extensions/impleme
 Execution must:
 
 1. Read the target `IU-xx.md` artifact directly.
-2. Confirm the Unit Contract is non-placeholder and approved for execution.
+2. Confirm the Unit Scope is non-placeholder and approved for execution.
 3. Confirm the Session Scope still authorizes the unit.
 4. Confirm `unresolved-items.md` has no gated blocker for the unit.
 5. Inspect current project files before editing.
@@ -64,7 +64,7 @@ Do not execute from prose, checkpoint summaries, or old split artifacts. The IU 
 2. Instantiate or update only the canonical artifacts required by the active request path.
 3. Produce non-placeholder content before claiming completion.
 4. Preserve lifecycle ownership boundaries; route back in `SESSION_EXECUTION.md` when evidence invalidates an earlier stage.
-5. Apply the extension method and this capability-specific contract; do not execute from chat summaries or raw inputs alone.
+5. Apply the extension method and this capability-specific execution surface; do not execute from chat summaries or raw inputs alone.
 
 ## Interaction-mode visibility
 

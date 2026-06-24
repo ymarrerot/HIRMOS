@@ -32,6 +32,7 @@ Before execution:
 6. `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`
 7. `_hirmos/core/protocol/GOVERNED_CHECKPOINTS.md`
 8. `_hirmos/core/protocol/VALIDATION_AND_EVIDENCE.md`
+8a. `_hirmos/core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md` before surfacing the first implementation-readiness checkpoint
 9. `_hirmos/core/protocol/CURRENT_SYSTEM_STATE.md`
 10. `_hirmos/core/protocol/REQUIREMENTS.md`
 11. `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md` when material runtime services are involved
@@ -59,6 +60,10 @@ Before starting lifecycle work, `hirmos start` must apply `_hirmos/core/protocol
 
 If any check fails, `hirmos start` must stop at `Blocked / Fail-Closed`, identify the failed precondition, and recommend exactly one governed recovery command. It must not create a new session over an active or stale session.
 
+### Runtime timestamp source
+
+Before creating timestamped session artifacts, `hirmos start` must populate `_hirmos/session/SESSION_STATE.json` → `run_context` from a reliable runtime source: CLI-provided timestamp, shell `date -u`, or explicit user-provided timestamp. Do not infer dates from model memory, prior chat context, or examples. All generated `created_at`, `updated_at`, session-id date segments, authorization dates, checkpoint dates, and close/archive timestamps must derive from `SESSION_STATE.json.run_context`. If no reliable timestamp source is available, stop at `Blocked / Fail-Closed` and request or obtain one before writing timestamped artifacts.
+
 ### Required state mutation
 
 ### Delivery Shape Decision Gate
@@ -80,7 +85,7 @@ Fail-closed behavior:
 
 - `UNCERTAIN` blocks implementation readiness until resolved.
 - `SINGLE_SESSION_VERTICAL_SLICE` requires affirmative bounded-scope safety evidence.
-- `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` requires implementation units that collectively cover the Session Scope.
+- `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` requires implementation units that collectively cover the Session Scope after the session scope baseline has been accepted or amended. Before acceptance, only implementation-shape preview information may be recorded.
 - `MULTI_SESSION_DELIVERY` requires a durable Delivery Plan before implementation authorization.
 - `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` requires a durable Delivery Plan and exactly one adopted durable phase file before implementation authorization.
 
@@ -108,11 +113,12 @@ For implementation-capable sessions, the final start state must be `lifecycle_st
 2. Capture the User Request from the command argument, current conversation, or declared input files.
 3. If the User Request is missing or too unclear to govern, stop at `Request Not Governable` and ask for the missing request.
 4. Verify the active working copy and `_hirmos/` installation.
-5. Create `_hirmos/session/SESSION_EXECUTION.md` from the session template before lifecycle work begins.
-6. Record session id, active command, User Request, interaction mode, active lifecycle boundary, and continuation state.
-7. Establish baseline execution controls.
-8. Instantiate only the session artifacts required by the active request path.
-9. Run Understand System State before claiming Design authority.
+5. Populate `_hirmos/session/SESSION_STATE.json` → `run_context` from a reliable runtime timestamp source before writing timestamped artifacts.
+6. Create `_hirmos/session/SESSION_EXECUTION.md` from the session template before lifecycle work begins.
+7. Record session id, active command, User Request, interaction mode, active lifecycle boundary, and continuation state.
+8. Establish baseline execution controls.
+9. Instantiate only the session artifacts required before the first review checkpoint.
+10. Run Understand System State before claiming Design authority.
 10. During Understand System State, read `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` first when it exists. If it is missing, record the absence explicitly in `_hirmos/session/DESIGN.md` and `_hirmos/session/SESSION_EXECUTION.md`.
 11. Read supporting accepted-state artifacts (`CURRENT_SYSTEM_STATE.md` latest-close metadata, `CARRY_FORWARD.md`, `DECISION_LOG.md`) when present. Use session archives only as history/evidence, not as the primary current-state source.
 12. Use the User Request and source inputs to guide focused system-state understanding, but do not treat them as governed requirements.
@@ -124,19 +130,28 @@ For implementation-capable sessions, the final start state must be `lifecycle_st
 
 ## Mandatory implementation-readiness pause
 
-`hirmos start` must stop before implementation. For implementation-capable sessions, the terminal state is `Ready for Implementation` after HIRMOS has created/updated the contract-centered start artifacts and surfaced what it understood.
+`hirmos start` must stop before implementation. For implementation-capable sessions, the terminal state is `Ready for Implementation` only after HIRMOS has created/updated the session baseline artifacts and surfaced a governed first-review checkpoint using `_hirmos/core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md`.
+
+The checkpoint heading must be:
+
+```text
+Recommended Baseline — Review or Change
+```
 
 Before returning control to the user, `hirmos start` must explain:
 
 - what HIRMOS understood;
 - what HIRMOS is going to do;
 - what HIRMOS is not going to do;
-- affected areas/artifacts;
-- planned implementation units, when applicable;
-- gated unresolved items;
-- non-gating assumptions;
-- required validation;
+- recommended delivery shape and why it was selected;
+- gated unresolved items from `_hirmos/session/unresolved-items.md#Current Checkpoint Feed`;
+- non-gating assumptions from `_hirmos/session/unresolved-items.md#Current Checkpoint Feed`;
+- material technical-review items and where to inspect them;
+- artifacts worth reviewing before continuation;
+- what `hirmos continue` will do;
 - exactly one next governed command: `hirmos continue`.
+
+The checkpoint must state that if the user runs `hirmos continue`, HIRMOS will treat the recommended baseline as accepted unless the user requests changes first.
 
 HIRMOS must not begin implementation during `hirmos start` unless the active request is explicitly design-only or analysis-only and no implementation is being performed.
 
@@ -203,17 +218,20 @@ If system evidence, Design authority, or required artifacts are insufficient, st
 
 `hirmos start` must create `_hirmos/session/SESSION_EXECUTION.md` before lifecycle work begins. It must then instantiate only artifacts required by the active request path.
 
-Common instantiation sequence:
+Common instantiation sequence before the first review checkpoint:
 
 1. `SESSION_EXECUTION.md` always.
-2. `SESSION_SCOPE.md` parent authority, `DESIGN.md` source matrix, or `DESIGN.md` source matrix when request/source/prototype inputs require durable extraction.
-3. `DESIGN.md` current-state basis for governed software work.
-4. `unresolved-items.md` always for governed sessions.
-5. `SESSION_SCOPE.md` before Implementation can be authorized or close can be claimed.
-6. Design artifacts only when Design is active.
-7. Durable delivery artifacts under `_hirmos/system/delivery/<delivery-id>/` when the selected delivery shape requires them.
-8. Implementation artifacts only when Implementation is authorized.
-8. Update System State / close major artifact sections only when close/update-state is active.
+2. `_hirmos/session/SESSION_STATE.json#run_context` before timestamped artifacts are written.
+3. `unresolved-items.md` always for governed sessions.
+4. `SESSION_SCOPE.md` before Implementation can be authorized or close can be claimed.
+5. `REQUIREMENTS.md` or `DESIGN.md` only when separate authority is justified, and `SESSION_SCOPE.md` must record the separate authority justification.
+6. Durable delivery artifacts under `_hirmos/system/delivery/<delivery-id>/` only when the selected delivery shape requires them.
+7. Implementation-shape preview may be recorded in `SESSION_SCOPE.md` only when it helps the user accept or change the baseline.
+8. Full implementation-unit artifacts under `_hirmos/session/implementation-units/` must not be created before the session scope baseline has been accepted or amended.
+9. Implementation artifacts are created only when Implementation is authorized.
+10. Update System State / close major artifact sections only when close/update-state is active.
+
+Implementation-unit artifacts are created only after the session scope baseline is accepted or amended. This prevents stale duplicate plans and keeps detailed implementation-unit planning in one canonical location: `_hirmos/session/implementation-units/`.
 
 Every created artifact must be recorded in `SESSION_EXECUTION.md` under `Artifact Instantiation Log`. Do not reference an artifact as inspectable or ready until it exists and contains non-placeholder content.
 
@@ -231,6 +249,9 @@ Before returning control to the user, update:
 - Terminal state.
 
 ## Governed checkpoint rules
+
+The first implementation-readiness checkpoint must use `_hirmos/core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md`. It must be sourced from `_hirmos/session/unresolved-items.md#Current Checkpoint Feed`, not from memory or a loose summary.
+
 
 Before surfacing a checkpoint that asks for a decision, claims readiness/completion, fails closed, or changes continuation state, HIRMOS must:
 
@@ -276,7 +297,7 @@ Required behavior:
 - instantiate or update `_hirmos/system/delivery/DELIVERY_PLAN.md and _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md status log` when delivery status materially affects the user-facing checkpoint or next action;
 - keep `SESSION_EXECUTION.md` aligned with the active slice status;
 - recommend exactly one primary next command/action unless blocked;
-- do not imply the next Delivery Unit is authorized unless its governing contract and controls support it.
+- do not imply the next Delivery Unit is authorized unless its governing authority and controls support it.
 
 ## Claim reconciliation behavior
 

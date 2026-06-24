@@ -3,7 +3,7 @@
 Status: active-session Main Artifact.
 Purpose: define the authorized outcome, scoped requirements, governing design decisions, implementation boundaries, production-shaped gate, acceptance criteria, and close verification basis for the current HIRMOS session.
 
-This artifact is the active session scope and acceptance authority. Implementation may not begin until this scope exists, is non-placeholder, and the relevant execution controls in `SESSION_EXECUTION.md` are satisfied.
+This artifact is the complete active session authority and acceptance root. Implementation may not begin until this scope exists, is non-placeholder, and the relevant execution controls in `SESSION_EXECUTION.md` are satisfied. Close verification must answer whether the implementation satisfied `SESSION_SCOPE.md` first. Optional `REQUIREMENTS.md` and `DESIGN.md` may provide detailed requirement/design authority only when this file explicitly adopts them; they must not create independent session obligations absent from `SESSION_SCOPE.md`.
 
 ## 1. Session Identity
 
@@ -31,6 +31,25 @@ Identify every source this session scope must cover. Source inputs are evidence 
 | Independent Requirements | `_hirmos/session/REQUIREMENTS.md` or delivery-level `REQUIREMENTS.md` when justified | conditional | Use only when separate requirements authority is justified. |
 | Independent Design | `_hirmos/session/DESIGN.md` or delivery-level `DESIGN.md` when justified | conditional | Use only when separate design authority is justified. |
 | Other | | | |
+
+### Optional authority artifact justification and adoption
+
+Use this section only when this single session creates separate `REQUIREMENTS.md` or `DESIGN.md`. Leave as `NOT_APPLICABLE` when `SESSION_SCOPE.md` is the only active session authority.
+
+`SESSION_SCOPE.md` remains the complete active session authority. Optional `REQUIREMENTS.md` and `DESIGN.md` are subordinate detail authorities only for the IDs or sections explicitly adopted here. They must not create independent session obligations that are absent from this scope.
+
+- Separate `REQUIREMENTS.md` created? YES | NO
+- Justification if yes:
+- Adopted requirements / sections: `REQ-*` / sections / NOT_APPLICABLE
+- Requirement obligations excluded from this session, if any:
+- Separate `DESIGN.md` created? YES | NO
+- Justification if yes:
+- Adopted design decisions / sections: `SD-*` / sections / NOT_APPLICABLE
+- Design decisions excluded from this session, if any:
+- Why this does not recreate duplicate authority:
+- Review pointer for user / technical reviewer:
+
+Close rule: if this section adopts `REQUIREMENTS.md` or `DESIGN.md`, those adopted items are evaluated as part of `SESSION_SCOPE.md` satisfaction. Non-adopted details remain reference material only.
 
 ## 3. Authorized Outcome
 
@@ -98,7 +117,7 @@ Answer: SINGLE_SESSION_VERTICAL_SLICE | SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS
 - Triggers ruled out:
 - Selected shape justification:
 - If `SINGLE_SESSION_VERTICAL_SLICE`, why is one bounded session safe without separate implementation units?
-- If `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS`, required implementation unit coverage plan:
+- If `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS`, implementation-shape preview before baseline acceptance, or implementation-unit coverage after acceptance:
 - If `MULTI_SESSION_DELIVERY`, required Delivery roadmap: `_hirmos/system/delivery/DELIVERY_PLAN.md` and delivery scope: `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
 - If `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, required Delivery Plan, delivery scope, and active phase path: `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`
 - Current System State delivery pointer basis: `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` Active Development Context and Delivery Pointers
@@ -112,7 +131,7 @@ Fail-closed rule:
 
 - `UNCERTAIN` blocks implementation readiness.
 - `SINGLE_SESSION_VERTICAL_SLICE` requires affirmative bounded-scope safety evidence.
-- `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` requires implementation units that collectively cover authorized scope.
+- `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` requires implementation units that collectively cover authorized scope after the session scope baseline is accepted or amended. Before acceptance, do not create full implementation-unit artifacts; record only a compact implementation-shape preview when needed for review.
 - `MULTI_SESSION_DELIVERY` requires a durable Delivery Plan and Delivery Scope before implementation authorization.
 - `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` requires a durable Delivery Plan, Delivery Scope, and adopted phase file before implementation authorization.
 - The selected shape must be the smallest shape that preserves engineering quality, implementation truth, validation, continuity, and accepted-state integrity.
@@ -165,7 +184,7 @@ Required when the selected delivery shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_
 
 #### Adopted phase scope
 
-| Phase item ID | Phase contract text / summary | Adopted into Session Scope item(s) | Implementation unit(s) | Status |
+| Phase item ID | Phase scope text / summary | Adopted into Session Scope item(s) | Implementation unit(s) | Status |
 |---|---|---|---|---|
 | PH-ITEM-01 | | SR-01 | IU-01 | PENDING |
 
@@ -219,17 +238,33 @@ Required when this session claims phase completion or updates phase status.
 - Decision recording requirement:
 - User approval required before:
 
-## 10. Implementation Shape
+## 10. Implementation Shape Preview
 
-Implementation units are required when implementation is non-trivial, multi-file, risky, or delegated to an implementation agent. Unit files live under `_hirmos/session/implementation-units/`.
+This section exists to help the user review the recommended baseline before implementation begins. It is not implementation-unit authority.
 
-| Unit ID | Unit artifact | Purpose | Scope coverage | Dependencies | Status |
-|---|---|---|---|---|---|
-| IU-01 | `_hirmos/session/implementation-units/IU-01.md` | | | | planned |
+Implementation units required: YES | NO | TO_BE_DETERMINED_AFTER_SCOPE_ACCEPTANCE
+
+Reason:
+- 
+
+Expected implementation areas:
+- 
+
+Instantiation rule:
+- Full implementation-unit artifacts must not be created until the session scope baseline is accepted or amended.
+- Detailed implementation-unit planning belongs only in `_hirmos/session/implementation-units/` after acceptance/amendment.
+- A preview here must be updated or replaced by actual implementation-unit artifacts when `hirmos continue` accepts the baseline and enters Implementation.
 
 ### Required implementation-unit coverage question
 
-Do all planned implementation units collectively cover 100% of `SESSION_SCOPE.md`?
+Before acceptance:
+
+- Is a detailed implementation-unit plan required for the user to accept/change this baseline? YES | NO
+- If YES, why is a compact preview insufficient?
+
+After acceptance/amendment:
+
+Do instantiated implementation units collectively cover 100% of `SESSION_SCOPE.md`?
 
 - Answer: YES | NO | PARTIAL | NOT_APPLICABLE
 - Evidence:
@@ -290,6 +325,9 @@ Record every scope change after initial session scope approval.
 | AM-01 | | | | |
 
 ## 15. Session Satisfaction Review and Close Verification
+
+Close must evaluate satisfaction against `SESSION_SCOPE.md` first. If `SESSION_SCOPE.md` adopts `REQUIREMENTS.md` or `DESIGN.md`, those adopted items are evaluated as part of `SESSION_SCOPE.md` satisfaction.
+
 
 This section must be completed before any `hirmos close` success claim.
 

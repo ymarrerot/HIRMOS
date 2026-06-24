@@ -3,7 +3,7 @@
 Status: active-session implementation-unit Main Artifact.
 Purpose: define, execute, evidence, review, and retry one bounded implementation unit in a single self-contained artifact.
 
-An Implementation Unit is an execution contract, not a generic task or prompt.
+An Implementation Unit is a bounded execution authority record, not a generic task or prompt.
 
 ## 1. Unit Identity
 
@@ -18,7 +18,7 @@ An Implementation Unit is an execution contract, not a generic task or prompt.
 - If cross-stack, involved contexts and justification:
 - Unit status: planned | approved | in_progress | complete | partial | failed | blocked | route_back_required
 
-## 2. Unit Contract
+## 2. Unit Scope
 
 ### Objective
 
@@ -72,7 +72,7 @@ The unit must not silently substitute fixture/mock/boundary-only work for a requ
 
 | Check | Result | Evidence / notes |
 |---|---|---|
-| Unit contract is non-placeholder | | |
+| Unit authority record is non-placeholder | | |
 | Session Scope still governs this unit | | |
 | unresolved-items.md has no gated blocker for this unit | | |
 | Target files inspected before editing | | |
@@ -121,7 +121,7 @@ List blockers, deviations, failures, scope risks, or route-back triggers.
 
 ## 5. Unit Review
 
-Does the actual implementation satisfy 100% of this implementation unit contract?
+Does the actual implementation satisfy 100% of this implementation unit authority record?
 
 - Answer: YES | NO | PARTIAL
 - Evidence:
@@ -130,7 +130,7 @@ Does the actual implementation satisfy 100% of this implementation unit contract
 
 ### Request-to-Result Review
 
-| Unit contract requirement | Result | Evidence | Notes |
+| Unit authority record requirement | Result | Evidence | Notes |
 |---|---|---|---|
 
 ### Scope Conformance Review

@@ -111,7 +111,7 @@ Coverage status is a requirement-coverage status, not evidence status. Evidence 
 
 `REQUIREMENTS.md` must include:
 
-1. Baseline Identity
+1. Requirements Identity
 2. Source Inputs and Classification
 3. Product Goal
 4. Scope Boundary
@@ -122,7 +122,7 @@ Coverage status is a requirement-coverage status, not evidence status. Evidence 
 9. Coverage Status
 10. Source Traceability
 11. Change / Supersession Log
-12. Baseline Self-Check
+12. Requirements Self-Check
 
 ## Requirement ID rules
 
@@ -344,3 +344,8 @@ Before claiming total or near-total requirements coverage, HIRMOS must check:
 - each requirement has a delivery-unit mapping, a coverage status, and an evidence/carry-forward posture.
 
 Firm rule: do not claim `100% requirements coverage`, `complete MVP coverage`, or equivalent unless `REQUIREMENTS.md` supports that claim and `EVIDENCE.md` claim reconciliation records the evidence status for the coverage claim.
+
+
+## SESSION_SCOPE adoption rule
+
+Only requirement IDs or sections explicitly adopted in `SESSION_SCOPE.md` are session obligations. `REQUIREMENTS.md` provides detailed normalization and traceability; it must not create independent scope outside `SESSION_SCOPE.md`.

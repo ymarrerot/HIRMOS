@@ -13,7 +13,7 @@ The most important runtime surfaces are:
 4. `_hirmos/session/unresolved-items.md` — governed unresolved-item register.
 5. `_hirmos/session/DESIGN.md` — conditional governed Design authority.
 6. `_hirmos/session/EVIDENCE.md` — conditional evidence surface for nontrivial implementation/runtime/close evidence.
-7. `_hirmos/session/implementation-units/` — conditional implementation unit contracts, evidence, reviews, and retries.
+7. `_hirmos/session/implementation-units/` — conditional implementation unit authority records, evidence, reviews, and retries.
 8. `_hirmos/session/bootstrap/` — required session infrastructure for startup/bootstrap evidence.
 9. `_hirmos/session/SESSION_EXECUTION.md` Current Continuation Snapshot — required session infrastructure for continuation/continuation snapshot records.
 10. `_hirmos/session/stack-resolution.json` — conditional machine-readable stack-routing state only.
@@ -47,7 +47,7 @@ _hirmos/system/delivery/
   <delivery-id>/
     DELIVERY_SCOPE.md           # scoped authority for one delivery/release
     phases/
-      PHASE-xx.md               # conditional phase contract
+      PHASE-xx.md               # conditional phase scope
 ```
 
 `DELIVERY_PLAN.md` is append/update-oriented and preserves delivery history. `DELIVERY_SCOPE.md` is the default combined delivery authority. Separate delivery-level `REQUIREMENTS.md` and `DESIGN.md` are optional only when independent authority is justified.

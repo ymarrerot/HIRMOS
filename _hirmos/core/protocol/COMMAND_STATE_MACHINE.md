@@ -135,14 +135,14 @@ Continuation pass types:
 |---|---|---|
 | Initial implementation pass | first implementation continuation after start/readiness | execute authorized implementation units |
 | Corrective pass | user identifies a bug, gap, or issue inside current session scope before close | append correction pass, update affected IU/review/evidence |
-| Contract amendment pass | user requests new work outside the existing Session Scope | amend `SESSION_SCOPE.md` before implementation |
+| Scope amendment pass | user requests new work outside the existing Session Scope | amend `SESSION_SCOPE.md` before implementation |
 | Validation-only pass | user asks to rerun or complete validation | append validation evidence and update review surfaces |
 | Route-back pass | later evidence invalidates earlier authority | record route-back and reset affected controls |
 
 Scope rules:
 
-- Same-contract corrections do not rewrite the Authorized Scope; they append correction records.
-- Scope expansions require a `Contract Amendment` section in `SESSION_SCOPE.md` before implementation.
+- Same-scope corrections do not rewrite the Authorized Scope; they append correction records.
+- Scope expansions require a `Scope Amendment` section in `SESSION_SCOPE.md` before implementation.
 - `unresolved-items.md` dispositions must be appended, not deleted.
 - `SESSION_SCOPE.md` close verification must add review passes, not replace prior reviews.
 - `implementation-units/IU-xx.md` must append attempts/retries/reviews.
@@ -171,7 +171,7 @@ Command execution applies the execution-control subset of `_hirmos/core/authorit
 
 - command protocols provide clear executable specs;
 - `SESSION_EXECUTION.md` provides strict local self-validation for lifecycle-boundary claims;
-- command responses fail closed when machine state, ledger state, contract state, unresolved-item state, or evidence cannot support the requested transition;
+- command responses fail closed when machine state, ledger state, scope state, unresolved-item state, or evidence cannot support the requested transition;
 - append-only continuation and control-mutation records protect against stale or overwritten session history.
 
 This protocol does not require the full escalated Beyond Clear Specs pattern for every command or capability. It applies the minimum execution-control subset needed to keep command transitions honest, reviewable, and fail-closed.

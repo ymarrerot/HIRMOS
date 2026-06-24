@@ -12,7 +12,7 @@ Execution Controls
 + Lightweight Static Validation
 ```
 
-It does not require heavy runtime output-contract machinery by default.
+It does not require heavy runtime output-governance machinery by default.
 
 ## Core claim rule
 

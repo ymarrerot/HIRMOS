@@ -18,15 +18,9 @@ Core owns:
 
 Extensions contribute specialized work capability under that core authority.
 
-## Bundled extensions
+## Extension families
 
-The baseline framework includes three stage-aligned extension families:
-
-```text
-_hirmos/extensions/system-state-agent/
-_hirmos/extensions/design-agent/
-_hirmos/extensions/implementation-agent/
-```
+The baseline framework uses stage-aligned extension families for system-state, design, and implementation work. Use extension manifests for discovery instead of assuming hard-coded extension paths.
 
 Each extension may expose capabilities through its own manifest and entrypoint files.
 

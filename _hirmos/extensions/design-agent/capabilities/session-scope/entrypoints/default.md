@@ -16,7 +16,7 @@ Create the Session Scope that authorizes exactly what the active session may do.
 
 - COMPLETED — ready Session Scope exists and can authorize downstream work if readiness passes.
 - NEEDS_USER_DECISION — scope boundary needs user decision.
-- BLOCKED — required source contracts or unresolved dispositions are missing.
+- BLOCKED — required source authority artifacts or unresolved dispositions are missing.
 - ROUTE_BACK_REQUIRED — scope creation exposes missing Design or system-state evidence.
 - NOT_APPLICABLE — active request does not require session scope authority.
 
@@ -49,7 +49,7 @@ This capability inherits shared extension rules from `_hirmos/extensions/design-
 2. Instantiate or update only the canonical artifacts required by the active request path.
 3. Produce non-placeholder content before claiming completion.
 4. Preserve lifecycle ownership boundaries; route back in `SESSION_EXECUTION.md` when evidence invalidates an earlier stage.
-5. Apply the extension method and this capability-specific contract; do not execute from chat summaries or raw inputs alone.
+5. Apply the extension method and this capability-specific execution surface; do not execute from chat summaries or raw inputs alone.
 
 
 ## Capability-specific obligations
@@ -106,7 +106,7 @@ Required behavior:
 Forbidden session-local delivery authorities:
 
 ```text
-legacy session-local delivery plan, phase plan, delivery status, phase contract, or delivery-unit contract files
+legacy session-local delivery plan, phase plan, delivery status, phase scope, or delivery-unit authority record files
 ```
 
 ## PROD-L4 runtime route obligations

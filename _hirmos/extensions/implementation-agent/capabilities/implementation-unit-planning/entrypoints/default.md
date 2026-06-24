@@ -46,7 +46,7 @@ Planning must:
 1. Read the Session Scope directly.
 2. Read `unresolved-items.md` directly and fail closed if a gated item blocks implementation planning.
 3. Create one self-contained `implementation-units/IU-xx.md` artifact per unit from `_hirmos/core/templates/session/implementation-units/IU.md`.
-4. Fill each IU artifact's Unit Contract sections before execution begins.
+4. Fill each IU artifact's Unit Scope sections before execution begins.
 5. Update the Session Scope Implementation Unit Plan table with the unit list and coverage mapping.
 6. Literally answer in `SESSION_SCOPE.md`: `Do all planned implementation units collectively cover 100% of SESSION_SCOPE.md?`
 7. Record the capability decision and evidence in `SESSION_EXECUTION.md`.
@@ -59,7 +59,7 @@ Do not create standalone `SESSION_SCOPE.md Implementation Unit Plan`, `implement
 2. Instantiate or update only the canonical artifacts required by the active request path.
 3. Produce non-placeholder content before claiming completion.
 4. Preserve lifecycle ownership boundaries; route back in `SESSION_EXECUTION.md` when evidence invalidates an earlier stage.
-5. Apply the extension method and this capability-specific contract; do not execute from chat summaries or raw inputs alone.
+5. Apply the extension method and this capability-specific execution surface; do not execute from chat summaries or raw inputs alone.
 
 ## Interaction-mode visibility
 

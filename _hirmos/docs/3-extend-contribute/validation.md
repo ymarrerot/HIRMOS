@@ -39,7 +39,7 @@ Use regression fixtures for known failure modes that must remain protected over 
 A good regression case is useful when a bug could come back silently, such as:
 
 - missing required artifacts;
-- incomplete execution contracts;
+- incomplete execution surfaces;
 - invalid phase lifecycle state;
 - broken integration registry;
 - package/init mismatch;

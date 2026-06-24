@@ -69,10 +69,15 @@ Every material unresolved item must preserve the minimum fields from `_hirmos/co
 - Affected lifecycle boundary:
 - Current status: OPEN | BLOCKED | CARRIED | RESOLVED | DUPLICATE | NOT_APPLICABLE
 - Current recommendation:
+- Why this matters:
 - Options / valid answer shape when user input is required:
+- What happens after answer, if user input is required:
 - Assumption if carried:
+- Why it is safe enough for now:
+- Risk if wrong or stale:
 - Downstream impact:
 - Revalidation point:
+- How to challenge or change it:
 - Disposition history reference:
 
 ## Active Gated Items
@@ -129,18 +134,24 @@ Prepare the concise user-facing unresolved-item basis for the next governed chec
 
 ### Gated items to surface
 
-| Item ID | User-facing question | Recommended baseline | Answer format | What happens after answer |
-|---|---|---|---|---|
+Each gated item surfaced to the user must include a description/question, recommended baseline, why it matters, options/answer format, and what happens after answer.
+
+| Item ID | User-facing question | Recommended baseline | Why it matters | Options / answer format | What happens after answer |
+|---|---|---|---|---|---|
 
 ### Non-gating assumptions to disclose
 
-| Item ID | Assumption | Scope | Revalidation point |
-|---|---|---|---|
+Each material non-gating item must disclose the assumption, why it is safe enough for now, risk, scope, and revalidation point. Non-gating does not mean invisible.
+
+| Item ID | Assumption | Why it is safe enough for now | Risk | Scope | Revalidation point |
+|---|---|---|---|---|---|
 
 ### Technical review pointer
 
-| Item ID | What to inspect | Artifact/path | Why it matters |
-|---|---|---|---|
+Each material technical-review item must point to where it can be inspected and how it can be challenged or changed.
+
+| Item ID | Decision / assumption to inspect | Artifact/path | Why it matters | How to challenge or change it |
+|---|---|---|---|---|
 
 ### Checkpoint terminal state supported
 

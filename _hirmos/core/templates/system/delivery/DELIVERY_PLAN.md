@@ -108,7 +108,7 @@ This section makes delivery-to-delivery continuation explicit for future `hirmos
 - When a delivery completes and a planned follow-up delivery is related by `follows`, `depends-on`, or an explicit sequence constraint, close must refresh Delivery Navigation and `CURRENT_SYSTEM_STATE.md` next-delivery pointers.
 - The roadmap may recommend an active delivery or next phase, but implementation authority must be narrowed into `SESSION_SCOPE.md` before implementation.
 
-## Close-Time Delivery Status Update Contract
+## Close-Time Delivery Status Update
 
 This section must be updated during `hirmos close` whenever a session accepts, partially accepts, blocks, supersedes, defers, cancels, or advances a delivery in this roadmap/register.
 

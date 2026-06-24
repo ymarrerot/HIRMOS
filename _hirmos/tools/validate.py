@@ -69,6 +69,7 @@ required = [
     'core/templates/system/history/sessions/ARCHIVE_MANIFEST.md',
     'core/templates/session/stack-resolution.json',
     'core/templates/session/bootstrap/BOOTSTRAP_REPORT.md',
+    'core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md',
     'core/templates/session/DESIGN.md',
     'core/templates/session/EVIDENCE.md',
     'session/SESSION_STATE.json',
@@ -209,7 +210,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.0.4'
+expected_version = '1.0.5'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -955,7 +956,7 @@ for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'DELIVERY_SCOPE.md'],
     'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Index', 'Delivery Coverage Matrix', 'Status Update Log'],
     'core/templates/system/delivery/DELIVERY_SCOPE.md': ['Authorized Outcome', 'Scoped Requirements', 'Production-Shaped Engineering Gate', 'Delivery Close Verification'],
-    'core/templates/system/delivery/phases/PHASE.md': ['Phase Contract', 'Source Delivery Scope', 'Binary Exit Criteria', 'Session Handoff'],
+    'core/templates/system/delivery/phases/PHASE.md': ['Phase Scope', 'Source Delivery Scope', 'Binary Exit Criteria', 'Session Handoff'],
     'core/templates/session/SESSION_SCOPE.md': ['Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Selected shape justification'],
     'core/templates/session/SESSION_EXECUTION.md': ['Delivery Shape Decision Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
     'core/protocol/PROJECT_TYPES.md': ['Delivery shape fields', 'Delivery governance required: YES / NO / UNCERTAIN'],
@@ -1058,9 +1059,9 @@ print('PASS: HIRMOS session scope phase adoption enforcement static check')
 # Close-time Delivery Plan / Phase status update enforcement checks
 for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Close-Time Delivery Plan / Phase Status Update Enforcement', 'Required close-time status authority chain', 'Close is blocked if Delivery Plan status'],
-    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Close-Time Delivery Status Update Contract', 'Delivery Status Update Log'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Close-Time Delivery Status Update', 'Delivery Status Update Log'],
     'core/templates/system/delivery/DELIVERY_SCOPE.md': ['Delivery Close Verification', 'Session Adoption Rules', 'Phase Plan'],
-    'core/templates/system/delivery/phases/PHASE.md': ['Close-Time Phase Status Update Contract', 'Phase Acceptance Review records the closed session', 'Binary Exit Criterion'],
+    'core/templates/system/delivery/phases/PHASE.md': ['Close-Time Phase Status Update', 'Phase Acceptance Review records the closed session', 'Binary Exit Criterion'],
     'core/templates/session/SESSION_EXECUTION.md': [' Close-Time Delivery Status Execution Log', 'durable delivery status updates remain pending'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': [' Close-Time Delivery Pointer Refresh Rule', 'explicitly verified unchanged'],
     'core/protocol/CURRENT_SYSTEM_STATE.md': [' Close-Time Delivery Pointer Refresh', 'not refreshed or explicitly verified unchanged'],
@@ -1224,7 +1225,7 @@ for phrase in [
 template_expectations = {
     'SESSION_SCOPE.md': ['Authorized Scope', 'Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Unresolved Items Control', 'Session Satisfaction Review and Close Verification', 'Fail-closed result'],
     'unresolved-items.md': ['Producer Contributions', 'Active Gated Items', 'Disposition History', 'Protocol authority'],
-    'implementation-units/IU.md': ['Unit Contract', 'Execution Record', 'Unit Review', 'Does the actual implementation satisfy 100%', 'Retry Decision', 'Evidence from Failed Attempt', 'Escalation Condition'],
+    'implementation-units/IU.md': ['Unit Scope', 'Execution Record', 'Unit Review', 'Does the actual implementation satisfy 100%', 'Retry Decision', 'Evidence from Failed Attempt', 'Escalation Condition'],
     'DESIGN.md': ['Current-State Basis', 'Governed Requirements', 'Delivery Shape Decision', 'Technical Review and Implementation Readiness Basis'],
     'EVIDENCE.md': ['Command Evidence', 'Runtime and Critical-Flow Evidence', 'Production-Shaped Engineering Evidence', 'Claim Reconciliation Summary', 'Close / Archive Evidence'],
     'SESSION_EXECUTION.md': ['Active Execution Controls', 'Artifact Instantiation Log', 'Close / Archive / Reset Invariant Controls'],
@@ -1289,7 +1290,7 @@ for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'DELIVERY_SCOPE.md'],
     'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Index', 'Delivery Coverage Matrix', 'Status Update Log'],
     'core/templates/system/delivery/DELIVERY_SCOPE.md': ['Authorized Outcome', 'Scoped Requirements', 'Production-Shaped Engineering Gate', 'Delivery Close Verification'],
-    'core/templates/system/delivery/phases/PHASE.md': ['Phase Contract', 'Source Delivery Scope', 'Binary Exit Criteria', 'Session Handoff'],
+    'core/templates/system/delivery/phases/PHASE.md': ['Phase Scope', 'Source Delivery Scope', 'Binary Exit Criteria', 'Session Handoff'],
     'core/templates/session/SESSION_SCOPE.md': ['Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Selected shape justification'],
     'core/templates/session/SESSION_EXECUTION.md': ['Delivery Shape Decision Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
     'core/protocol/PROJECT_TYPES.md': ['Delivery shape fields', 'Delivery governance required: YES / NO / UNCERTAIN'],
@@ -1498,7 +1499,7 @@ design_entrypoints = {
     'requirements-design': ['Method', 'Separate requirement inputs from governed requirements authority', 'Map each material requirement to source evidence and system-state findings'],
     'system-design': ['Method', 'Design from governed requirements, not raw requirement inputs alone', 'technical review'],
     'delivery-design': ['Method', 'Delivery Plan', 'Map Delivery Plan items to governed requirements'],
-    'phase-contracting': ['Method', 'Phase Contract', 'durable delivery'],
+    'phase-contracting': ['Method', 'Phase Scope', 'durable delivery'],
     'session-scope': ['Method', 'Session Scope', 'implementation unit planning, implementation unit review, session implementation review, and Update System State'],
     'technical-review': ['Method', 'Third-party review pointers', 'challenge/change path'],
     'implementation-readiness': ['Method', 'snapshot-backed checkpoint control', 'Session Scope authorizes exactly what Implementation may do'],
@@ -1536,7 +1537,7 @@ if not implementation_method.exists():
 implementation_method_body = implementation_method.read_text()
 for phrase in [
     'Implementation is governed realization of accepted Design, not merely code editing',
-    'An Implementation Unit is an execution contract, not a generic task or prompt',
+    'An Implementation Unit is a bounded execution authority record, not a generic task or prompt',
     'The Session Scope Implementation Unit Plan must cover 100% of authorized implementation scope',
     'Implementation execution performs only the work authorized by the target `IU-xx.md` artifact',
     'Implementation is incomplete without evidence',
@@ -1564,7 +1565,7 @@ for cap, phrases in implementation_entrypoints.items():
             sys.exit(1)
 
 implementation_templates = {
-    'implementation-units/IU.md': ['Unit Contract', 'Execution Record', 'Unit Review', 'Does the actual implementation satisfy 100%', 'Request-to-Result Review', 'Retry / Route-Back Decision', 'Not Run / Not Applicable Checks', 'Retry Decision', 'Evidence from Failed Attempt', 'Escalation Condition'],
+    'implementation-units/IU.md': ['Unit Scope', 'Execution Record', 'Unit Review', 'Does the actual implementation satisfy 100%', 'Request-to-Result Review', 'Retry / Route-Back Decision', 'Not Run / Not Applicable Checks', 'Retry Decision', 'Evidence from Failed Attempt', 'Escalation Condition'],
     'EVIDENCE.md': ['Evidence Claims', 'Not Run / Not Applicable', 'Scope Coverage', 'Evidence Limitations'],
 }
 for name, phrases in implementation_templates.items():
@@ -2228,11 +2229,11 @@ for phrase in [
 # Implementation-unit consolidation must be structural.
 iu_template = (root / 'core/templates/session/implementation-units/IU.md').read_text()
 for phrase in [
-    'Unit Contract',
+    'Unit Scope',
     'Execution Record',
     'Unit Review',
     'Retries',
-    'Does the actual implementation satisfy 100% of this implementation unit contract?',
+    'Does the actual implementation satisfy 100% of this implementation unit authority record?',
 ]:
     if phrase not in iu_template:
         fail(f'IU.md missing consolidated implementation-unit phrase: {phrase}')
@@ -2347,7 +2348,7 @@ for phrase in [
     'entrypoints/default.md',
     'Legacy redirect wrappers',
     'entrypoint.md` are not allowed',
-    'without the complete execution contract',
+    'without the complete execution surface',
 ]:
     if phrase not in capability_routing:
         print(f'FAIL: CAPABILITY_ROUTING.md missing canonical entrypoint phrase: {phrase}')
@@ -2493,6 +2494,19 @@ first_version_excluded = {
     'tools/test_validator_regressions.py',
 }
 text_suffixes = {'.md', '.json', '.txt', '.yml', '.yaml'}
+# Legacy runtime-authority names are forbidden across shipped framework text surfaces.
+# Project/domain markers are forbidden only in framework doctrine/payload surfaces;
+# generated project artifacts may and must mention the user's project/features.
+framework_surface_prefixes = (
+    'core/', 'docs/', 'extensions/', 'integrations/', 'stacks/', 'tools/',
+    'AGENTS.md', 'README.md', 'CHANGELOG.md', 'UPGRADE_GUIDE.md',
+    'hirmos.config.json', 'inputs/README.md', 'inputs/uploads/README.md',
+    'inputs/prototypes/README.md', 'inputs/references/README.md',
+)
+generated_project_prefixes = (
+    'session/', 'system/accepted-state/', 'system/history/', 'inputs/uploads/',
+    'inputs/prototypes/', 'inputs/references/',
+)
 for candidate in root.rglob('*'):
     if not candidate.is_file():
         continue
@@ -2502,9 +2516,15 @@ for candidate in root.rglob('*'):
     if candidate.suffix not in text_suffixes:
         continue
     body = candidate.read_text(errors='ignore')
-    for marker in first_version_forbidden_markers + project_specific_forbidden_markers:
+    for marker in first_version_forbidden_markers:
         if marker in body:
-            fail(f'PROD-L8 first-version/project-agnostic surface contains forbidden marker {marker!r}: {rel}')
+            fail(f'PROD-L8 first-version surface contains forbidden legacy marker {marker!r}: {rel}')
+    if rel.startswith(generated_project_prefixes):
+        continue
+    if rel.startswith(framework_surface_prefixes):
+        for marker in project_specific_forbidden_markers:
+            if marker in body:
+                fail(f'PROD-L8 project-agnostic framework surface contains forbidden marker {marker!r}: {rel}')
 for legacy_path in [
     root/'core/protocol/REQUIREMENTS_BASELINE.md',
     root/'core/templates/session/REQUIREMENTS_BASELINE.md',
@@ -2552,3 +2572,106 @@ if execution_template.count('## Phase Progress / Carry-Forward Record') != 1:
 if execution_template.count('## Phase Acceptance Enforcement Record') != 1:
     fail('PROD-L8.5 SESSION_EXECUTION.md must contain exactly one Phase Acceptance Enforcement Record section')
 print('PASS: HIRMOS PROD-L8.5 session execution ledger slimming static check')
+
+
+# PROD-L8.7 start checkpoint, unresolved disclosure, validator scope, and date concordance hardening checks
+start_checkpoint_template = root / 'core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md'
+if not start_checkpoint_template.exists():
+    fail('PROD-L8.7 missing START_CHECKPOINT_OUTPUT.md template')
+start_checkpoint_body = start_checkpoint_template.read_text(errors='ignore')
+for phrase in [
+    'Recommended Baseline — Review or Change',
+    '_hirmos/session/unresolved-items.md#Current Checkpoint Feed',
+    'If you run `hirmos continue`, HIRMOS will treat this recommended baseline as accepted unless you request changes first',
+    'Accept baseline',
+    'Ask for technical review summary',
+    'Do not create or reference full implementation-unit artifacts before the session scope baseline has been accepted or amended',
+]:
+    if phrase not in start_checkpoint_body:
+        fail(f'PROD-L8.7 START_CHECKPOINT_OUTPUT.md missing required phrase: {phrase}')
+start_command_body = (root / 'core/commands/start.md').read_text(errors='ignore')
+for phrase in [
+    'before the session scope baseline has been accepted or amended',
+    'Implementation-unit artifacts are created only after the session scope baseline is accepted or amended',
+    'START_CHECKPOINT_OUTPUT.md',
+    'SESSION_STATE.json` → `run_context',
+]:
+    if phrase not in start_command_body:
+        fail(f'PROD-L8.7 hirmos start missing hardening phrase: {phrase}')
+continue_command_body = (root / 'core/commands/continue.md').read_text(errors='ignore')
+for phrase in [
+    'accepts the recommended baseline unless the user requested changes before continuing',
+    'instantiate implementation-unit artifacts when the accepted Session Scope requires them',
+]:
+    if phrase not in continue_command_body:
+        fail(f'PROD-L8.7 hirmos continue missing baseline/IU phrase: {phrase}')
+scope_template = (root / 'core/templates/session/SESSION_SCOPE.md').read_text(errors='ignore')
+for phrase in [
+    'Implementation Shape Preview',
+    'Full implementation-unit artifacts must not be created until the session scope baseline is accepted or amended',
+    'Optional authority artifact justification and adoption',
+]:
+    if phrase not in scope_template:
+        fail(f'PROD-L8.7 SESSION_SCOPE.md missing start checkpoint authority phrase: {phrase}')
+unresolved_template = (root / 'core/templates/session/unresolved-items.md').read_text(errors='ignore')
+for phrase in [
+    'Why it is safe enough for now',
+    'How to challenge or change it',
+    'Current Checkpoint Feed',
+]:
+    if phrase not in unresolved_template:
+        fail(f'PROD-L8.7 unresolved-items.md missing checkpoint-feed phrase: {phrase}')
+print('PASS: HIRMOS PROD-L8.7 start checkpoint, unresolved disclosure, validator scope, and date concordance static check')
+
+
+# PROD-L8.8 runtime context consolidation and optional authority responsibility hardening checks
+session_state_template = root / 'core/templates/session/SESSION_STATE.json'
+session_state = json.loads(session_state_template.read_text())
+if 'run_context' not in session_state:
+    fail('PROD-L8.8 SESSION_STATE.json missing run_context')
+for key in ['run_started_at_utc', 'run_started_date_utc', 'timezone_basis', 'source']:
+    if key not in session_state['run_context']:
+        fail(f'PROD-L8.8 SESSION_STATE.json run_context missing key: {key}')
+if (root / 'core/templates/session/bootstrap/RUN_CONTEXT.json').exists():
+    fail('PROD-L8.8 separate RUN_CONTEXT.json template must not exist')
+for rel in ['core/commands/start.md', 'core/protocol/SESSION_ARTIFACTS.md', 'core/templates/session/bootstrap/BOOTSTRAP_REPORT.md']:
+    body = (root / rel).read_text(errors='ignore')
+    if 'RUN_CONTEXT.json' in body:
+        fail(f'PROD-L8.8 {rel} still references RUN_CONTEXT.json')
+scope_body = (root / 'core/templates/session/SESSION_SCOPE.md').read_text(errors='ignore')
+for phrase in [
+    'complete active session authority',
+    'Optional `REQUIREMENTS.md` and `DESIGN.md` may provide detailed requirement/design authority only when this file explicitly adopts them',
+    'Adopted requirements / sections',
+    'Adopted design decisions / sections',
+    'Close must evaluate satisfaction against `SESSION_SCOPE.md` first',
+]:
+    if phrase not in scope_body:
+        fail(f'PROD-L8.8 SESSION_SCOPE.md missing complete-authority/adoption phrase: {phrase}')
+req_body = (root / 'core/templates/session/REQUIREMENTS.md').read_text(errors='ignore')
+for phrase in [
+    'subordinate to `SESSION_SCOPE.md`',
+    'Only requirement IDs or sections explicitly adopted in `SESSION_SCOPE.md` are in scope',
+    'This artifact owns:',
+    'This artifact does not own:',
+    'Requirements Self-Check',
+]:
+    if phrase not in req_body:
+        fail(f'PROD-L8.8 REQUIREMENTS.md missing responsibility phrase: {phrase}')
+for forbidden in ['Baseline Identity', 'Baseline Self-Check', 'Baseline Input-to-Requirement Coverage Check']:
+    if forbidden in req_body:
+        fail(f'PROD-L8.8 REQUIREMENTS.md retains old baseline section: {forbidden}')
+design_body = (root / 'core/templates/session/DESIGN.md').read_text(errors='ignore')
+for phrase in [
+    'subordinate to `SESSION_SCOPE.md`',
+    'Only design decisions or sections explicitly adopted in `SESSION_SCOPE.md` govern implementation',
+    'This artifact owns:',
+    'This artifact does not own:',
+    'No full implementation-unit artifacts or detailed implementation-unit plans are created here before baseline acceptance',
+]:
+    if phrase not in design_body:
+        fail(f'PROD-L8.8 DESIGN.md missing responsibility phrase: {phrase}')
+for forbidden in ['Delivery / Slice / Phase / Implementation-Unit Mapping', 'Contract artifact']:
+    if forbidden in design_body:
+        fail(f'PROD-L8.8 DESIGN.md retains implementation-unit planning section: {forbidden}')
+print('PASS: HIRMOS PROD-L8.8 runtime context consolidation and optional authority responsibility static check')

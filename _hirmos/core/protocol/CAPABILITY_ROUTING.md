@@ -114,9 +114,9 @@ Example:
 
 ```text
 Active lifecycle stage: design
-Candidate extension: _hirmos/extensions/design-agent/extension.json
-Reason: extension.json lifecycle_stages includes design
-Extension entrypoint: extension.json entrypoints.default
+Candidate extension: extension manifest whose lifecycle_stages includes design
+Reason: manifest lifecycle_stages includes the active stage
+Extension entrypoint: manifest entrypoints.default
 ```
 
 ## Capability manifest inspection
@@ -189,7 +189,7 @@ Runnable capability entrypoints are canonical only at:
 extensions/<agent>/capabilities/<capability>/entrypoints/default.md
 ```
 
-Capability manifests must point directly to `entrypoints/default.md`, and runners must resolve that canonical path. Legacy redirect wrappers at `extensions/<agent>/capabilities/<capability>/entrypoint.md` are not allowed because they create a second discoverable surface without the complete execution contract.
+Capability manifests must point directly to `entrypoints/default.md`, and runners must resolve that canonical path. Legacy redirect wrappers at `extensions/<agent>/capabilities/<capability>/entrypoint.md` are not allowed because they create a second discoverable surface without the complete execution surface.
 
 ## Entrypoint execution contract
 
@@ -201,7 +201,7 @@ Produces
 Terminal States
 ```
 
-The entrypoint contract is not a full lifecycle authority. It tells the runner what the capability does, what artifacts/evidence it may produce, and how it may terminate inside the active lifecycle-stage responsibility.
+The entrypoint execution surface is not a full lifecycle authority. It tells the runner what the capability does, what artifacts/evidence it may produce, and how it may terminate inside the active lifecycle-stage responsibility.
 
 ## Capability completion rule
 

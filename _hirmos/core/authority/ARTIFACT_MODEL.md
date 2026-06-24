@@ -74,7 +74,7 @@ stack-resolution.json           # conditional machine-readable stack routing onl
 Each lifecycle responsibility owns its authority inside the smallest sufficient artifact set:
 
 - Understand System State records the current-state-first control in `SESSION_EXECUTION.md` and material state findings in `DESIGN.md` when they affect Design or Implementation.
-- Design / Contracting owns requirements, design, delivery/phase contracts, production-shaped engineering posture, and the active `SESSION_SCOPE.md`.
+- Design / Scope Authority owns requirements, design, delivery/phase scopes, production-shaped engineering posture, and the active `SESSION_SCOPE.md`.
 - Implementation owns `implementation-units/IU-xx.md` artifacts and `EVIDENCE.md` when evidence is material.
 - Update System State owns accepted-state update and archive records through `SESSION_SCOPE.md` close verification, `SESSION_EXECUTION.md` close/archive/reset control pointers, `EVIDENCE.md` when needed, and accepted-state artifacts.
 - `SESSION_EXECUTION.md` owns the human-readable Current Continuation Snapshot, execution-control ledger, and append-only lifecycle history only; it does not own scope or acceptance criteria.
@@ -160,7 +160,7 @@ _hirmos/system/delivery/
   <delivery-id>/
     DELIVERY_SCOPE.md           # scoped authority for one delivery/release
     phases/
-      PHASE-xx.md               # conditional phase contract
+      PHASE-xx.md               # conditional phase scope
 ```
 
 `DELIVERY_PLAN.md` is append/update-oriented and preserves delivery history. `DELIVERY_SCOPE.md` is the default combined delivery authority. Separate delivery-level `REQUIREMENTS.md` and `DESIGN.md` are optional only when independent authority is justified.

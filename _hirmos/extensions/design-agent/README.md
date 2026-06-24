@@ -1,9 +1,9 @@
 # design-agent
 
 Status: bundled extension.
-Purpose: support the Design lifecycle stage with governed requirements, system/application design, durable delivery planning, phase contracts, Session Scopes, technical review, and implementation-readiness capabilities.
+Purpose: support the Design lifecycle stage with governed requirements, system/application design, durable delivery planning, phase scopes, Session Scopes, technical review, and implementation-readiness capabilities.
 
-Read `entrypoints/default.md` before running any design-agent capability; it contains the shared Design method and routing contract.
+Read `entrypoints/default.md` before running any design-agent capability; it contains the shared Design method and routing authority.
 
 ## Capabilities
 
