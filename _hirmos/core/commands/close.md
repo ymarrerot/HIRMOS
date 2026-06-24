@@ -456,3 +456,8 @@ When `SESSION_STATE.json.session_focus = delivery_baseline`, the active authorit
 - `_hirmos/system/delivery/<delivery-id>/DESIGN.md` when separate delivery-level design authority is justified.
 
 During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`. If separate optional authority is not justified, requirements and design decisions remain inside `DELIVERY_SCOPE.md` only. Session-level optional authority artifacts become applicable only after the flow advances to a bounded `phase_session_baseline` or `session_baseline` focus.
+
+
+## PROD-L8.13 Delivery Review Wording
+
+When reporting delivery-baseline state, use status-aware delivery labels. Before baseline acceptance, use Candidate Delivery, Proposed Delivery, or Delivery Under Baseline Review. Use Active Delivery only after the baseline has been accepted/amended and the delivery is in a post-acceptance state. Explain routing from current-state-first evidence and governance need rather than from greenfield/brownfield labels alone.

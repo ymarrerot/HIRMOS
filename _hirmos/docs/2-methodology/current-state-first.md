@@ -83,3 +83,8 @@ Before implementation, a good HIRMOS run should usually make the active understa
 - what evidence will be needed before close.
 
 The amount of detail should follow progressive disclosure: simple when the path is clear, more explicit when risk, uncertainty, or scope increases.
+
+
+## Generated artifact wording note
+
+Generated HIRMOS artifacts should explain routing from current-state evidence and governance need. Project-type labels are supporting metadata, not the primary authority for selecting delivery, phase, or session shape.

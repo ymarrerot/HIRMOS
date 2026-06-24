@@ -52,7 +52,7 @@ def run_validator(root: Path) -> ValidationResult:
     try:
         with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
             try:
-                runpy.run_path(str(root / "tools" / "validate.py"), run_name="__main__")
+                runpy.run_path(str(root / "tools" / "validate.py"), run_name="__hirmos_validate_fixture__")
                 return ValidationResult(0, stdout.getvalue() + stderr.getvalue())
             except SystemExit as exc:
                 code = exc.code if isinstance(exc.code, int) else 1
@@ -136,6 +136,9 @@ def write_delivery_artifacts(
     include_acceptance_evidence: bool = True,
     include_status_report: bool = True,
     status_report_complete: bool = True,
+    entry_criteria_scalar: bool = True,
+    stale_post_continue_ledger: bool = False,
+    delivery_plan_current_phase_none: bool = False,
 ) -> None:
     activate_session(root, stage="close_ready" if close_transaction else "implementation_readiness", recommended="hirmos close" if close_transaction else "hirmos continue")
     session = root / "session"
@@ -275,7 +278,45 @@ Exactly one recommended next command:
     else:
         status_report = ""
 
-    (session / "SESSION_EXECUTION.md").write_text(f"# SESSION_EXECUTION.md\n\n## Durable Phase Adoption Gate\nGate status: PASS\n\n## Phase Entry Gate Execution Log\nImplementation readiness authorized: YES\n\n## Phase Progress / Carry-Forward Record\nAdopted phase progress reviewed: PASS\nCarry-forward obligations recorded: PASS\n{status_report}\n{acceptance_execution}\n")
+    phase_route_status = "PENDING" if stale_post_continue_ledger else "COMPLETED"
+    session_route_status = "PENDING" if stale_post_continue_ledger else "COMPLETED"
+    phase_concordance_status = "NOT_APPLICABLE" if stale_post_continue_ledger else "SATISFIED"
+    session_concordance_status = "NOT_APPLICABLE" if stale_post_continue_ledger else "SATISFIED"
+    (session / "SESSION_EXECUTION.md").write_text(f"""# SESSION_EXECUTION.md
+
+## Focus-Aware Capability Routing Log
+
+| Capability | Expected durable/session output | Status | Evidence path | Notes |
+|---|---|---|---|---|
+| delivery-baseline | `_hirmos/system/delivery/DELIVERY_PLAN.md` and `<delivery-id>/DELIVERY_SCOPE.md` | COMPLETED | {scope_path} | fixture |
+| phase-baseline | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` when phase files are selected | {phase_route_status} | {phase_path} | fixture |
+| session-scope | `_hirmos/session/SESSION_SCOPE.md` adopts and narrows active delivery/phase authority | {session_route_status} | `_hirmos/session/SESSION_SCOPE.md` | fixture |
+| implementation-readiness | `SESSION_SCOPE.md` authorizes implementation and required controls are satisfied | READY_FOR_REVIEW | `_hirmos/session/SESSION_SCOPE.md` | fixture |
+
+## Current System State Delivery Pointer Concordance
+
+| Check | Result | Evidence | Notes |
+|---|---|---|---|
+| Current System State delivery pointers read | SATISFIED | `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` | fixture |
+| Delivery roadmap pointer exists when required | SATISFIED | `_hirmos/system/delivery/DELIVERY_PLAN.md` | fixture |
+| Delivery scope pointer exists when required | SATISFIED | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | fixture |
+| Active Phase pointer exists when required | {phase_concordance_status} | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` | fixture |
+| Session Scope adopts the same delivery/phase authority | {session_concordance_status} | `SESSION_SCOPE.md` | fixture |
+| Next phase / next command concordance checked | SATISFIED | `DELIVERY_PLAN.md`, `SESSION_STATE.json` | fixture |
+
+## Durable Phase Adoption Gate
+Gate status: PASS
+
+## Phase Entry Gate Execution Log
+Entry criteria status: SATISFIED
+Implementation readiness authorized: YES
+
+## Phase Progress / Carry-Forward Record
+Adopted phase progress reviewed: PASS
+Carry-forward obligations recorded: PASS
+{status_report}
+{acceptance_execution}
+""")
     (session / "unresolved-items.md").write_text("# unresolved-items.md\n")
     (session / "SESSION_SCOPE.md").write_text((session / "SESSION_SCOPE.md").read_text() + f"\n\n## Phase Entry Gate Review\nWas the Phase Entry Gate status PASS? YES\n\n## Phase Progress / Carry-Forward Review\nDid the session update or verify the durable Phase Progress Ledger? YES\nIf phase outcome is not ACCEPTED, are carry-forward obligations recorded? {cf_review_answer}\n{acceptance_review}\n")
 
@@ -286,7 +327,8 @@ Exactly one recommended next command:
         if use_legacy_per_delivery_plan:
             (delivery_dir / "DELIVERY_PLAN.md").write_text("# DELIVERY_PLAN.md\n\n## Legacy per-delivery plan\n")
         else:
-            (delivery_root / "DELIVERY_PLAN.md").write_text("# DELIVERY_PLAN.md\n\n## Delivery Index\n\n## Delivery Status Update Log\n")
+            current_phase_value = "none" if delivery_plan_current_phase_none else phase_path
+            (delivery_root / "DELIVERY_PLAN.md").write_text(f"# DELIVERY_PLAN.md\n\n## Delivery Index\n\n## Delivery Status Update Log\n\n## Active Development Context\n\n- Active delivery: {delivery_id}\n- Active delivery scope: {scope_path}\n- Current phase: {current_phase_value}\n- Next recommended delivery: none\n- Next recommended delivery scope: none\n- Next recommended phase: none\n")
     if include_scope:
         (delivery_dir / "DELIVERY_SCOPE.md").write_text("# DELIVERY_SCOPE.md\n\n## Delivery Close Verification\n\n## Session Adoption Rules\n")
 
@@ -337,7 +379,7 @@ Do-not-touch boundaries:
 ## Phase Entry Gate
 
 Entry gate status: {entry_gate_status}
-Entry criteria status: SATISFIED
+{("Entry criteria status: SATISFIED" if entry_criteria_scalar else "| Entry criteria | Delivery baseline accepted | SATISFIED |")}
 
 {greenfield_controls}
 {brownfield_controls}
@@ -619,6 +661,48 @@ def mutate_delivery_baseline_with_delivery_optional_authority_passes(root: Path)
     (delivery / "REQUIREMENTS.md").write_text("# REQUIREMENTS.md\n\nStatus: delivery-level optional requirements authority.\n")
     (delivery / "DESIGN.md").write_text("# DESIGN.md\n\nStatus: delivery-level optional design authority.\n")
 
+
+def mutate_phase_entry_gate_table_only_fails(root: Path) -> None:
+    write_delivery_artifacts(root, entry_criteria_scalar=False)
+
+
+def mutate_phase_session_baseline_fresh_ledger_passes(root: Path) -> None:
+    write_delivery_artifacts(root, stale_post_continue_ledger=False, delivery_plan_current_phase_none=False)
+    state = read_state(root)
+    state["session_focus"] = "phase_session_baseline"
+    state["active_phase"] = "_hirmos/system/delivery/fixture-delivery/phases/PHASE-01.md"
+    write_state(root, state)
+
+
+def mutate_phase_session_baseline_stale_routing_log_fails(root: Path) -> None:
+    write_delivery_artifacts(root, stale_post_continue_ledger=True, delivery_plan_current_phase_none=False)
+    state = read_state(root)
+    state["session_focus"] = "phase_session_baseline"
+    state["active_phase"] = "_hirmos/system/delivery/fixture-delivery/phases/PHASE-01.md"
+    write_state(root, state)
+
+
+def mutate_phase_session_baseline_stale_delivery_plan_current_phase_fails(root: Path) -> None:
+    write_delivery_artifacts(root, stale_post_continue_ledger=False, delivery_plan_current_phase_none=True)
+    state = read_state(root)
+    state["session_focus"] = "phase_session_baseline"
+    state["active_phase"] = "_hirmos/system/delivery/fixture-delivery/phases/PHASE-01.md"
+    write_state(root, state)
+
+
+def mutate_delivery_baseline_active_wording_fails(root: Path) -> None:
+    mutate_delivery_baseline_without_session_scope_passes(root)
+    (root / "system" / "delivery" / "DELIVERY_PLAN.md").write_text("""# DELIVERY_PLAN.md
+
+Status: READY_FOR_BASELINE_REVIEW
+
+## Active Delivery
+
+- Active delivery ID: fixture-delivery
+- Active delivery scope: _hirmos/system/delivery/fixture-delivery/DELIVERY_SCOPE.md
+""")
+
+
 # retained marker: accepted-state index reappears
 CASES = [
     Case("valid baseline", mutate_none, True, "PASS:"),
@@ -634,6 +718,10 @@ CASES = [
     Case("archive manifest missing normalization fails", mutate_archive_manifest_missing_normalization, False, "Archived Session State Normalization"),
     Case("phase entry gate valid brownfield passes", mutate_phase_entry_gate_valid_brownfield, True, "PASS:"),
     Case("phase entry gate valid mixed passes", mutate_phase_entry_gate_valid_mixed, True, "PASS:"),
+    Case("phase entry gate table-only evidence fails", mutate_phase_entry_gate_table_only_fails, False, "scalar evidence"),
+    Case("phase session baseline fresh ledger passes", mutate_phase_session_baseline_fresh_ledger_passes, True, "PASS:"),
+    Case("phase session baseline stale routing log fails", mutate_phase_session_baseline_stale_routing_log_fails, False, "routing log leaves phase-baseline PENDING"),
+    Case("phase session baseline stale delivery plan current phase fails", mutate_phase_session_baseline_stale_delivery_plan_current_phase_fails, False, "Current phase as none"),
     Case("phase lifecycle status report missing fields fails", mutate_phase_status_report_missing_required_fields, False, "Phase Lifecycle Status Report"),
     Case("phase lifecycle status report complete passes", mutate_phase_status_report_complete, True, "PASS:"),
     Case("legacy capability entrypoint wrapper fails", mutate_legacy_capability_entrypoint_wrapper, False, "legacy capability entrypoint wrapper"),
@@ -658,6 +746,7 @@ CASES = [
     Case("delivery baseline with session REQUIREMENTS fails", mutate_delivery_baseline_with_session_requirements_fails, False, "delivery_baseline focus must store optional requirements authority"),
     Case("delivery baseline with session DESIGN fails", mutate_delivery_baseline_with_session_design_fails, False, "delivery_baseline focus must store optional design authority"),
     Case("delivery baseline with delivery optional authority passes", mutate_delivery_baseline_with_delivery_optional_authority_passes, True, "PASS:"),
+    Case("delivery baseline active wording fails", mutate_delivery_baseline_active_wording_fails, False, "delivery wording conflict"),
 ]
 
 

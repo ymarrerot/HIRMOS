@@ -23,7 +23,7 @@ Decide whether delivery decomposition is needed and produce a Delivery Plan road
 
 ## Activation triggers
 
-- greenfield project needs staged delivery
+- inspected current state and governance need show that staged delivery is required
 - large, multi-session, or prototype-to-product work cannot be safely governed as one session
 - Design needs delivery decomposition before phase/session-scope work
 
@@ -115,3 +115,8 @@ The capability must not compensate for missing authority by creating legacy sess
 
 
 Compatibility note: Map Delivery Plan items to governed requirements through the active `DELIVERY_SCOPE.md`; the Delivery Plan remains the roadmap/register.
+
+
+## PROD-L8.13 Current-State-First Generated Artifact Cleanup
+
+Generated artifacts and checkpoint text must explain routing from current system state, scope size, validation risk, continuity need, and artifact-authority requirements. Do not use greenfield/brownfield labels as the primary reason for delivery/session/phase selection. If a project-type label is useful, record it as supporting evidence metadata or phase-control routing metadata only.

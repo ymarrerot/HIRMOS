@@ -19,6 +19,8 @@ Summarize the delivery/release/change requested in plain language. Use domain la
 
 ### Recommended delivery baseline
 
+Use status-aware wording. Before acceptance, describe this as a Candidate Delivery, Proposed Delivery, or Delivery Under Baseline Review; do not call it active until baseline acceptance/amendment has occurred.
+
 - Delivery ID:
 - Delivery status: `PROPOSED` | `READY_FOR_BASELINE_REVIEW`
 - Delivery authority: `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
@@ -29,8 +31,8 @@ Summarize the delivery/release/change requested in plain language. Use domain la
 ### Recommended delivery shape
 
 - Shape: `DELIVERY_BASELINE`
-- Why durable delivery governance is needed:
-- Why this is not safe as one session:
+- Current-state evidence that durable delivery governance is needed:
+- Why the smaller single-session shape is not sufficient for this current state and scope:
 - Why phase files are not instantiated yet:
 
 ### Delivery phase coverage
@@ -158,3 +160,8 @@ When `SESSION_STATE.json.session_focus = delivery_baseline`, the active authorit
 - `_hirmos/system/delivery/<delivery-id>/DESIGN.md` when separate delivery-level design authority is justified.
 
 During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`. If separate optional authority is not justified, requirements and design decisions remain inside `DELIVERY_SCOPE.md` only. Session-level optional authority artifacts become applicable only after the flow advances to a bounded `phase_session_baseline` or `session_baseline` focus.
+
+
+## PROD-L8.13 Current-State-First Wording
+
+The checkpoint must explain delivery/session/phase routing from current system state, request scope, governance need, validation risk, continuity requirements, and artifact-authority boundaries. It may mention project-type classification as supporting metadata, but must not present greenfield/brownfield labels as the primary reason for durable delivery governance.

@@ -23,7 +23,7 @@ Produce durable phase files under one selected delivery scope when the chosen ro
 ## Activation triggers
 
 - Delivery Plan requires phases
-- greenfield, brownfield, or mixed implementation needs phase files
+- inspected current state, delivery scope, validation risk, or continuity need requires phase files
 - large or multi-session decomposition needs bounded delivery scopes
 
 ## Required inputs
@@ -108,3 +108,8 @@ The capability must not compensate for missing authority by creating legacy sess
 
 
 Compatibility note: Phase Scope language now means durable `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` adopted from `DELIVERY_SCOPE.md`.
+
+
+## PROD-L8.13 Current-State-First Generated Artifact Cleanup
+
+Generated artifacts and checkpoint text must explain routing from current system state, scope size, validation risk, continuity need, and artifact-authority requirements. Do not use greenfield/brownfield labels as the primary reason for delivery/session/phase selection. If a project-type label is useful, record it as supporting evidence metadata or phase-control routing metadata only.

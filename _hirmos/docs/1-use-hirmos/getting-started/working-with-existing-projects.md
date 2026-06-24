@@ -70,3 +70,8 @@ Be cautious if HIRMOS:
 - loses track of existing validation commands;
 - ignores unresolved items from prior sessions;
 - implements before establishing a governed session scope.
+
+
+## Generated artifact wording note
+
+Generated HIRMOS artifacts should explain routing from current-state evidence and governance need. Project-type labels are supporting metadata, not the primary authority for selecting delivery, phase, or session shape.

@@ -191,6 +191,7 @@ For `MIXED` phases, both the greenfield and brownfield entry gates apply. The ph
 - `UNKNOWN` phase type blocks phase adoption and implementation readiness.
 - `NOT_STARTED`, `BLOCKED`, `ACCEPTED`, `DEFERRED`, `SUPERSEDED`, or `CANCELLED` lifecycle status blocks implementation adoption.
 - Missing or unsatisfied entry criteria block implementation readiness.
+- Phase Entry Gate records must include a scalar `Entry criteria status: SATISFIED | BLOCKED | PENDING | NOT_APPLICABLE` field; table-only evidence is supplementary and cannot replace the scalar status.
 - Missing greenfield MVP/scope/architecture entry controls block greenfield or mixed phase adoption.
 - Missing existing-system preservation/regression entry controls block existing-system or mixed phase adoption.
 - Pointer disagreement between Current System State, Delivery Plan, Phase file, and Session Scope blocks implementation readiness.

@@ -85,3 +85,14 @@ These fixtures protect the phase lifecycle stack from regressions in phase type 
 ## Canonical Entrypoint Surface Cleanup
 
 The fixture suite verifies that legacy capability-level `entrypoint.md` redirect wrappers fail validation. Canonical runnable capability entrypoints must live only at `entrypoints/default.md`.
+
+## PROD-L8.12 Phase/Session Baseline Freshness Fixtures
+
+The regression suite also verifies post-delivery-baseline continuation concordance:
+
+- table-only Phase Entry Gate entry criteria evidence fails because scalar `Entry criteria status` is required;
+- phase/session baseline with completed `phase-baseline` and `session-scope` routing rows passes;
+- phase/session baseline with stale PENDING routing rows fails;
+- phase/session baseline with `DELIVERY_PLAN.md` current phase left as `none` fails.
+
+- delivery baseline active wording fails — protects status-aware delivery wording before baseline acceptance.

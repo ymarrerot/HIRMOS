@@ -45,9 +45,9 @@ Compatibility label: Delivery-Need Classification Source.
 
 - Classification answer: YES | NO | UNCERTAIN
 - Classification evidence:
-- Greenfield triggers present:
-- Brownfield triggers present:
-- Universal triggers present:
+- New-build / empty-system signals present:
+- Existing-system preservation signals present:
+- Universal governance triggers present:
 - If adopted from prior work, source artifact/session:
 
 
@@ -68,7 +68,7 @@ After baseline acceptance, HIRMOS marks the delivery `ACTIVE` or accepted/amende
 
 | Delivery ID | Name | Status | Type | Scope file | Current/Final phase | Relationship |
 |---|---|---|---|---|---|---|
-| `<delivery-id>` | | proposed / ready_for_baseline_review / planned / active / accepted / completed / partial / blocked / deferred / superseded / cancelled | MVP / release / hardening / migration / brownfield-change / other | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | none / `PHASE-xx` | initial / follows / supersedes / depends-on / blocks |
+| `<delivery-id>` | | proposed / ready_for_baseline_review / planned / active / accepted / completed / partial / blocked / deferred / superseded / cancelled | MVP / release / hardening / migration / existing-system-change / other | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | none / `PHASE-xx` | initial / follows / supersedes / depends-on / blocks |
 
 ## Delivery Relationships
 
@@ -83,10 +83,12 @@ After baseline acceptance, HIRMOS marks the delivery `ACTIVE` or accepted/amende
 - Carry-forward: `_hirmos/system/accepted-state/CARRY_FORWARD.md`
 - Decision log: `_hirmos/system/accepted-state/DECISION_LOG.md`
 
-## Active Delivery
+## Delivery Review / Active Context
 
-- Active delivery ID: none / `<delivery-id>`
-- Active delivery scope: none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
+Use status-aware wording in generated artifacts. Before baseline acceptance (`PROPOSED` or `READY_FOR_BASELINE_REVIEW`), describe the delivery as `Candidate Delivery`, `Proposed Delivery`, or `Delivery Under Baseline Review`. Use `Accepted Delivery` or `Active Delivery` only after the delivery baseline has been accepted/amended and the delivery status is `ACTIVE`, `ACCEPTED`, `PARTIAL`, or another post-acceptance status.
+
+- Delivery under review or active delivery ID: none / `<delivery-id>`
+- Delivery under review or active delivery scope: none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
 - Current phase: none / `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`
 - Current/next session source:
 - Current blockers:
@@ -97,8 +99,8 @@ After baseline acceptance, HIRMOS marks the delivery `ACTIVE` or accepted/amende
 This section makes delivery-to-delivery continuation explicit for future `hirmos start` runs. It is navigation metadata, not implementation authority.
 
 - Last accepted delivery: none / `<delivery-id>`
-- Active delivery: none / `<delivery-id>`
-- Active delivery scope: none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
+- Delivery under review or active delivery: none / `<delivery-id>`
+- Delivery under review or active delivery scope: none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
 - Next recommended delivery: none / `<delivery-id>`
 - Next recommended delivery scope: none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
 - Selection rationale:
@@ -136,10 +138,18 @@ Compatibility section. Delivery decomposition is represented by Delivery Index e
 
 ## Active Development Context
 
-- Active delivery:
-- Active delivery scope:
+- Delivery under review or active delivery:
+- Delivery under review or active delivery scope:
 - Current phase:
 - Next recommended delivery:
 - Next recommended delivery scope:
 - Next recommended phase:
 - Current blockers:
+
+Freshness rule: after a delivery-baseline acceptance/amendment instantiates a phase, `Current phase` must point to that concrete `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` path. It must not remain `none` while `SESSION_STATE.json.active_phase`, `CURRENT_SYSTEM_STATE.md`, or `SESSION_SCOPE.md` identifies an active phase.
+
+## PROD-L8.13 Status-Aware Delivery Wording
+
+Generated delivery-roadmap text must not imply that a delivery is accepted or active before the delivery baseline is accepted. When a delivery status is `PROPOSED` or `READY_FOR_BASELINE_REVIEW`, headings, summaries, and checkpoint-facing labels must use status-aware terms such as `Candidate Delivery`, `Proposed Delivery`, or `Delivery Under Baseline Review`. Reserve `Active Delivery` for post-acceptance statuses such as `ACTIVE`, `ACCEPTED`, `PARTIAL`, `BLOCKED`, or accepted carry-forward work.
+
+Generated artifacts should use current-state-first evidence to explain delivery shape: current system state, scope size, governance need, validation risk, continuity need, and artifact authority. Project-type labels may appear as evidence metadata only when useful; they must not be the primary reason for delivery/session/phase selection.

@@ -318,3 +318,8 @@ They also exposed hardening lessons that HIRMOS now treats as framework concerns
 - dated session IDs and archive records must use the actual current date, not stale copied dates;
 - `SESSION_EXECUTION.md` continuation records are append-only and must not lose earlier pass detail blocks;
 - close must reconcile stale checkpoint text before accepted-state/archive claims are surfaced.
+
+
+## Generated artifact wording note
+
+Generated HIRMOS artifacts should explain routing from current-state evidence and governance need. Project-type labels are supporting metadata, not the primary authority for selecting delivery, phase, or session shape.

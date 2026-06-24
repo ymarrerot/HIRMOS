@@ -123,3 +123,8 @@ The capability must not compensate for missing authority by creating legacy sess
 
 
 Compatibility note: implementation unit planning, implementation unit review, session implementation review, and Update System State remain downstream responsibilities governed by `SESSION_SCOPE.md`.
+
+
+## PROD-L8.13 Current-State-First Generated Artifact Cleanup
+
+Generated artifacts and checkpoint text must explain routing from current system state, scope size, validation risk, continuity need, and artifact-authority requirements. Do not use greenfield/brownfield labels as the primary reason for delivery/session/phase selection. If a project-type label is useful, record it as supporting evidence metadata or phase-control routing metadata only.

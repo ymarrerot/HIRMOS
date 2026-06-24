@@ -8,6 +8,17 @@ def fail(message: str):
     print('FAIL: ' + message)
     sys.exit(1)
 
+
+def _delivery_plan_has_pre_acceptance_active_delivery_wording(plan_body: str) -> bool:
+    if not re.search(r'READY_FOR_BASELINE_REVIEW|PROPOSED', plan_body, re.I):
+        return False
+    if re.search(r'^##\s+Active Delivery\s*$', plan_body, re.I | re.M):
+        return True
+    if re.search(r'^-\s*Active delivery(?: ID| scope)?\s*:', plan_body, re.I | re.M):
+        return True
+    return False
+
+
 required = [
     'AGENTS.md',
     'tools/test_validator_regressions.py',
@@ -213,7 +224,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.0.8'
+expected_version = '1.0.9'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -548,6 +559,12 @@ def _validate_session_state_semantics(state_path: Path, active_session_dir: Path
                 if (active_session_dir/'DESIGN.md').exists():
                     print('FAIL: delivery_baseline focus must store optional design authority under system/delivery/<delivery-id>/DESIGN.md, not session/DESIGN.md')
                     sys.exit(1)
+
+    if state_obj.get('session_focus') == 'delivery_baseline':
+        plan_candidate = root / 'system' / 'delivery' / 'DELIVERY_PLAN.md'
+        if plan_candidate.exists() and _delivery_plan_has_pre_acceptance_active_delivery_wording(plan_candidate.read_text(errors='ignore')):
+            print('FAIL: delivery-baseline delivery wording conflict: READY_FOR_BASELINE_REVIEW/PROPOSED delivery must not be labeled Active Delivery before baseline acceptance')
+            sys.exit(1)
             for dirname in ['implementation-units','bootstrap']:
                 if not (active_session_dir/dirname).is_dir():
                     print(f'FAIL: active session missing canonical directory: session/{dirname}')
@@ -735,6 +752,71 @@ def _validate_phase_lifecycle_status_report(session_execution: str) -> None:
         sys.exit(1)
 
 
+
+def _table_row_status(body: str, first_cell_pattern: str) -> str | None:
+    pattern = r'^\|\s*' + first_cell_pattern + r'\s*\|(?P<rest>.*)\|\s*$'
+    for match in re.finditer(pattern, body, re.I | re.M):
+        cells = [cell.strip() for cell in match.group('rest').split('|')]
+        for cell in reversed(cells):
+            if cell:
+                return cell.upper()
+    return None
+
+
+def _routing_log_row_status(body: str, capability: str) -> str | None:
+    pattern = r'^\|\s*' + re.escape(capability) + r'\s*\|(?P<rest>.*)\|\s*$'
+    for match in re.finditer(pattern, body, re.I | re.M):
+        cells = [cell.strip() for cell in match.group('rest').split('|')]
+        # Focus-Aware Capability Routing Log columns after capability are:
+        # Expected durable/session output | Status | Evidence path | Notes
+        if len(cells) >= 2 and cells[1]:
+            return cells[1].upper()
+    return None
+
+
+def _concordance_row_result(body: str, check_label: str) -> str | None:
+    pattern = r'^\|\s*' + re.escape(check_label) + r'\s*\|(?P<rest>.*)\|\s*$'
+    for match in re.finditer(pattern, body, re.I | re.M):
+        cells = [cell.strip() for cell in match.group('rest').split('|')]
+        if cells and cells[0]:
+            return cells[0].upper()
+    return None
+
+
+def _active_context_current_phase_is_none(plan_body: str) -> bool:
+    # Check both the delivery-specific Active Delivery block and final Active Development Context block.
+    for match in re.finditer(r'^-\s*Current phase\s*:\s*(?P<value>.*)$', plan_body, re.I | re.M):
+        value = match.group('value').strip().lower()
+        if value in {'none', 'none / `_hirmos/system/delivery/<delivery-id>/phases/phase-xx.md`', 'not_applicable', 'not applicable'}:
+            return True
+    return False
+
+
+
+
+def _validate_phase_session_post_continue_freshness(state_obj: dict, session_execution: str, plan_body: str, phase_text_path: str) -> None:
+    if state_obj.get('session_focus') != 'phase_session_baseline':
+        return
+    if not phase_text_path:
+        return
+
+    for capability in ['phase-baseline', 'session-scope']:
+        status = _routing_log_row_status(session_execution, capability)
+        if status and status == 'PENDING':
+            print(f'FAIL: phase_session_baseline SESSION_EXECUTION.md routing log leaves {capability} PENDING after required artifact creation')
+            sys.exit(1)
+
+    for label in ['Active Phase pointer exists when required', 'Session Scope adopts the same delivery/phase authority']:
+        result = _concordance_row_result(session_execution, label)
+        if result and result == 'NOT_APPLICABLE':
+            print(f'FAIL: phase_session_baseline SESSION_EXECUTION.md concordance row is stale: {label} is NOT_APPLICABLE')
+            sys.exit(1)
+
+    if _active_context_current_phase_is_none(plan_body):
+        print('FAIL: phase_session_baseline DELIVERY_PLAN.md Active Development Context leaves Current phase as none after phase instantiation')
+        sys.exit(1)
+
+
 def _validate_phase_entry_gate(phase_text_path: str, phase_rel: Path, stage: str | None) -> None:
     phase_body = _read_optional_text(root / phase_rel)
     lifecycle_status = _extract_label_value(phase_body, 'Lifecycle status')
@@ -766,8 +848,13 @@ def _validate_phase_entry_gate(phase_text_path: str, phase_rel: Path, stage: str
     if not re.search(r'Entry gate status\s*:\s*PASS', phase_body, re.I):
         print('FAIL: phase entry gate status must be PASS before implementation_readiness')
         sys.exit(1)
-    if not re.search(r'Entry criteria (status|satisfied)\s*:\s*(SATISFIED|PASS|YES)', phase_body, re.I):
-        print('FAIL: phase entry gate entry criteria satisfied evidence is missing')
+    scalar_entry_status = re.search(r'Entry criteria (status|satisfied)\s*:\s*(SATISFIED|PASS|YES)', phase_body, re.I)
+    table_entry_status = _table_row_status(phase_body, r'Entry criteria')
+    if not scalar_entry_status:
+        print('FAIL: phase entry gate entry criteria satisfied scalar evidence is missing')
+        sys.exit(1)
+    if table_entry_status and table_entry_status not in {'SATISFIED', 'PASS', 'YES'}:
+        print('FAIL: phase entry gate table entry criteria status is not satisfied')
         sys.exit(1)
 
     if phase_type in {'GREENFIELD', 'MIXED'}:
@@ -836,6 +923,8 @@ def _validate_delivery_governance_active_session(active_session_dir: Path) -> No
         print(f'FAIL: delivery-governed active session missing durable phase: {phase_text_path}')
         sys.exit(1)
 
+    plan_body = _read_optional_text(root / plan_rel)
+    _validate_phase_session_post_continue_freshness(state_obj, session_execution, plan_body, phase_text_path)
     _validate_phase_entry_gate(phase_text_path, phase_rel, stage)
     _validate_phase_lifecycle_status_report(session_execution)
     _validate_phase_progress_carry_forward(phase_rel, stage, close_controls, session_execution, session_review)
@@ -976,7 +1065,7 @@ for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'DELIVERY_SCOPE.md'],
     'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Index', 'Delivery Coverage Matrix', 'Status Update Log'],
     'core/templates/system/delivery/DELIVERY_SCOPE.md': ['Authorized Outcome', 'Scoped Requirements', 'Production-Shaped Engineering Gate', 'Delivery Close Verification'],
-    'core/templates/system/delivery/phases/PHASE.md': ['Phase Scope', 'Source Delivery Scope', 'Binary Exit Criteria', 'Session Handoff'],
+    'core/templates/system/delivery/phases/PHASE.md': ['Phase Scope', 'Source Delivery Scope', 'Binary Exit Criteria', 'Session Handoff', 'Entry criteria status'],
     'core/templates/session/SESSION_SCOPE.md': ['Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Selected shape justification'],
     'core/templates/session/SESSION_EXECUTION.md': ['Delivery Shape Decision Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
     'core/protocol/PROJECT_TYPES.md': ['Delivery shape fields', 'Delivery governance required: YES / NO / UNCERTAIN'],
@@ -1006,7 +1095,7 @@ for rel, phrases in {
     'extensions/design-agent/capabilities/phase-baseline/capability.json': ['session_focus = phase_session_baseline', '_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md', '_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md', 'session-scope adoption control'],
     'extensions/design-agent/capabilities/session-scope/capability.json': ['durable phase', 'single-session safety evidence'],
     'extensions/design-agent/capabilities/implementation-readiness/capability.json': ['durable delivery coverage when required', 'Delivery Shape Decision gate'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Focus-Aware Capability Routing Log', 'delivery-baseline', 'phase-baseline', 'session-scope', 'implementation-readiness'],
+    'core/templates/session/SESSION_EXECUTION.md': ['Focus-Aware Capability Routing Log', 'delivery-baseline', 'phase-baseline', 'session-scope', 'implementation-readiness', 'Post-continue freshness rule'],
     'core/templates/session/SESSION_SCOPE.md': ['Focus-Aware Capability Routing Evidence', 'delivery-baseline', 'phase-baseline', 'implementation-readiness'],
 }.items():
     body = (root/rel).read_text()
@@ -1310,7 +1399,7 @@ for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'DELIVERY_SCOPE.md'],
     'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Index', 'Delivery Coverage Matrix', 'Status Update Log'],
     'core/templates/system/delivery/DELIVERY_SCOPE.md': ['Authorized Outcome', 'Scoped Requirements', 'Production-Shaped Engineering Gate', 'Delivery Close Verification'],
-    'core/templates/system/delivery/phases/PHASE.md': ['Phase Scope', 'Source Delivery Scope', 'Binary Exit Criteria', 'Session Handoff'],
+    'core/templates/system/delivery/phases/PHASE.md': ['Phase Scope', 'Source Delivery Scope', 'Binary Exit Criteria', 'Session Handoff', 'Entry criteria status'],
     'core/templates/session/SESSION_SCOPE.md': ['Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Selected shape justification'],
     'core/templates/session/SESSION_EXECUTION.md': ['Delivery Shape Decision Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
     'core/protocol/PROJECT_TYPES.md': ['Delivery shape fields', 'Delivery governance required: YES / NO / UNCERTAIN'],
@@ -1340,7 +1429,7 @@ for rel, phrases in {
     'extensions/design-agent/capabilities/phase-baseline/capability.json': ['session_focus = phase_session_baseline', '_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md', '_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md', 'session-scope adoption control'],
     'extensions/design-agent/capabilities/session-scope/capability.json': ['durable phase', 'single-session safety evidence'],
     'extensions/design-agent/capabilities/implementation-readiness/capability.json': ['durable delivery coverage when required', 'Delivery Shape Decision gate'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Focus-Aware Capability Routing Log', 'delivery-baseline', 'phase-baseline', 'session-scope', 'implementation-readiness'],
+    'core/templates/session/SESSION_EXECUTION.md': ['Focus-Aware Capability Routing Log', 'delivery-baseline', 'phase-baseline', 'session-scope', 'implementation-readiness', 'Post-continue freshness rule'],
     'core/templates/session/SESSION_SCOPE.md': ['Focus-Aware Capability Routing Evidence', 'delivery-baseline', 'phase-baseline', 'implementation-readiness'],
 }.items():
     body = (root/rel).read_text()
@@ -2190,6 +2279,10 @@ else:
             fail('delivery_baseline focus must not create SESSION_SCOPE.md before bounded phase/session scope exists')
         if 'unresolved-items.md' in actual_session_files:
             fail('delivery_baseline focus must store delivery unresolved items under system/delivery/<delivery-id>/unresolved-items.md, not session/unresolved-items.md')
+
+        plan_candidate = root / 'system' / 'delivery' / 'DELIVERY_PLAN.md'
+        if plan_candidate.exists() and _delivery_plan_has_pre_acceptance_active_delivery_wording(plan_candidate.read_text(errors='ignore')):
+            fail('delivery_baseline focus delivery wording conflict: pre-acceptance delivery must be labeled Candidate/Proposed/Under Baseline Review, not Active Delivery')
     else:
         for rel in ['SESSION_SCOPE.md', 'unresolved-items.md']:
             if rel not in actual_session_files:
@@ -2809,3 +2902,25 @@ for rel, phrases in {
         if phrase.lower() not in body.lower():
             fail(f'PROD-L8.11 optional authority location {rel} missing phrase: {phrase}')
 print('PASS: HIRMOS PROD-L8.11 delivery-baseline optional authority location static check')
+
+
+# PROD-L8.13 delivery review wording and current-state-first generated artifact cleanup checks
+for rel, phrases in {
+    'core/protocol/COMMANDS.md': ['PROD-L8.13 Delivery Review Wording', 'Candidate Delivery', 'current-state-first evidence'],
+    'core/protocol/CAPABILITY_ROUTING.md': ['PROD-L8.13 Delivery Review Wording', 'current-state-first explanations'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['PROD-L8.13 Delivery Review Wording and Current-State-First Generated Artifacts', 'Project-type labels', 'supporting evidence metadata'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['PROD-L8.13 Status-Aware Delivery Wording', 'Candidate Delivery', 'Delivery Under Baseline Review'],
+    'core/templates/checkpoints/DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md': ['PROD-L8.13 Current-State-First Wording', 'Candidate Delivery', 'current system state'],
+    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.13 Delivery Review Wording Record', 'current-state-first routing explanation'],
+    'extensions/design-agent/entrypoints/default.md': ['PROD-L8.13 Current-State-First Generated Artifact Cleanup'],
+    'extensions/design-agent/capabilities/delivery-baseline/entrypoints/default.md': ['PROD-L8.13 Current-State-First Generated Artifact Cleanup'],
+}.items():
+    body = (root/rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.13 delivery wording/current-state-first {rel} missing phrase: {phrase}')
+
+plan_template_body = (root/'core/templates/system/delivery/DELIVERY_PLAN.md').read_text(errors='ignore')
+if re.search(r'^##\s+Active Delivery\s*$', plan_template_body, re.I | re.M):
+    fail('PROD-L8.13 DELIVERY_PLAN.md template must not use a bare Active Delivery heading for pre-acceptance contexts')
+print('PASS: HIRMOS PROD-L8.13 delivery review wording static check')

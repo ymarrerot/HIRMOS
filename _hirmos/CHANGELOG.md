@@ -6,7 +6,17 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 ## Unreleased
 
-No unreleased changes yet.
+## 1.0.9 — Phase-baseline concordance and current-state-first delivery review stabilization
+
+### Changed
+
+- Aligned phase entry-gate templates and validator expectations by requiring scalar `Entry criteria status` evidence, with tables treated as supplementary evidence instead of the only authority signal.
+- Hardened post-continue ledger freshness so `SESSION_EXECUTION.md` reflects completed phase-baseline and session-scope routing after `PHASE-xx.md` and `SESSION_SCOPE.md` exist.
+- Clarified delivery plan freshness after phase instantiation so active phase pointers must not remain `none` once a phase is active.
+- Added status-aware delivery-baseline wording so pre-acceptance deliveries are described as Candidate Delivery, Proposed Delivery, or Delivery Under Baseline Review instead of Active Delivery.
+- Clarified that generated artifacts should explain delivery/session/phase routing from current-state evidence, scope, governance need, validation risk, continuity need, and artifact authority.
+- Reduced generated-artifact encouragement to use greenfield/brownfield labels as primary routing reasons; project-type labels remain supporting evidence metadata or phase-control routing metadata when useful.
+- Added validator and regression coverage for phase entry-gate concordance, post-continue ledger freshness, delivery-plan current phase freshness, and pre-acceptance delivery wording conflicts.
 
 ## 1.0.8 — Delivery-baseline optional authority location and dogfood stabilization
 

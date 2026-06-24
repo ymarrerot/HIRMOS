@@ -157,6 +157,10 @@ A mixed phase must satisfy both Greenfield Controls and Brownfield Controls. If 
 ## Phase Entry Gate
 
 Entry gate status: PENDING / PASS / BLOCKED / UNCERTAIN
+Entry criteria status: PENDING / SATISFIED / BLOCKED / NOT_APPLICABLE
+Entry criteria evidence: delivery baseline accepted/amended, required prior phase conditions satisfied, required unresolved decisions resolved or explicitly carried, and runtime/setup prerequisites recorded.
+
+The scalar `Entry criteria status` field is mandatory. A table row may provide additional detail, but it does not replace the scalar field because validators and continuation checks need a stable machine-readable status.
 
 ### Greenfield Entry Gate Controls
 

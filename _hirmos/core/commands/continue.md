@@ -321,7 +321,9 @@ A continuation pass may add evidence or implementation-unit detail, but it must 
 
 When `session_focus = delivery_baseline`, `hirmos continue` does not implement. It must treat the Delivery Baseline — Review or Change checkpoint as accepted unless the user requested amendments first, apply any amendments to `DELIVERY_SCOPE.md`, delivery-level `unresolved-items.md`, optional delivery `REQUIREMENTS.md`/`DESIGN.md`, and `DELIVERY_PLAN.md`, then set the next focus to `phase_session_baseline` when a phase/session should be prepared.
 
-After delivery-baseline acceptance or amendment, `hirmos continue` may instantiate only the next needed `PHASE-xx.md` when phase files are selected. It must not instantiate future phase files by default. It must then create the bounded `SESSION_SCOPE.md` for that phase/session and pause with `Session Baseline — Review or Change`; implementation starts only on a later allowed continuation after the session baseline is accepted or amended.
+After delivery-baseline acceptance or amendment, `hirmos continue` may instantiate only the next needed `PHASE-xx.md` when phase files are selected. It must not instantiate future phase files by default. The instantiated phase must include a scalar Phase Entry Gate field: `Entry criteria status: SATISFIED` when the accepted/amended delivery baseline satisfies entry criteria. A table may add detail, but it must not replace this scalar field.
+
+The same continuation pass must then create the bounded `SESSION_SCOPE.md` for that phase/session and pause with `Session Baseline — Review or Change`; implementation starts only on a later allowed continuation after the session baseline is accepted or amended. Before surfacing the checkpoint, refresh `SESSION_EXECUTION.md` so `phase-baseline` and `session-scope` rows are `COMPLETED` with evidence paths, not left `PENDING`; refresh Current System State Delivery Pointer Concordance so active phase and session scope rows are not `NOT_APPLICABLE`; and refresh `DELIVERY_PLAN.md` Active Development Context so `Current phase` points to the instantiated phase.
 
 When `session_focus = session_baseline` or `phase_session_baseline`, `hirmos continue` treats the session baseline as accepted unless the user requested amendments first, then may instantiate implementation-unit artifacts only when needed by the accepted scope.
 
@@ -342,3 +344,8 @@ When `SESSION_STATE.json.session_focus = delivery_baseline`, the active authorit
 - `_hirmos/system/delivery/<delivery-id>/DESIGN.md` when separate delivery-level design authority is justified.
 
 During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`. If separate optional authority is not justified, requirements and design decisions remain inside `DELIVERY_SCOPE.md` only. Session-level optional authority artifacts become applicable only after the flow advances to a bounded `phase_session_baseline` or `session_baseline` focus.
+
+
+## PROD-L8.13 Delivery Review Wording
+
+When reporting delivery-baseline state, use status-aware delivery labels. Before baseline acceptance, use Candidate Delivery, Proposed Delivery, or Delivery Under Baseline Review. Use Active Delivery only after the baseline has been accepted/amended and the delivery is in a post-acceptance state. Explain routing from current-state-first evidence and governance need rather than from greenfield/brownfield labels alone.

@@ -141,6 +141,7 @@ DELIVERY_PHASE_SESSION / phase_session_baseline
 - `delivery-baseline` creates or updates `_hirmos/system/delivery/DELIVERY_PLAN.md`, `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`, `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`, and optional delivery-level `REQUIREMENTS.md` / `DESIGN.md` only when justified.
 - `delivery-baseline` must stop at `Delivery Baseline — Review or Change`; it must not create `SESSION_SCOPE.md`, `PHASE-xx.md`, or implementation units before baseline acceptance by default.
 - `phase-baseline` runs only after delivery-baseline acceptance or amendment. It instantiates the next needed `PHASE-xx.md` when phase files are selected and prepares the bounded phase/session authority.
+- `phase-baseline` must write a scalar `Entry criteria status` field in the instantiated phase and refresh `DELIVERY_PLAN.md`, `SESSION_EXECUTION.md`, and Current System State delivery pointers so post-continue artifacts do not retain delivery-baseline-only `PENDING`, `NOT_APPLICABLE`, or `Current phase: none` values.
 - `session-scope` adopts and narrows the accepted `DELIVERY_SCOPE.md` and, when applicable, the active `PHASE-xx.md` into `_hirmos/session/SESSION_SCOPE.md`.
 - `implementation-readiness` verifies the focus-specific authority chain and blocks implementation when required artifacts are missing, stale, contradictory, placeholder-only, or not accepted/amended.
 
@@ -305,3 +306,12 @@ When `SESSION_STATE.json.session_focus = delivery_baseline`, the active authorit
 - `_hirmos/system/delivery/<delivery-id>/DESIGN.md` when separate delivery-level design authority is justified.
 
 During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`. If separate optional authority is not justified, requirements and design decisions remain inside `DELIVERY_SCOPE.md` only. Session-level optional authority artifacts become applicable only after the flow advances to a bounded `phase_session_baseline` or `session_baseline` focus.
+
+
+## PROD-L8.13 Delivery Review Wording and Current-State-First Generated Artifacts
+
+Delivery artifacts and checkpoints must be status-aware. Before a delivery baseline is accepted, generated text must describe the delivery as a Candidate Delivery, Proposed Delivery, or Delivery Under Baseline Review. `Active Delivery` is reserved for post-acceptance delivery states such as `ACTIVE`, `ACCEPTED`, `PARTIAL`, `BLOCKED`, or accepted carry-forward work.
+
+Generated artifacts must explain delivery shape from current-state-first evidence: inspected system state, scope size, governance need, validation risk, continuity need, and authority boundaries. Project-type labels such as greenfield, brownfield, mixed, or unknown may be recorded as supporting evidence metadata or phase-control routing metadata, but they must not be the primary user-facing justification for delivery governance, session scope, or phase creation.
+
+When the delivery status is `READY_FOR_BASELINE_REVIEW`, the roadmap/register may identify the candidate delivery and its delivery authority, but it must not imply implementation authority. Implementation remains unauthorized until the delivery baseline is accepted/amended and narrowed into phase/session authority.

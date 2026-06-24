@@ -359,10 +359,11 @@ Required when the selected delivery shape is `MULTI_SESSION_DELIVERY` or `MULTI_
 | Capability | Expected durable/session output | Status | Evidence path | Notes |
 |---|---|---|---|---|
 | delivery-baseline | `_hirmos/system/delivery/DELIVERY_PLAN.md` and `<delivery-id>/DELIVERY_SCOPE.md` | PENDING | | |
-| phase-baseline | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` when phase files are selected | PENDING | | |
-| session-scope | `_hirmos/session/SESSION_SCOPE.md` adopts and narrows active delivery/phase authority | PENDING | | |
-| implementation-readiness | `SESSION_SCOPE.md` authorizes implementation and required controls are satisfied | PENDING | | |
+| phase-baseline | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` when phase files are selected | PENDING / COMPLETED / BLOCKED / NOT_APPLICABLE | | |
+| session-scope | `_hirmos/session/SESSION_SCOPE.md` adopts and narrows active delivery/phase authority | PENDING / COMPLETED / BLOCKED / NOT_APPLICABLE | | |
+| implementation-readiness | `SESSION_SCOPE.md` authorizes implementation and required controls are satisfied | PENDING / READY_FOR_REVIEW / ACCEPTED / BLOCKED / NOT_APPLICABLE | | |
 
+Post-continue freshness rule: in `phase_session_baseline`, `phase-baseline` and `session-scope` must be `COMPLETED` with evidence paths once `PHASE-xx.md` and `SESSION_SCOPE.md` exist; `implementation-readiness` waits for Session Baseline acceptance/amendment.
 Fail closed if this log is missing, incomplete, or contradicted by artifacts while the selected delivery shape requires durable delivery artifacts.
 
 ## Current System State Delivery Pointer Concordance
@@ -378,6 +379,7 @@ Record this before implementation readiness and again before close when delivery
 | Session Scope adopts the same delivery/phase authority | SATISFIED / BLOCKED / NOT_APPLICABLE | `SESSION_SCOPE.md` | |
 | Next phase / next command concordance checked | SATISFIED / BLOCKED / NOT_APPLICABLE | `DELIVERY_PLAN.md`, `SESSION_STATE.json` | |
 
+Post-continue freshness rule: in `phase_session_baseline`, active phase and Session Scope adoption rows must be `SATISFIED` or `BLOCKED`, not `NOT_APPLICABLE`, after `PHASE-xx.md` and `SESSION_SCOPE.md` exist.
 Fail-closed rule: delivery-governed implementation must not proceed while Current System State delivery pointers contradict the durable Delivery Plan roadmap, Delivery Scope, active Phase file, or Session Scope.
 
 ## Durable Phase Adoption Gate
@@ -395,12 +397,12 @@ Pointer-only execution record required before implementation readiness when the 
 | Partial adoption has explicit deferrals | SATISFIED / NOT_APPLICABLE | `SESSION_SCOPE.md` Phase exclusions / deferrals | PENDING |
 
 ## Phase Entry Gate Execution Log
-
 - Phase file inspected:
 - Delivery Plan inspected:
 - Delivery Scope inspected:
 - Current System State pointer inspected:
 - Phase Entry Gate status:
+- Entry criteria status: PENDING / SATISFIED / BLOCKED / NOT_APPLICABLE
 - Implementation readiness authorized: YES / NO
 
 ## Phase Progress / Carry-Forward Record
@@ -570,4 +572,4 @@ A delivery-baseline checkpoint must point to the delivery unresolved register an
 
 ## PROD-L8.11 Delivery-Baseline Optional Authority Location
 
-During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`; optional authority belongs under `_hirmos/system/delivery/<delivery-id>/` or stays in `DELIVERY_SCOPE.md`.
+During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`; optional authority belongs under `_hirmos/system/delivery/<delivery-id>/` or stays in `DELIVERY_SCOPE.md`. PROD-L8.13 Delivery Review Wording Record: status-aware wording verified and current-state-first routing explanation recorded.
