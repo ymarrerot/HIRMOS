@@ -213,7 +213,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.0.7'
+expected_version = '1.0.8'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -541,6 +541,12 @@ def _validate_session_state_semantics(state_path: Path, active_session_dir: Path
                     sys.exit(1)
                 if (active_session_dir/'unresolved-items.md').exists():
                     print('FAIL: delivery_baseline focus must store delivery unresolved items under system/delivery/<delivery-id>/unresolved-items.md, not session/unresolved-items.md')
+                    sys.exit(1)
+                if (active_session_dir/'REQUIREMENTS.md').exists():
+                    print('FAIL: delivery_baseline focus must store optional requirements authority under system/delivery/<delivery-id>/REQUIREMENTS.md, not session/REQUIREMENTS.md')
+                    sys.exit(1)
+                if (active_session_dir/'DESIGN.md').exists():
+                    print('FAIL: delivery_baseline focus must store optional design authority under system/delivery/<delivery-id>/DESIGN.md, not session/DESIGN.md')
                     sys.exit(1)
             for dirname in ['implementation-units','bootstrap']:
                 if not (active_session_dir/dirname).is_dir():
@@ -2781,3 +2787,25 @@ for rel, phrases in {
             fail(f'PROD-L8.10 delivery-baseline minimality {rel} missing phrase: {phrase}')
 
 print('PASS: HIRMOS PROD-L8.10 delivery-baseline session-surface minimality static check')
+
+
+# PROD-L8.11 delivery-baseline optional authority location hardening checks
+for rel, phrases in {
+    'core/protocol/COMMANDS.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location', 'must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`'],
+    'core/protocol/CAPABILITY_ROUTING.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location', '_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md', '_hirmos/system/delivery/<delivery-id>/DESIGN.md'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location', 'If separate optional authority is not justified, requirements and design decisions remain inside `DELIVERY_SCOPE.md` only'],
+    'core/commands/start.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location', 'During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`'],
+    'core/commands/continue.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location', 'Session-level optional authority artifacts become applicable only after the flow advances to a bounded `phase_session_baseline` or `session_baseline` focus'],
+    'core/commands/status.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location'],
+    'core/commands/close.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location'],
+    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location', 'During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`'],
+    'core/templates/checkpoints/DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location', 'Do not list `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md` during `delivery_baseline`'],
+    'extensions/design-agent/capabilities/delivery-baseline/entrypoints/default.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location'],
+    'extensions/design-agent/capabilities/requirements-design/entrypoints/default.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location'],
+    'extensions/design-agent/capabilities/system-design/entrypoints/default.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location'],
+}.items():
+    body = (root/rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.11 optional authority location {rel} missing phrase: {phrase}')
+print('PASS: HIRMOS PROD-L8.11 delivery-baseline optional authority location static check')

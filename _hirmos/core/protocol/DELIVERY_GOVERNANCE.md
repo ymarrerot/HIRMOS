@@ -296,3 +296,12 @@ Runtime commands must use this binding when deciding which artifacts to instanti
 ## PROD-L8.10 Delivery-Baseline Surface Minimality
 
 Delivery-baseline planning uses the runtime session envelope but delivery authority owns the governed content. During `session_focus = delivery_baseline`, `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` is the active authority and `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` is the unresolved register. `_hirmos/session/SESSION_SCOPE.md` and `_hirmos/session/unresolved-items.md` are not applicable and must not be created as placeholders. This rule is project-agnostic and applies to any durable delivery, regardless of domain, project type, or feature set.
+
+## PROD-L8.11 Delivery-Baseline Optional Authority Location
+
+When `SESSION_STATE.json.session_focus = delivery_baseline`, the active authority is delivery-level. Optional requirements/design authority must be located under `_hirmos/system/delivery/<delivery-id>/` only:
+
+- `_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md` when separate delivery-level requirements authority is justified.
+- `_hirmos/system/delivery/<delivery-id>/DESIGN.md` when separate delivery-level design authority is justified.
+
+During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`. If separate optional authority is not justified, requirements and design decisions remain inside `DELIVERY_SCOPE.md` only. Session-level optional authority artifacts become applicable only after the flow advances to a bounded `phase_session_baseline` or `session_baseline` focus.

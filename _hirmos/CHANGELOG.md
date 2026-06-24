@@ -8,6 +8,15 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 No unreleased changes yet.
 
+## 1.0.8 — Delivery-baseline optional authority location and dogfood stabilization
+
+### Changed
+
+- Hardened `delivery_baseline` focus so optional requirements and design authority are created only under `_hirmos/system/delivery/<delivery-id>/` when justified.
+- Clarified that session-local `REQUIREMENTS.md` and `DESIGN.md` are not valid during delivery-baseline focus because no bounded phase/session authority exists yet.
+- Updated validators and regression fixtures so delivery-baseline runs fail when session-local optional authority artifacts are created and pass when justified optional authority lives under the delivery folder.
+- Completed final dogfood-readiness stabilization for the focus-aware delivery/session boundary model.
+
 ## 1.0.7 — Delivery-baseline session-surface minimality and dogfood stabilization
 
 ### Changed

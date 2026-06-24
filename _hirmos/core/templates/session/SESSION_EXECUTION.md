@@ -567,3 +567,7 @@ When `session_focus = delivery_baseline`, record:
 | Active authority | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | | PENDING | |
 
 A delivery-baseline checkpoint must point to the delivery unresolved register and must not create an empty session unresolved placeholder.
+
+## PROD-L8.11 Delivery-Baseline Optional Authority Location
+
+During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`; optional authority belongs under `_hirmos/system/delivery/<delivery-id>/` or stays in `DELIVERY_SCOPE.md`.

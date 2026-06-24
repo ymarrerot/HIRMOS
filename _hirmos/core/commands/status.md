@@ -326,3 +326,12 @@ If `session_focus = delivery_baseline`, status must not report missing `SESSION_
 ## PROD-L8.10 delivery-baseline unresolved reporting
 
 When `session_focus = delivery_baseline`, status must report `_hirmos/session/unresolved-items.md` as `NOT_APPLICABLE` and must point to `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` for gated delivery items, non-gating delivery assumptions, and technical-review delivery items. A session-level unresolved register in this focus is a surface-minimality conflict and must be reported as blocked.
+
+## PROD-L8.11 Delivery-Baseline Optional Authority Location
+
+When `SESSION_STATE.json.session_focus = delivery_baseline`, the active authority is delivery-level. Optional requirements/design authority must be located under `_hirmos/system/delivery/<delivery-id>/` only:
+
+- `_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md` when separate delivery-level requirements authority is justified.
+- `_hirmos/system/delivery/<delivery-id>/DESIGN.md` when separate delivery-level design authority is justified.
+
+During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`. If separate optional authority is not justified, requirements and design decisions remain inside `DELIVERY_SCOPE.md` only. Session-level optional authority artifacts become applicable only after the flow advances to a bounded `phase_session_baseline` or `session_baseline` focus.

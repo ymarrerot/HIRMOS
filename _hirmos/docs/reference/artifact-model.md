@@ -152,3 +152,12 @@ _hirmos/system/delivery/<delivery-id>/
 `<delivery-id>/unresolved-items.md` is the durable delivery-level unresolved register. It survives across sessions and is checked at delivery close. Session unresolved registers own only session-scoped blockers, assumptions, technical-review items, and inherited delivery items that affect the active session.
 
 `SESSION_SCOPE.md` remains the complete active session authority once a bounded phase/session work scope exists. It may adopt delivery or phase authority, but it must not become the home for delivery-wide requirements, design, or unresolved items.
+
+## PROD-L8.11 Delivery-Baseline Optional Authority Location
+
+When `SESSION_STATE.json.session_focus = delivery_baseline`, the active authority is delivery-level. Optional requirements/design authority must be located under `_hirmos/system/delivery/<delivery-id>/` only:
+
+- `_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md` when separate delivery-level requirements authority is justified.
+- `_hirmos/system/delivery/<delivery-id>/DESIGN.md` when separate delivery-level design authority is justified.
+
+During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`. If separate optional authority is not justified, requirements and design decisions remain inside `DELIVERY_SCOPE.md` only. Session-level optional authority artifacts become applicable only after the flow advances to a bounded `phase_session_baseline` or `session_baseline` focus.

@@ -300,3 +300,12 @@ Checkpoint template selection is focus-aware. `delivery_baseline` must use `DELI
 ## PROD-L8.10 Delivery-Baseline Surface Minimality Routing
 
 When the selected route is `DELIVERY_BASELINE / delivery_baseline`, capability producers must write delivery-level uncertainty to `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`. They must not create `_hirmos/session/unresolved-items.md` or `_hirmos/session/SESSION_SCOPE.md` until the route advances to `DELIVERY_PHASE_SESSION / phase_session_baseline` or another bounded session-scope focus. Status and checkpoints must report session unresolved as `NOT_APPLICABLE` during delivery-baseline focus.
+
+## PROD-L8.11 Delivery-Baseline Optional Authority Location
+
+When `SESSION_STATE.json.session_focus = delivery_baseline`, the active authority is delivery-level. Optional requirements/design authority must be located under `_hirmos/system/delivery/<delivery-id>/` only:
+
+- `_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md` when separate delivery-level requirements authority is justified.
+- `_hirmos/system/delivery/<delivery-id>/DESIGN.md` when separate delivery-level design authority is justified.
+
+During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`. If separate optional authority is not justified, requirements and design decisions remain inside `DELIVERY_SCOPE.md` only. Session-level optional authority artifacts become applicable only after the flow advances to a bounded `phase_session_baseline` or `session_baseline` focus.

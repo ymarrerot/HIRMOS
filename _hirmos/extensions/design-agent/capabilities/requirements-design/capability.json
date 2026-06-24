@@ -31,5 +31,6 @@
   "unresolved_items": {
     "producer": true,
     "required_when_material": true
-  }
+  },
+  "l8_11_delivery_baseline_optional_authority_location": "During delivery_baseline, optional requirements/design authority lives only under _hirmos/system/delivery/<delivery-id>/; session-level REQUIREMENTS.md/DESIGN.md are not applicable until bounded session/phase focus."
 }

@@ -106,6 +106,8 @@ Include only artifacts that exist and contain non-placeholder content.
 - `_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md` — only if created and justified.
 - `_hirmos/system/delivery/<delivery-id>/DESIGN.md` — only if created and justified.
 
+Do not list `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md` during `delivery_baseline`. If optional authority exists, it must be under `_hirmos/system/delivery/<delivery-id>/`.
+
 Do not list `_hirmos/session/SESSION_SCOPE.md` unless a bounded phase/session scope already exists.
 
 ### What happens if you continue
@@ -147,3 +149,12 @@ Stop / do not continue
 ## Surface Minimality Requirement
 
 During `delivery_baseline`, do not list `_hirmos/session/unresolved-items.md` or `_hirmos/session/SESSION_SCOPE.md` as review artifacts. They are `NOT_APPLICABLE` until a bounded phase/session baseline exists. Delivery unresolved items must be sourced from `_hirmos/system/delivery/<delivery-id>/unresolved-items.md#Current Checkpoint Feed`.
+
+## PROD-L8.11 Delivery-Baseline Optional Authority Location
+
+When `SESSION_STATE.json.session_focus = delivery_baseline`, the active authority is delivery-level. Optional requirements/design authority must be located under `_hirmos/system/delivery/<delivery-id>/` only:
+
+- `_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md` when separate delivery-level requirements authority is justified.
+- `_hirmos/system/delivery/<delivery-id>/DESIGN.md` when separate delivery-level design authority is justified.
+
+During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`. If separate optional authority is not justified, requirements and design decisions remain inside `DELIVERY_SCOPE.md` only. Session-level optional authority artifacts become applicable only after the flow advances to a bounded `phase_session_baseline` or `session_baseline` focus.

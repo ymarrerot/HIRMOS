@@ -602,6 +602,23 @@ def mutate_delivery_baseline_with_session_unresolved_fails(root: Path) -> None:
     mutate_delivery_baseline_without_session_scope_passes(root)
     (root / "session" / "unresolved-items.md").write_text("# unresolved-items.md\n\nDelivery-level unresolved items were incorrectly stored here.\n")
 
+
+def mutate_delivery_baseline_with_session_requirements_fails(root: Path) -> None:
+    mutate_delivery_baseline_without_session_scope_passes(root)
+    (root / "session" / "REQUIREMENTS.md").write_text("# REQUIREMENTS.md\n\nDelivery-level requirements were incorrectly stored in the session surface.\n")
+
+
+def mutate_delivery_baseline_with_session_design_fails(root: Path) -> None:
+    mutate_delivery_baseline_without_session_scope_passes(root)
+    (root / "session" / "DESIGN.md").write_text("# DESIGN.md\n\nDelivery-level design was incorrectly stored in the session surface.\n")
+
+
+def mutate_delivery_baseline_with_delivery_optional_authority_passes(root: Path) -> None:
+    mutate_delivery_baseline_without_session_scope_passes(root)
+    delivery = root / "system" / "delivery" / "fixture-delivery"
+    (delivery / "REQUIREMENTS.md").write_text("# REQUIREMENTS.md\n\nStatus: delivery-level optional requirements authority.\n")
+    (delivery / "DESIGN.md").write_text("# DESIGN.md\n\nStatus: delivery-level optional design authority.\n")
+
 # retained marker: accepted-state index reappears
 CASES = [
     Case("valid baseline", mutate_none, True, "PASS:"),
@@ -638,6 +655,9 @@ CASES = [
     Case("delivery baseline without SESSION_SCOPE passes", mutate_delivery_baseline_without_session_scope_passes, True, "PASS:"),
     Case("delivery baseline with SESSION_SCOPE fails", mutate_delivery_baseline_with_session_scope_fails, False, "delivery_baseline focus must not create SESSION_SCOPE.md"),
     Case("delivery baseline with session unresolved fails", mutate_delivery_baseline_with_session_unresolved_fails, False, "delivery_baseline focus must store delivery unresolved items"),
+    Case("delivery baseline with session REQUIREMENTS fails", mutate_delivery_baseline_with_session_requirements_fails, False, "delivery_baseline focus must store optional requirements authority"),
+    Case("delivery baseline with session DESIGN fails", mutate_delivery_baseline_with_session_design_fails, False, "delivery_baseline focus must store optional design authority"),
+    Case("delivery baseline with delivery optional authority passes", mutate_delivery_baseline_with_delivery_optional_authority_passes, True, "PASS:"),
 ]
 
 
