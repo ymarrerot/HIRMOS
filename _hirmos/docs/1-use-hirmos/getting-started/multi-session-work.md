@@ -12,7 +12,7 @@ Use multi-session delivery when the work includes:
 - major architecture and implementation tracks;
 - dependencies between design, implementation, validation, and rollout;
 - significant unresolved decisions that should not block all progress;
-- brownfield preservation risk;
+- existing-system preservation, regression, compatibility, or migration-safety risk;
 - work that must carry context across multiple AI conversations.
 
 ## What changes in a larger delivery
@@ -100,8 +100,56 @@ _hirmos/system/delivery/
 For multi-session work, HIRMOS does not just create delivery files. Runtime commands route through delivery capabilities:
 
 ```text
-MULTI_SESSION_DELIVERY → delivery-design → session-scope → implementation-readiness
-MULTI_SESSION_DELIVERY_WITH_PHASE_FILES → delivery-design → phase-contracting → session-scope → implementation-readiness
+DELIVERY_BASELINE / delivery_baseline → delivery-baseline
+DELIVERY_PHASE_SESSION / phase_session_baseline → phase-baseline → session-scope → implementation-readiness
 ```
 
 For bounded single-session work, HIRMOS should avoid delivery artifacts and record why delivery governance is not applicable.
+
+
+## PROD-L8.9 delivery baseline focus
+
+HIRMOS always runs inside a governed runtime session envelope, but `SESSION_SCOPE.md` is required only when the active work has a bounded phase/session work scope. Durable delivery-baseline work uses `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` as active authority and `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` for delivery-level unresolved items.
+
+Before delivery-baseline acceptance, HIRMOS records a complete phase coverage plan inside `DELIVERY_SCOPE.md` and does not instantiate future `PHASE-xx.md` files by default. After acceptance, HIRMOS instantiates the next phase/session authority just in time.
+
+## Delivery baseline workflow
+
+When durable multi-session governance is justified, HIRMOS first prepares a delivery baseline rather than immediately creating a phase/session implementation scope.
+
+```text
+hirmos start
+→ session_focus: delivery_baseline
+→ _hirmos/system/delivery/DELIVERY_PLAN.md
+→ _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md
+→ _hirmos/system/delivery/<delivery-id>/unresolved-items.md
+→ optional _hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md
+→ optional _hirmos/system/delivery/<delivery-id>/DESIGN.md
+→ Delivery Baseline — Review or Change
+```
+
+Before the delivery baseline is accepted, HIRMOS should not create `SESSION_SCOPE.md`, session unresolved items, implementation-unit files, or future `PHASE-xx.md` files by default.
+
+`DELIVERY_SCOPE.md` must still include a complete phase coverage plan. That plan is the lightweight promise that planned phases cover the complete delivery scope even when future phase files are created just in time.
+
+After delivery-baseline acceptance:
+
+```text
+hirmos continue
+→ activate or amend the delivery baseline
+→ instantiate only the next needed PHASE-xx.md by default
+→ create the next SESSION_SCOPE.md
+→ Session Baseline — Review or Change
+```
+
+Only after the session baseline is accepted should HIRMOS create implementation-unit files and begin implementation.
+
+## Delivery-level unresolved items
+
+Delivery-level gated items, non-gating assumptions, and technical-review items live with the delivery:
+
+```text
+_hirmos/system/delivery/<delivery-id>/unresolved-items.md
+```
+
+Session-level unresolved items live in `_hirmos/session/unresolved-items.md` only after a bounded session scope exists. A session may resurface an accepted delivery assumption when implementation discovers a blocker or invalid assumption. In that case, the session unresolved item must point back to the delivery decision and state whether delivery authority must be amended.

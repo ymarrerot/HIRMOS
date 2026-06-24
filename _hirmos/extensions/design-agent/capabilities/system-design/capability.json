@@ -1,7 +1,7 @@
 {
   "id": "system-design",
   "extension": "design-agent",
-  "summary": "Define the product, technical, or system design needed to satisfy governed requirements and preserve system constraints.",
+  "summary": "Define focus-appropriate product, technical, or system design needed to satisfy governed requirements and preserve system constraints.",
   "lifecycle_stage": "design",
   "entrypoints": {
     "default": "entrypoints/default.md"
@@ -13,13 +13,14 @@
     ]
   },
   "requires_artifacts": [
-    "_hirmos/session/DESIGN.md current-state basis",
-    "_hirmos/session/DESIGN.md"
+    "active authority from SESSION_STATE.json.active_authority",
+    "focus-appropriate REQUIREMENTS.md when created",
+    "focus-appropriate unresolved-items.md"
   ],
   "produces_artifacts": [
-    "_hirmos/session/DESIGN.md",
-    "_hirmos/session/DESIGN.md technical review",
-    "_hirmos/session/unresolved-items.md",
+    "_hirmos/system/delivery/<delivery-id>/DESIGN.md when session_focus = delivery_baseline and separate design authority is justified",
+    "_hirmos/session/DESIGN.md when a bounded session scope justifies separate design authority",
+    "focus-appropriate unresolved-items.md",
     "_hirmos/session/SESSION_EXECUTION.md"
   ],
   "execution_controls": [

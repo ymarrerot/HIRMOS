@@ -126,3 +126,29 @@ The artifact model is activated through runtime command routing. Commands must i
 `ARCHIVE_MANIFEST.md` lives inside `_hirmos/system/history/sessions/<session-id>/` and is a history-only archive transaction record. It is evidence for close concordance, not accepted current truth.
 
 Delivery roadmap/register authority lives at `_hirmos/system/delivery/DELIVERY_PLAN.md`. Delivery scope authority lives at `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`. `CURRENT_SYSTEM_STATE.md` points to those surfaces without duplicating their content.
+
+
+## PROD-L8.9 delivery baseline focus
+
+HIRMOS always runs inside a governed runtime session envelope, but `SESSION_SCOPE.md` is required only when the active work has a bounded phase/session work scope. Durable delivery-baseline work uses `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` as active authority and `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` for delivery-level unresolved items.
+
+Before delivery-baseline acceptance, HIRMOS records a complete phase coverage plan inside `DELIVERY_SCOPE.md` and does not instantiate future `PHASE-xx.md` files by default. After acceptance, HIRMOS instantiates the next phase/session authority just in time.
+
+## Delivery baseline artifact responsibilities
+
+Durable delivery authority lives under the delivery folder:
+
+```text
+_hirmos/system/delivery/<delivery-id>/
+  DELIVERY_SCOPE.md
+  unresolved-items.md
+  REQUIREMENTS.md   # optional
+  DESIGN.md         # optional
+  phases/           # phase files created just in time after baseline acceptance by default
+```
+
+`DELIVERY_SCOPE.md` is the complete delivery authority and must include enough phase coverage planning to answer whether planned phases cover 100% of the delivery scope. Future phase files are not referenced as concrete paths until they exist.
+
+`<delivery-id>/unresolved-items.md` is the durable delivery-level unresolved register. It survives across sessions and is checked at delivery close. Session unresolved registers own only session-scoped blockers, assumptions, technical-review items, and inherited delivery items that affect the active session.
+
+`SESSION_SCOPE.md` remains the complete active session authority once a bounded phase/session work scope exists. It may adopt delivery or phase authority, but it must not become the home for delivery-wide requirements, design, or unresolved items.

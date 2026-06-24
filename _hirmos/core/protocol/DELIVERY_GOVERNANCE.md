@@ -54,8 +54,8 @@ Fail-closed rules:
 - `UNCERTAIN` blocks implementation readiness until the uncertainty is resolved.
 - `SINGLE_SESSION_VERTICAL_SLICE` requires affirmative evidence that one bounded vertical slice can be designed, implemented, validated, reviewed, and closed safely.
 - `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` requires a Session Scope plus implementation units that collectively cover the authorized scope.
-- `MULTI_SESSION_DELIVERY` requires `_hirmos/system/delivery/DELIVERY_PLAN.md` and `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`.
-- `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` requires `_hirmos/system/delivery/DELIVERY_PLAN.md`, `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`, and one or more `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` files.
+- `MULTI_SESSION_DELIVERY` requires a delivery baseline route that creates/updates `_hirmos/system/delivery/DELIVERY_PLAN.md` and `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` before any session scope is created.
+- `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` requires a delivery baseline route with a complete phase coverage plan in `DELIVERY_SCOPE.md`; concrete `PHASE-xx.md` files are instantiated just in time after delivery-baseline acceptance, starting with the next active phase/session.
 - Missing delivery-shape decision is a fail-closed condition for implementation readiness.
 
 Compatibility note: older artifacts may call this the `Delivery Shape Decision Gate`. New artifacts should use `Delivery Shape Decision Gate`. When both appear, the Delivery Shape Decision controls the result.
@@ -128,18 +128,23 @@ A project may start with multiple planned deliveries, and later add another dura
 
 ## Delivery / Phase Capability Routing
 
-When durable delivery governance is active, capability routing is:
+When durable delivery governance is selected, capability routing is focus-aware:
 
 ```text
-delivery-design → phase-contracting → session-scope → implementation-readiness
+DELIVERY_BASELINE / delivery_baseline
+  delivery-baseline
+
+DELIVERY_PHASE_SESSION / phase_session_baseline
+  phase-baseline → session-scope → implementation-readiness
 ```
 
-- `delivery-design` creates or updates `_hirmos/system/delivery/DELIVERY_PLAN.md` and `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`.
-- `phase-contracting` creates or updates `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` only when phase files are justified.
-- `session-scope` adopts and narrows `DELIVERY_SCOPE.md` and, when applicable, the active `PHASE-xx.md` into `_hirmos/session/SESSION_SCOPE.md`.
-- `implementation-readiness` verifies single-session safety evidence or durable delivery coverage when required.
+- `delivery-baseline` creates or updates `_hirmos/system/delivery/DELIVERY_PLAN.md`, `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`, `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`, and optional delivery-level `REQUIREMENTS.md` / `DESIGN.md` only when justified.
+- `delivery-baseline` must stop at `Delivery Baseline — Review or Change`; it must not create `SESSION_SCOPE.md`, `PHASE-xx.md`, or implementation units before baseline acceptance by default.
+- `phase-baseline` runs only after delivery-baseline acceptance or amendment. It instantiates the next needed `PHASE-xx.md` when phase files are selected and prepares the bounded phase/session authority.
+- `session-scope` adopts and narrows the accepted `DELIVERY_SCOPE.md` and, when applicable, the active `PHASE-xx.md` into `_hirmos/session/SESSION_SCOPE.md`.
+- `implementation-readiness` verifies the focus-specific authority chain and blocks implementation when required artifacts are missing, stale, contradictory, placeholder-only, or not accepted/amended.
 
-For single-session work, `session-scope` must record affirmative single-session safety evidence instead of silently skipping durable delivery governance.
+For single-session work, `session-scope` must record affirmative single-session safety evidence instead of silently skipping durable delivery governance. For minimal non-implementation work, HIRMOS creates only the minimal authority required by the requested output.
 
 ## Delivery Scope rules
 
@@ -209,7 +214,7 @@ A delivery-governed close must verify:
 - carry-forward and unresolved items are recorded;
 - `CURRENT_SYSTEM_STATE.md` delivery pointers are refreshed.
 
-## Legacy compatibility
+## Canonical delivery authority paths
 
 New templates, docs, validators, and command guidance use only the canonical delivery authority paths:
 
@@ -254,32 +259,35 @@ Phase Acceptance Evidence Gate must be evaluated before marking phase work accep
 
 Status output must report CURRENT_SYSTEM_STATE.md` delivery pointers, Phase Progress Ledger status, Phase Acceptance Evidence Gate status, and Status Blocked By Phase Lifecycle Conflict when authorities disagree.
 
-## PROD-L4 runtime command and capability route binding
+## PROD-L8.9 runtime command and capability route binding
 
-Delivery governance is enforced at runtime through command behavior and capability routing, not by static artifact names alone.
+Delivery governance is enforced at runtime through command behavior and focus-aware capability routing, not by static artifact names alone.
 
-The route binding is:
+The focus-aware route binding is:
 
 ```text
-SINGLE_SESSION_VERTICAL_SLICE
+SINGLE_SESSION_MINIMAL / minimal_session
+  session-scope only when bounded output authority is needed
+
+SINGLE_SESSION_VERTICAL_SLICE / session_baseline
   session-scope → implementation-readiness
 
-SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS
+SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS / session_baseline
   session-scope → implementation-readiness
 
-MULTI_SESSION_DELIVERY
-  delivery-design → session-scope → implementation-readiness
+DELIVERY_BASELINE / delivery_baseline
+  delivery-baseline
 
-MULTI_SESSION_DELIVERY_WITH_PHASE_FILES
-  delivery-design → phase-contracting → session-scope → implementation-readiness
+DELIVERY_PHASE_SESSION / phase_session_baseline
+  phase-baseline → session-scope → implementation-readiness
 ```
 
 Runtime commands must use this binding when deciding which artifacts to instantiate, which capability entrypoints to read, what can be claimed at user-facing checkpoints, and what close must reconcile.
 
-`delivery-design` must append/update the top-level `DELIVERY_PLAN.md` roadmap/register and create/update one active delivery's `DELIVERY_SCOPE.md` when durable delivery governance is selected. It must not overwrite prior deliveries.
+`delivery-baseline` must append/update the top-level `DELIVERY_PLAN.md` roadmap/register and create/update one delivery's `DELIVERY_SCOPE.md`, delivery unresolved register, and optional delivery requirements/design when justified. It must not overwrite prior deliveries.
 
-`phase-contracting` may create/update `PHASE-xx.md` only under the selected delivery and only when phase files are justified by the selected shape.
+`phase-baseline` may create/update `PHASE-xx.md` only after delivery-baseline acceptance or amendment and only for the next needed active phase/session by default. Future phase files remain uninstantiated until needed unless a narrow exception is justified.
 
-`session-scope` must adopt and narrow delivery/phase authority. It must not duplicate a full delivery scope inside the active session.
+`session-scope` must adopt and narrow accepted delivery/phase authority. It must not duplicate full delivery authority inside the active session.
 
-`implementation-readiness` must fail closed when the selected route's authority chain is missing, contradictory, or placeholder-only.
+`implementation-readiness` must fail closed when the selected focus route's authority chain is missing, contradictory, placeholder-only, or not accepted/amended.

@@ -50,8 +50,8 @@ New governed sessions use the smallest sufficient active-session surface:
 _hirmos/session/
   SESSION_STATE.json              # always present scaffold; machine state
   SESSION_EXECUTION.md            # required for active governed sessions
-  SESSION_SCOPE.md             # required before implementation authorization
-  unresolved-items.md             # required for governed sessions
+  SESSION_SCOPE.md             # required only when a bounded session/phase scope exists
+  unresolved-items.md             # conditional; required when session-level unresolved items exist or must be verified
   REQUIREMENTS.md        # conditional independent requirements authority
   DESIGN.md                       # conditional design / current-state / readiness authority
   EVIDENCE.md                     # conditional nontrivial evidence / claim reconciliation
@@ -69,7 +69,7 @@ _hirmos/session/
 | `SESSION_STATE.json` | installed scaffold / active sessions | machine-readable command state |
 | `SESSION_EXECUTION.md` | any active governed session | Current Continuation Snapshot, command timeline, controls, route-backs, boundary log, close/archive/reset control pointers |
 | `SESSION_SCOPE.md` | before implementation authorization and for scoped governed work | session scope, exclusions, acceptance criteria, production-shaped gate, delivery shape decision, close verification |
-| `unresolved-items.md` | governed sessions | gated items, assumptions, risks, decisions, dispositions, revalidation |
+| `unresolved-items.md` | session-level unresolved items exist or must be explicitly verified | gated items, assumptions, risks, decisions, dispositions, revalidation for the active session only |
 | `REQUIREMENTS.md` | requirements materially govern scope; target name `REQUIREMENTS.md` | normalized requirements, source traceability, requirement coverage |
 | `DESIGN.md` | substantial design/current-state/technical-review/readiness work is needed | current-state basis, source matrix, design, technical review, implementation readiness basis |
 | `EVIDENCE.md` | nontrivial implementation or material claims/evidence exist | command evidence, runtime evidence, production-shaped evidence, claim reconciliation, close evidence handoff |
@@ -309,3 +309,18 @@ Before the session scope baseline has been accepted or amended, implementation-u
 ## Complete active session authority
 
 `SESSION_SCOPE.md` is the complete active session authority and close-verification root. Optional `REQUIREMENTS.md` and `DESIGN.md` may provide detailed sub-authority only for IDs or sections explicitly adopted by `SESSION_SCOPE.md`; they must not create independent session obligations.
+
+
+## Runtime session focus and active authority
+
+HIRMOS always has a runtime session envelope while commands are active. The active authority depends on `SESSION_STATE.json.session_focus`:
+
+| session_focus | Active authority | SESSION_SCOPE.md required? | unresolved-items.md target |
+|---|---|---:|---|
+| `minimal_session` | `SESSION_SCOPE.md` when a bounded artifact/output scope is needed | conditional | session-level only if material items exist |
+| `session_baseline` | `SESSION_SCOPE.md` | YES | `_hirmos/session/unresolved-items.md` when material items exist |
+| `delivery_baseline` | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | NO | `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` |
+| `phase_session_baseline` | `PHASE-xx.md` plus `SESSION_SCOPE.md` | YES | `_hirmos/session/unresolved-items.md` for phase/session-specific or inherited items |
+| `implementation` | `SESSION_SCOPE.md` plus implementation units when needed | YES | `_hirmos/session/unresolved-items.md` when material items exist |
+
+A delivery-baseline runtime session must not create `_hirmos/session/SESSION_SCOPE.md` merely to have a session artifact. The active scope authority is the delivery scope until the first phase/session is instantiated.

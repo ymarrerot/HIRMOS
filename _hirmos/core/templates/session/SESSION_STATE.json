@@ -2,7 +2,12 @@
   "schema_version": "session-state-v1",
   "status": "idle",
   "session_id": "",
+  "session_focus": "idle",
   "lifecycle_stage": "idle",
+  "active_authority": null,
+  "active_delivery_id": null,
+  "active_delivery_scope": null,
+  "active_phase": null,
   "continuation_pass": 0,
   "pending_correction": false,
   "allowed_next_commands": [

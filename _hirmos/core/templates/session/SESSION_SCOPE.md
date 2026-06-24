@@ -74,7 +74,7 @@ List the functional, non-functional, and constraint requirements needed to gover
 |---|---|---|---|
 | EX-01 | | | |
 
-### Brownfield preservation rules
+### Existing-system preservation rules
 
 Record what existing behavior, files, APIs, data, UX, tests, runtime behavior, artifacts, or framework contracts must not regress.
 
@@ -155,15 +155,15 @@ Required for implementation-capable software sessions before implementation auth
 
 Implementation is not authorized to claim production-shaped completion beyond this gate. Close must preserve any unresolved or intentionally scoped-down posture as accepted-state limitation or carry-forward work.
 
-## 8. Delivery / Phase Capability Routing Evidence and Adoption
+## 8. Focus-Aware Capability Routing Evidence and Adoption
 
 Required when the selected delivery shape is `MULTI_SESSION_DELIVERY` or `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`.
 
 | Capability | Required output | Path / evidence | Status |
 |---|---|---|---|
-| delivery-design | Durable Delivery Plan / register | `_hirmos/system/delivery/DELIVERY_PLAN.md` | |
+| delivery-baseline | Durable Delivery Plan / register | `_hirmos/system/delivery/DELIVERY_PLAN.md` | |
 | delivery-scope | Durable Delivery Scope | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | |
-| phase-contracting | Durable phase file when phase files are selected | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` | |
+| phase-baseline | Next active phase authority after delivery-baseline acceptance | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` | |
 | session-scope | Active Session Scope adoption | `_hirmos/session/SESSION_SCOPE.md` | |
 | implementation-readiness | Readiness gate | `_hirmos/session/SESSION_SCOPE.md` and optional `DESIGN.md` only when justified | |
 

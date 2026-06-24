@@ -62,17 +62,17 @@ Use the active interaction mode from `_hirmos/core/authority/INTERACTION_MODES.m
 
 This capability is an unresolved-item producer and MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`.
 
-Before marking the capability complete, record exactly one producer outcome in `_hirmos/session/unresolved-items.md`: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`.
+Before marking the capability complete, record exactly one producer outcome in the focus-appropriate unresolved register selected by `SESSION_STATE.json.session_focus`: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`.
 
-Record full item fields in `unresolved-items.md`, including current status, downstream impact, and revalidation point; do not duplicate the full field schema in this entrypoint.
+Record full item fields in the selected unresolved register, including current status, downstream impact, and revalidation point; do not duplicate the full field schema in this entrypoint.
 
 ## Project-type / stack requirements
 
-Use `DESIGN.md` / `SESSION_SCOPE.md` for material project-type decisions and `stack-resolution.json` only when machine-readable stack routing is required by controls.
+Use the focus-appropriate `DESIGN.md`, `DELIVERY_SCOPE.md`, or `SESSION_SCOPE.md` for material project-type decisions and `stack-resolution.json` only when machine-readable stack routing is required by controls.
 
-For large or multi-session work in any project type, require governed Delivery Scope and phases when one bounded session cannot safely govern the change.
+For any project type, require delivery-baseline governance when one bounded session cannot safely govern the change; do not equate delivery governance with a greenfield or brownfield label.
 
-When stack contexts are active, carry in-scope/out-of-scope contexts into the Session Scope and Implementation Readiness decision.
+When stack contexts are active, carry in-scope/out-of-scope contexts into the active authority and Implementation Readiness decision when implementation is being authorized.
 
 
 ## durable delivery capability obligations
@@ -94,14 +94,14 @@ Forbidden session-local delivery authorities:
 legacy session-local delivery plan, phase plan, delivery status, phase scope, or delivery-unit authority record files
 ```
 
-## PROD-L4 runtime route obligations
+## PROD-L8.9 focus-aware runtime route obligations
 
-This capability participates in the command-selected delivery route. Before claiming completion, it must ensure `SESSION_EXECUTION.md` records:
+This capability participates in the command-selected focus route. Before claiming completion, it must ensure `SESSION_EXECUTION.md` records:
 
 - selected Delivery Shape Decision;
 - this capability decision and terminal state;
-- required authority artifacts for the selected route;
-- whether the route is satisfied, blocked, not applicable, or requires route-back;
+- required authority artifacts for the selected focus route;
+- whether the focus route is satisfied, blocked, not applicable, or requires route-back;
 - exactly one next governed command when the route cannot proceed.
 
 The capability must not compensate for missing authority by creating legacy session-local delivery files or by duplicating full delivery authority inside `SESSION_SCOPE.md`.

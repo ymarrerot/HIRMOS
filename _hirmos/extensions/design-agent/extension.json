@@ -1,6 +1,6 @@
 {
   "id": "design-agent",
-  "summary": "Design capabilities for governed requirements, system design, durable delivery planning, phase scopes, session scopes, technical review, and implementation readiness.",
+  "summary": "Design capabilities for governed requirements, system design, delivery baseline planning, durable delivery design, phase/session baselines, session scopes, technical review, and implementation readiness.",
   "lifecycle_stages": [
     "design"
   ],
@@ -8,6 +8,8 @@
     "requirements-design",
     "system-design",
     "delivery-design",
+    "phase-baseline",
+    "delivery-baseline",
     "phase-contracting",
     "session-scope",
     "technical-review",

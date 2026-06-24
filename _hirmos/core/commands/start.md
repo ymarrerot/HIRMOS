@@ -93,9 +93,10 @@ Use the smallest governed delivery shape that preserves engineering quality, imp
 
 Capability routing:
 
-- single-session shapes route through `session-scope → implementation-readiness`;
-- multi-session delivery routes through `delivery-design → session-scope → implementation-readiness`;
-- multi-session delivery with phase files routes through `delivery-design → phase-contracting → session-scope → implementation-readiness`.
+- `SINGLE_SESSION_MINIMAL` may route through `session-scope` only when a bounded output authority is needed;
+- single-session implementation shapes route through `session-scope → implementation-readiness`;
+- durable delivery work starts with `DELIVERY_BASELINE / delivery_baseline → delivery-baseline`;
+- after delivery-baseline acceptance or amendment, phase/session work routes through `DELIVERY_PHASE_SESSION / phase_session_baseline → phase-baseline → session-scope → implementation-readiness`.
 
 When `hirmos start` accepts a governable request, it must update `SESSION_STATE.json` to an active session before lifecycle work continues:
 
@@ -105,7 +106,14 @@ When `hirmos start` accepts a governable request, it must update `SESSION_STATE.
 - `status`, `allowed_next_commands`, `recommended_next_command`, `blocking_reason`, and `updated_at` updated at every user-facing boundary;
 
 
-For implementation-capable sessions, the final start state must be `lifecycle_stage = implementation_readiness`, `allowed_next_commands = ["hirmos continue", "hirmos status"]`, and `recommended_next_command = hirmos continue`.
+The final start state depends on `session_focus`:
+
+- `minimal_session`: stop at the minimal governed output checkpoint or completion boundary selected by the request;
+- `session_baseline`: stop at `Recommended Baseline — Review or Change`;
+- `delivery_baseline`: stop at `Delivery Baseline — Review or Change` with delivery authority as the active authority;
+- `phase_session_baseline`: stop at `Session Baseline — Review or Change`.
+
+At every user-facing checkpoint, `allowed_next_commands` must include only safe governed commands, normally `hirmos continue` and `hirmos status`, and `recommended_next_command` must explain what `hirmos continue` will accept or advance.
 
 ### Start sequence
 
@@ -125,12 +133,12 @@ For implementation-capable sessions, the final start state must be `lifecycle_st
 13. Route to Design only after the system-state and current-system-state-first controls are satisfied, explicitly not applicable with rationale, or blocked.
 14. Before Design work selects specialized extension capabilities, apply `_hirmos/core/protocol/CAPABILITY_ROUTING.md` and record material capability decisions in `_hirmos/session/SESSION_EXECUTION.md`.
 15. In `domain_expert` mode, attempt to advance through Understand System State and Design until a gated user-owned decision, implementation-readiness, blocker, or non-governable request is reached.
-16. Do not begin Implementation during `hirmos start`; stop at `Ready for Implementation` when Design and Session Scope controls authorize implementation.
+16. Do not begin Implementation during `hirmos start`. Stop at the focus-appropriate checkpoint: `Recommended Baseline — Review or Change` for single-session scope, `Delivery Baseline — Review or Change` for delivery baseline, or `Session Baseline — Review or Change` for a phase/session baseline.
 
 
 ## Mandatory implementation-readiness pause
 
-`hirmos start` must stop before implementation. For implementation-capable sessions, the terminal state is `Ready for Implementation` only after HIRMOS has created/updated the session baseline artifacts and surfaced a governed first-review checkpoint using `_hirmos/core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md`.
+`hirmos start` must stop before implementation. For single-session work, it stops after creating/updating the required session baseline artifacts and surfacing a governed first-review checkpoint using `_hirmos/core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md`. For durable delivery work, it stops after creating/updating delivery-baseline artifacts and surfacing `Delivery Baseline — Review or Change`; `SESSION_SCOPE.md`, `PHASE-xx.md`, and implementation-unit artifacts are not created by default before delivery-baseline acceptance.
 
 The checkpoint heading must be:
 
@@ -374,17 +382,22 @@ Required status terms: Phase Progress Ledger, Carry-Forward Items, partial phase
 
 `hirmos start` must inspect prior Phase Acceptance Evidence Gate results when continuing a delivery. If the previous phase is `READY_FOR_ACCEPTANCE`, the new session may be review/close-oriented, but it must not implement new work until the phase acceptance decision is resolved or a new phase is explicitly adopted.
 
-## PROD-L4 delivery-route runtime behavior
+## PROD-L8.9 focus-aware route runtime behavior
 
-`hirmos start` must use the Delivery Shape Decision to select the runtime capability route before it creates delivery/session authority artifacts.
+`hirmos start` must use the Delivery Shape Decision and `session_focus` to select the runtime capability route before it creates delivery/session authority artifacts.
 
 Required behavior:
 
 1. Read Current System State delivery pointers before shape selection.
 2. Apply `_hirmos/core/protocol/CAPABILITY_ROUTING.md` and record a capability routing table in `SESSION_EXECUTION.md`.
-3. For single-session shapes, instantiate `SESSION_SCOPE.md` only and record delivery governance as `NOT_APPLICABLE` with affirmative bounded-scope safety evidence.
-4. For `MULTI_SESSION_DELIVERY`, require `delivery-design` to create or append/update `_hirmos/system/delivery/DELIVERY_PLAN.md` and `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` before `session-scope` creates the active `SESSION_SCOPE.md`.
-5. For `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, require `delivery-design`, then `phase-contracting`, then `session-scope`, and verify exactly one adopted phase before implementation readiness.
-6. If any required capability is `BLOCKED` or `ROUTE_BACK_REQUIRED`, stop before implementation readiness and recommend exactly one safe next command.
+3. For `SINGLE_SESSION_MINIMAL`, create only the minimal artifacts needed by the requested output; do not create unresolved, requirements, design, delivery, evidence, or implementation-unit artifacts unless strictly necessary.
+4. For single-session implementation shapes, instantiate `SESSION_SCOPE.md` and record delivery governance as `NOT_APPLICABLE` with affirmative bounded-scope safety evidence.
+5. For durable delivery baseline, set `session_focus = delivery_baseline`, require `delivery-baseline`, create/update only delivery-baseline artifacts under `_hirmos/system/delivery/<delivery-id>/`, and stop at `Delivery Baseline — Review or Change`.
+6. For phase/session work after delivery-baseline acceptance, set `session_focus = phase_session_baseline`, require `phase-baseline → session-scope → implementation-readiness`, instantiate only the next needed `PHASE-xx.md`, create `SESSION_SCOPE.md`, and stop at `Session Baseline — Review or Change` before implementation.
+7. If any required capability is `BLOCKED` or `ROUTE_BACK_REQUIRED`, stop before implementation readiness and recommend exactly one safe next command.
 
-`hirmos start` must not create a per-delivery `DELIVERY_PLAN.md` under `<delivery-id>/`, must not create delivery artifacts for a safe single-session request, and must not overwrite the top-level delivery roadmap/register.
+`hirmos start` must not create a per-delivery `DELIVERY_PLAN.md` under `<delivery-id>/`, must not create delivery artifacts for a safe single-session request, must not create future phase files before delivery-baseline acceptance by default, and must not overwrite the top-level delivery roadmap/register.
+
+## PROD-L8.9E/F Focus-Aware Checkpoint Output
+
+After `session_focus` is resolved, `hirmos start` must use `START_CHECKPOINT_OUTPUT.md` to select either `DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md` or `SESSION_BASELINE_CHECKPOINT_OUTPUT.md`. A delivery-baseline pause must not create `_hirmos/session/SESSION_SCOPE.md`, concrete future phase files, or implementation-unit artifacts.

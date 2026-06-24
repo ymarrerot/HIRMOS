@@ -24,9 +24,11 @@ This is the required human-readable resume surface. Keep it near the top and upd
 | Last updated | | |
 | Session ID | | `SESSION_STATE.json` |
 | Current lifecycle stage | | `SESSION_STATE.json` |
+| Session focus | | `SESSION_STATE.json.session_focus` |
+| Active authority | | `SESSION_STATE.json.active_authority` |
 | Current terminal state | | `SESSION_STATE.json` / Terminal State |
 | Current status | | `SESSION_STATE.json` |
-| Active scope | | `SESSION_SCOPE.md` |
+| Active scope | | `SESSION_SCOPE.md` when session scope exists; `DELIVERY_SCOPE.md` during delivery_baseline focus |
 | Active delivery / phase / unit | | delivery artifacts / `SESSION_SCOPE.md` / implementation units |
 | Authoritative artifacts reviewed | | Boundary Control Checklist / Artifact Reference Log |
 | Completed since session start | | Command Timeline / Evidence Handoff |
@@ -101,9 +103,10 @@ This checklist records whether owning artifacts were reviewed at each lifecycle 
 | Command control | command spec / `COMMAND_STATE_MACHINE.md` | every command | PENDING | |
 | Working-copy control | project root / `_hirmos/` | meaningful mutation | PENDING | |
 | Current-system-state-first control | `CURRENT_SYSTEM_STATE.md` | design / implementation | PENDING | |
-| Session scope control | `SESSION_SCOPE.md` | implementation readiness / close | PENDING | |
+| Session scope control | `SESSION_SCOPE.md` | session_baseline / implementation readiness / close | PENDING / NOT_APPLICABLE during delivery_baseline | |
 | Unresolved-items control | `unresolved-items.md` | every boundary | PENDING | |
-| Delivery/phase control | `DELIVERY_PLAN.md` / `DELIVERY_SCOPE.md` / `PHASE-xx.md` | delivery-governed readiness / close | NOT_APPLICABLE | |
+| Delivery baseline control | `DELIVERY_PLAN.md` / `DELIVERY_SCOPE.md` / delivery `unresolved-items.md` | delivery_baseline checkpoint | NOT_APPLICABLE | |
+| Delivery/phase control | `DELIVERY_PLAN.md` / `DELIVERY_SCOPE.md` / `PHASE-xx.md` when instantiated | delivery-governed readiness / close | NOT_APPLICABLE | |
 | Implementation-unit coverage control | `implementation-units/` | implementation-unit sessions | NOT_APPLICABLE | |
 | Implementation authorization control | `SESSION_SCOPE.md` | implementation start | PENDING | |
 | Validation/evidence control | `EVIDENCE.md` / unit reviews / command output | completion / close | PENDING | |
@@ -348,14 +351,14 @@ Pointer-only execution record for the delivery-shape decision in `SESSION_SCOPE.
 - Gate status: PASS | BLOCKED | NOT_ASSESSED
 - Evidence pointer:
 
-## Delivery / Phase Capability Routing Log
+## Focus-Aware Capability Routing Log
 
 Required when the selected delivery shape is `MULTI_SESSION_DELIVERY` or `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`.
 
 | Capability | Expected durable/session output | Status | Evidence path | Notes |
 |---|---|---|---|---|
-| delivery-design | `_hirmos/system/delivery/DELIVERY_PLAN.md` and `<delivery-id>/DELIVERY_SCOPE.md` | PENDING | | |
-| phase-contracting | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` when phase files are selected | PENDING | | |
+| delivery-baseline | `_hirmos/system/delivery/DELIVERY_PLAN.md` and `<delivery-id>/DELIVERY_SCOPE.md` | PENDING | | |
+| phase-baseline | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` when phase files are selected | PENDING | | |
 | session-scope | `_hirmos/session/SESSION_SCOPE.md` adopts and narrows active delivery/phase authority | PENDING | | |
 | implementation-readiness | `SESSION_SCOPE.md` authorizes implementation and required controls are satisfied | PENDING | | |
 

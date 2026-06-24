@@ -1,0 +1,40 @@
+{
+  "id": "delivery-baseline",
+  "extension": "design-agent",
+  "summary": "Prepare proposed durable delivery authority and delivery-level unresolved disclosure before phase/session scope exists.",
+  "lifecycle_stage": "design",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "delivery_baseline focus is selected",
+      "session_focus requires delivery-baseline"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/SESSION_STATE.json with session_focus = delivery_baseline",
+    "_hirmos/session/SESSION_EXECUTION.md",
+    "_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md when present"
+  ],
+  "produces_artifacts": [
+    "_hirmos/system/delivery/DELIVERY_PLAN.md",
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md",
+    "_hirmos/system/delivery/<delivery-id>/unresolved-items.md",
+    "_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md when justified",
+    "_hirmos/system/delivery/<delivery-id>/DESIGN.md when justified",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "delivery-baseline checkpoint control",
+    "active delivery authority control",
+    "delivery unresolved-item target control",
+    "phase coverage plan control",
+    "pre-acceptance non-instantiation control"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

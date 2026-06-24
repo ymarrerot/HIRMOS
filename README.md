@@ -199,3 +199,7 @@ For framework structure, validation, and extension guidance, read:
 ## License
 
 See the project license for distribution terms.
+
+## Delivery baseline and session focus
+
+HIRMOS can keep small work light while still supporting durable multi-session delivery. Commands always run inside a governed runtime session envelope, but the active focus determines which artifacts are created. Durable delivery work first prepares a delivery baseline under `_hirmos/system/delivery/<delivery-id>/`; bounded implementation sessions create `SESSION_SCOPE.md` only after the delivery or session baseline is ready for review.

@@ -56,7 +56,7 @@ Rules:
 
 - `UNKNOWN` blocks implementation readiness.
 - `GREENFIELD` activates greenfield MVP boundary, scope, architecture sequencing, and product-maturity controls.
-- `BROWNFIELD` activates brownfield preservation, regression, compatibility, and migration-safety controls.
+- `BROWNFIELD` activates existing-system preservation, regression, compatibility, and migration-safety controls.
 - `MIXED` activates both greenfield-specific controls and brownfield-specific controls.
 
 ## Universal Phase Lifecycle Fields
@@ -192,7 +192,7 @@ For `MIXED` phases, both the greenfield and brownfield entry gates apply. The ph
 - `NOT_STARTED`, `BLOCKED`, `ACCEPTED`, `DEFERRED`, `SUPERSEDED`, or `CANCELLED` lifecycle status blocks implementation adoption.
 - Missing or unsatisfied entry criteria block implementation readiness.
 - Missing greenfield MVP/scope/architecture entry controls block greenfield or mixed phase adoption.
-- Missing brownfield preservation/regression entry controls block brownfield or mixed phase adoption.
+- Missing existing-system preservation/regression entry controls block existing-system or mixed phase adoption.
 - Pointer disagreement between Current System State, Delivery Plan, Phase file, and Session Scope blocks implementation readiness.
 
 ## Phase Progress / Carry-Forward Enforcement

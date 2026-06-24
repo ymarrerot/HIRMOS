@@ -1,7 +1,7 @@
 {
   "id": "requirements-design",
   "extension": "design-agent",
-  "summary": "Convert User Request inputs and system-state findings into governed requirements authority.",
+  "summary": "Convert source inputs and system-state findings into focus-appropriate governed requirements authority.",
   "lifecycle_stage": "design",
   "entrypoints": {
     "default": "entrypoints/default.md"
@@ -15,13 +15,13 @@
     ]
   },
   "requires_artifacts": [
-    "_hirmos/session/SESSION_SCOPE.md parent authority",
-    "_hirmos/session/DESIGN.md current-state basis",
-    "_hirmos/session/unresolved-items.md"
+    "active authority from SESSION_STATE.json.active_authority",
+    "focus-appropriate unresolved-items.md"
   ],
   "produces_artifacts": [
-    "_hirmos/session/DESIGN.md",
-    "_hirmos/session/unresolved-items.md",
+    "_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md when session_focus = delivery_baseline and separate requirements authority is justified",
+    "_hirmos/session/REQUIREMENTS.md when a bounded session scope justifies separate requirements authority",
+    "focus-appropriate unresolved-items.md",
     "_hirmos/session/SESSION_EXECUTION.md"
   ],
   "execution_controls": [

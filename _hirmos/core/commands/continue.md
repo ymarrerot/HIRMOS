@@ -302,16 +302,29 @@ Required behavior:
 - materialize `EVIDENCE.md` when command/runtime/provider/storage/database evidence becomes nontrivial;
 - do not claim implementation completion when code evidence contradicts production-shaped claims.
 
-## PROD-L4 delivery-route continuation behavior
+## PROD-L8.9 focus-aware continuation behavior
 
-`hirmos continue` must preserve the capability route selected by `hirmos start` unless a governed Session Scope amendment changes it.
+`hirmos continue` must preserve the capability route and `session_focus` selected by `hirmos start` unless a governed active-authority amendment changes it.
 
 Required behavior:
 
-- Re-read `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, unresolved items, and any adopted delivery/phase artifacts before implementation or correction work.
-- Re-run capability routing checks for required route controls: `delivery-design`, `phase-contracting`, `session-scope`, and `implementation-readiness` when applicable.
-- Block continuation if a durable delivery artifact was removed, contradicted, or made stale since start.
+- Re-read `SESSION_STATE.json`, `SESSION_EXECUTION.md`, the active authority, focus-appropriate unresolved items, and any adopted delivery/phase artifacts before delivery-baseline acceptance, phase/session baseline preparation, implementation, or correction work.
+- Re-run capability routing checks for required focus-route controls: `delivery-baseline`, `phase-baseline`, `session-scope`, and `implementation-readiness` when applicable.
+- Block continuation if the active focus authority was removed, contradicted, made stale, or not accepted/amended before the command tries to advance past it.
 - Block continuation if a session attempts to implement work from a different delivery or phase than the adopted authority chain.
 - Record route preservation, route amendment, or route-back in `SESSION_EXECUTION.md`.
 
 A continuation pass may add evidence or implementation-unit detail, but it must not expand delivery scope silently.
+
+
+## PROD-L8.9 delivery-baseline continuation behavior
+
+When `session_focus = delivery_baseline`, `hirmos continue` does not implement. It must treat the Delivery Baseline — Review or Change checkpoint as accepted unless the user requested amendments first, apply any amendments to `DELIVERY_SCOPE.md`, delivery-level `unresolved-items.md`, optional delivery `REQUIREMENTS.md`/`DESIGN.md`, and `DELIVERY_PLAN.md`, then set the next focus to `phase_session_baseline` when a phase/session should be prepared.
+
+After delivery-baseline acceptance or amendment, `hirmos continue` may instantiate only the next needed `PHASE-xx.md` when phase files are selected. It must not instantiate future phase files by default. It must then create the bounded `SESSION_SCOPE.md` for that phase/session and pause with `Session Baseline — Review or Change`; implementation starts only on a later allowed continuation after the session baseline is accepted or amended.
+
+When `session_focus = session_baseline` or `phase_session_baseline`, `hirmos continue` treats the session baseline as accepted unless the user requested amendments first, then may instantiate implementation-unit artifacts only when needed by the accepted scope.
+
+## PROD-L8.9E/F Baseline Acceptance Boundary
+
+If the prior checkpoint was `Delivery Baseline — Review or Change`, `hirmos continue` accepts or amends delivery authority, then prepares the next phase/session baseline and pauses again. It must not implement directly from the delivery-baseline checkpoint. If the prior checkpoint was `Session Baseline — Review or Change`, `hirmos continue` accepts or amends the session baseline before implementation-unit artifacts are instantiated.

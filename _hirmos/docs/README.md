@@ -95,3 +95,18 @@ hirmos close
 ## Scope authority model
 
 Current HIRMOS releases use `SESSION_SCOPE.md` as active session authority. Durable multi-session work uses `_hirmos/system/delivery/DELIVERY_PLAN.md` as the delivery roadmap/register and `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` as the scoped authority for one delivery/release.
+
+## Focus-aware delivery and session workflow
+
+Current HIRMOS uses a focus-aware runtime model. Every command runs inside a governed session envelope, but HIRMOS creates only the artifacts required by the selected focus.
+
+- Small work can stay minimal.
+- Single-session implementation uses `SESSION_SCOPE.md` as the complete active authority.
+- Durable delivery work first uses `DELIVERY_SCOPE.md` and delivery-level unresolved items, then creates phase/session authority after the delivery baseline is accepted.
+
+See:
+
+- [Command Guide](1-use-hirmos/getting-started/commands.md)
+- [Multi-Session Work](1-use-hirmos/getting-started/multi-session-work.md)
+- [Delivery Baseline and Phase/Session Flow](1-use-hirmos/examples/delivery-baseline-and-phase-session.md)
+- [Runtime Surfaces](reference/runtime-surfaces.md)

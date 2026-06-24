@@ -1,7 +1,7 @@
 {
   "id": "technical-review",
   "extension": "design-agent",
-  "summary": "Make technical assumptions and technical decisions inspectable by a technical reviewer without forcing Domain Expert approval of routine technical details.",
+  "summary": "Make focus-appropriate technical assumptions and decisions inspectable by a technical reviewer without forcing Domain Expert approval of routine technical details.",
   "lifecycle_stage": "design",
   "entrypoints": {
     "default": "entrypoints/default.md"
@@ -14,12 +14,12 @@
     ]
   },
   "requires_artifacts": [
-    "_hirmos/session/DESIGN.md current-state basis",
-    "_hirmos/session/DESIGN.md"
+    "active authority from SESSION_STATE.json.active_authority",
+    "focus-appropriate DESIGN.md when created"
   ],
   "produces_artifacts": [
-    "_hirmos/session/DESIGN.md technical review",
-    "_hirmos/session/unresolved-items.md",
+    "technical-review items in focus-appropriate DESIGN.md or unresolved-items.md",
+    "focus-appropriate unresolved-items.md",
     "_hirmos/session/SESSION_EXECUTION.md"
   ],
   "execution_controls": [

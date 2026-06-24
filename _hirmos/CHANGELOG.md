@@ -8,6 +8,27 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 No unreleased changes yet.
 
+## 1.0.6 — Focus-aware delivery baseline and multi-session authority hardening
+
+### Added
+
+- Added the focus-aware runtime session model, including `session_focus`, `active_authority`, delivery pointer, and phase pointer fields in `SESSION_STATE.json`.
+- Added delivery-baseline and phase/session-baseline capability surfaces without introducing a separate delivery-agent extension.
+- Added delivery-level optional authority templates for `_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md`, `_hirmos/system/delivery/<delivery-id>/DESIGN.md`, and `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`.
+- Added governed checkpoint templates for delivery-baseline and session-baseline review.
+- Added focus-aware documentation and examples for delivery-baseline and phase/session workflows.
+- Added an example showing durable delivery baseline review before phase/session authority and implementation-unit artifacts are instantiated.
+
+### Changed
+
+- Clarified that HIRMOS always runs inside a governed runtime session envelope, but artifacts are activated only when the selected focus requires them.
+- Clarified that `SESSION_SCOPE.md` is required only when the active work has a bounded phase/session work scope.
+- Clarified that durable delivery work first enters `delivery_baseline` focus and uses `DELIVERY_SCOPE.md` as the active authority before phase/session authority is instantiated.
+- Clarified that `DELIVERY_SCOPE.md` must include a complete phase coverage plan before delivery-baseline approval, while future `PHASE-xx.md` files are created just in time by default.
+- Rewired command and capability-routing guidance so delivery-baseline acceptance transitions to phase/session baseline preparation instead of direct implementation.
+- Hardened validators and regression fixtures for focus-aware delivery/session artifact rules.
+- Generalized remaining framework-facing preservation wording from brownfield-specific language to existing-system preservation language.
+
 ## 1.0.5 — Dogfood-ready start checkpoint and authority hardening
 
 ### Added

@@ -98,7 +98,7 @@ If command legality is unclear or contradictory, the command must stop at a bloc
 
 ## Mandatory start pause rule
 
-`hirmos start` must not go directly into implementation. For implementation-capable sessions, it must stop at implementation readiness after creating the Session Scope, unresolved-item register, execution ledger, runtime timestamp context, and any conditional requirements/design/delivery authority justified by the selected route.
+`hirmos start` must not go directly into implementation. For implementation-capable single-session work, it must stop at the session baseline checkpoint after creating the needed Session Scope, execution ledger, runtime timestamp context, and any conditional session requirements/design/unresolved authority justified by the selected route. For durable delivery work, it must stop at the delivery baseline checkpoint with `session_focus = delivery_baseline`, delivery authority under `_hirmos/system/delivery/<delivery-id>/`, and no `SESSION_SCOPE.md` by default.
 
 The user-facing pause must use `_hirmos/core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md` and surface `Recommended Baseline — Review or Change` before implementation begins. If the user runs `hirmos continue`, HIRMOS treats the baseline as accepted unless the user requested changes first.
 
@@ -139,7 +139,7 @@ At minimum, capability routing is material when:
 - deciding whether Design can reach implementation-readiness;
 - deciding whether Implementation may begin, continue, retry, or complete;
 - deciding whether Update System State may accept outcomes, archive, or close;
-- selecting requirements, system-design, delivery-design, phase-contracting, session-scope, technical-review, implementation-readiness, implementation, validation, evidence, or update-state capabilities;
+- selecting requirements, system-design, delivery-baseline, phase-baseline, session-scope, technical-review, implementation-readiness, implementation, validation, evidence, or update-state capabilities;
 - a required artifact or execution control names a capability, extension, or entrypoint;
 - unresolved items, project type, stack evidence, delivery governance, runtime services, or current-state evidence affects which specialized work must run;
 - a capability may produce or update artifacts required for a readiness claim, completion claim, blocker, route-back, or user-facing checkpoint.
@@ -230,15 +230,43 @@ Commands that create session identifiers, archive paths, close records, accepted
 
 If the current date cannot be established, the command must record the uncertainty in `_hirmos/session/SESSION_EXECUTION.md` and avoid date-specific claims until the date is resolved. Session IDs and archive folder names must be consistent with the resolved current date or explicitly documented as user-provided identifiers.
 
-## PROD-L4 command-to-capability routing behavior
+## PROD-L8.9 command-to-capability routing behavior
 
 Runtime commands must treat capability routing as part of command execution, not as optional design commentary.
 
 Command-specific behavior:
 
-- `hirmos start` must perform Delivery Shape Decision routing before claiming `Ready for Implementation`. It creates only the artifacts required by the selected route.
-- `hirmos continue` must re-check the active route before implementation, retry, or correction work. It must not silently switch from delivery-governed work to single-session work or adopt a different phase without a recorded Session Scope amendment.
-- `hirmos status` must report the active delivery route, required capabilities, artifact readiness, blocked capability decisions, and exactly one safe next governed command.
-- `hirmos close` must reconcile the route used by the session against `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, delivery artifacts, evidence, unresolved items, and accepted-state pointers before close success.
+- `hirmos start` must perform Delivery Shape Decision and `session_focus` routing before claiming any readiness checkpoint. It creates only the artifacts required by the selected focus and route.
+- `hirmos continue` must re-check the active focus and route before delivery-baseline acceptance, phase/session baseline preparation, implementation, retry, or correction work. It must not silently switch from delivery-governed work to single-session work or adopt a different phase without a recorded authority amendment.
+- `hirmos status` must report the active session_focus, delivery route when applicable, required capabilities, artifact readiness, blocked capability decisions, and exactly one safe next governed command.
+- `hirmos close` must reconcile the route and focus used by the session against the active authority (`DELIVERY_SCOPE.md` or `SESSION_SCOPE.md`), `SESSION_EXECUTION.md`, delivery artifacts, evidence, unresolved items, and accepted-state pointers before close success.
 
 The command surface does not redefine capability methods. It reads `_hirmos/core/protocol/CAPABILITY_ROUTING.md`, resolves installed extension/capability manifests, records the routing decisions in `SESSION_EXECUTION.md`, and follows the selected entrypoints.
+
+
+## Runtime session envelope and focus rule
+
+HIRMOS always runs commands inside a governed runtime session envelope. A runtime session is not always an implementation session.
+
+`SESSION_STATE.json.session_focus` identifies the active work focus. Supported values are:
+
+```text
+minimal_session
+session_baseline
+delivery_baseline
+phase_session_baseline
+implementation
+correction
+close
+status
+```
+
+`SESSION_SCOPE.md` is required when the session focus has a bounded phase/session work scope or implementation authority. It is not required during `delivery_baseline` focus; in that state the active authority is `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` and delivery-level unresolved items are recorded in `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`.
+
+Commands must update `SESSION_STATE.json.active_authority`, `active_delivery_id`, `active_delivery_scope`, and `active_phase` when those fields apply. User-facing output must name the active focus and explain what `hirmos continue` will accept or advance.
+
+SESSION_SCOPE.md is required when the session focus has a bounded phase/session work scope.
+
+## PROD-L8.9E/F Checkpoint Template Enforcement
+
+`hirmos start` must select the governed checkpoint template from `START_CHECKPOINT_OUTPUT.md` after resolving `session_focus`. `delivery_baseline` pauses with `Delivery Baseline — Review or Change`. `session_baseline` and `phase_session_baseline` pause with `Session Baseline — Review or Change`. `hirmos continue` must preserve this acceptance boundary and must not skip from delivery-baseline acceptance directly into implementation.

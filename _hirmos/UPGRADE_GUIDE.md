@@ -4,10 +4,9 @@ This file records version-level operational notes for the installed HIRMOS frame
 
 ## Current baseline
 
-## HIRMOS 1.0.5 baseline
+## HIRMOS 1.0.6 baseline
 
-HIRMOS 1.0.5 is the dogfood-ready scope-authority baseline for the framework payload. It presents the simplified authority model as the first-version model, adds a governed start checkpoint before implementation, consolidates runtime timestamp context into `SESSION_STATE.json.run_context`, and does not preserve legacy authority filenames as supported runtime surfaces.
-
+HIRMOS 1.0.6 is the focus-aware delivery/session authority baseline for the framework payload. It keeps the scope-centered first-version model from 1.0.5 and adds durable delivery-baseline routing before phase/session authority is instantiated. HIRMOS always runs inside a governed runtime session envelope, but artifacts are activated only when the selected focus requires them.
 
 HIRMOS uses the scope-centered authority model:
 
@@ -37,3 +36,7 @@ The CLI package version remains unchanged when the framework content changes but
 ## Framework package
 
 Release packaging must ship only canonical runtime surfaces, templates, docs, validators, and examples. Framework files must remain project-agnostic except for clearly labeled examples.
+
+## Current unreleased stabilization note
+
+HIRMOS 1.0.6 includes focus-aware delivery/session runtime doctrine, delivery-baseline templates, checkpoint templates, validators, and documentation. No terminal CLI version bump is required because terminal install behavior did not change.

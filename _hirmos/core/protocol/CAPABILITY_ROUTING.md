@@ -28,7 +28,7 @@ At minimum, routing is required when:
 - deciding whether Design can reach implementation-readiness;
 - deciding whether Implementation may begin, continue, retry, or complete;
 - deciding whether Update System State may accept outcomes, archive, or close;
-- selecting requirements, system-design, delivery-design, phase-contracting, session-scope, technical-review, implementation-readiness, implementation, validation, evidence, or update-state capabilities;
+- selecting requirements, system-design, delivery-baseline, phase-baseline, session-scope, technical-review, implementation-readiness, implementation, validation, evidence, or update-state capabilities;
 - a required artifact or execution control names a capability, extension, or entrypoint;
 - unresolved items, project type, stack evidence, delivery governance, runtime services, or current-state evidence affects which specialized work must run;
 - a capability may produce or update artifacts required for a readiness claim, completion claim, blocker, route-back, or user-facing checkpoint.
@@ -232,8 +232,10 @@ HIRMOS must fail closed when:
 
 Every capability that can discover uncertainty must either:
 
-1. contribute unresolved items to `_hirmos/session/unresolved-items.md`; or
+1. contribute unresolved items to the unresolved register selected by `SESSION_STATE.json.session_focus`; or
 2. explicitly record that no material unresolved items were discovered.
+
+When `session_focus = delivery_baseline`, the target is `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`. When the focus is `session_baseline`, `phase_session_baseline`, `implementation`, or single-session work with material uncertainty, the target is `_hirmos/session/unresolved-items.md`.
 
 Capabilities must not hide unresolved items inside local prose.
 
@@ -259,24 +261,37 @@ At minimum, the capability must identify:
 
 Capability completion cannot be claimed if its unresolved-item producer obligation is missing or contradictory.
 
-## PROD-L4 delivery-shape routing matrix
+## PROD-L8.9 focus-aware routing matrix
 
-Runtime commands must route delivery-related capabilities from the Delivery Shape Decision before they instantiate artifacts or claim implementation readiness.
+Compatibility note: PROD-L8.9 supersedes the original PROD-L4 route shape with focus-aware routing. Historical reports may mention older route labels; runtime routing uses the table below.
 
-| Delivery shape | Required capability route | Required authority artifacts before implementation readiness |
+## PROD-L8.9 focus-aware routing matrix
+
+Runtime commands must route capabilities from the active `session_focus`, the Delivery Shape Decision, and the active authority before they instantiate artifacts or claim readiness.
+
+| Route / focus | Required capability route | Required authority before next boundary |
 |---|---|---|
-| `SINGLE_SESSION_VERTICAL_SLICE` | `session-scope → implementation-readiness` | `_hirmos/session/SESSION_SCOPE.md` with affirmative single-session safety evidence |
-| `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` | `session-scope → implementation-readiness` | `_hirmos/session/SESSION_SCOPE.md` plus implementation-unit coverage plan |
-| `MULTI_SESSION_DELIVERY` | `delivery-design → session-scope → implementation-readiness` | `_hirmos/system/delivery/DELIVERY_PLAN.md` and `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` |
-| `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` | `delivery-design → phase-contracting → session-scope → implementation-readiness` | `_hirmos/system/delivery/DELIVERY_PLAN.md`, `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`, and exactly one adopted `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` |
+| `SINGLE_SESSION_MINIMAL` / `minimal_session` | `session-scope` only when a bounded output authority is needed | Minimal `SESSION_SCOPE.md`; no unresolved, requirements, design, delivery, implementation-unit, or evidence artifacts unless strictly necessary |
+| `SINGLE_SESSION_VERTICAL_SLICE` / `session_baseline` | `session-scope → implementation-readiness` | `_hirmos/session/SESSION_SCOPE.md` with affirmative single-session safety evidence |
+| `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` / `session_baseline` | `session-scope → implementation-readiness` | `_hirmos/session/SESSION_SCOPE.md`; full implementation-unit artifacts only after baseline acceptance/amendment |
+| `DELIVERY_BASELINE` / `delivery_baseline` | `delivery-baseline` with delivery requirements/design/unresolved/phase-coverage responsibilities as needed | `_hirmos/system/delivery/DELIVERY_PLAN.md`, `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`, and `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`; optional delivery `REQUIREMENTS.md` / `DESIGN.md` only when justified |
+| `DELIVERY_PHASE_SESSION` / `phase_session_baseline` | `phase-baseline → session-scope → implementation-readiness` | accepted delivery baseline, next instantiated `PHASE-xx.md` when phase files are used, and `_hirmos/session/SESSION_SCOPE.md` for the bounded phase/session |
 
 Routing guardrails:
 
-- `delivery-design` owns creation or append/update of the durable delivery roadmap/register and the active delivery's `DELIVERY_SCOPE.md`.
-- `phase-contracting` owns phase-file creation or update only after a delivery scope exists and only when phase files are justified.
-- `session-scope` adopts and narrows delivery/phase authority into the active session; it must not recreate the full delivery authority.
-- `implementation-readiness` verifies the shape-specific authority chain and blocks implementation when the required artifacts are missing, stale, contradictory, or placeholder-only.
-- Single-session shapes must not instantiate durable delivery artifacts just to satisfy governance; they must record why delivery governance is `NOT_APPLICABLE`.
-- Durable delivery shapes must not be downgraded to single-session routing merely because the current user message is short.
+- HIRMOS always has a runtime session envelope, but `SESSION_SCOPE.md` is not required during `delivery_baseline` focus.
+- `delivery-baseline` owns creation/update of the delivery roadmap/register, delivery scope, delivery-level unresolved register, and optional delivery-level requirements/design.
+- `delivery-baseline` must include a complete phase coverage plan in `DELIVERY_SCOPE.md` before baseline acceptance.
+- `phase-baseline` instantiates the next `PHASE-xx.md` just in time after delivery-baseline acceptance; it must not create future phase files by default.
+- `session-scope` adopts and narrows accepted delivery/phase authority into the active phase/session; it must not recreate the full delivery authority.
+- `implementation-readiness` verifies the focus-specific authority chain and blocks implementation when required artifacts are missing, stale, contradictory, placeholder-only, or unaccepted.
+- Single-session routes must not instantiate durable delivery artifacts just to satisfy governance.
+- Durable delivery routes must not be downgraded to single-session routing merely because the current user message is short.
 
-Fail-closed rule: if the Delivery Shape Decision is `UNCERTAIN`, or if the selected route cannot satisfy its authority artifacts, the command must set the relevant capability decision to `BLOCKED` or `ROUTE_BACK_REQUIRED`, record the reason in `SESSION_EXECUTION.md`, and stop before implementation.
+Fail-closed rule: if the focus, route, active authority, or Delivery Shape Decision is `UNCERTAIN`, or if the selected route cannot satisfy its authority artifacts, the command must set the relevant capability decision to `BLOCKED` or `ROUTE_BACK_REQUIRED`, record the reason in `SESSION_EXECUTION.md`, and stop before implementation.
+
+Legacy route labels are history only. Runtime routing uses `DELIVERY_BASELINE / delivery_baseline → delivery-baseline` before session scope when durable delivery baseline is not yet accepted, and `DELIVERY_PHASE_SESSION / phase_session_baseline → phase-baseline → session-scope → implementation-readiness` after acceptance. Fail-closed rule: if the Delivery Shape Decision is `UNCERTAIN`, the route must block before implementation.
+
+## PROD-L8.9E/F Checkpoint and Validation Routing
+
+Checkpoint template selection is focus-aware. `delivery_baseline` must use `DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md` and delivery-level unresolved items. `session_baseline` and `phase_session_baseline` must use `SESSION_BASELINE_CHECKPOINT_OUTPUT.md` and session-level unresolved items when created. Validators must fail closed when a delivery baseline creates `SESSION_SCOPE.md`, instantiates `PHASE-xx.md` before baseline acceptance, or stores delivery-level unresolved items in `_hirmos/session/unresolved-items.md`.

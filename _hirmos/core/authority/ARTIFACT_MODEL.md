@@ -132,14 +132,22 @@ Close success requires consistency between accepted-state records, archive recor
 
 Multi-session delivery authority lives under `_hirmos/system/delivery/<delivery-id>/`.
 
-Required durable delivery artifacts:
+Required durable delivery artifacts for delivery-baseline planning:
 
 ```text
-_hirmos/system/delivery/DELIVERY_PLAN.md and _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md
-_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
+_hirmos/system/delivery/DELIVERY_PLAN.md
+_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md
+_hirmos/system/delivery/<delivery-id>/unresolved-items.md
 ```
 
-For durable multi-session delivery, a Delivery Plan is needed. Separate phase files are required only when the selected delivery shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`.
+Optional delivery-level authority artifacts:
+
+```text
+_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md
+_hirmos/system/delivery/<delivery-id>/DESIGN.md
+```
+
+Separate phase files are instantiated just in time after delivery-baseline acceptance. Before that, `DELIVERY_SCOPE.md` must carry a phase coverage plan sufficient to verify that planned phases cover 100% of delivery scope.
 
 `CURRENT_SYSTEM_STATE.md` may point to the active delivery plan and active phase, but it must not duplicate their contents. Session-local delivery files are not canonical delivery authority.
 
@@ -164,3 +172,28 @@ _hirmos/system/delivery/
 ```
 
 `DELIVERY_PLAN.md` is append/update-oriented and preserves delivery history. `DELIVERY_SCOPE.md` is the default combined delivery authority. Separate delivery-level `REQUIREMENTS.md` and `DESIGN.md` are optional only when independent authority is justified.
+
+
+## PROD-L8.9 runtime session focus model
+
+HIRMOS always runs inside a governed runtime session envelope, but `SESSION_SCOPE.md` is not synonymous with the runtime session itself.
+
+A runtime session may focus on delivery-baseline planning, phase/session baseline planning, implementation, correction, close, status, or minimal single-session work. `SESSION_STATE.json.session_focus` records the active focus.
+
+Canonical focus values:
+
+```text
+idle
+minimal_session
+session_baseline
+delivery_baseline
+phase_session_baseline
+implementation
+correction
+close
+status
+```
+
+Rule: `SESSION_SCOPE.md` is required only when the active work has a bounded phase/session work scope or implementation authority. During `delivery_baseline` focus, the active authority is `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`, not `_hirmos/session/SESSION_SCOPE.md`.
+
+Delivery-level uncertainty belongs to `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`. Session-level uncertainty belongs to `_hirmos/session/unresolved-items.md` only after a session scope exists or when the active single-session work has material unresolved items.

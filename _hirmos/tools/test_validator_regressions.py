@@ -560,6 +560,48 @@ def mutate_archive_manifest_missing_normalization(root: Path) -> None:
     body = body.replace("## 6. Archived Session State Normalization", "## 6. Archived State")
     manifest.write_text(body)
 
+
+
+def mutate_delivery_baseline_without_session_scope_passes(root: Path) -> None:
+    state = read_state(root)
+    state.update({
+        "status": "active",
+        "session_id": "fixture-delivery-baseline-001",
+        "session_focus": "delivery_baseline",
+        "lifecycle_stage": "design",
+        "active_authority": "_hirmos/system/delivery/fixture-delivery/DELIVERY_SCOPE.md",
+        "active_delivery_id": "fixture-delivery",
+        "active_delivery_scope": "_hirmos/system/delivery/fixture-delivery/DELIVERY_SCOPE.md",
+        "active_phase": None,
+        "continuation_pass": 0,
+        "pending_correction": False,
+        "allowed_next_commands": ["hirmos continue", "hirmos status"],
+        "recommended_next_command": "hirmos continue",
+        "updated_at": "2026-01-01T00:00:00Z",
+    })
+    write_state(root, state)
+    session = root / "session"
+    for rel in ["SESSION_SCOPE.md", "unresolved-items.md"]:
+        p = session / rel
+        if p.exists():
+            p.unlink()
+    (session / "SESSION_EXECUTION.md").write_text("# SESSION_EXECUTION.md\n\nCurrent focus: delivery_baseline\nActive authority: _hirmos/system/delivery/fixture-delivery/DELIVERY_SCOPE.md\nCheckpoint: Delivery Baseline — Review or Change\n")
+    delivery = root / "system" / "delivery" / "fixture-delivery"
+    delivery.mkdir(parents=True, exist_ok=True)
+    (root / "system" / "delivery" / "DELIVERY_PLAN.md").write_text("# DELIVERY_PLAN.md\n\nDelivery Index\n")
+    (delivery / "DELIVERY_SCOPE.md").write_text("# DELIVERY_SCOPE.md\n\nStatus: READY_FOR_BASELINE_REVIEW\n\n## Phase Plan / Phase Coverage Plan\n\n| Phase | Purpose | Delivery requirements covered | Design areas covered | Production gates covered | Entry condition | Exit condition | Status | Phase file |\n|---|---|---|---|---|---|---|---|---|\n| PHASE-01 | Test | REQ-01 | DD-01 | Gate | Accepted delivery baseline | Done | planned | not instantiated |\n\n## Delivery Coverage Self-Check\n\n- All in-scope delivery requirements assigned to one or more phases: YES\n- All required design/engineering decisions assigned to one or more phases: YES\n- All production-shaped gates assigned to delivery-level or phase-level evidence: YES\n- No future concrete `PHASE-xx.md` paths referenced unless the files exist: YES\n")
+    (delivery / "unresolved-items.md").write_text("# Delivery Unresolved Items\n\n## Current Checkpoint Feed\n\n### Gated delivery items\n\nNone.\n\n### Non-gating delivery assumptions\n\nNone.\n\n### Technical-review delivery items\n\nNone.\n")
+
+
+def mutate_delivery_baseline_with_session_scope_fails(root: Path) -> None:
+    mutate_delivery_baseline_without_session_scope_passes(root)
+    (root / "session" / "SESSION_SCOPE.md").write_text("# SESSION_SCOPE.md\n\nThis should not exist during delivery_baseline focus.\n")
+
+
+def mutate_delivery_baseline_with_session_unresolved_fails(root: Path) -> None:
+    mutate_delivery_baseline_without_session_scope_passes(root)
+    (root / "session" / "unresolved-items.md").write_text("# unresolved-items.md\n\nDelivery-level unresolved items were incorrectly stored here.\n")
+
 # retained marker: accepted-state index reappears
 CASES = [
     Case("valid baseline", mutate_none, True, "PASS:"),
@@ -593,6 +635,9 @@ CASES = [
     Case("greenfield phase missing MVP boundary fails", mutate_greenfield_missing_mvp_boundary, False, "MVP boundary"),
     Case("brownfield phase missing preservation baseline fails", mutate_brownfield_missing_preservation_baseline, False, "Preservation baseline"),
     Case("mixed phase missing brownfield controls fails", mutate_mixed_missing_brownfield_controls, False, "Preservation baseline"),
+    Case("delivery baseline without SESSION_SCOPE passes", mutate_delivery_baseline_without_session_scope_passes, True, "PASS:"),
+    Case("delivery baseline with SESSION_SCOPE fails", mutate_delivery_baseline_with_session_scope_fails, False, "delivery_baseline focus must not create SESSION_SCOPE.md"),
+    Case("delivery baseline with session unresolved fails", mutate_delivery_baseline_with_session_unresolved_fails, False, "delivery_baseline focus must store delivery unresolved items"),
 ]
 
 

@@ -19,7 +19,7 @@
   },
   "requires_artifacts": [
     "_hirmos/session/SESSION_EXECUTION.md",
-    "_hirmos/session/unresolved-items.md",
+    "focus-appropriate unresolved-items.md",
     "_hirmos/system/delivery/DELIVERY_PLAN.md when Delivery Shape Decision selects a durable delivery shape",
     "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md when Delivery Shape Decision selects a durable delivery shape",
     "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when Delivery Shape Decision selects MULTI_SESSION_DELIVERY_WITH_PHASE_FILES"
@@ -27,7 +27,7 @@
   "produces_artifacts": [
     "_hirmos/session/SESSION_SCOPE.md",
     "_hirmos/session/SESSION_EXECUTION.md",
-    "_hirmos/session/unresolved-items.md when contract blockers are found"
+    "focus-appropriate unresolved-items.md when contract blockers are found"
   ],
   "execution_controls": [
     "session-scope control",

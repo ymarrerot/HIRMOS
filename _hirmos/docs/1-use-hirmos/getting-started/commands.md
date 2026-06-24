@@ -82,3 +82,19 @@ close updates current state only when evidence and artifacts agree
 
 
 New governed sessions use `_hirmos/session/SESSION_SCOPE.md` as the active session authority. Durable multi-session work uses `_hirmos/system/delivery/DELIVERY_PLAN.md` plus `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` when needed.
+
+## Focus-aware command behavior
+
+HIRMOS always runs inside a governed runtime session envelope, but the active focus determines which authority artifacts are required.
+
+| Focus | When used | Required authority | Default next checkpoint |
+|---|---|---|---|
+| `minimal_session` | Small bounded output or non-implementation work | `SESSION_SCOPE.md` only when bounded authority is needed | Session Baseline / Recommended Baseline |
+| `session_baseline` | Single-session implementation or reviewable session scope | `SESSION_SCOPE.md` | Session Baseline — Review or Change |
+| `delivery_baseline` | Durable delivery/release planning before phase/session work | `DELIVERY_SCOPE.md` and delivery unresolved register | Delivery Baseline — Review or Change |
+| `phase_session_baseline` | First or next phase/session inside an accepted delivery | `PHASE-xx.md` and `SESSION_SCOPE.md` | Session Baseline — Review or Change |
+| `implementation` | Accepted session scope is ready to implement | `SESSION_SCOPE.md` and implementation controls | Implementation / evidence |
+
+During `delivery_baseline`, `hirmos start` must not create `SESSION_SCOPE.md`, session unresolved items, phase files, or implementation-unit files by default. It prepares delivery authority and pauses for delivery baseline review. After acceptance, `hirmos continue` transitions to the next phase/session baseline rather than implementing directly.
+
+During `session_baseline` or `phase_session_baseline`, `hirmos continue` accepts or amends the session baseline and only then creates implementation-unit artifacts when they are actually needed.

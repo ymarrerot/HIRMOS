@@ -1,7 +1,7 @@
 {
   "id": "phase-contracting",
   "extension": "design-agent",
-  "summary": "Create or update durable phase files under one selected delivery scope when the selected delivery route requires phase files.",
+  "summary": "Maintain durable phase files as a subordinate responsibility of phase-baseline after delivery-baseline acceptance; future phase files are not instantiated by default.",
   "lifecycle_stage": "design",
   "entrypoints": {
     "default": "entrypoints/default.md"
@@ -9,24 +9,22 @@
   "activation": {
     "default": "conditional",
     "triggers": [
-      "Delivery Shape Decision selects MULTI_SESSION_DELIVERY_WITH_PHASE_FILES",
-      "active delivery scope requires ordered phases",
-      "active session must be sourced from exactly one phase",
-      "phase coverage or sequencing must be repaired",
-      "brownfield preservation risk requires bounded phase authority"
+      "session_focus = phase_session_baseline and phase files are selected",
+      "accepted delivery baseline requires the next active PHASE-xx.md",
+      "phase coverage or sequencing must be repaired after delivery-baseline acceptance"
     ]
   },
   "requires_artifacts": [
+    "_hirmos/session/SESSION_STATE.json with session_focus = phase_session_baseline",
     "_hirmos/system/delivery/DELIVERY_PLAN.md",
-    "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md",
-    "_hirmos/session/SESSION_EXECUTION.md",
-    "_hirmos/session/unresolved-items.md"
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md with accepted/amended delivery baseline",
+    "_hirmos/session/SESSION_EXECUTION.md"
   ],
   "produces_artifacts": [
-    "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md",
-    "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md phase-plan update when needed",
+    "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md for the next active phase only",
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md phase-plan status update when needed",
     "_hirmos/session/SESSION_EXECUTION.md",
-    "_hirmos/session/unresolved-items.md when phase blockers are found"
+    "_hirmos/session/unresolved-items.md when phase/session blockers are found"
   ],
   "execution_controls": [
     "phase-contracting control",

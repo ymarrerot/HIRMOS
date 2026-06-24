@@ -42,7 +42,7 @@ Before implementing in an existing project, HIRMOS should make clear:
 - what validation evidence is required;
 - what is intentionally out of scope for the current session.
 
-## Brownfield preservation
+## Existing-system preservation
 
 For brownfield or mixed work, a good HIRMOS run should avoid:
 

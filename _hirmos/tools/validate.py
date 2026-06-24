@@ -65,6 +65,9 @@ required = [
     'core/templates/system/CURRENT_SYSTEM_STATE.md',
     'core/templates/system/delivery/DELIVERY_PLAN.md',
     'core/templates/system/delivery/DELIVERY_SCOPE.md',
+    'core/templates/system/delivery/unresolved-items.md',
+    'core/templates/system/delivery/REQUIREMENTS.md',
+    'core/templates/system/delivery/DESIGN.md',
     'core/templates/system/delivery/phases/PHASE.md',
     'core/templates/system/history/sessions/ARCHIVE_MANIFEST.md',
     'core/templates/session/stack-resolution.json',
@@ -210,7 +213,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.0.5'
+expected_version = '1.0.6'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -524,10 +527,21 @@ def _validate_session_state_semantics(state_path: Path, active_session_dir: Path
                     print(f'FAIL: idle session scaffold missing required sentinel: session/{required_idle}')
                     sys.exit(1)
         elif status == 'active':
-            missing_active = sorted(name for name in ACTIVE_REQUIRED_ROOT_FILES if not (active_session_dir/name).exists())
+            session_focus = state_obj.get('session_focus')
+            required_roots = {'SESSION_STATE.json', 'SESSION_EXECUTION.md'}
+            if session_focus != 'delivery_baseline':
+                required_roots.update({'SESSION_SCOPE.md', 'unresolved-items.md'})
+            missing_active = sorted(name for name in required_roots if not (active_session_dir/name).exists())
             if missing_active:
                 print(f'FAIL: active session missing canonical root artifact(s): {missing_active}')
                 sys.exit(1)
+            if session_focus == 'delivery_baseline':
+                if (active_session_dir/'SESSION_SCOPE.md').exists():
+                    print('FAIL: delivery_baseline focus must not create SESSION_SCOPE.md before bounded phase/session scope exists')
+                    sys.exit(1)
+                if (active_session_dir/'unresolved-items.md').exists():
+                    print('FAIL: delivery_baseline focus must store delivery unresolved items under system/delivery/<delivery-id>/unresolved-items.md, not session/unresolved-items.md')
+                    sys.exit(1)
             for dirname in ['implementation-units','bootstrap']:
                 if not (active_session_dir/dirname).is_dir():
                     print(f'FAIL: active session missing canonical directory: session/{dirname}')
@@ -979,15 +993,15 @@ for forbidden in ['core/templates/session/DELIVERY_PLAN.md','core/templates/sess
 
 # delivery / phase capability rewire checks
 for rel, phrases in {
-    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery / Phase Capability Routing', 'delivery-design → phase-contracting → session-scope → implementation-readiness', 'single-session safety evidence'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery / Phase Capability Routing', 'delivery-baseline', 'phase-baseline → session-scope → implementation-readiness', 'single-session safety evidence'],
     'extensions/design-agent/extension.json': ['phase-contracting', 'session-scope'],
-    'extensions/design-agent/entrypoints/default.md': ['Durable Delivery / Phase Capability Rewire', 'delivery-design', 'phase-contracting', 'session-scope', 'implementation-readiness'],
-    'extensions/design-agent/capabilities/delivery-design/capability.json': ['Delivery Shape Decision selects a durable delivery shape', '_hirmos/system/delivery/DELIVERY_PLAN.md', '_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md'],
-    'extensions/design-agent/capabilities/phase-contracting/capability.json': ['_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md', '_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md', 'session-scope source-readiness control'],
+    'extensions/design-agent/entrypoints/default.md': ['PROD-L8.9 focus-aware delivery routing', 'delivery-baseline', 'phase-baseline', 'session-scope', 'implementation-readiness'],
+    'extensions/design-agent/capabilities/delivery-baseline/capability.json': ['session_focus = delivery_baseline', '_hirmos/system/delivery/DELIVERY_PLAN.md', '_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md', '_hirmos/system/delivery/<delivery-id>/unresolved-items.md'],
+    'extensions/design-agent/capabilities/phase-baseline/capability.json': ['session_focus = phase_session_baseline', '_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md', '_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md', 'session-scope adoption control'],
     'extensions/design-agent/capabilities/session-scope/capability.json': ['durable phase', 'single-session safety evidence'],
     'extensions/design-agent/capabilities/implementation-readiness/capability.json': ['durable delivery coverage when required', 'Delivery Shape Decision gate'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Delivery / Phase Capability Routing Log', 'delivery-design', 'phase-contracting', 'session-scope', 'implementation-readiness'],
-    'core/templates/session/SESSION_SCOPE.md': ['Delivery / Phase Capability Routing Evidence', 'delivery-design', 'phase-contracting', 'implementation-readiness'],
+    'core/templates/session/SESSION_EXECUTION.md': ['Focus-Aware Capability Routing Log', 'delivery-baseline', 'phase-baseline', 'session-scope', 'implementation-readiness'],
+    'core/templates/session/SESSION_SCOPE.md': ['Focus-Aware Capability Routing Evidence', 'delivery-baseline', 'phase-baseline', 'implementation-readiness'],
 }.items():
     body = (root/rel).read_text()
     for phrase in phrases:
@@ -1313,15 +1327,15 @@ for forbidden in ['core/templates/session/DELIVERY_PLAN.md','core/templates/sess
 
 # delivery / phase capability rewire checks
 for rel, phrases in {
-    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery / Phase Capability Routing', 'delivery-design → phase-contracting → session-scope → implementation-readiness', 'single-session safety evidence'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery / Phase Capability Routing', 'delivery-baseline', 'phase-baseline → session-scope → implementation-readiness', 'single-session safety evidence'],
     'extensions/design-agent/extension.json': ['phase-contracting', 'session-scope'],
-    'extensions/design-agent/entrypoints/default.md': ['Durable Delivery / Phase Capability Rewire', 'delivery-design', 'phase-contracting', 'session-scope', 'implementation-readiness'],
-    'extensions/design-agent/capabilities/delivery-design/capability.json': ['Delivery Shape Decision selects a durable delivery shape', '_hirmos/system/delivery/DELIVERY_PLAN.md', '_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md'],
-    'extensions/design-agent/capabilities/phase-contracting/capability.json': ['_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md', '_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md', 'session-scope source-readiness control'],
+    'extensions/design-agent/entrypoints/default.md': ['PROD-L8.9 focus-aware delivery routing', 'delivery-baseline', 'phase-baseline', 'session-scope', 'implementation-readiness'],
+    'extensions/design-agent/capabilities/delivery-baseline/capability.json': ['session_focus = delivery_baseline', '_hirmos/system/delivery/DELIVERY_PLAN.md', '_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md', '_hirmos/system/delivery/<delivery-id>/unresolved-items.md'],
+    'extensions/design-agent/capabilities/phase-baseline/capability.json': ['session_focus = phase_session_baseline', '_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md', '_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md', 'session-scope adoption control'],
     'extensions/design-agent/capabilities/session-scope/capability.json': ['durable phase', 'single-session safety evidence'],
     'extensions/design-agent/capabilities/implementation-readiness/capability.json': ['durable delivery coverage when required', 'Delivery Shape Decision gate'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Delivery / Phase Capability Routing Log', 'delivery-design', 'phase-contracting', 'session-scope', 'implementation-readiness'],
-    'core/templates/session/SESSION_SCOPE.md': ['Delivery / Phase Capability Routing Evidence', 'delivery-design', 'phase-contracting', 'implementation-readiness'],
+    'core/templates/session/SESSION_EXECUTION.md': ['Focus-Aware Capability Routing Log', 'delivery-baseline', 'phase-baseline', 'session-scope', 'implementation-readiness'],
+    'core/templates/session/SESSION_SCOPE.md': ['Focus-Aware Capability Routing Evidence', 'delivery-baseline', 'phase-baseline', 'implementation-readiness'],
 }.items():
     body = (root/rel).read_text()
     for phrase in phrases:
@@ -1368,7 +1382,7 @@ for phrase in [
 
 expected_extensions = {
     'system-state-agent': ['request-intake','source-material-ingestion','prototype-ingestion','understand-system-state','update-system-state'],
-    'design-agent': ['requirements-design','system-design','delivery-design','phase-contracting','session-scope','technical-review','implementation-readiness'],
+    'design-agent': ['requirements-design','system-design','delivery-design','delivery-baseline','phase-baseline','phase-contracting','session-scope','technical-review','implementation-readiness'],
     'implementation-agent': ['implementation-unit-planning','implementation-execution','implementation-unit-review','validation-review','retry-escalation','session-implementation-review'],
 }
 for ext, caps in expected_extensions.items():
@@ -1484,11 +1498,11 @@ if not design_method.exists():
 design_method_body = design_method.read_text()
 for phrase in [
     'Requirement inputs are source material, not requirements authority',
-    'Design owns governed requirements, system/application design, delivery structure, technical review, Session Scope, and implementation readiness',
+    'Design owns governed requirements, system/application design, delivery-baseline authority, phase/session baseline authority, technical review, Session Scope when a bounded session scope exists, and implementation readiness',
     'Design may satisfy requirements/design/planning requests',
     'Durable Delivery Plan',
     'PHASE-xx.md',
-    'Session Scope is downstream implementation authority',
+    'focus-aware delivery routing',
     'Design may route back to Understand System State',
 ]:
     if phrase not in design_method_body:
@@ -1498,6 +1512,8 @@ for phrase in [
 design_entrypoints = {
     'requirements-design': ['Method', 'Separate requirement inputs from governed requirements authority', 'Map each material requirement to source evidence and system-state findings'],
     'system-design': ['Method', 'Design from governed requirements, not raw requirement inputs alone', 'technical review'],
+    'delivery-baseline': ['Execution Contract', 'delivery baseline', 'unresolved-item target control'],
+    'phase-baseline': ['Execution Contract', 'next phase authority', 'phase/session'],
     'delivery-design': ['Method', 'Delivery Plan', 'Map Delivery Plan items to governed requirements'],
     'phase-contracting': ['Method', 'Phase Scope', 'durable delivery'],
     'session-scope': ['Method', 'Session Scope', 'implementation unit planning, implementation unit review, session implementation review, and Update System State'],
@@ -2160,9 +2176,18 @@ if session_state.get('status') == 'idle':
     if stale:
         fail('session scaffold invariant: active-session artifact(s) present while SESSION_STATE.status is idle: ' + ', '.join(stale))
 else:
-    for rel in ['SESSION_SCOPE.md', 'SESSION_EXECUTION.md', 'unresolved-items.md']:
-        if rel not in actual_session_files:
-            fail(f'active session missing canonical root artifact: {rel}')
+    session_focus = session_state.get('session_focus')
+    if 'SESSION_EXECUTION.md' not in actual_session_files:
+        fail('active session missing canonical root artifact: SESSION_EXECUTION.md')
+    if session_focus == 'delivery_baseline':
+        if 'SESSION_SCOPE.md' in actual_session_files:
+            fail('delivery_baseline focus must not create SESSION_SCOPE.md before bounded phase/session scope exists')
+        if 'unresolved-items.md' in actual_session_files:
+            fail('delivery_baseline focus must store delivery unresolved items under system/delivery/<delivery-id>/unresolved-items.md, not session/unresolved-items.md')
+    else:
+        for rel in ['SESSION_SCOPE.md', 'unresolved-items.md']:
+            if rel not in actual_session_files:
+                fail(f'active session missing canonical root artifact: {rel}')
 
 required_canonical_templates = [
     'core/templates/session/SESSION_SCOPE.md',
@@ -2374,19 +2399,19 @@ print('PASS: HIRMOS canonical entrypoint surface cleanup static check')
 
 # PROD-L4 runtime command / capability routing checks
 for rel, phrases in {
-    'core/protocol/CAPABILITY_ROUTING.md': ['PROD-L4 delivery-shape routing matrix', 'delivery-design → session-scope → implementation-readiness', 'delivery-design → phase-contracting → session-scope → implementation-readiness', 'Fail-closed rule: if the Delivery Shape Decision is `UNCERTAIN`'],
-    'core/protocol/COMMANDS.md': ['PROD-L4 command-to-capability routing behavior', 'hirmos start` must perform Delivery Shape Decision routing', 'hirmos close` must reconcile the route'],
-    'core/protocol/DELIVERY_GOVERNANCE.md': ['PROD-L4 runtime command and capability route binding', 'session-scope → implementation-readiness', 'implementation-readiness` must fail closed'],
-    'core/commands/start.md': ['PROD-L4 delivery-route runtime behavior', 'must not create a per-delivery `DELIVERY_PLAN.md`'],
-    'core/commands/continue.md': ['PROD-L4 delivery-route continuation behavior', 'must not expand delivery scope silently'],
-    'core/commands/status.md': ['PROD-L4 delivery-route status reporting', 'Status Blocked By Delivery Route Conflict'],
-    'core/commands/close.md': ['PROD-L4 delivery-route close reconciliation', 'route claims and durable artifacts disagree'],
-    'extensions/design-agent/entrypoints/default.md': ['PROD-L4 delivery route selection', 'MULTI_SESSION_DELIVERY_WITH_PHASE_FILES → delivery-design → phase-contracting → session-scope → implementation-readiness'],
-    'extensions/design-agent/capabilities/delivery-design/entrypoints/default.md': ['PROD-L4 runtime route obligations', 'must not compensate for missing authority'],
-    'extensions/design-agent/capabilities/phase-contracting/entrypoints/default.md': ['PROD-L4 runtime route obligations', 'must not compensate for missing authority'],
-    'extensions/design-agent/capabilities/session-scope/entrypoints/default.md': ['PROD-L4 runtime route obligations', 'must not compensate for missing authority'],
-    'extensions/design-agent/capabilities/implementation-readiness/entrypoints/default.md': ['PROD-L4 runtime route obligations', 'must not compensate for missing authority'],
-    'docs/reference/runtime-surfaces.md': ['PROD-L4 runtime command and capability routing', 'hirmos status` reports route readiness'],
+    'core/protocol/CAPABILITY_ROUTING.md': ['PROD-L8.9 focus-aware routing matrix', 'DELIVERY_BASELINE / delivery_baseline', 'DELIVERY_PHASE_SESSION / phase_session_baseline', 'Fail-closed rule: if the Delivery Shape Decision is `UNCERTAIN`'],
+    'core/protocol/COMMANDS.md': ['PROD-L8.9 command-to-capability routing behavior', 'hirmos start` must perform Delivery Shape Decision and `session_focus` routing', 'hirmos close` must reconcile the route and focus'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['PROD-L8.9 runtime command and capability route binding', 'phase-baseline → session-scope → implementation-readiness', 'implementation-readiness` must fail closed'],
+    'core/commands/start.md': ['PROD-L8.9 focus-aware route runtime behavior', 'must not create a per-delivery `DELIVERY_PLAN.md`'],
+    'core/commands/continue.md': ['PROD-L8.9 focus-aware continuation behavior', 'must not expand delivery scope silently'],
+    'core/commands/status.md': ['PROD-L8.9 focus-aware status reporting', 'Status Blocked By Delivery Route Conflict'],
+    'core/commands/close.md': ['PROD-L8.9 focus-aware close reconciliation', 'focus route claims and durable artifacts disagree'],
+    'extensions/design-agent/entrypoints/default.md': ['PROD-L8.9 command-selected focus route', 'DELIVERY_PHASE_SESSION / phase_session_baseline'],
+    'extensions/design-agent/capabilities/delivery-baseline/entrypoints/default.md': ['Execution Contract', 'delivery baseline'],
+    'extensions/design-agent/capabilities/phase-baseline/entrypoints/default.md': ['Execution Contract', 'next phase authority'],
+    'extensions/design-agent/capabilities/session-scope/entrypoints/default.md': ['PROD-L8.9 focus-aware runtime route obligations', 'must not compensate for missing authority'],
+    'extensions/design-agent/capabilities/implementation-readiness/entrypoints/default.md': ['PROD-L8.9 focus-aware runtime route obligations', 'must not compensate for missing authority'],
+    'docs/reference/runtime-surfaces.md': ['focus-aware runtime command and capability routing', 'hirmos status` reports route readiness'],
 }.items():
     body = (root/rel).read_text(errors='ignore')
     for phrase in phrases:
@@ -2675,3 +2700,64 @@ for forbidden in ['Delivery / Slice / Phase / Implementation-Unit Mapping', 'Con
     if forbidden in design_body:
         fail(f'PROD-L8.8 DESIGN.md retains implementation-unit planning section: {forbidden}')
 print('PASS: HIRMOS PROD-L8.8 runtime context consolidation and optional authority responsibility static check')
+
+
+# PROD-L8.9A/B runtime focus model and delivery baseline artifact checks
+session_state_template = json.loads((root / 'core/templates/session/SESSION_STATE.json').read_text())
+for key in ['session_focus', 'active_authority', 'active_delivery_id', 'active_delivery_scope', 'active_phase']:
+    if key not in session_state_template:
+        fail(f'PROD-L8.9A SESSION_STATE.json missing runtime focus key: {key}')
+capability_routing_body = (root / 'core/protocol/CAPABILITY_ROUTING.md').read_text()
+for phrase in ['SINGLE_SESSION_MINIMAL', 'DELIVERY_BASELINE', 'DELIVERY_PHASE_SESSION', 'session_focus = delivery_baseline', 'phase coverage plan']:
+    if phrase not in capability_routing_body:
+        fail(f'PROD-L8.9A CAPABILITY_ROUTING.md missing focus-routing phrase: {phrase}')
+commands_body = (root / 'core/protocol/COMMANDS.md').read_text()
+for phrase in ['runtime session envelope', 'session_focus', 'SESSION_SCOPE.md is required when the session focus has a bounded phase/session work scope']:
+    if phrase not in commands_body:
+        fail(f'PROD-L8.9A COMMANDS.md missing runtime focus phrase: {phrase}')
+delivery_scope_body = (root / 'core/templates/system/delivery/DELIVERY_SCOPE.md').read_text()
+for phrase in ['READY_FOR_BASELINE_REVIEW', 'Optional Authority Artifact Justification and Adoption', 'Delivery-Level Unresolved Items', 'Phase Coverage Plan', 'Delivery Coverage Self-Check', 'not instantiated']:
+    if phrase not in delivery_scope_body:
+        fail(f'PROD-L8.9B DELIVERY_SCOPE.md missing delivery-baseline phrase: {phrase}')
+for rel in ['core/templates/system/delivery/unresolved-items.md', 'core/templates/system/delivery/REQUIREMENTS.md', 'core/templates/system/delivery/DESIGN.md']:
+    if not (root / rel).exists():
+        fail(f'PROD-L8.9B missing delivery baseline template: {rel}')
+delivery_unresolved_body = (root / 'core/templates/system/delivery/unresolved-items.md').read_text()
+for phrase in ['Current Checkpoint Feed', 'Gated delivery items', 'Non-gating delivery assumptions', 'Technical-review delivery items', 'survives across all sessions']:
+    if phrase not in delivery_unresolved_body:
+        fail(f'PROD-L8.9B delivery unresolved template missing phrase: {phrase}')
+print('PASS: HIRMOS PROD-L8.9A/B runtime focus and delivery baseline artifact static check')
+
+# PROD-L8.9E/F checkpoint templates, validators, and regression fixture checks
+for rel in [
+    'core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md',
+    'core/templates/checkpoints/DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md',
+    'core/templates/checkpoints/SESSION_BASELINE_CHECKPOINT_OUTPUT.md',
+]:
+    if not (root / rel).exists():
+        fail(f'PROD-L8.9E missing checkpoint template: {rel}')
+start_checkpoint_body = (root / 'core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md').read_text(errors='ignore')
+for phrase in ['checkpoint output selector', 'DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md', 'SESSION_BASELINE_CHECKPOINT_OUTPUT.md', 'session_focus', 'Do not treat delivery-level unresolved items as session-level unresolved items']:
+    if phrase not in start_checkpoint_body:
+        fail(f'PROD-L8.9E START_CHECKPOINT_OUTPUT.md missing focus selector phrase: {phrase}')
+delivery_checkpoint_body = (root / 'core/templates/checkpoints/DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md').read_text(errors='ignore')
+for phrase in ['Delivery Baseline — Review or Change', '_hirmos/system/delivery/<delivery-id>/unresolved-items.md#Current Checkpoint Feed', 'All in-scope delivery requirements have planned phase coverage', 'Do not create or reference concrete future `PHASE-xx.md` paths unless those files exist', 'pause again for Session Baseline — Review or Change before implementation begins']:
+    if phrase not in delivery_checkpoint_body:
+        fail(f'PROD-L8.9E DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md missing phrase: {phrase}')
+session_checkpoint_body = (root / 'core/templates/checkpoints/SESSION_BASELINE_CHECKPOINT_OUTPUT.md').read_text(errors='ignore')
+for phrase in ['Session Baseline — Review or Change', '_hirmos/session/unresolved-items.md#Current Checkpoint Feed', 'Delivery assumptions resurfaced in this session', 'No accepted delivery assumptions were challenged by this session baseline', 'instantiate implementation-unit artifacts if needed and begin governed implementation']:
+    if phrase not in session_checkpoint_body:
+        fail(f'PROD-L8.9E SESSION_BASELINE_CHECKPOINT_OUTPUT.md missing phrase: {phrase}')
+for rel, phrases in {
+    'core/protocol/CAPABILITY_ROUTING.md': ['PROD-L8.9E/F Checkpoint and Validation Routing', 'delivery_baseline` must use `DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md`', 'session-level unresolved items'],
+    'core/protocol/COMMANDS.md': ['PROD-L8.9E/F Checkpoint Template Enforcement', 'must not skip from delivery-baseline acceptance directly into implementation'],
+    'core/commands/start.md': ['PROD-L8.9E/F Focus-Aware Checkpoint Output', 'A delivery-baseline pause must not create `_hirmos/session/SESSION_SCOPE.md`'],
+    'core/commands/continue.md': ['PROD-L8.9E/F Baseline Acceptance Boundary', 'must not implement directly from the delivery-baseline checkpoint'],
+    'core/commands/status.md': ['PROD-L8.9E/F Checkpoint Status Reporting', 'prematurely instantiated'],
+    'core/commands/close.md': ['PROD-L8.9E/F Focus-Aware Close Guard', 'must not claim implementation completion from a delivery-baseline session'],
+}.items():
+    text = (root / rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase not in text:
+            fail(f'PROD-L8.9E/F {rel} missing phrase: {phrase}')
+print('PASS: HIRMOS PROD-L8.9E/F checkpoint template and focus-aware validator static check')

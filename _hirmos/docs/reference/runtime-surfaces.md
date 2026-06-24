@@ -52,7 +52,7 @@ _hirmos/system/delivery/
 
 `DELIVERY_PLAN.md` is append/update-oriented and preserves delivery history. `DELIVERY_SCOPE.md` is the default combined delivery authority. Separate delivery-level `REQUIREMENTS.md` and `DESIGN.md` are optional only when independent authority is justified.
 
-## PROD-L4 runtime command and capability routing
+## PROD-L8.9 focus-aware runtime command and capability routing
 
 Commands execute the delivery authority model through capability routing.
 
@@ -66,6 +66,27 @@ Canonical delivery routes:
 ```text
 SINGLE_SESSION_VERTICAL_SLICE → session-scope → implementation-readiness
 SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS → session-scope → implementation-readiness
-MULTI_SESSION_DELIVERY → delivery-design → session-scope → implementation-readiness
-MULTI_SESSION_DELIVERY_WITH_PHASE_FILES → delivery-design → phase-contracting → session-scope → implementation-readiness
+DELIVERY_BASELINE / delivery_baseline → delivery-baseline
+DELIVERY_PHASE_SESSION / phase_session_baseline → phase-baseline → session-scope → implementation-readiness
 ```
+
+
+## PROD-L8.9 delivery baseline focus
+
+HIRMOS always runs inside a governed runtime session envelope, but `SESSION_SCOPE.md` is required only when the active work has a bounded phase/session work scope. Durable delivery-baseline work uses `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` as active authority and `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` for delivery-level unresolved items.
+
+Before delivery-baseline acceptance, HIRMOS records a complete phase coverage plan inside `DELIVERY_SCOPE.md` and does not instantiate future `PHASE-xx.md` files by default. After acceptance, HIRMOS instantiates the next phase/session authority just in time.
+
+## Focus-aware runtime surfaces
+
+The active `SESSION_STATE.json.session_focus` determines which surfaces are required.
+
+| `session_focus` | Required surfaces | Surfaces not created by default |
+|---|---|---|
+| `minimal_session` | `SESSION_STATE.json`, `SESSION_EXECUTION.md`, and `SESSION_SCOPE.md` only when bounded output authority is needed | delivery artifacts, implementation units, optional requirements/design unless justified |
+| `session_baseline` | `SESSION_STATE.json`, `SESSION_EXECUTION.md`, `SESSION_SCOPE.md`; session unresolved items only when material items exist | delivery artifacts unless adopted; implementation units before acceptance |
+| `delivery_baseline` | `SESSION_STATE.json`, `SESSION_EXECUTION.md`, `DELIVERY_PLAN.md`, `<delivery-id>/DELIVERY_SCOPE.md`, `<delivery-id>/unresolved-items.md` | `SESSION_SCOPE.md`, session unresolved items, `PHASE-xx.md`, implementation units |
+| `phase_session_baseline` | accepted delivery scope, next instantiated phase file, `SESSION_SCOPE.md`, session unresolved items when needed | future phase files and implementation units before acceptance |
+| `implementation` | accepted `SESSION_SCOPE.md`, implementation controls, evidence/unit surfaces as needed | new authority artifacts unless the session is amended |
+
+This model preserves a single command/session envelope while preventing delivery-level authority from being stored in session-local scope artifacts.

@@ -402,7 +402,7 @@ Required close checks:
 
 If any check fails, close must downgrade the accepted claim, route back, or preserve the limitation as carry-forward. Do not accept production-shaped outcomes contradicted by implementation evidence.
 
-## PROD-L4 delivery-route close reconciliation
+## PROD-L8.9 focus-aware close reconciliation
 
 `hirmos close` must reconcile the route actually used during the session before accepting, partially accepting, blocking, or failing the close.
 
@@ -413,7 +413,7 @@ Required behavior:
 3. For single-session routes, verify that no unnecessary durable delivery artifacts were created as close authority.
 4. For delivery routes, verify `DELIVERY_PLAN.md`, `DELIVERY_SCOPE.md`, any adopted `PHASE-xx.md`, `SESSION_SCOPE.md`, and Current System State pointers are concordant.
 5. Verify blocked or route-back capability outcomes have either been resolved or carried forward.
-6. Block close success if the route claims and durable artifacts disagree.
+6. Block close success if the focus route claims and durable artifacts disagree.
 
 Close may archive the routing evidence, but archive metadata does not replace updating durable delivery scope, delivery roadmap, phase status, unresolved items, and accepted-state pointers when those artifacts are active.
 
@@ -431,3 +431,14 @@ Active phase: _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
 ```
 
 The archive manifest may record the transaction, but it does not substitute for updating the durable delivery roadmap/register, active delivery scope, phase file, and Current System State delivery pointers.
+
+
+## PROD-L8.9 focus-aware close behavior
+
+`hirmos close` must reconcile the active focus before claiming success. A delivery-baseline session close records delivery-baseline acceptance/amendment, blocked, deferred, or cancelled status; it must not claim implementation completion. A phase/session or implementation close must reconcile `SESSION_SCOPE.md` first, and when it adopts delivery authority, reconcile the adopted `DELIVERY_SCOPE.md`, active `PHASE-xx.md`, delivery unresolved register, session unresolved register, evidence, and accepted-state pointers.
+
+If a session-level unresolved item invalidates a delivery-level decision or assumption, close must either update the delivery authority, add/update the delivery-level unresolved register, or block/partial-close truthfully.
+
+## PROD-L8.9E/F Focus-Aware Close Guard
+
+`hirmos close` must not claim implementation completion from a delivery-baseline session. Delivery-baseline close can only record delivery-baseline acceptance/amendment/blockage and the next governed phase/session command.

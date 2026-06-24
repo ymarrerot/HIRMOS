@@ -275,15 +275,15 @@ Mixed phase status group:
 
 If the durable phase state is missing, contradictory, or unsupported for the current command state, status must report `Status Blocked By Phase Lifecycle Conflict` and recommend exactly one safe governed command.
 
-## PROD-L4 delivery-route status reporting
+## PROD-L8.9 focus-aware status reporting
 
 `hirmos status` must make delivery routing visible without expanding the artifact surface.
 
 When a session is active, status must report:
 
-- selected Delivery Shape Decision;
+- selected Delivery Shape Decision and `session_focus`;
 - active capability route;
-- whether `delivery-design`, `phase-contracting`, `session-scope`, and `implementation-readiness` are `REQUIRED`, `NOT_APPLICABLE`, `BLOCKED`, or satisfied;
+- whether `delivery-baseline`, `phase-baseline`, `session-scope`, and `implementation-readiness` are `REQUIRED`, `NOT_APPLICABLE`, `BLOCKED`, or satisfied;
 - required authority artifacts and whether each exists, is non-placeholder, and is concordant;
 - exactly one safe next governed command.
 
@@ -303,3 +303,21 @@ For delivery-governed state, status must report:
 - whether accepted-state pointers and archive manifest concordance pass.
 
 If accepted state still points to `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` as active delivery authority, report `Status Blocked By Delivery Pointer Conflict`.
+
+
+## PROD-L8.9 focus-aware status reporting
+
+When a session is active, status must report:
+
+- `session_focus`;
+- active authority path;
+- active delivery ID/scope when applicable;
+- active phase when applicable;
+- focus-appropriate unresolved register path;
+- whether the next `hirmos continue` accepts a delivery baseline, prepares a phase/session baseline, accepts a session baseline, or advances implementation.
+
+If `session_focus = delivery_baseline`, status must not report missing `SESSION_SCOPE.md` as an error. If `session_focus` is `session_baseline`, `phase_session_baseline`, `implementation`, `correction`, or `close`, status must report whether `SESSION_SCOPE.md` is required and concordant.
+
+## PROD-L8.9E/F Checkpoint Status Reporting
+
+`hirmos status` must report the active checkpoint type, active authority, unresolved register path, baseline acceptance status, and whether phase files or implementation-unit files have been prematurely instantiated.

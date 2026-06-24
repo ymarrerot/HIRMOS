@@ -66,3 +66,17 @@ A modular unit of HIRMOS behavior contributed by an extension. Capabilities prod
 ## Entrypoint
 
 A framework file that describes how an extension or capability is activated and what it produces. Runnable entrypoints expose an execution contract with purpose, produced outputs, and terminal states.
+
+## Session Focus
+
+The active work focus recorded in `SESSION_STATE.json.session_focus`. It tells HIRMOS which authority surface is active and which artifacts are required.
+
+Examples include `minimal_session`, `session_baseline`, `delivery_baseline`, `phase_session_baseline`, `implementation`, `correction`, `close`, and `status`.
+
+## Delivery Baseline
+
+A proposed durable delivery authority prepared before phase/session implementation work. It is governed by `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` and `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`, then surfaced through `Delivery Baseline — Review or Change`.
+
+## Phase Coverage Plan
+
+The section of `DELIVERY_SCOPE.md` that maps planned phases to delivery requirements, design/engineering decisions, production-shaped gates, and exit evidence. It allows HIRMOS to verify planned phase coverage before future phase files are instantiated.

@@ -1,0 +1,40 @@
+{
+  "id": "phase-baseline",
+  "extension": "design-agent",
+  "summary": "Prepare the next phase/session baseline after delivery-baseline acceptance.",
+  "lifecycle_stage": "design",
+  "entrypoints": {
+    "default": "entrypoints/default.md"
+  },
+  "activation": {
+    "default": "conditional",
+    "triggers": [
+      "phase_baseline focus is selected",
+      "session_focus requires phase-baseline"
+    ]
+  },
+  "requires_artifacts": [
+    "_hirmos/session/SESSION_STATE.json with session_focus = phase_session_baseline",
+    "_hirmos/session/SESSION_EXECUTION.md",
+    "_hirmos/system/delivery/DELIVERY_PLAN.md",
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md with accepted/amended delivery baseline",
+    "_hirmos/system/delivery/<delivery-id>/unresolved-items.md"
+  ],
+  "produces_artifacts": [
+    "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md for the next active phase only when phase files are selected",
+    "_hirmos/session/SESSION_SCOPE.md",
+    "_hirmos/session/unresolved-items.md when session/phase items exist",
+    "_hirmos/session/SESSION_EXECUTION.md"
+  ],
+  "execution_controls": [
+    "phase-baseline checkpoint control",
+    "delivery baseline acceptance control",
+    "just-in-time phase authority control",
+    "session-scope adoption control",
+    "session unresolved-item target control"
+  ],
+  "unresolved_items": {
+    "producer": true,
+    "required_when_material": true
+  }
+}

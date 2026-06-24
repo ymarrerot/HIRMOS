@@ -1,106 +1,50 @@
 # START_CHECKPOINT_OUTPUT.md
 
-Status: governed output template.
-Purpose: govern the user-facing pause produced by `hirmos start` before implementation begins.
+Status: governed checkpoint output selector template.
+Purpose: select the correct user-facing checkpoint output after `hirmos start`, based on `SESSION_STATE.json.session_focus` and active authority.
 
-This template is not a session artifact. It governs the response shown to the user at the first implementation-readiness checkpoint.
+This template is not a session artifact. It prevents free-form checkpoint output and routes the pause to the correct governed checkpoint template.
 
-## Required heading
+## Checkpoint selection
 
-```text
-Recommended Baseline — Review or Change
-```
+| `session_focus` | Active authority | Required checkpoint template | Required heading |
+|---|---|---|---|
+| `minimal_session` | `_hirmos/session/SESSION_SCOPE.md` if bounded output authority is needed | `SESSION_BASELINE_CHECKPOINT_OUTPUT.md` | `Recommended Baseline — Review or Change` or `Session Baseline — Review or Change` |
+| `session_baseline` | `_hirmos/session/SESSION_SCOPE.md` | `SESSION_BASELINE_CHECKPOINT_OUTPUT.md` | `Session Baseline — Review or Change` |
+| `delivery_baseline` | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | `DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md` | `Delivery Baseline — Review or Change` |
+| `phase_session_baseline` | `_hirmos/session/SESSION_SCOPE.md` adopting active delivery/phase | `SESSION_BASELINE_CHECKPOINT_OUTPUT.md` | `Session Baseline — Review or Change` |
 
-## Required response shape
+## General hard rules
 
-### What HIRMOS understood
+- Do not use one checkpoint format for all focuses.
+- Do not treat delivery-level unresolved items as session-level unresolved items.
+- During `delivery_baseline`, source unresolved disclosure from `_hirmos/system/delivery/<delivery-id>/unresolved-items.md#Current Checkpoint Feed`.
+- During `session_baseline` or `phase_session_baseline`, source unresolved disclosure from `_hirmos/session/unresolved-items.md#Current Checkpoint Feed` when that artifact exists.
+- Do not create or reference concrete future `PHASE-xx.md` paths unless those files exist.
+- Do not create or reference full implementation-unit artifacts before the relevant baseline has been accepted or amended.
+- Recommend exactly one next governed command when the baseline is acceptable: `hirmos continue`.
 
-Summarize the request in plain language. Use domain language first. Avoid low-level implementation detail unless it affects scope, cost, risk, or review.
+## Required continuation semantics
 
-### Recommended scope
-
-- What this session will do:
-- What this session will not do:
-
-### Recommended delivery shape
-
-- Shape: `SINGLE_SESSION_VERTICAL_SLICE` | `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` | `MULTI_SESSION_DELIVERY` | `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`
-- Why this shape was chosen:
-- Smaller-shape safety summary:
-- Larger-shape overhead summary:
-
-### Decisions needing your action
-
-If there are no gated items, say exactly:
+For `delivery_baseline`, the output must say:
 
 ```text
-No gated decisions are blocking this baseline.
+If you run `hirmos continue`, HIRMOS will treat this delivery baseline as accepted unless you request changes first. It will then activate or amend the delivery, instantiate only the next needed phase/session authority, and pause again for Session Baseline — Review or Change before implementation begins.
 ```
 
-For each gated unresolved item from `_hirmos/session/unresolved-items.md#Current Checkpoint Feed`, include:
-
-1. `<item title or question>`
-   - Recommendation:
-   - Why this matters:
-   - Options / answer format:
-   - What happens after you answer:
-
-### Assumptions HIRMOS will carry unless changed
-
-List material non-gating assumptions from `_hirmos/session/unresolved-items.md#Current Checkpoint Feed`.
-
-For each item, include:
-
-- Assumption:
-- Why it is safe enough for now:
-- Risk:
-- Revalidation point:
-
-If there are none, say:
+For `session_baseline`, `phase_session_baseline`, and implementation-capable `minimal_session`, the output must say:
 
 ```text
-No material non-gating assumptions need user review at this checkpoint.
+If you run `hirmos continue`, HIRMOS will treat this session baseline as accepted unless you request changes first. It will then instantiate implementation-unit artifacts if needed and begin governed implementation.
 ```
 
-### Technical decisions available for review
-
-List material technical-review items from `_hirmos/session/unresolved-items.md#Current Checkpoint Feed`.
-
-For each item, include:
-
-- Decision / assumption:
-- Why it matters:
-- Where to inspect:
-- How to challenge or change it:
-
-If there are none, say:
+## Compatibility phrase for minimal/session baseline checkpoints
 
 ```text
-No material technical-review items need review at this checkpoint.
+If you run `hirmos continue`, HIRMOS will treat this recommended baseline as accepted unless you request changes first. It will then follow the focus-specific continuation semantics above.
 ```
 
-### Artifacts worth reviewing before continuing
-
-Include only artifacts that exist and contain non-placeholder content.
-
-- `_hirmos/session/SESSION_SCOPE.md` — session authority.
-- `_hirmos/session/unresolved-items.md` — complete gated, non-gating, and technical-review register.
-- `_hirmos/session/REQUIREMENTS.md` — only if created and justified.
-- `_hirmos/session/DESIGN.md` — only if created and justified.
-- `_hirmos/system/delivery/DELIVERY_PLAN.md` — only if durable delivery governance is active.
-- `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` — only if durable delivery governance is active.
-
-### What happens if you continue
-
-Say this explicitly:
-
-```text
-If you run `hirmos continue`, HIRMOS will treat this recommended baseline as accepted unless you request changes first. It will then instantiate implementation-unit artifacts if needed and begin governed implementation.
-```
-
-### How to respond
-
-Offer these options exactly, adapting item numbers to the actual output:
+## Compatibility response options for recommended/session baseline
 
 ```text
 Accept baseline
@@ -110,17 +54,4 @@ Ask for technical review summary
 Stop / do not continue
 ```
 
-## Interaction-mode density
-
-- `domain_expert`: show concise recommendations, why they matter, and clear options. Link technical details instead of expanding them by default.
-- `technical_supervisor`: include artifact paths, technical-review items, and challenge/change paths.
-- `framework_diagnostics`: include control names, item classifications, and artifact concordance notes.
-
-## Hard rules
-
-- Do not hide gated unresolved items in prose.
-- Do not summarize unresolved items from memory; source this output from `_hirmos/session/unresolved-items.md#Current Checkpoint Feed`.
-- Do not tell the user an artifact exists unless it exists and is non-placeholder.
 - Do not create or reference full implementation-unit artifacts before the session scope baseline has been accepted or amended.
-- Do not use implementation-unit previews as implementation authority.
-- Recommend exactly one next governed command when the baseline is acceptable: `hirmos continue`.

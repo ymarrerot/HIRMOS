@@ -1,7 +1,7 @@
 {
   "id": "delivery-design",
   "extension": "design-agent",
-  "summary": "Select and maintain durable delivery routing by appending/updating the delivery roadmap/register and one delivery scope when multi-session governance is required.",
+  "summary": "Maintain delivery roadmap/scope details as a subordinate responsibility of the delivery-baseline route; not the runtime route root after PROD-L8.9.",
   "lifecycle_stage": "design",
   "entrypoints": {
     "default": "entrypoints/default.md"
@@ -9,25 +9,22 @@
   "activation": {
     "default": "conditional",
     "triggers": [
-      "Delivery Shape Decision selects a durable delivery shape",
-      "Delivery Shape Decision selects MULTI_SESSION_DELIVERY",
-      "Delivery Shape Decision selects MULTI_SESSION_DELIVERY_WITH_PHASE_FILES",
-      "durable multi-session work in any project context cannot be safely governed as one session",
-      "existing durable delivery roadmap/register must be appended or reconciled",
-      "Current System State delivery pointers indicate active delivery governance"
+      "delivery-baseline route requires roadmap/register or delivery scope update",
+      "accepted delivery roadmap/register must be appended or reconciled",
+      "existing Current System State delivery pointers require delivery authority reconciliation"
     ]
   },
   "requires_artifacts": [
+    "_hirmos/session/SESSION_STATE.json with session_focus = delivery_baseline or delivery reconciliation focus",
     "_hirmos/session/SESSION_EXECUTION.md",
-    "_hirmos/session/SESSION_SCOPE.md when available",
-    "_hirmos/session/unresolved-items.md",
-    "_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md when present"
+    "_hirmos/system/delivery/DELIVERY_PLAN.md when it exists",
+    "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md when it exists"
   ],
   "produces_artifacts": [
     "_hirmos/system/delivery/DELIVERY_PLAN.md",
     "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md",
-    "_hirmos/session/SESSION_EXECUTION.md",
-    "_hirmos/session/unresolved-items.md when delivery blockers are found"
+    "_hirmos/system/delivery/<delivery-id>/unresolved-items.md when delivery-baseline blockers are found",
+    "_hirmos/session/SESSION_EXECUTION.md"
   ],
   "execution_controls": [
     "Delivery Shape Decision Gate",

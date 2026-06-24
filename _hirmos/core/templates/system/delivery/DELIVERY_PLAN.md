@@ -1,6 +1,6 @@
 # Delivery Plan
 
-Status: DRAFT | ACTIVE | COMPLETE | SUPERSEDED | BLOCKED
+Status: DRAFT | PROPOSED | READY_FOR_BASELINE_REVIEW | ACTIVE | ACCEPTED | COMPLETE | PARTIAL | SUPERSEDED | BLOCKED | DEFERRED | CANCELLED
 Last updated from session:
 
 ## Purpose
@@ -25,8 +25,10 @@ Authority flows through:
 CURRENT_SYSTEM_STATE.md
 → _hirmos/system/delivery/DELIVERY_PLAN.md
 → _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md
-→ _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when phase files are used
-→ _hirmos/session/SESSION_SCOPE.md
+→ _hirmos/system/delivery/<delivery-id>/unresolved-items.md for delivery-level unresolved items
+→ phase coverage plan in DELIVERY_SCOPE.md before phase files exist
+→ _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when instantiated after delivery-baseline acceptance
+→ _hirmos/session/SESSION_SCOPE.md when a bounded phase/session scope exists
 → implementation-units / EVIDENCE / SESSION_EXECUTION.md
 ```
 
@@ -48,11 +50,25 @@ Compatibility label: Delivery-Need Classification Source.
 - Universal triggers present:
 - If adopted from prior work, source artifact/session:
 
+
+## Delivery Baseline Rule
+
+A delivery entry may be `PROPOSED` or `READY_FOR_BASELINE_REVIEW` before the user accepts or amends the delivery baseline. In those states, the roadmap/register and delivery scope may exist, but they do not authorize phase/session implementation.
+
+Before baseline acceptance:
+
+- the delivery may have `DELIVERY_SCOPE.md`, delivery `unresolved-items.md`, and optional delivery-level `REQUIREMENTS.md` / `DESIGN.md`;
+- future phases are represented by a phase coverage plan inside `DELIVERY_SCOPE.md`;
+- concrete future `PHASE-xx.md` paths must not be referenced unless those files exist;
+- `_hirmos/session/SESSION_SCOPE.md` is not required for `session_focus = delivery_baseline`.
+
+After baseline acceptance, HIRMOS marks the delivery `ACTIVE` or accepted/amended as appropriate and instantiates the next phase/session authority just in time.
+
 ## Delivery Index
 
 | Delivery ID | Name | Status | Type | Scope file | Current/Final phase | Relationship |
 |---|---|---|---|---|---|---|
-| `<delivery-id>` | | planned / active / completed / partial / blocked / deferred / superseded / cancelled | MVP / release / hardening / migration / brownfield-change / other | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | none / `PHASE-xx` | initial / follows / supersedes / depends-on / blocks |
+| `<delivery-id>` | | proposed / ready_for_baseline_review / planned / active / accepted / completed / partial / blocked / deferred / superseded / cancelled | MVP / release / hardening / migration / brownfield-change / other | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | none / `PHASE-xx` | initial / follows / supersedes / depends-on / blocks |
 
 ## Delivery Relationships
 

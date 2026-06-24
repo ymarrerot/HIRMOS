@@ -45,15 +45,15 @@ If Design authorizes a weaker prototype, fixture, local-only, or demo-only resul
 ### Shared invariants
 
 1. Requirement inputs are source material, not requirements authority.
-2. Design owns governed requirements, system/application design, delivery structure, technical review, Session Scope, and implementation readiness.
+2. Design owns governed requirements, system/application design, delivery-baseline authority, phase/session baseline authority, technical review, Session Scope when a bounded session scope exists, and implementation readiness.
 3. Design may satisfy requirements/design/planning requests without activating Implementation.
 4. Design may route back to Understand System State when evidence is missing, stale, contradictory, or too narrow.
-5. Design may authorize Implementation only through a ready Session Scope and Implementation Readiness decision.
+5. Design may authorize Implementation only through a ready focus-specific authority chain: a ready Session Scope for single-session work, or an accepted delivery baseline plus ready phase/session scope for delivery-governed work.
 6. Interaction modes change visibility, not Design authority.
 
 ### Source input surfaces
 
-Design may inspect `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, `_hirmos/inputs/prototypes/`, and `_hirmos/inputs/references/`. These files are raw source material only and must be reconciled through `DESIGN.md` source matrix, `DESIGN.md` source matrix, `REQUIREMENTS.md`, `SESSION_SCOPE.md`, or `unresolved-items.md` before they become governed authority.
+Design may inspect `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, `_hirmos/inputs/prototypes/`, and `_hirmos/inputs/references/`. These files are raw source material only and must be reconciled through the focus-appropriate `REQUIREMENTS.md`, `DESIGN.md`, `DELIVERY_SCOPE.md`, `SESSION_SCOPE.md`, or unresolved-item register before they become governed authority.
 
 ### Operating sequence
 
@@ -63,21 +63,35 @@ Design may inspect `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, `_hi
 4. Produce system/application design from governed requirements plus system-state evidence.
 5. Decide the smallest sufficient governed delivery shape using `DELIVERY_GOVERNANCE.md`; do not equate broad greenfield or brownfield work with automatic multi-session delivery.
 6. Produce technical review material when assumptions, risks, or reviewer inspection paths exist.
-7. Produce a Session Scope and Implementation Readiness before Implementation can begin.
-8. Record Design capability results, route-backs, unresolved-item producer outcomes, and readiness gates in `SESSION_EXECUTION.md`.
+7. If `session_focus = delivery_baseline`, produce delivery-baseline authority and stop at Delivery Baseline — Review or Change; do not create `SESSION_SCOPE.md`, phase files, or implementation units by default.
+8. If `session_focus = phase_session_baseline`, instantiate only the next needed phase file, create/narrow `SESSION_SCOPE.md`, and stop at Session Baseline — Review or Change before implementation.
+9. Produce Implementation Readiness only after the focus-specific baseline has been accepted or amended.
+10. Record Design capability results, route-backs, unresolved-item producer outcomes, and readiness gates in `SESSION_EXECUTION.md`.
 
-### Durable Delivery / Phase Capability Rewire
+### PROD-L8.9 focus-aware delivery routing
 
-This section now implements Delivery Shape Capability Routing.
+This section implements focus-aware Delivery Shape Capability Routing.
 
-Use `_hirmos/core/protocol/DELIVERY_GOVERNANCE.md` to select the smallest sufficient governed delivery shape.
+Use `_hirmos/core/protocol/DELIVERY_GOVERNANCE.md` and `_hirmos/core/protocol/CAPABILITY_ROUTING.md` to select the smallest sufficient governed delivery shape and active `session_focus`.
 
 ```text
-SINGLE_SESSION_VERTICAL_SLICE → session-scope → implementation-readiness
-SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS → session-scope → implementation-readiness
-MULTI_SESSION_DELIVERY → delivery-design → session-scope → implementation-readiness
-MULTI_SESSION_DELIVERY_WITH_PHASE_FILES → delivery-design → phase-contracting → session-scope → implementation-readiness
+SINGLE_SESSION_MINIMAL / minimal_session
+  session-scope only when bounded output authority is needed
+
+SINGLE_SESSION_VERTICAL_SLICE / session_baseline
+  session-scope → implementation-readiness
+
+SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS / session_baseline
+  session-scope → implementation-readiness
+
+DELIVERY_BASELINE / delivery_baseline
+  delivery-baseline
+
+DELIVERY_PHASE_SESSION / phase_session_baseline
+  phase-baseline → session-scope → implementation-readiness
 ```
+
+For durable delivery work, Design must first produce a delivery baseline under `_hirmos/system/delivery/<delivery-id>/` and stop at `Delivery Baseline — Review or Change`. It must not create `SESSION_SCOPE.md`, `PHASE-xx.md`, or implementation units before delivery-baseline acceptance by default. After acceptance or amendment, Design may instantiate the next needed phase file and create the bounded phase/session `SESSION_SCOPE.md`.
 
 Design must explain why the selected shape is safer than smaller alternatives and why larger alternatives would add unnecessary governance overhead. For a single-session shape, the Session Scope must record affirmative bounded-scope safety evidence.
 
@@ -100,7 +114,7 @@ Design must explain why the selected shape is safer than smaller alternatives an
 
 ### Unresolved-item producer discipline
 
-Every capability in this extension is an unresolved-item producer and MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`. Each capability must record exactly one producer outcome in `_hirmos/session/unresolved-items.md`: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`. When items exist, preserve the protocol fields including current status, downstream impact, and revalidation point.
+Every capability in this extension that can discover uncertainty is an unresolved-item producer and MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`. Each such capability must record exactly one producer outcome in the focus-appropriate unresolved register: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`. For `delivery_baseline`, the target is `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`; for session/phase/implementation focus, the target is `_hirmos/session/unresolved-items.md`. When items exist, preserve the protocol fields including current status, downstream impact, and revalidation point.
 
 ### Runtime integration and production-readiness design discipline
 
@@ -120,27 +134,36 @@ When local setup or role-workflow behavior affects readiness, Design must requir
 
 ### Requirements design authority
 
-Material requirements must be normalized into `_hirmos/session/REQUIREMENTS.md` before Design or Delivery Plan mapping relies on them.
+Material requirements must be normalized into the focus-appropriate `REQUIREMENTS.md`: delivery-level requirements under `_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md` during delivery baseline, and session-level requirements under `_hirmos/session/REQUIREMENTS.md` only when a bounded session scope justifies separate requirements authority.
 
 ### Cross-run synthesis responsibilities
 
-When prior runs, accepted state, or carry-forward items affect scope, Design must reconcile them into governed requirements, Design, Session Scope, or unresolved items instead of relying on chat memory.
+When prior runs, accepted state, or carry-forward items affect scope, Design must reconcile them into focus-appropriate governed requirements, design, Delivery Scope, Session Scope, or unresolved items instead of relying on chat memory.
 
 
-A Durable Delivery Plan remains the durable authority for multi-session delivery shapes.
-When the selected delivery shape uses phase files, Design uses durable `PHASE-xx.md` phase scopes.
+A Durable Delivery Plan remains the durable roadmap/register for multi-session delivery shapes.
 
-## PROD-L4 delivery route selection
+## PROD-L8.9 command-selected focus route
 
-The design-agent default method must select capability routing from the Delivery Shape Decision and record the result in `SESSION_EXECUTION.md`.
+The design-agent default method must select capability routing from `SESSION_STATE.json.session_focus`, the Delivery Shape Decision, and the active authority, then record the result in `SESSION_EXECUTION.md`.
 
-Canonical routes:
+Canonical focus routes:
 
 ```text
-SINGLE_SESSION_VERTICAL_SLICE → session-scope → implementation-readiness
-SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS → session-scope → implementation-readiness
-MULTI_SESSION_DELIVERY → delivery-design → session-scope → implementation-readiness
-MULTI_SESSION_DELIVERY_WITH_PHASE_FILES → delivery-design → phase-contracting → session-scope → implementation-readiness
+SINGLE_SESSION_MINIMAL / minimal_session
+  session-scope only when bounded output authority is needed
+
+SINGLE_SESSION_VERTICAL_SLICE / session_baseline
+  session-scope → implementation-readiness
+
+SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS / session_baseline
+  session-scope → implementation-readiness
+
+DELIVERY_BASELINE / delivery_baseline
+  delivery-baseline
+
+DELIVERY_PHASE_SESSION / phase_session_baseline
+  phase-baseline → session-scope → implementation-readiness
 ```
 
-The method must not activate `delivery-design` for safe single-session work, must not activate `phase-contracting` unless phase files are justified, and must not allow `implementation-readiness` to pass until the selected route's authority chain is satisfied.
+The method must not activate delivery-baseline for safe single-session work, must not activate phase-baseline until the delivery baseline is accepted or amended, and must not allow implementation-readiness to pass until the selected focus-specific authority chain is satisfied.

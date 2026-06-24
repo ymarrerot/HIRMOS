@@ -1,0 +1,144 @@
+# DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md
+
+Status: governed output template.
+Purpose: govern the user-facing pause produced when `hirmos start` selects `session_focus = delivery_baseline` before phase/session authority or implementation begins.
+
+This template is not a delivery artifact and not a session artifact. It governs the response shown to the user while the active authority is `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`.
+
+## Required heading
+
+```text
+Delivery Baseline — Review or Change
+```
+
+## Required response shape
+
+### What HIRMOS understood
+
+Summarize the delivery/release/change requested in plain language. Use domain language first. Avoid low-level implementation detail unless it affects scope, cost, risk, phase coverage, or review.
+
+### Recommended delivery baseline
+
+- Delivery ID:
+- Delivery status: `PROPOSED` | `READY_FOR_BASELINE_REVIEW`
+- Delivery authority: `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
+- Delivery roadmap/register: `_hirmos/system/delivery/DELIVERY_PLAN.md`
+- What this delivery will produce:
+- What this delivery will not produce:
+
+### Recommended delivery shape
+
+- Shape: `DELIVERY_BASELINE`
+- Why durable delivery governance is needed:
+- Why this is not safe as one session:
+- Why phase files are not instantiated yet:
+
+### Delivery phase coverage
+
+Summarize the phase coverage plan from `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md#Phase Plan / Phase Coverage Plan`.
+
+Required statements:
+
+- All in-scope delivery requirements have planned phase coverage: YES | NO | BLOCKED
+- All delivery design/engineering decisions have planned phase coverage: YES | NO | BLOCKED
+- All production-shaped gates have delivery-level or phase-level planned evidence: YES | NO | BLOCKED
+- Future phase files are instantiated now: NO, unless explicitly justified
+
+If any answer is NO or BLOCKED, surface the blocking delivery unresolved item.
+
+### Decisions needing your action
+
+If there are no gated delivery items, say exactly:
+
+```text
+No gated delivery decisions are blocking this baseline.
+```
+
+For each gated item from `_hirmos/system/delivery/<delivery-id>/unresolved-items.md#Current Checkpoint Feed`, include:
+
+1. `<item title or question>`
+   - Recommendation:
+   - Why this matters:
+   - Options / answer format:
+   - What happens after you answer:
+
+### Assumptions HIRMOS will carry unless changed
+
+List material non-gating delivery assumptions from `_hirmos/system/delivery/<delivery-id>/unresolved-items.md#Current Checkpoint Feed`.
+
+For each item, include:
+
+- Assumption:
+- Why it is safe enough for now:
+- Risk:
+- Revalidation point:
+
+If there are none, say:
+
+```text
+No material non-gating delivery assumptions need user review at this checkpoint.
+```
+
+### Technical decisions available for review
+
+List material technical-review delivery items from `_hirmos/system/delivery/<delivery-id>/unresolved-items.md#Current Checkpoint Feed`.
+
+For each item, include:
+
+- Decision / assumption:
+- Why it matters:
+- Where to inspect:
+- How to challenge or change it:
+
+If there are none, say:
+
+```text
+No material technical-review delivery items need review at this checkpoint.
+```
+
+### Artifacts worth reviewing before continuing
+
+Include only artifacts that exist and contain non-placeholder content.
+
+- `_hirmos/system/delivery/DELIVERY_PLAN.md` — delivery roadmap/register.
+- `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` — complete delivery authority and phase coverage plan.
+- `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` — complete delivery unresolved register.
+- `_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md` — only if created and justified.
+- `_hirmos/system/delivery/<delivery-id>/DESIGN.md` — only if created and justified.
+
+Do not list `_hirmos/session/SESSION_SCOPE.md` unless a bounded phase/session scope already exists.
+
+### What happens if you continue
+
+Say this explicitly:
+
+```text
+If you run `hirmos continue`, HIRMOS will treat this delivery baseline as accepted unless you request changes first. It will then activate or amend the delivery, instantiate only the next needed phase/session authority, and pause again for Session Baseline — Review or Change before implementation begins.
+```
+
+### How to respond
+
+Offer these options exactly, adapting item numbers to the actual output:
+
+```text
+Accept delivery baseline
+Change 1: ...
+Mark item 2 uncertain
+Ask for technical review summary
+Stop / do not continue
+```
+
+## Interaction-mode density
+
+- `domain_expert`: show concise recommendations, phase coverage, why decisions matter, and clear options. Link technical details instead of expanding them by default.
+- `technical_supervisor`: include artifact paths, technical-review items, phase coverage assignments, and challenge/change paths.
+- `framework_diagnostics`: include `session_focus`, capability route, item classifications, artifact concordance notes, and validation status.
+
+## Hard rules
+
+- Do not hide gated delivery unresolved items in prose.
+- Do not summarize delivery unresolved items from memory; source this output from `_hirmos/system/delivery/<delivery-id>/unresolved-items.md#Current Checkpoint Feed`.
+- Do not create or reference `_hirmos/session/SESSION_SCOPE.md` before a bounded phase/session scope exists.
+- Do not create or reference concrete future `PHASE-xx.md` paths unless those files exist.
+- Do not instantiate implementation-unit artifacts from the delivery baseline checkpoint.
+- Recommend exactly one next governed command when the delivery baseline is acceptable: `hirmos continue`.
