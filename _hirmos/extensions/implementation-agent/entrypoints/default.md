@@ -119,3 +119,7 @@ Implementation close handoff must identify accepted outcomes, rejected/not-appli
 ### Cross-run implementation lesson application
 
 Apply accepted prior run lessons and carry-forward items only when they are present in accepted-state artifacts or active session artifacts, not from memory alone.
+
+## Implementation-Unit Timing Rule
+
+When implementation-unit mode is active, implementation-unit artifacts are execution authorities. Create them after session baseline acceptance and before material code changes begin. Do not create them only as retrospective summaries after implementation unless a correction record explicitly reconciles the deviation.

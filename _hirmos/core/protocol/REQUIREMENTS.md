@@ -207,3 +207,23 @@ Close may not claim complete requirements coverage while any material requiremen
 ## On-demand synthesis
 
 A complete current requirements artifact may be generated on demand from `CURRENT_SYSTEM_STATE.md`, delivery/session/archive requirement sources, delivery/session scopes, and close records. That generated synthesis is not source authority unless explicitly adopted by a governed future workflow.
+
+
+## PROD-L8.18 Source Authority Location Matrix
+
+HIRMOS uses source-authority location to prevent requirements/design/scope duplication. The matrix below is the default authority map.
+
+| Concern | Default authority | Conditional detailed authority | Must not be default | Close/update behavior |
+|---|---|---|---|---|
+| Accepted current navigation | `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` | none by default | root accepted-state `REQUIREMENTS.md`, `DESIGN.md`, `SYSTEM_SCOPE.md` | update pointers, Work History Ledger, Source Artifact Index, and material summary only |
+| Delivery scope | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | delivery `REQUIREMENTS.md` / `DESIGN.md` only when justified | session requirements/design during `delivery_baseline` | keep delivery authority current; close records source pointers |
+| Phase scope | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` plus adopted `SESSION_SCOPE.md` | none unless explicitly justified by delivery/session authority | future phase files before acceptance | phase status/freshness updated during governed transitions |
+| Session scope | `_hirmos/session/SESSION_SCOPE.md` | session `REQUIREMENTS.md` / `DESIGN.md` only when justified | root accepted-state requirements/design | archive source authority at close; record pointer in `CURRENT_SYSTEM_STATE.md` |
+| Requirements | active delivery/session scope by default | delivery/session `REQUIREMENTS.md` when normalized catalog is necessary | default accepted-state `REQUIREMENTS.md` | update coverage in source authority; do not merge into root accepted state by default |
+| Design | active delivery/session scope by default | delivery/session `DESIGN.md` when independent design authority is necessary | default accepted-state `DESIGN.md` | update source authority and evidence; record pointer rather than duplicating design |
+| Unresolved items | delivery or session unresolved register according to focus | carry-forward only for accepted deferrals/blocked items | unresolved details hidden only in narrative text | resolved/deferred/blocked status must reconcile before close success |
+| Evidence | session `EVIDENCE.md` and IU evidence | stack-specific evidence commands when needed | accepted-state evidence summaries as source authority | current evidence truth must be reconciled before completion/close claims |
+
+Selection rule: use the narrowest authority that can safely own the concern. Escalate to a separate `REQUIREMENTS.md` or `DESIGN.md` only when the active scope artifact would become ambiguous, oversized, or unable to provide traceable coverage.
+
+On-demand synthesis is allowed, but a generated requirements/design/system-scope synthesis is not source authority unless a future governed workflow explicitly adopts it.

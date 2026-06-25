@@ -83,7 +83,7 @@ Use `LOCAL_TECHNICAL_SETUP_AND_ROLE_WORKFLOW_SMOKE_CHECKS.md` for local runtime,
 
 ### Current-state method responsibilities
 
-During Understand System State, read `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` first when it exists. During Update System State, merge accepted outcomes into `CURRENT_SYSTEM_STATE.md`, update current-state metadata, `CARRY_FORWARD.md`, and `DECISION_LOG.md`, and keep MVP completion, runtime readiness, production readiness, provider readiness, compliance readiness, and go-live approval as separate tracks.
+During Understand System State, read `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` first when it exists. During Update System State, merge accepted outcomes into `CURRENT_SYSTEM_STATE.md`, update current-state metadata, `CARRY_FORWARD.md`, and conditional `DECISION_LOG.md` when active, and keep MVP completion, runtime readiness, production readiness, provider readiness, compliance readiness, and go-live approval as separate tracks.
 
 ### Current-system-state-first understanding
 
@@ -91,7 +91,7 @@ Record the read status, contradictions, confidence, and Design handoff for `CURR
 
 ### Accepted-state invariant and canonical-value responsibilities
 
-Preserve accepted-state artifact roles: `CURRENT_SYSTEM_STATE.md` is current truth; latest-close metadata is navigation; `CARRY_FORWARD.md` is continuation control; `DECISION_LOG.md` is durable decision history. Preserve accepted-state invariant and canonical-value responsibilities when reading or updating accepted state.
+Preserve accepted-state artifact roles: `CURRENT_SYSTEM_STATE.md` is current truth; latest-close metadata is navigation; `CARRY_FORWARD.md` is continuation control; conditional `DECISION_LOG.md` is durable decision history when explicit governance is active. Preserve accepted-state invariant and canonical-value responsibilities when reading or updating accepted state.
 
 ### Update System State close-time responsibilities
 

@@ -16,7 +16,7 @@ These are the supporting artifacts for durable current-state management.
 |---|---|---|
 | `CURRENT_SYSTEM_STATE.md` | accepted-state navigation authority | session log or backlog |
 | `CARRY_FORWARD.md` | unresolved/future-session obligations | accepted feature list |
-| `DECISION_LOG.md` | durable accepted/rejected/superseded decisions | full design doc |
+| `DECISION_LOG.md` | conditional durable accepted/rejected/superseded decisions when explicit governance is active | full design doc |
 | session archives | historical evidence | current truth substitute |
 
 ## Close rule
@@ -35,7 +35,7 @@ HIRMOS must read `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` before 
 Supporting files have narrower roles:
 
 - `CARRY_FORWARD.md` preserves active unresolved and future-session obligations.
-- `DECISION_LOG.md` preserves accepted, rejected, and superseded decisions.
+- `DECISION_LOG.md` is conditional and preserves accepted, rejected, and superseded decisions only when explicit decision-log governance is active.
 - session archives preserve history/evidence only.
 
 Accepted-state navigation and latest-close metadata now live inside `CURRENT_SYSTEM_STATE.md`, not a separate index file.
@@ -62,3 +62,7 @@ Future sessions must inspect these pointers before selecting a new delivery shap
 ## Delivery phase adoption pointer discipline
 
 When delivery governance is active, Current System State pointers identify the durable Delivery Plan and active Phase. A session may implement only after `SESSION_SCOPE.md` adopts exactly one durable `PHASE-xx.md` and maps that phase scope into authorized session work. Future sessions must treat the Current System State pointer as a discovery aid, not as a replacement for directly reading the Delivery Plan and Phase file.
+
+## Source-Complete, Not Content-Complete
+
+`CURRENT_SYSTEM_STATE.md` should remain source-complete, not content-complete. It must preserve the navigation spine and source pointers needed to find authoritative requirements/design/scope/evidence/history, but it should not duplicate all of that content into accepted state.

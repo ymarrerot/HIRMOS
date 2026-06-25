@@ -117,7 +117,7 @@ Do not list `_hirmos/session/SESSION_SCOPE.md` unless a bounded phase/session sc
 Say this explicitly:
 
 ```text
-If you run `hirmos continue`, HIRMOS will treat this delivery baseline as accepted unless you request changes first. It will then activate or amend the delivery, instantiate only the next needed phase/session authority, and pause again for Session Baseline — Review or Change before implementation begins.
+If there are no gated delivery decisions requiring user input, `hirmos continue` will treat this delivery baseline as accepted unless you request changes first; it will then activate or amend the delivery, instantiate only the next needed phase/session authority, and pause again for Session Baseline — Review or Change before implementation begins. If gated decisions are listed as pending user input and not reflected in delivery authority, you must either answer them, explicitly adopt the surfaced recommendation, or ask HIRMOS to reclassify them before `hirmos continue` may accept the baseline.
 ```
 
 ### How to respond

@@ -345,3 +345,7 @@ When reporting delivery-baseline state, use status-aware delivery labels. Before
 ## PROD-L8.14 accepted-state navigation status rule
 
 `hirmos status` must report from `CURRENT_SYSTEM_STATE.md` Current Governance Context, Work History Ledger, Source Artifact Index, active delivery/phase/session pointers, and latest accepted close metadata. Status output must distinguish concise accepted-state summaries from source authorities and must not claim root accepted-state `REQUIREMENTS.md` or `DESIGN.md` exists by default.
+
+## Current-State Navigation Status Contract
+
+`hirmos status` must report whether the Current-State-First Navigation Spine is fresh enough for the next governed command: current governance context, latest accepted close, Work History Ledger, Source Artifact Index, active carry-forward pointer, and next governed command. When active pointers are stale or contradictory, status must recommend reconciliation rather than implementation or close.

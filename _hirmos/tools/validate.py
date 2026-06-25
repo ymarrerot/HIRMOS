@@ -89,7 +89,6 @@ required = [
     'session/implementation-units/.gitkeep',
     'system/accepted-state/CURRENT_SYSTEM_STATE.md',
     'system/accepted-state/CARRY_FORWARD.md',
-    'system/accepted-state/DECISION_LOG.md',
     'system/history/sessions/.gitkeep',
     'system/delivery/.gitkeep',
     'docs/README.md',
@@ -223,7 +222,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.1.0'
+expected_version = '1.1.1'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -2213,8 +2212,7 @@ require_phrases('durable current-system-state merge and accepted-state invariant
     'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Product State', 'Delivery State', 'Runtime Integration State', 'Production Readiness State', 'Work History Ledger', 'Source Artifact Index'],
     'system/accepted-state/CURRENT_SYSTEM_STATE.md': ['accepted-state navigation authority', 'Production Readiness State', 'Accepted-State Artifact Invariants:', 'Work History Ledger', 'Source Artifact Index'],
     'system/accepted-state/CARRY_FORWARD.md': ['Active Carry-Forward Items', 'Active-Only Rule', 'Do not maintain a closed carry-forward table', 'Accepted-State Artifact Invariants:'],
-    'system/accepted-state/DECISION_LOG.md': ['Active Accepted Decisions', 'Superseded Decisions', 'Accepted-State Artifact Invariants:'],
-    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['CURRENT_SYSTEM_STATE.md', 'DECISION_LOG.md', 'accepted-state invariant'],
+    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['CURRENT_SYSTEM_STATE.md', 'conditional `DECISION_LOG.md`', 'accepted-state invariant'],
     'core/templates/session/SESSION_EXECUTION.md': ['Current-State Execution Controls', 'Invariant / Canonical Value Controls'],
     'core/commands/close.md': ['Durable current-system-state merge invariant', 'accepted-state navigation and latest-close metadata'],
     'core/commands/status.md': ['accepted current-state status', 'status invariant and canonical-value reporting'],
@@ -2222,7 +2220,7 @@ require_phrases('durable current-system-state merge and accepted-state invariant
     'docs/2-methodology/durable-current-system-state.md': ['Durable Current System State', 'supporting artifacts', 'Accepted-state invariants and canonical values'],
 })
 
-for rel in ['system/accepted-state/CURRENT_SYSTEM_STATE.md', 'system/accepted-state/CARRY_FORWARD.md', 'system/accepted-state/DECISION_LOG.md', 'core/templates/system/CURRENT_SYSTEM_STATE.md']:
+for rel in ['system/accepted-state/CURRENT_SYSTEM_STATE.md', 'system/accepted-state/CARRY_FORWARD.md', 'core/templates/system/CURRENT_SYSTEM_STATE.md']:
     body = (root/rel).read_text()
     for phrase in ['Accepted-State Artifact Invariants:', 'Use canonical runtime posture values', 'Use canonical evidence states']:
         if phrase.lower() not in body.lower():
@@ -2244,6 +2242,80 @@ for rel in ['system/accepted-state/CARRY_FORWARD.md', 'core/protocol/CURRENT_SYS
             print(f'FAIL: carry-forward active-only rule: {rel} missing required phrase: {phrase}')
             sys.exit(1)
 print('PASS: HIRMOS accepted-state simplification static check')
+
+
+
+
+# PROD-L8.17 protocol ownership and validator minimality checks.
+# These checks protect the simplification decision, not historical wording.
+for rel, phrases in {
+    'core/protocol/COMMANDS.md': [
+        'Protocol ownership matrix',
+        'one canonical owner per concern',
+        'Do not copy full rules into multiple protocol files',
+    ],
+    'core/protocol/VALIDATION_AND_EVIDENCE.md': [
+        'Validator minimality classes',
+        'Authority-safety',
+        'Freshness/concordance',
+        'Structural/status',
+        'Exact wording',
+        'Release-marker / plan-marker',
+    ],
+    'docs/reference/runtime-surfaces.md': [
+        'Protocol ownership and minimality',
+        'fewer duplicate rules',
+    ],
+    'docs/3-extend-contribute/validation.md': [
+        'Validator minimality guidance',
+        'Avoid exact-prose checks unless the wording itself prevents an authority-safety failure',
+    ],
+}.items():
+    body = (root / rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'protocol ownership / validator minimality: {rel} missing structural phrase: {phrase}')
+print('PASS: HIRMOS protocol ownership and validator minimality static check')
+
+
+# PROD-L8.18 capability taxonomy and source authority matrix checks.
+for rel, phrases in {
+    'core/protocol/CAPABILITY_ROUTING.md': [
+        'PROD-L8.18 Capability Taxonomy',
+        'Canonical capability families',
+        'Current-state understanding',
+        'Delivery and phase shaping',
+        'Session scope and design',
+        'Implementation execution and review',
+        'Accepted-state update',
+        'Capability manifests remain the dispatch source of truth',
+    ],
+    'docs/3-extend-contribute/capabilities-and-entrypoints.md': [
+        'Capability taxonomy and aliases',
+        'stable dispatch identifiers',
+        'documentation aliases only',
+    ],
+    'core/protocol/REQUIREMENTS.md': [
+        'PROD-L8.18 Source Authority Location Matrix',
+        'use the narrowest authority that can safely own the concern',
+        'generated requirements/design/system-scope synthesis is not source authority',
+    ],
+    'docs/2-methodology/artifact-authority.md': [
+        'Source authority location matrix',
+        'CURRENT_SYSTEM_STATE.md is the accepted-state navigation authority',
+        'Use the narrowest source authority that can safely own the concern',
+    ],
+    'docs/reference/runtime-surfaces.md': [
+        'Capability taxonomy and source authority minimality',
+        'capability families',
+        'Source authority is kept at the narrowest safe level',
+    ],
+}.items():
+    body = (root / rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'capability taxonomy / source authority matrix: {rel} missing structural phrase: {phrase}')
+print('PASS: HIRMOS PROD-L8.18 capability taxonomy and source authority matrix static check')
 
 
 session_dir = root / 'session'
@@ -2670,7 +2742,7 @@ css_body = (root/'system/accepted-state/CURRENT_SYSTEM_STATE.md').read_text(erro
 for phrase in ['accepted-state navigation authority', 'Work History Ledger', 'Source Artifact Index', 'concise navigation summary only', 'not the complete requirements, design, scope']:
     if phrase.lower() not in css_body.lower():
         fail(f'PROD-L8.14 CURRENT_SYSTEM_STATE.md missing navigation/ledger phrase: {phrase}')
-for forbidden in ['system/accepted-state/REQUIREMENTS.md', 'system/accepted-state/DESIGN.md', 'system/accepted-state/SYSTEM_SCOPE.md', 'system/accepted-state/DECISIONS.md', 'system/accepted-state/ACCEPTED_CHANGES.md']:
+for forbidden in ['system/accepted-state/REQUIREMENTS.md', 'system/accepted-state/DESIGN.md', 'system/accepted-state/SYSTEM_SCOPE.md', 'system/accepted-state/DECISIONS.md', 'system/accepted-state/ACCEPTED_CHANGES.md', 'system/accepted-state/DECISION_LOG.md']:
     path = root / forbidden
     if path.exists():
         body = path.read_text(errors='ignore')
@@ -2682,6 +2754,36 @@ for rel in ['core/protocol/CURRENT_SYSTEM_STATE.md', 'core/protocol/CLOSE_ARCHIV
         if phrase.lower() not in body.lower():
             fail(f'PROD-L8.14 {rel} missing {phrase}')
 print('PASS: HIRMOS PROD-L8.14 accepted-state navigation authority static check')
+
+
+# PROD-L8.15 current-state-first source reading and runtime freshness hardening checks
+for rel, phrases in {
+    'core/authority/LIFECYCLE.md': ['Current-State-First Source Reading Discipline', 'CURRENT_SYSTEM_STATE.md` first', 'source-complete, not content-complete'],
+    'core/protocol/CURRENT_SYSTEM_STATE.md': ['Current-State-First Navigation Spine', 'Transition Updates vs Close Updates', 'Source Reading Contract for Future Sessions'],
+    'core/commands/start.md': ['Current-State-First Source Reading Contract'],
+    'core/commands/continue.md': ['Current-State-First Source Reading Gate', 'Runtime Freshness Gate', 'Implementation-Unit Instantiation Timing'],
+    'core/commands/status.md': ['Current-State Navigation Status Contract'],
+    'core/templates/session/SESSION_EXECUTION.md': ['Current-State Source Reading Record', 'Runtime Freshness Reconciliation Record', 'Implementation-Unit Instantiation Timing Record'],
+    'core/templates/session/SESSION_SCOPE.md': ['Implementation Shape Preview Reconciliation'],
+    'core/templates/system/delivery/phases/PHASE.md': ['Phase Lifecycle Freshness Rule'],
+    'core/templates/session/EVIDENCE.md': ['Evidence Claim Reconciliation Freshness'],
+    'core/protocol/UNRESOLVED_ITEMS.md': ['Gated Item Continue Semantics'],
+    'core/authority/ARTIFACT_MODEL.md': ['Reuse-First Complexity Control'],
+}.items():
+    body = (root/rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.15 {rel} missing hardening phrase: {phrase}')
+
+if (root/'system/accepted-state/DECISION_LOG.md').exists():
+    decision_log_body = (root/'system/accepted-state/DECISION_LOG.md').read_text(errors='ignore')
+    if 'Explicit decision-log governance: ACTIVE' not in decision_log_body and 'Explicit accepted-state artifact governance: ACTIVE' not in decision_log_body:
+        fail('PROD-L8.15 DECISION_LOG.md must be conditional; default baseline must not include it without explicit governance activation')
+
+if 'pending user input' in (root/'core/templates/checkpoints/DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md').read_text(errors='ignore').lower() and 'explicitly adopt the surfaced recommendation' not in (root/'core/templates/checkpoints/DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md').read_text(errors='ignore'):
+    fail('PROD-L8.15 delivery checkpoint missing gated item adoption/blocking semantics')
+
+print('PASS: HIRMOS PROD-L8.15 current-state source reading and runtime freshness static check')
 
 
 

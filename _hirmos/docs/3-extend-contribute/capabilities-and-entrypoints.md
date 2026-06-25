@@ -81,6 +81,23 @@ The canonical integration registry/templates live in the framework payload under
 
 This matters because HIRMOS must remain installable and inspectable as a framework payload, not as hidden CLI internals.
 
+
+
+## Capability taxonomy and aliases
+
+HIRMOS capability names are stable dispatch identifiers. Contributors should discuss capabilities through families before creating new capability IDs.
+
+Canonical families:
+
+- current-state understanding;
+- delivery and phase shaping;
+- session scope and design;
+- implementation execution and review;
+- accepted-state update.
+
+The family names are documentation aliases only. They do not replace extension manifests or capability manifests. Before adding a capability, first determine whether an existing capability entrypoint can safely own the responsibility with a smaller update.
+
+
 ## Contribution checklist
 
 When adding or changing an extension or capability:

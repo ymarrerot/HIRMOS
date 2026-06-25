@@ -61,3 +61,9 @@ From the public repository perspective, CLI behavior should be documented by wha
 Validation failures should be treated as framework integrity failures, not cosmetic warnings.
 
 Do not patch around a failing validator by weakening the invariant unless the invariant itself has been explicitly replaced by a better one.
+
+## Validator minimality guidance
+
+Prefer validator checks that protect authority safety, freshness, concordance, legal state transitions, required paths, and required status fields. Avoid exact-prose checks unless the wording itself prevents an authority-safety failure.
+
+When a wording check is needed, phrase the invariant in structural terms where possible. For example, a delivery with `READY_FOR_BASELINE_REVIEW` must not be represented as accepted/active; the validator should check the delivery status and conflicting active labels, not require a single exact sentence.

@@ -167,7 +167,7 @@ When HIRMOS encounters shorthand, prose labels, or accepted-state decisions in a
 | `NOT_IMPLEMENTED`, `deferred`, `future` | Use `NOT_CLAIMED`, `NOT_RUN`, or `BLOCKED` according to whether a claim was made and whether scope is blocked; record carry-forward separately. |
 | `PARTIAL`, `PARTIAL_PASS`, `works`, `done` | Translate to the strongest supported canonical evidence value and downgrade unsupported parts. |
 
-Generated artifacts that contain material claim tables must include a canonical-value check or state that the claim is not applicable. If noncanonical evidence values remain in session artifacts, `CURRENT_SYSTEM_STATE.md`, `CURRENT_SYSTEM_STATE.md` latest-close metadata, `CARRY_FORWARD.md`, or `DECISION_LOG.md`, Update System State is blocked until they are translated or explicitly marked as historical/prose notes outside evidence/status fields.
+Generated artifacts that contain material claim tables must include a canonical-value check or state that the claim is not applicable. If noncanonical evidence values remain in session artifacts, `CURRENT_SYSTEM_STATE.md`, `CURRENT_SYSTEM_STATE.md` latest-close metadata, `CARRY_FORWARD.md`, or conditional `DECISION_LOG.md`, Update System State is blocked until they are translated or explicitly marked as historical/prose notes outside evidence/status fields.
 
 Firm rule: do not invent new evidence states during a run. Add nuance in rationale/notes, not in the status value.
 

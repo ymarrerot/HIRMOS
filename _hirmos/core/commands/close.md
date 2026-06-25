@@ -223,10 +223,10 @@ Required behavior:
 1. Read existing `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`.
 2. Classify material outcomes in `SESSION_SCOPE.md` close verification close-verification record as accepted, superseded, rejected / not applied, evidence-only, carry-forward, or blocked.
 3. Merge accepted and superseded truth into `CURRENT_SYSTEM_STATE.md`.
-4. Update `DECISION_LOG.md` for durable decisions.
+4. Update `DECISION_LOG.md` for durable decisions only when explicit decision-log governance is active; otherwise record source pointers in `CURRENT_SYSTEM_STATE.md`.
 5. Update `CARRY_FORWARD.md` for unresolved or future-session obligations.
 6. Update `CURRENT_SYSTEM_STATE.md` accepted-state navigation and latest-close metadata in the same file.
-7. Preserve accepted-state invariant blocks in `CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, and `DECISION_LOG.md`.
+7. Preserve accepted-state invariant blocks in `CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, and conditional `DECISION_LOG.md` when active.
 
 Do not claim close success if `CURRENT_SYSTEM_STATE.md` was not updated or explicitly verified as unchanged.
 
@@ -466,3 +466,7 @@ When reporting delivery-baseline state, use status-aware delivery labels. Before
 ## PROD-L8.14 source-artifact traceability close rule
 
 `hirmos close` must update `CURRENT_SYSTEM_STATE.md` with a Work History Ledger row and Source Artifact Index changes for every governed accepted, deferred, blocked, cancelled, or superseded work outcome. Close must not copy detailed delivery/session requirements, design, or scope content into default root accepted-state artifacts. The accepted-state summary is concise navigation only; delivery/session/archive artifacts remain source authority.
+
+## Source Traceability Close Gate
+
+Before normal close, HIRMOS must verify that every accepted outcome has a discoverable source authority through `CURRENT_SYSTEM_STATE.md` Work History Ledger and Source Artifact Index. Close must not merge detailed requirements/design/scope into root accepted-state artifacts by default. It must register source pointers and accepted outcomes, not duplicate source content.

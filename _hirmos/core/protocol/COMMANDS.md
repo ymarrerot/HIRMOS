@@ -291,3 +291,25 @@ During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `
 ## PROD-L8.13 Delivery Review Wording
 
 When reporting delivery-baseline state, use status-aware delivery labels. Before baseline acceptance, use Candidate Delivery, Proposed Delivery, or Delivery Under Baseline Review. Use Active Delivery only after the baseline has been accepted/amended and the delivery is in a post-acceptance state. Explain routing from current-state-first evidence and governance need rather than from greenfield/brownfield labels alone.
+
+## Protocol ownership matrix
+
+This matrix is the first authority for resolving protocol-document overlap. It does not add a new runtime layer; it assigns ownership to existing files so future edits reuse the correct surface instead of duplicating governance.
+
+| Concern | Canonical owner | Supporting surfaces | Must not redefine |
+|---|---|---|---|
+| Lifecycle responsibility boundaries | `core/authority/LIFECYCLE.md` | command files, capability routing | command files, extension entrypoints |
+| Command legality, command state, and next-command discipline | `core/protocol/COMMAND_STATE_MACHINE.md` plus the matching `core/commands/<command>.md` | `COMMANDS.md`, `SESSION_STATE.json`, `SESSION_EXECUTION.md` | capability entrypoints |
+| Command-to-capability routing algorithm | `core/protocol/CAPABILITY_ROUTING.md` | extension manifests, capability manifests, command files | individual capability entrypoints |
+| Accepted-state navigation and current-state spine | `core/protocol/CURRENT_SYSTEM_STATE.md` | `CURRENT_SYSTEM_STATE.md` template, `close.md`, `status.md` | delivery/session source artifacts |
+| Close/archive/update-state transaction | `core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md` | `CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, `SESSION_EXECUTION.md`, `close.md` | status or continue command docs |
+| Delivery authority and delivery-baseline behavior | `core/protocol/DELIVERY_GOVERNANCE.md` | `DELIVERY_SCOPE.md`, `DELIVERY_PLAN.md`, delivery checkpoint template | session scope templates during delivery baseline |
+| Phase lifecycle and phase-entry gates | `core/protocol/PHASE_LIFECYCLE.md` | `PHASE-xx.md` template, `continue.md`, `SESSION_SCOPE.md` | delivery plan summaries |
+| Session artifact responsibility and active-session surface | `core/protocol/SESSION_ARTIFACTS.md` | `ARTIFACT_MODEL.md`, session templates | accepted-state docs |
+| Requirements/design source-authority location | `core/protocol/REQUIREMENTS.md` plus `ARTIFACT_MODEL.md` | delivery/session scope templates | root accepted-state artifacts by default |
+| Evidence, validation, and claim reconciliation | `core/protocol/VALIDATION_AND_EVIDENCE.md` plus `CLAIM_RECONCILIATION.md` | `EVIDENCE.md`, IU reviews, close protocol | user-facing status prose alone |
+| Runtime integration posture | `core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md` | stack packages, evidence template | generic build/test evidence alone |
+| Unresolved/gated/non-gating/technical-review items | `core/protocol/UNRESOLVED_ITEMS.md` | unresolved templates, checkpoints, close protocol | informal prose only |
+| Project-type classification metadata | `core/protocol/PROJECT_TYPES.md` | routing evidence, templates | primary routing justification |
+
+Ownership rule: one canonical owner per concern. When two documents appear to govern the same concern, update the canonical owner and make the secondary surface point to it. Do not copy full rules into multiple protocol files unless the duplicate text is a short pointer needed for command execution.

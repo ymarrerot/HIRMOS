@@ -222,3 +222,9 @@ Runtime or close-time validators should fail when:
 ## Start checkpoint disclosure rule
 
 The `hirmos start` implementation-readiness pause must source gated items, non-gating assumptions, and technical-review pointers from `_hirmos/session/unresolved-items.md#Current Checkpoint Feed` and render them through `_hirmos/core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md`. The user-facing checkpoint must not summarize unresolved items from memory or hide material non-gating assumptions.
+
+## Gated Item Continue Semantics
+
+A gated item blocks the boundary it governs until it is resolved, explicitly adopted from a surfaced recommendation, converted to a documented non-gating assumption, or deferred with an accepted carry-forward target.
+
+HIRMOS must not allow a bare `hirmos continue` to silently accept a baseline when a gated item is still classified as pending user input and not reflected in the relevant delivery/session authority.

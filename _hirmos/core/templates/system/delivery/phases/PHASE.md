@@ -249,3 +249,13 @@ The phase may be marked `ACCEPTED` only when the Phase Acceptance Evidence Gate 
 - Carry-forward item:
 - Target delivery/phase/session:
 - Revalidation point:
+
+## Phase Lifecycle Freshness Rule
+
+When implementation starts or completes for this phase, HIRMOS must update the phase lifecycle/progress fields. A phase must not remain `READY_FOR_ADOPTION` or say implementation has not started after implementation evidence or implementation-unit records exist for adopted phase scope.
+
+| Freshness check | Status | Evidence / pointer |
+|---|---|---|
+| Phase lifecycle status matches active session state | MATCH / STALE / NOT_CHECKED | |
+| Phase Progress Ledger reflects current session work | MATCH / STALE / NOT_CHECKED | |
+| Acceptance evidence gate reflects current evidence level | MATCH / STALE / NOT_CHECKED | |

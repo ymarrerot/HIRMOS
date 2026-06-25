@@ -81,7 +81,7 @@ After baseline acceptance, HIRMOS marks the delivery `ACTIVE` or accepted/amende
 
 - Current system state: `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`
 - Carry-forward: `_hirmos/system/accepted-state/CARRY_FORWARD.md`
-- Decision log: `_hirmos/system/accepted-state/DECISION_LOG.md`
+- Decision log: none / `_hirmos/system/accepted-state/DECISION_LOG.md` when explicit decision-log governance is active
 
 ## Delivery Review / Active Context
 

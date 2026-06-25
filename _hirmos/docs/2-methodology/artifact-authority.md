@@ -34,4 +34,20 @@ Durable delivery authority lives under `_hirmos/system/delivery/<delivery-id>/`,
 
 ## Accepted-state navigation authority
 
-`CURRENT_SYSTEM_STATE.md` is the accepted-state navigation authority. It maintains current governance pointers, latest-close metadata, Work History Ledger, Source Artifact Index, and concise accepted-state summaries. It is not the source authority for full requirements, design, scope, implementation, evidence, unresolved-item, or archive content. Those remain in delivery/session/archive artifacts.
+CURRENT_SYSTEM_STATE.md is the accepted-state navigation authority. It maintains current governance pointers, latest-close metadata, Work History Ledger, Source Artifact Index, and concise accepted-state summaries. It is not the source authority for full requirements, design, scope, implementation, evidence, unresolved-item, or archive content. Those remain in delivery/session/archive artifacts.
+
+
+## Source authority location matrix
+
+HIRMOS keeps requirements, design, and scope source authority at the delivery/session/archive level by default. CURRENT_SYSTEM_STATE.md is the accepted-state navigation authority and source index; it is not a cumulative requirements, design, or system-scope authority.
+
+Default locations:
+
+| Concern | Default source authority | Conditional authority |
+|---|---|---|
+| Delivery scope | `system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | delivery `REQUIREMENTS.md` / `DESIGN.md` when justified |
+| Session scope | `session/SESSION_SCOPE.md` | session `REQUIREMENTS.md` / `DESIGN.md` when justified |
+| Accepted-state navigation | `system/accepted-state/CURRENT_SYSTEM_STATE.md` | no extra root artifact by default |
+| Requirements synthesis | source delivery/session/archive artifacts | generated on demand; not authority unless adopted |
+
+Use the narrowest source authority that can safely own the concern. Avoid duplicating the same requirement/design truth across root accepted-state, delivery, and session artifacts.

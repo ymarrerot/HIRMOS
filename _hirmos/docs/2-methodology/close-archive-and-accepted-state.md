@@ -46,6 +46,6 @@ A normal close must archive all active session artifacts, normalize the archived
 
 ## PROD-L6 archive concordance
 
-Normal close writes `_hirmos/system/history/sessions/<session-id>/ARCHIVE_MANIFEST.md` as a history-only archive manifest. The manifest records archived artifacts, accepted-state application, delivery pointer refresh, archived `SESSION_STATE.json` normalization, active-session reset, and post-close concordance. It supports accepted-state concordance but does not replace `CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, or `DECISION_LOG.md`.
+Normal close writes `_hirmos/system/history/sessions/<session-id>/ARCHIVE_MANIFEST.md` as a history-only archive manifest. The manifest records archived artifacts, accepted-state application, delivery pointer refresh, archived `SESSION_STATE.json` normalization, active-session reset, and post-close concordance. It supports accepted-state concordance but does not replace `CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, or conditional `DECISION_LOG.md` when active.
 
 Accepted-state concordance requires `CURRENT_SYSTEM_STATE.md` latest-close metadata, the archive manifest, active carry-forward records, durable decisions, and post-close idle session state to agree.

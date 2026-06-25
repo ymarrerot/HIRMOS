@@ -128,7 +128,7 @@ At every user-facing checkpoint, `allowed_next_commands` must include only safe 
 9. Instantiate only the session artifacts required before the first review checkpoint.
 10. Run Understand System State before claiming Design authority.
 10. During Understand System State, read `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` first when it exists. If it is missing, record the absence explicitly in `_hirmos/session/DESIGN.md` and `_hirmos/session/SESSION_EXECUTION.md`.
-11. Read supporting accepted-state artifacts (`CURRENT_SYSTEM_STATE.md` latest-close metadata, `CARRY_FORWARD.md`, `DECISION_LOG.md`) when present. Use session archives only as history/evidence, not as the primary current-state source.
+11. Read supporting accepted-state artifacts (`CURRENT_SYSTEM_STATE.md` latest-close metadata, `CARRY_FORWARD.md`, and conditional `DECISION_LOG.md` when present). Use session archives only as history/evidence, not as the primary current-state source.
 12. Use the User Request and source inputs to guide focused system-state understanding, but do not treat them as governed requirements.
 13. Route to Design only after the system-state and current-system-state-first controls are satisfied, explicitly not applicable with rationale, or blocked.
 14. Before Design work selects specialized extension capabilities, apply `_hirmos/core/protocol/CAPABILITY_ROUTING.md` and record material capability decisions in `_hirmos/session/SESSION_EXECUTION.md`.
@@ -425,3 +425,9 @@ When reporting delivery-baseline state, use status-aware delivery labels. Before
 ## PROD-L8.14 accepted-state navigation read rule
 
 `hirmos start` must treat `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` as the accepted-state navigation authority. It must read Current Governance Context, Work History Ledger, Source Artifact Index, active delivery/phase/session pointers, latest close metadata, and active carry-forward items before deciding whether the request continues active governance or starts new work. It must not require or infer a default root accepted-state `REQUIREMENTS.md`.
+
+## Current-State-First Source Reading Contract
+
+`hirmos start` must read `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` before creating or selecting delivery/session authority. It must follow the Current-State-First Navigation Spine to active delivery/session pointers, Work History Ledger entries, Source Artifact Index entries, latest close/archive pointers, and active carry-forward records that materially affect the user request.
+
+`hirmos start` may scope historical depth to the request, but it must not route to delivery/session/phase work from chat memory or project-type labels alone when current-state pointers exist.

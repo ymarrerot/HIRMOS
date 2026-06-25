@@ -9,7 +9,7 @@ Purpose: ensure `hirmos close` is a governed state transaction, not a chat summa
 
 1. **Session scope truth** — `_hirmos/session/SESSION_SCOPE.md`, especially close verification, shows what was promised, what was verified, unresolved-item disposition, and the final fail-closed verdict.
 2. **Execution truth** — `_hirmos/session/SESSION_EXECUTION.md` records the close command, execution controls, evidence pointers, archive/reset control pointers, and exactly one legal next command or action.
-3. **Accepted current truth** — `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`, active-only `CARRY_FORWARD.md`, and `DECISION_LOG.md` reflect only accepted outcomes and durable decisions.
+3. **Accepted current truth** — `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`, active-only `CARRY_FORWARD.md`, and conditional `DECISION_LOG.md` when explicit decision-log governance is active reflect only accepted outcomes, active carry-forward obligations, and governed durable decisions.
 4. **Archive/reset truth** — the archive records archived artifacts and post-close verification, while active `_hirmos/session/` is reset to idle scaffolding. Archive manifest information belongs in history at `ARCHIVE_MANIFEST.md` and in `SESSION_EXECUTION.md` archive controls; do not create a separate active-session archive manifest support file.
 
 If any surface disagrees, HIRMOS must report `Close Blocked`, not `Closed / Archived`.
@@ -61,7 +61,7 @@ The baseline accepted-state files are:
 
 - `CURRENT_SYSTEM_STATE.md` — accepted-state navigation authority, current governance pointers, chronological Work History Ledger, Source Artifact Index, concise current-state summary, and latest-close metadata;
 - `CARRY_FORWARD.md` — active carry-forward obligations only;
-- `DECISION_LOG.md` — durable accepted, rejected, superseded, and replaced decisions when decision-log governance is active.
+- `DECISION_LOG.md` — conditional durable accepted, rejected, superseded, and replaced decisions when explicit decision-log governance is active.
 
 Default HIRMOS must not create root accepted-state `REQUIREMENTS.md`, `DESIGN.md`, `SYSTEM_SCOPE.md`, `DECISIONS.md`, or `ACCEPTED_CHANGES.md`. Requirements, design, and scope remain source authorities at delivery/session/archive level unless a future explicit cumulative-governance mode is activated.
 
@@ -209,7 +209,7 @@ The accepted-state folder must contain:
 - `CURRENT_SYSTEM_STATE.md` — canonical merged current truth;
 - `CURRENT_SYSTEM_STATE.md` latest-close metadata — navigation, latest close pointer, and accepted-state file index;
 - `CARRY_FORWARD.md` — active carry-forward obligations only;
-- `DECISION_LOG.md` — durable accepted, rejected, and superseded decisions.
+- `DECISION_LOG.md` — conditional durable accepted, rejected, and superseded decisions when explicit decision-log governance is active.
 
 ### Current-state merge requirements
 
@@ -219,7 +219,7 @@ Before close success is surfaced, HIRMOS must verify:
 2. rejected / not-applied outcomes are not promoted into current truth;
 3. evidence-only outcomes remain archive evidence only;
 4. active carry-forward items are reflected in `CARRY_FORWARD.md`, while resolved/closed carry-forward history is recorded in the archive and `CURRENT_SYSTEM_STATE.md` History / Traceability;
-5. durable decisions are reflected in `DECISION_LOG.md`;
+5. durable decisions are reflected in conditional `DECISION_LOG.md` when explicit decision-log governance is active;
 6. `CURRENT_SYSTEM_STATE.md` latest-close metadata points to the updated current state and latest archive;
 7. production-readiness planning, provider readiness, compliance readiness, and go-live approval remain separate tracks.
 
@@ -231,7 +231,7 @@ Before normal close, HIRMOS must verify accepted-state artifact invariants and c
 
 Required checks:
 
-1. `CURRENT_SYSTEM_STATE.md`, `CURRENT_SYSTEM_STATE.md` latest-close metadata, `CARRY_FORWARD.md`, and `DECISION_LOG.md` preserve their accepted-state invariant block.
+1. `CURRENT_SYSTEM_STATE.md`, latest-close metadata, and `CARRY_FORWARD.md` preserve their accepted-state invariant blocks; conditional `DECISION_LOG.md` does so when active.
 2. `CURRENT_SYSTEM_STATE.md` latest-close metadata remains navigation/latest-close metadata and does not replace `CURRENT_SYSTEM_STATE.md`.
 3. Runtime posture fields use only canonical posture values.
 4. Evidence/status fields use only canonical evidence values.
@@ -286,7 +286,7 @@ Before normal close, HIRMOS must scan generated session and accepted-state artif
 - `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`;
 - `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` accepted-state navigation/latest-close section;
 - `_hirmos/system/accepted-state/CARRY_FORWARD.md`;
-- `_hirmos/system/accepted-state/DECISION_LOG.md`.
+- `_hirmos/system/accepted-state/DECISION_LOG.md` only when explicit decision-log governance is active.
 
 Any noncanonical value found in a structured evidence/status/posture field must be translated through the owning protocol before close. Prose notes may include explanatory words, but structured status fields must remain canonical.
 
@@ -325,3 +325,11 @@ At normal close, HIRMOS must update `CURRENT_SYSTEM_STATE.md` using an index-fir
 5. Next recommended work / navigation.
 
 Close must not merge session or delivery requirements into `_hirmos/system/accepted-state/REQUIREMENTS.md` by default. Instead, it records the source artifact path and accepted result in `CURRENT_SYSTEM_STATE.md`. A cumulative root requirements baseline requires explicit future governance activation and close-time merge/deprecation controls.
+
+## Active Navigation Updates vs Accepted Outcome Updates
+
+`hirmos continue` may refresh active navigation pointers in `CURRENT_SYSTEM_STATE.md` when the active delivery, phase, session scope, unresolved register, or next recommended command changes. That transition update is not an accepted close outcome.
+
+`hirmos close` owns accepted outcome updates: latest accepted close metadata, final Work History Ledger rows, accepted-state summary changes, final Source Artifact Index changes, archive concordance, and active-session reset.
+
+Close must fail closed if active pointer updates and accepted outcome records contradict each other.

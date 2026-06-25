@@ -88,3 +88,9 @@ The amount of detail should follow progressive disclosure: simple when the path 
 ## Generated artifact wording note
 
 Generated HIRMOS artifacts should explain routing from current-state evidence and governance need. Project-type labels are supporting metadata, not the primary authority for selecting delivery, phase, or session shape.
+
+## Canonical Source Reading Discipline
+
+Current-state-first means reading `CURRENT_SYSTEM_STATE.md` as the navigation authority and then following the relevant canonical source pointers. It does not mean designing from summary prose alone.
+
+Before material design or implementation, HIRMOS reads the active delivery/session/phase authorities, unresolved registers, evidence, carry-forward, and source requirement/design artifacts that materially affect the request. Reading depth is scoped to the request; the canonical navigation path is not optional.

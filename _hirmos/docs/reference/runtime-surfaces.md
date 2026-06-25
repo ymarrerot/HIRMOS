@@ -99,3 +99,16 @@ When `SESSION_STATE.json.session_focus = delivery_baseline`, the active authorit
 - `_hirmos/system/delivery/<delivery-id>/DESIGN.md` when separate delivery-level design authority is justified.
 
 During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`. If separate optional authority is not justified, requirements and design decisions remain inside `DELIVERY_SCOPE.md` only. Session-level optional authority artifacts become applicable only after the flow advances to a bounded `phase_session_baseline` or `session_baseline` focus.
+
+## Protocol ownership and minimality
+
+HIRMOS has several private runtime protocols because they protect different failure modes. The ownership rule is: one canonical owner per concern, with secondary documents pointing to that owner instead of restating full governance.
+
+For protocol-overlap decisions, use the ownership matrix in `_hirmos/core/protocol/COMMANDS.md`. For validator additions, use the minimality classes in `_hirmos/core/protocol/VALIDATION_AND_EVIDENCE.md`.
+
+The intended result is not fewer checks at any cost. It is fewer duplicate rules, fewer brittle wording checks, and stronger authority-safety/freshness checks.
+
+
+## Capability taxonomy and source authority minimality
+
+HIRMOS uses capability families to explain routing without expanding the runtime surface. Capability IDs remain stable dispatch identifiers, while family names help reviewers see whether a new responsibility can reuse an existing capability. Source authority is kept at the narrowest safe level: delivery/session/archive artifacts own detailed requirements/design/scope, and `CURRENT_SYSTEM_STATE.md` owns navigation and traceability.

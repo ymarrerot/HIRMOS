@@ -381,3 +381,13 @@ Required when delivery shape is `MULTI_SESSION_DELIVERY` or `MULTI_SESSION_DELIV
 - Out-of-scope delivery items preserved for later:
 
 Fail-closed rule: a delivery-governed session must not proceed to implementation unless the Session Scope adopts and narrows the governing `DELIVERY_SCOPE.md` and, when applicable, the selected `PHASE-xx.md`.
+
+## Implementation Shape Preview Reconciliation
+
+When implementation-unit artifacts are later created, this preview must be reconciled:
+
+| Preview item | Implementation unit / evidence | Result | Notes |
+|---|---|---|---|
+| | `implementation-units/IU-xx.md` / `EVIDENCE.md` | PENDING / SATISFIED / PARTIAL / BLOCKED | |
+
+A preview row must not remain `PENDING` after implementation-unit records exist unless the row is explicitly not adopted, deferred, or blocked.

@@ -111,7 +111,7 @@ Accepted current system truth lives in `_hirmos/system/accepted-state/CURRENT_SY
 
 - `CURRENT_SYSTEM_STATE.md` owns current truth, accepted-state navigation, active development-context pointers, and latest-close metadata.
 - `CARRY_FORWARD.md` preserves active unresolved items, blockers, assumptions, and future-session instructions only.
-- `DECISION_LOG.md` preserves durable accepted, rejected, and superseded decisions.
+- `DECISION_LOG.md` is conditional durable decision support when explicit decision-log governance is active; it is not a default accepted-state root artifact.
 - `_hirmos/system/history/sessions/<session-id>/` preserves historical evidence and archived session artifacts.
 
 Do not use session archives, chat output, or accepted-state summaries as substitutes for the merged current-state artifact.
@@ -197,3 +197,16 @@ status
 Rule: `SESSION_SCOPE.md` is required only when the active work has a bounded phase/session work scope or implementation authority. During `delivery_baseline` focus, the active authority is `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`, not `_hirmos/session/SESSION_SCOPE.md`.
 
 Delivery-level uncertainty belongs to `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`. Session-level uncertainty belongs to `_hirmos/session/unresolved-items.md` only after a session scope exists or when the active single-session work has material unresolved items.
+
+## Reuse-First Complexity Control
+
+Before adding any new artifact surface, protocol layer, or capability split, HIRMOS must identify which existing surface already owns the responsibility. Prefer updating existing lifecycle doctrine, command protocols, templates, validators, and artifacts. Add a new governance layer only when no existing surface can safely own the responsibility.
+
+Complexity-pressure risks to review periodically:
+
+- overlapping protocol docs;
+- excessive capability names;
+- default durable support artifacts such as decision logs;
+- validators enforcing wording instead of authority safety;
+- project-type language replacing current-state-first routing;
+- too many places to express requirements, design, or source authority.

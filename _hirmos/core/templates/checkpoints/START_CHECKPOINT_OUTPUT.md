@@ -29,7 +29,7 @@ This template is not a session artifact. It prevents free-form checkpoint output
 For `delivery_baseline`, the output must say:
 
 ```text
-If you run `hirmos continue`, HIRMOS will treat this delivery baseline as accepted unless you request changes first. It will then activate or amend the delivery, instantiate only the next needed phase/session authority, and pause again for Session Baseline — Review or Change before implementation begins.
+If there are no gated delivery decisions requiring user input, `hirmos continue` will treat this delivery baseline as accepted unless you request changes first; it will then activate or amend the delivery, instantiate only the next needed phase/session authority, and pause again for Session Baseline — Review or Change before implementation begins. If gated decisions are listed as pending user input and not reflected in delivery authority, answer them or explicitly adopt the surfaced recommendations before continuing.
 ```
 
 For `session_baseline`, `phase_session_baseline`, and implementation-capable `minimal_session`, the output must say:

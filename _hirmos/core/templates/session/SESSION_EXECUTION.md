@@ -13,7 +13,7 @@ Authoritative references:
 - Delivery unresolved-item details during delivery baseline: `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`
 - Evidence details: `_hirmos/session/EVIDENCE.md` and implementation-unit records when present
 - Delivery authority when active: `_hirmos/system/delivery/DELIVERY_PLAN.md`, `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`, and `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`
-- Accepted state: `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, and `DECISION_LOG.md`
+- Accepted state: `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, and conditional `DECISION_LOG.md` when active
 - Archive transaction: `_hirmos/system/history/sessions/<session-id>/ARCHIVE_MANIFEST.md`
 
 ## Current Continuation Snapshot
@@ -130,13 +130,7 @@ Execution controls apply clear-specification discipline to the command spine: re
 
 ## Baseline Control Families
 
-| Family | Controls included | Current status |
-|---|---|---|
-| Command and lifecycle | bootstrap, command, working copy, lifecycle stage | PENDING |
-| Scope and unresolved items | session scope, unresolved items, implementation authorization | PENDING |
-| Delivery/phase routing | delivery roadmap, delivery scope, active phase when selected | NOT_APPLICABLE |
-| Implementation and evidence | implementation units, evidence pointers, validation status | PENDING |
-| Close and archive | accepted-state update, archive manifest, active reset | NOT_APPLICABLE |
+Command/lifecycle, scope/unresolved, delivery/phase, implementation/evidence, and close/archive control families must be reviewed through the Boundary Control Checklist and Active Execution Controls.
 
 ## Control Mutation Ledger
 
@@ -451,7 +445,6 @@ Pointers only. Evidence details belong in `EVIDENCE.md`, implementation-unit rev
 | Seq | Evidence pointer | Evidence type | Result | Supports claim |
 |---:|---|---|---|---|
 
-
 ## Close-Time Delivery Status Execution Log
 
 Pointer-only delivery close transaction record. Detailed status updates belong in `DELIVERY_PLAN.md`, `DELIVERY_SCOPE.md`, `PHASE-xx.md`, accepted-state files, and `ARCHIVE_MANIFEST.md`.
@@ -473,7 +466,7 @@ Pointer-only close controls. Detailed archive transaction belongs in `ARCHIVE_MA
 |---|---|---|
 | Session Scope close verification completed | `SESSION_SCOPE.md` close verification final verdict supports close | PENDING |
 | Unresolved register reconciled | `unresolved-items.md` directly reviewed; no blocking gated item remains | PENDING |
-| Accepted state updated or verified unchanged | `CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, `DECISION_LOG.md` | PENDING |
+| Accepted state updated or verified unchanged | `CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, conditional `DECISION_LOG.md` when active | PENDING |
 | Archive manifest created | `ARCHIVE_MANIFEST.md` exists and matches archived artifacts | PENDING |
 | Archived session state normalized | archived `SESSION_STATE.json` is closed / archived / history_only | PENDING |
 | Active session reset | active `_hirmos/session/` reset to idle scaffolding only | PENDING |
@@ -556,7 +549,6 @@ Required controls applied here:
 
 HIRMOS must not claim a lifecycle boundary complete merely because intended work was described clearly. It may claim the boundary only when this execution ledger self-validates that required controls were satisfied and recorded.
 
-
 ## PROD-L8.10 Delivery-Baseline Session Surface Minimality Record
 
 When `session_focus = delivery_baseline`, record:
@@ -573,3 +565,11 @@ A delivery-baseline checkpoint must point to the delivery unresolved register an
 ## PROD-L8.11 Delivery-Baseline Optional Authority Location
 
 During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`; optional authority belongs under `_hirmos/system/delivery/<delivery-id>/` or stays in `DELIVERY_SCOPE.md`. PROD-L8.13 Delivery Review Wording Record: status-aware wording verified and current-state-first routing explanation recorded.
+
+## Current-State Source Reading Record Record source-reading coverage before Design, Implementation, continuation, or close claims: `CURRENT_SYSTEM_STATE.md` first; active delivery/phase/session authority; active unresolved/carry-forward source; materially relevant requirements/design/evidence/archive source. Missing/stale/contradictory/inaccessible required sources route to unresolved handling or fail closed.
+
+## Runtime Freshness Reconciliation Record
+After each transition or implementation pass, refresh `SESSION_STATE.json`, Current Continuation Snapshot, command concordance, active controls, routing log, active phase, session scope preview, evidence claim reconciliation, and current-state active pointers. Stale sections that contradict machine state or active authority block readiness, completion, and close claims until reconciled or marked historical.
+
+## Implementation-Unit Instantiation Timing Record
+When IU mode is active, record whether full IU artifacts were created before material code changes; retrospective IU creation requires an explicit correction and reconciliation before completion claims.

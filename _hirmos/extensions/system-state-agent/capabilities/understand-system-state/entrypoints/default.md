@@ -32,7 +32,7 @@ Produce general and User Request-focused system-state understanding before Desig
 - `_hirmos/session/DESIGN.md` when prototype/POC inputs exist
 - repository/project evidence when a codebase exists
 - `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` when it exists; if missing, record the absence explicitly
-- supporting accepted-state records when they exist: `_hirmos/system/accepted-state/CARRY_FORWARD.md` and `_hirmos/system/accepted-state/DECISION_LOG.md`; latest-close metadata lives inside `CURRENT_SYSTEM_STATE.md`
+- supporting accepted-state records when they exist: `_hirmos/system/accepted-state/CARRY_FORWARD.md` and conditional `_hirmos/system/accepted-state/DECISION_LOG.md` when explicit governance is active; latest-close metadata lives inside `CURRENT_SYSTEM_STATE.md`
 - session archives only when needed as history/evidence, not as current truth
 
 ## Execution controls contributed
@@ -52,7 +52,7 @@ Produce general and User Request-focused system-state understanding before Desig
    - application/runtime shape;
    - existing docs/specs;
    - `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` as the first accepted-state source when it exists;
-   - supporting accepted-state records: `CURRENT_SYSTEM_STATE.md` latest-close metadata, `CARRY_FORWARD.md`, and `DECISION_LOG.md`;
+   - supporting accepted-state records: `CURRENT_SYSTEM_STATE.md` latest-close metadata, `CARRY_FORWARD.md`, and conditional `DECISION_LOG.md` when active;
    - session archives only as history/evidence when needed, not as current truth;
    - project maturity and confidence.
 4. Perform focused system understanding guided by the User Request and source-input focus map:
@@ -113,7 +113,7 @@ Required sequence for accepted-state understanding:
 
 1. Check whether `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` exists.
 2. If it exists, read it first as the primary accepted current-state source.
-3. Read `_hirmos/system/accepted-state/CARRY_FORWARD.md` and `_hirmos/system/accepted-state/DECISION_LOG.md` as supporting accepted-state records when present. Read latest-close metadata from `CURRENT_SYSTEM_STATE.md`.
+3. Read `_hirmos/system/accepted-state/CARRY_FORWARD.md` and conditional `_hirmos/system/accepted-state/DECISION_LOG.md` as supporting accepted-state records when present and active. Read latest-close metadata from `CURRENT_SYSTEM_STATE.md`.
 4. Use session archives only as history/evidence or to resolve contradictions. Do not reconstruct current truth from archives when `CURRENT_SYSTEM_STATE.md` exists.
 5. Record the read status, missing status, contradictions, and confidence in `_hirmos/session/DESIGN.md` and `_hirmos/session/SESSION_EXECUTION.md`.
 6. Set terminal state `BLOCKED` when accepted-state contradictions make safe Design impossible without clarification.

@@ -100,3 +100,13 @@ Record repository evidence first, then command/runtime evidence by active stack 
 - Command / Log Reconciliation:
 - Runtime Verification Reconciliation:
 - Downgraded Claims:
+
+## Evidence Claim Reconciliation Freshness
+
+When a blocked/not-run claim later becomes passed, or a passed claim is later contradicted, HIRMOS must reconcile the earlier record instead of leaving both statuses as current truth.
+
+| Claim / check | Previous status | New status | Current truth | Evidence pointer | Reconciliation action |
+|---|---|---|---|---|---|
+| | NOT_RUN / BLOCKED / LOGGED_COMMAND_PASSED / LOCAL_RUNTIME_VERIFIED | | | | |
+
+A material claim cannot simultaneously be current `LOGGED_COMMAND_PASSED` and current `NOT_RUN` / `BLOCKED`. Earlier failed or blocked attempts may remain as historical rows, but the current-truth row must be explicit.

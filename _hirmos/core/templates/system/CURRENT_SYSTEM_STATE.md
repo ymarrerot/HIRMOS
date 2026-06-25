@@ -100,7 +100,7 @@ This section is part of `CURRENT_SYSTEM_STATE.md` so accepted-state navigation, 
 |---|---|---:|---|
 | `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` | Accepted-state navigation authority, current governance pointers, concise current-state summary, Work History Ledger, Source Artifact Index, and latest-close metadata | yes | |
 | `_hirmos/system/accepted-state/CARRY_FORWARD.md` | Active unresolved / future-session obligations only | yes | |
-| `_hirmos/system/accepted-state/DECISION_LOG.md` | Durable accepted/rejected/superseded decisions when decision-log governance is active | yes | |
+| `_hirmos/system/accepted-state/DECISION_LOG.md` | Conditional durable accepted/rejected/superseded decision support when explicit decision-log governance is active | conditional | |
 
 No default root accepted-state `REQUIREMENTS.md`, `DESIGN.md`, `SYSTEM_SCOPE.md`, `DECISIONS.md`, or `ACCEPTED_CHANGES.md` is created. Detailed requirements, design, and scope source authority remains at delivery, phase, session, implementation, evidence, unresolved-item, and archive levels.
 
@@ -117,7 +117,20 @@ No default root accepted-state `REQUIREMENTS.md`, `DESIGN.md`, `SYSTEM_SCOPE.md`
 
 ### Future Session Starting Notes
 
-Future sessions must read `CURRENT_SYSTEM_STATE.md` before treating archived session history, chat transcripts, summaries, or generated reports as current truth.
+Future sessions must read `CURRENT_SYSTEM_STATE.md` before treating archived session history, chat transcripts, summaries, or generated reports as current truth. They must then follow the Current-State-First Navigation Spine to the active and materially relevant source artifacts before material design, implementation, continuation, or close decisions.
+
+### Current-State-First Navigation Spine
+
+Mandatory spine:
+
+- Current Governance Context
+- Accepted-State Navigation and Latest Close
+- Work History Ledger
+- Source Artifact Index
+- Active carry-forward pointer / carry-forward summary
+- Next governed command / next recommended work
+
+This file is source-complete, not content-complete: it points to canonical requirements, design, scope, evidence, unresolved-item, and archive authorities without duplicating their full content.
 
 ## 4. Accepted State Summary
 
@@ -236,7 +249,7 @@ This is the canonical pointer surface for durable delivery governance. It record
 
 ### Important accepted technical decisions
 
-Reference durable decisions in `DECISION_LOG.md` when decision-log governance is active.
+Reference durable decisions in conditional `DECISION_LOG.md` only when explicit decision-log governance is active; otherwise keep decision source pointers in the Work History Ledger / Source Artifact Index.
 
 ### Superseded technical decisions
 
@@ -333,7 +346,7 @@ Use this section when accepted state incorporates lessons from multiple candidat
 |---|---|---|---|---|
 | | | requirements / design / implementation / UX / test / package / carry-forward | | |
 
-This section summarizes accepted lessons only. Rejected or deferred lessons belong in `DECISION_LOG.md` or `CARRY_FORWARD.md`.
+This section summarizes accepted lessons only. Rejected or deferred lessons belong in conditional `DECISION_LOG.md` when explicit governance is active, or in `CARRY_FORWARD.md` when they are active obligations.
 
 ### Close-Time Delivery Pointer Refresh Rule
 
@@ -376,3 +389,9 @@ Required concordance fields:
 - durable delivery pointers refreshed or explicitly verified unchanged;
 - archived `SESSION_STATE.json` normalized to terminal history state;
 - active `_hirmos/session/SESSION_STATE.json` reset to idle.
+
+## Update Contract: Active Navigation vs Close Outcomes
+
+Active navigation pointers may be refreshed during governed `hirmos start` / `hirmos continue` transitions when active delivery, phase, session, unresolved-register, or next-command pointers change. These pointer updates do not by themselves claim accepted completion.
+
+Accepted-state outcome rows, latest accepted close metadata, final Work History Ledger outcomes, accepted-state summary changes, and archive concordance are updated during `hirmos close`.

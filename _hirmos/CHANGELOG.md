@@ -6,6 +6,23 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 ## Unreleased
 
+## 1.1.1 — Current-state source reading and complexity-pressure stabilization
+
+### Changed
+
+- Hardened Understand System State guidance so HIRMOS reads `CURRENT_SYSTEM_STATE.md` first, follows active governance pointers, and reads materially relevant source artifacts before design or implementation.
+- Added runtime freshness guidance so `SESSION_STATE.json`, `SESSION_EXECUTION.md`, `PHASE-xx.md`, `SESSION_SCOPE.md`, `EVIDENCE.md`, and active accepted-state pointers must be reconciled after governed transitions and implementation passes.
+- Clarified implementation-unit timing: when implementation-unit mode is active, `IU-xx.md` files are instantiated after session-baseline acceptance and before material code changes begin.
+- Hardened gated continue semantics so unresolved gated items cannot be silently accepted by bare `hirmos continue` unless the surfaced recommendation is explicitly adopted, the item is resolved, or it is reclassified/deferred under governed rules.
+- Added evidence claim reconciliation guidance so historical failures and current pass/fail claims cannot remain contradictory.
+- Removed default `DECISION_LOG.md` from accepted-state support surfaces; decision logging is now conditional on explicit decision-log governance.
+- Added protocol ownership and validator minimality guidance to reduce overlap and discourage brittle exact-wording validators when authority-safety or structural/status checks are sufficient.
+- Added capability-family taxonomy and source-authority matrix clarifying that capability IDs are stable dispatch identifiers and that requirements/design/scope authority should live at the narrowest safe source level.
+
+### Validation
+
+- Revalidated private/public framework payloads, validator fixtures, CLI tests, package generation, package verification, and independence checks for the 1.1.1 framework package.
+
 ## 1.1.0 — Accepted-state navigation authority and source-artifact traceability
 
 ### Changed
@@ -209,3 +226,11 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 - This is the initial public HIRMOS baseline.
 - Terminal CLI scope is limited to installation/bootstrap concerns. The terminal CLI command is `hirmos init`; workflow commands are used inside the AI-tool conversation.
 - Framework versioning is tracked in `_hirmos/hirmos.config.json`; HIRMOS does not use a separate `_hirmos/VERSION` file.
+
+## Unreleased — PROD-L8.15
+
+- Hardened current-state-first source reading discipline: `CURRENT_SYSTEM_STATE.md` is mandatory first read, followed by scoped reads of active and materially relevant source artifacts.
+- Added runtime freshness expectations for session execution, phase lifecycle, session scope previews, evidence reconciliation, and active current-state pointers.
+- Hardened gated unresolved item continue semantics so pending user input cannot be silently accepted by bare `hirmos continue`.
+- Made `DECISION_LOG.md` conditional rather than a default accepted-state root artifact; `CARRY_FORWARD.md` remains active-only support.
+- Added reuse-first complexity-control doctrine before adding new governance surfaces.

@@ -144,6 +144,30 @@ The runner must compare the capability manifest to the active lifecycle boundary
 
 Capability-specific triggers belong in `capability.json`. The global algorithm for how to inspect and apply those triggers belongs in this protocol.
 
+
+
+## PROD-L8.18 Capability Taxonomy
+
+Capability names are runtime dispatch identifiers, not product taxonomy, workflow phases, or user-facing process names. HIRMOS keeps capability names stable unless a rename is required for authority safety. Capability consolidation should happen through documented families and aliases before directory renames.
+
+Canonical capability families:
+
+| Family | Purpose | Baseline capabilities | Notes |
+|---|---|---|---|
+| Current-state understanding | Establish current state and input context before design or implementation. | `request-intake`, `source-material-ingestion`, `prototype-ingestion`, `understand-system-state` | These capabilities feed Understand System State. They do not produce final scope authority by themselves. |
+| Delivery and phase shaping | Decide whether work needs delivery/phase/session governance and create the relevant baseline authority. | `delivery-baseline`, `delivery-design`, `phase-baseline`, `phase-contracting` | Prefer capability-family language in docs. Keep existing IDs as stable dispatch IDs. |
+| Session scope and design | Produce bounded session authority and optional requirements/design sub-authority when justified. | `requirements-design`, `system-design`, `technical-review`, `session-scope`, `implementation-readiness` | These capabilities support Design; they do not bypass `SESSION_SCOPE.md` / delivery authority. |
+| Implementation execution and review | Plan, execute, validate, review, and retry implementation work under accepted authority. | `implementation-unit-planning`, `implementation-execution`, `implementation-unit-review`, `session-implementation-review`, `validation-review`, `retry-escalation` | IU artifacts must exist before material implementation when IU mode is active. |
+| Accepted-state update | Close/archive/update accepted-state navigation and carry-forward after governed work. | `update-system-state` | This family updates navigation/source indexes; it does not create root accepted-state requirements/design authority by default. |
+
+Alias/minimality rules:
+
+- Do not add a new capability ID when an existing capability family and entrypoint can safely own the responsibility.
+- Do not rename existing capability directories only to improve wording. Use taxonomy labels and docs aliases first.
+- Add a new capability only when the existing family cannot safely own required inputs, produced artifacts, terminal states, or validation controls.
+- Capability manifests remain the dispatch source of truth; taxonomy tables are interpretive guidance, not a second manifest.
+
+
 ## Capability decisions
 
 Allowed capability decisions:

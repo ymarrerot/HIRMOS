@@ -39,14 +39,14 @@ When the command reaches Design, Implementation, or close/update-state for softw
 
 ## First continuation after start checkpoint
 
-When `hirmos continue` is the first continuation after a `Recommended Baseline — Review or Change` start checkpoint, it accepts the recommended baseline unless the user requested changes before continuing.
+When `hirmos continue` is the first continuation after a `Recommended Baseline — Review or Change` checkpoint, it accepts the recommended baseline only when no gated unresolved item requires user input and every gated item is either resolved, explicitly adopted from a surfaced recommendation, or reclassified as non-gating with a documented assumption. Compatibility phrase: when no gated unresolved item blocks acceptance, `hirmos continue` accepts the recommended baseline unless the user requested changes before continuing. A baseline cannot be both `gated / pending user input / reflected in authority: NO` and silently accepted by bare `hirmos continue`.
 
 Before implementation begins, `hirmos continue` must:
 
 - verify that `SESSION_SCOPE.md` exists and records the accepted or amended session scope baseline;
 - verify that `_hirmos/session/unresolved-items.md#Current Checkpoint Feed` has no unresolved gated item blocking Implementation;
 - apply any user-requested baseline changes before proceeding;
-- instantiate implementation-unit artifacts when the accepted Session Scope requires them;
+- instantiate implementation-unit artifacts before material code changes begin when the accepted Session Scope requires implementation-unit mode; this satisfies the legacy rule to instantiate implementation-unit artifacts when the accepted Session Scope requires them;
 - record the baseline acceptance, amendments, and created implementation-unit artifacts in `SESSION_EXECUTION.md`;
 - stop or route back if the baseline is uncertain, contradicted, or missing required review items.
 
@@ -354,3 +354,31 @@ When reporting delivery-baseline state, use status-aware delivery labels. Before
 ## PROD-L8.14 navigation update rule
 
 `hirmos continue` must preserve `CURRENT_SYSTEM_STATE.md` as the navigation authority while transitioning focus. When delivery baseline acceptance creates a phase/session baseline, active delivery, active phase, active session scope, and source artifact pointers must remain aligned. It must not create root accepted-state requirements/design/scope artifacts as a substitute for delivery/session source authorities.
+
+## Current-State-First Source Reading Gate
+
+Before Design, Implementation, continuation across delivery/phase/session boundaries, or close/update-state, `hirmos continue` must verify that Understand System State followed the canonical navigation path:
+
+1. `CURRENT_SYSTEM_STATE.md` was read first.
+2. Active governance pointers were followed: active delivery scope, active phase, active session scope, active unresolved registers, latest close/archive pointer, and active carry-forward records when present.
+3. Source artifacts materially relevant to the requested continuation were read before material design or implementation.
+4. Source-reading coverage was recorded in `SESSION_EXECUTION.md`, `BOOTSTRAP_REPORT.md`, or the active authority when material.
+
+If this cannot be verified, route back to Understand System State before advancing.
+
+## Runtime Freshness Gate
+
+After every governed transition or implementation pass, `hirmos continue` must refresh the active snapshot and affected mirrors without rewriting append-only history:
+
+- `SESSION_STATE.json` lifecycle and focus fields;
+- `SESSION_EXECUTION.md` Current Continuation Snapshot, Machine Command State Concordance, Active Execution Controls, Focus-Aware Capability Routing Log, artifact instantiation log, and affected boundary records;
+- `PHASE-xx.md` lifecycle/progress/acceptance fields when a phase is active;
+- `SESSION_SCOPE.md` implementation-shape preview and close-verification status when implementation-unit records or evidence exist;
+- `EVIDENCE.md` claim reconciliation when command/environment/runtime evidence changes;
+- `CURRENT_SYSTEM_STATE.md` active navigation pointers when active delivery/phase/session pointers change.
+
+Stale lower sections are not harmless if they contradict the current snapshot or machine state. HIRMOS must either reconcile them or mark them as historical rows with pass/date/context.
+
+## Implementation-Unit Instantiation Timing
+
+When implementation-unit mode is active, full implementation-unit artifacts must be instantiated immediately after the session baseline is accepted/amended and before material code changes begin. Retrospective implementation-unit creation after code changes is allowed only when the session explicitly declared a lightweight/no-IU mode, or when HIRMOS records a correction explaining the deviation and reconciles unit authority against actual changes before claiming completion.

@@ -153,3 +153,17 @@ Required artifacts when applicable:
 - `_hirmos/session/EVIDENCE.md` reconciles whether the claim may be surfaced.
 
 Firm rule: tests/build/lint alone do not prove local runtime readiness or role workflow readiness.
+
+## Validator minimality classes
+
+Validator checks must protect runtime safety and artifact authority before they protect wording. When a check is added or changed, classify it as one of these categories:
+
+| Class | Keep by default? | Purpose | Examples |
+|---|---|---|---|
+| Authority-safety | Yes | Prevent invalid authority surfaces or unsafe lifecycle progress. | delivery baseline must not create session scope; session optional authority must not appear during delivery baseline; root accepted-state requirements must not exist without explicit governance. |
+| Freshness/concordance | Yes | Prevent stale mirrors from contradicting active machine state or evidence. | `SESSION_STATE.json` conflicts with `SESSION_EXECUTION.md`; phase status remains pending after implementation; evidence says both passed and not-run. |
+| Structural/status | Yes | Require machine-checkable fields, legal statuses, and referenced paths. | scalar `Entry criteria status`; current phase pointer exists; allowed next command is legal. |
+| Exact wording | Avoid unless it protects authority safety | Require particular prose. Convert to structural/status checks when possible. | pre-acceptance delivery should be tested by status + absence of accepted/active labels, not by requiring one exact sentence. |
+| Release-marker / plan-marker | Avoid | Historical implementation-plan markers should not be long-term validation authority. | `PROD-Lx` strings are not runtime invariants unless the phrase names a current contract. |
+
+Validator minimality rule: prefer structural/status checks over exact phrase checks. Keep wording checks only when the wording itself prevents an authority-safety failure, and express the failure in terms of state and authority rather than plan history.

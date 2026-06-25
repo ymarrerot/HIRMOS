@@ -9,7 +9,7 @@ Purpose: define the durable accepted-state navigation model that `hirmos close`,
 
 `CURRENT_SYSTEM_STATE.md` is index-first. It summarizes current state, owns current governance pointers, records latest-close metadata, and maintains a chronological Work History Ledger and Source Artifact Index. It must not become a cumulative requirements catalog, full design document, system-scope substitute, command log, evidence store, or archive manifest.
 
-Session archives are history. Session artifacts are evidence. Delivery and session scope/requirements/design artifacts are source authorities at their level. `CARRY_FORWARD.md` is active future work and unresolved continuation control. `DECISION_LOG.md` is durable decision support when decision-log governance is active. None of those replace `CURRENT_SYSTEM_STATE.md`, and `CURRENT_SYSTEM_STATE.md` does not replace them.
+Session archives are history. Session artifacts are evidence. Delivery and session scope/requirements/design artifacts are source authorities at their level. `CARRY_FORWARD.md` is active future work and unresolved continuation control. `DECISION_LOG.md` is conditional durable decision support when explicit decision-log governance is active. None of those replace `CURRENT_SYSTEM_STATE.md`, and `CURRENT_SYSTEM_STATE.md` does not replace them.
 
 `CURRENT_SYSTEM_STATE.md` also owns accepted-state navigation and latest-close metadata. Accepted-state navigation and latest-close metadata live in `CURRENT_SYSTEM_STATE.md` to prevent drift between latest-close metadata and current truth.
 
@@ -27,7 +27,7 @@ It must contain these required files:
 |---|---:|---|
 | `CURRENT_SYSTEM_STATE.md` | yes | accepted-state navigation authority, current governance pointers, latest-close metadata, Work History Ledger, Source Artifact Index, and concise current-state summary |
 | `CARRY_FORWARD.md` | yes | active unresolved / future-session obligations only |
-| `DECISION_LOG.md` | yes | durable accepted/rejected/superseded decision support when decision-log governance is active |
+| `DECISION_LOG.md` | conditional | durable accepted/rejected/superseded decision support when explicit decision-log governance is active |
 
 Default HIRMOS must not create root accepted-state `REQUIREMENTS.md`, `DESIGN.md`, `SYSTEM_SCOPE.md`, `DECISIONS.md`, or `ACCEPTED_CHANGES.md`.
 
@@ -111,7 +111,7 @@ Future sessions must not reconstruct current truth from chat memory, old transcr
 
 ## Accepted-State Artifact Invariants
 
-`CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, and `DECISION_LOG.md` must preserve their accepted-state invariant blocks. They must use canonical runtime posture values, canonical evidence states, and separate decision classifications from evidence status.
+`CURRENT_SYSTEM_STATE.md` and `CARRY_FORWARD.md` must preserve their accepted-state invariant blocks; `DECISION_LOG.md` must preserve them when explicit decision-log governance is active. They must use canonical runtime posture values, canonical evidence states, and separate decision classifications from evidence status.
 
 ## PROD-L6 accepted-state delivery pointer model
 
@@ -142,3 +142,31 @@ When a phase becomes accepted, `CURRENT_SYSTEM_STATE.md` must record the last ac
 Close is blocked when delivery or phase pointers are not refreshed or explicitly verified unchanged.
 
 Active carry-forward details live in CARRY_FORWARD.md; closed carry-forward history belongs in session archives and CURRENT_SYSTEM_STATE.md Work History Ledger / History / Traceability.
+
+## Current-State-First Navigation Spine
+
+`CURRENT_SYSTEM_STATE.md` must be source-complete, not content-complete. It does not duplicate full requirements, design, scope, evidence, unresolved-item, or archive content. It must contain enough fresh navigation to find those canonical source authorities.
+
+The mandatory navigation spine is:
+
+- Current Governance Context;
+- Accepted-State Navigation and Latest Close;
+- Work History Ledger;
+- Source Artifact Index;
+- active carry-forward pointer / carry-forward summary;
+- next governed command / next recommended work.
+
+Validators and command protocols should protect this spine without requiring `CURRENT_SYSTEM_STATE.md` to become a cumulative requirements/design/scope artifact.
+
+## Transition Updates vs Close Updates
+
+`CURRENT_SYSTEM_STATE.md` has two update classes:
+
+1. **Active navigation pointer updates** may happen during governed transitions such as `hirmos start` or `hirmos continue` when the active delivery, phase, session scope, unresolved register, or recommended next command changes. These updates keep the next command oriented and do not by themselves claim accepted completion.
+2. **Accepted-state outcome updates** happen during `hirmos close`. These include accepted-state summary changes, latest accepted close metadata, final Work History Ledger outcome rows, accepted source index changes, and archive/close concordance.
+
+A transition may refresh active pointers, but it must not claim accepted outcomes that belong to close. Close remains responsible for final accepted-state history, archive concordance, and accepted outcome registration.
+
+## Source Reading Contract for Future Sessions
+
+During Understand System State, HIRMOS must read `CURRENT_SYSTEM_STATE.md` first and then follow the mandatory navigation spine to active and materially relevant source artifacts. HIRMOS may scope historical depth to the request, but it must not design or implement from `CURRENT_SYSTEM_STATE.md` summaries alone when relevant canonical source artifacts exist.
