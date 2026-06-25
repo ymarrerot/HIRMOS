@@ -22,6 +22,12 @@ Route the active lifecycle boundary to the installed `system-state-agent` capabi
 
 ## Required behavior
 
+
+### Governance posture check
+
+System-state updates are governed synchronization, not after-the-fact cleanup for unauthorized work. Do not convert ungoverned edits into accepted state without recording the governing session, source artifacts, evidence, and any deviation/correction status.
+
+
 1. Apply the shared extension method in this entrypoint before routing system-state capabilities.
 2. Read `_hirmos/core/protocol/CAPABILITY_ROUTING.md` when routing is material to the active command.
 3. Select only capabilities required by the active lifecycle boundary and execution controls.

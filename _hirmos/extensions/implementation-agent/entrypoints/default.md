@@ -42,6 +42,14 @@ When a production-shaped implementation cannot be completed in scope, Implementa
 
 ## Shared Extension Method
 
+
+### Governance posture
+
+Implementation-agent capabilities execute inside HIRMOS governance. They must not treat HIRMOS as an after-the-fact compliance layer. Implementation work may begin only after command state, active scope authority, unresolved-item status, and IU authority when applicable permit it.
+
+The model must not implement first and then create IU files, evidence, or execution ledger rows as a report of what happened. If that deviation is discovered, route to correction/deviation handling before any completion claim.
+
+
 ### Core Principle
 
 Implementation is governed realization of accepted Design, not merely code editing. Implementation must execute only what the active Session Scope and approved Implementation Unit artifacts authorize.

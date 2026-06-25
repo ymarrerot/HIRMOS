@@ -37,6 +37,13 @@ When the command reaches Design, Implementation, or close/update-state for softw
 ## Required behavior
 
 
+### Governance posture check
+
+Before resolving `hirmos continue`, confirm that HIRMOS is being used as active governance, not as an after-the-fact compliance layer. The model must verify command legality, active authority, and implementation/correction preconditions before material edits.
+
+If the requested continuation would require work outside current authority, route back or fail closed before editing. Do not patch first and then create `SESSION_EXECUTION.md`, IU files, evidence, or correction rows to explain the already-completed work.
+
+
 ## First continuation after start checkpoint
 
 When `hirmos continue` is the first continuation after a `Recommended Baseline — Review or Change` checkpoint, it accepts the recommended baseline only when no gated unresolved item requires user input and every gated item is either resolved, explicitly adopted from a surfaced recommendation, or reclassified as non-gating with a documented assumption. Compatibility phrase: when no gated unresolved item blocks acceptance, `hirmos continue` accepts the recommended baseline unless the user requested changes before continuing. A baseline cannot be both `gated / pending user input / reflected in authority: NO` and silently accepted by bare `hirmos continue`.
@@ -382,3 +389,29 @@ Stale lower sections are not harmless if they contradict the current snapshot or
 ## Implementation-Unit Instantiation Timing
 
 When implementation-unit mode is active, full implementation-unit artifacts must be instantiated immediately after the session baseline is accepted/amended and before material code changes begin. Retrospective implementation-unit creation after code changes is allowed only when the session explicitly declared a lightweight/no-IU mode, or when HIRMOS records a correction explaining the deviation and reconciles unit authority against actual changes before claiming completion.
+
+## PROD-L8.19 idle-state command legality
+
+If `_hirmos/session/SESSION_STATE.json.status = idle`, `hirmos continue` must fail closed before any project-file or artifact mutation. A `hirmos continue - fix/analyze/report ...` message while idle is still illegal: it may be used as source context for the next governed `hirmos start`, but it is not authority to edit files.
+
+Required result while idle:
+
+1. report that no active governed session exists;
+2. preserve the workspace unchanged;
+3. recommend exactly one governed recovery command, normally `hirmos start`;
+4. if the user clearly requests a correction, state that HIRMOS must start a governed correction session first.
+
+Forbidden result while idle:
+
+- direct runtime fix;
+- direct project-file edits;
+- delivery/session/accepted-state artifact mutation;
+- retrospective correction-session creation after edits have occurred.
+
+## PROD-L8.19 IU pre-execution authority gate
+
+Before any material code/configuration/project-file change in IU mode, `hirmos continue` must verify that each targeted `implementation-units/IU-xx.md` exists and has non-placeholder Unit Scope, Files / Areas, Acceptance Criteria, Verification Commands / Checks, and Evidence Requirements.
+
+If IU mode is active and IU artifacts do not exist, the next action is implementation-unit planning, not implementation execution. Code changes before IU creation are a governance deviation. HIRMOS must not silently reconstruct IU artifacts after implementation and claim normal governance.
+
+Allowed exception: an explicit lightweight/no-IU mode must be declared before implementation begins and recorded in `SESSION_SCOPE.md` and `SESSION_EXECUTION.md` with the reason IU artifacts are not required. If lightweight/no-IU mode was not declared before edits, retrospective IU reconstruction is non-compliant and must be marked as a correction/deviation before completion claims.

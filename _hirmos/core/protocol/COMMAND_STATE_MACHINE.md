@@ -251,3 +251,24 @@ Before a session may enter `close_ready` or `closed`, HIRMOS must verify that im
 A continuation pass must not replace, summarize away, reorder, or delete earlier pass records. If a correction must amend an earlier claim, the correction is recorded in a new pass and may reference the earlier pass; the earlier pass remains visible.
 
 Before surfacing a continuation checkpoint, the runner must verify that the expected previous pass count and detail blocks still exist. If an earlier pass was accidentally removed or changed, the runner must restore the ledger or fail closed before claiming progress.
+
+## PROD-L8.19 Idle Continue Fail-Closed Rule
+
+When `SESSION_STATE.json.status = idle`, `hirmos continue` is not a recovery shortcut and must not mutate project files, HIRMOS session artifacts; it must not modify project files, delivery artifacts, accepted-state artifacts, or archive artifacts except to report the illegal command if status reporting is explicitly requested.
+
+Required behavior:
+
+- fail closed with exactly one governed recovery command, normally `hirmos start`;
+- if the user request is a correction/fix/analyze/report request, route it to a new governed `hirmos start` correction/session-intake flow before any project-file edits;
+- do not perform a direct runtime fix while idle;
+- do not create a retrospective correction session after code changes have already been made;
+- do not treat chat transcript context as active session authority.
+
+This rule reuses the existing command-state gate and does not create a new command or artifact surface.
+
+
+## PROD-L8.20 Governance Posture Interpretation
+
+Command legality is a precondition for action, not a post-action reporting check. If a command is illegal for the current state, the model must not perform useful edits and then describe them as a correction. It must stop before mutation, surface the invalid command state, and route to the existing governed command that can establish authority.
+
+HIRMOS artifacts are active authority and live execution records. They are not compliance documents to be reconstructed after implementation.

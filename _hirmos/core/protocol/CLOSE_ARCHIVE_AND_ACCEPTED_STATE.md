@@ -333,3 +333,32 @@ Close must not merge session or delivery requirements into `_hirmos/system/accep
 `hirmos close` owns accepted outcome updates: latest accepted close metadata, final Work History Ledger rows, accepted-state summary changes, final Source Artifact Index changes, archive concordance, and active-session reset.
 
 Close must fail closed if active pointer updates and accepted outcome records contradict each other.
+
+## PROD-L8.19 archive chronology and carry-forward concordance
+
+Close must verify chronology and cross-artifact freshness before surfacing success.
+
+### Session archive timestamp monotonicity
+
+Archived session timestamps must be monotonic with the governed transcript/session sequence unless an explicit chronology exception is recorded. A later session must not appear to start or close before an earlier session close without explanation.
+
+Required check:
+
+- archived session ID / sequence;
+- `created_at`, `started_at`, `closed_at`, and archive manifest timestamp;
+- prior archived session close timestamp;
+- transcript order when available;
+- chronology exception rationale when monotonicity is not possible due to imported/restored history.
+
+### Delivery-plan multi-section freshness
+
+`DELIVERY_PLAN.md` close-time reconciliation must update or mark historical every active/pointer section that can affect future routing. It is not enough to append a correct final section while older active context, accepted-state pointers, delivery review, or status-log sections still imply stale active phase, stale carry-forward, stale current-state version, or stale next command.
+
+### Later carry-forward resolution concordance
+
+When a later session resolves a carry-forward item that limited earlier phase acceptance, HIRMOS must either:
+
+- update affected phase/delivery current verification posture with a link to later evidence; or
+- explicitly mark the original phase verdict as historical and point to the later resolution record.
+
+The original close verdict may remain historically true, but current navigation must not leave future sessions believing the carry-forward is still unresolved.

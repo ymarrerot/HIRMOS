@@ -551,25 +551,25 @@ HIRMOS must not claim a lifecycle boundary complete merely because intended work
 
 ## PROD-L8.10 Delivery-Baseline Session Surface Minimality Record
 
-When `session_focus = delivery_baseline`, record:
-
-| Check | Expected value | Actual value | Status | Evidence pointer |
-|---|---|---|---|---|
-| Session unresolved register | NOT_APPLICABLE / absent | | PENDING | |
-| Delivery unresolved register | `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` exists and was reviewed | | PENDING | |
-| Session Scope | NOT_APPLICABLE / absent | | PENDING | |
-| Active authority | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | | PENDING | |
-
-A delivery-baseline checkpoint must point to the delivery unresolved register and must not create an empty session unresolved placeholder.
+Record delivery-baseline minimality in pointer form: Session unresolved register = NOT_APPLICABLE / absent; Delivery unresolved register = `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`; Session Scope = NOT_APPLICABLE / absent; Active authority = `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`. A delivery-baseline checkpoint must point to the delivery unresolved register and must not create an empty session unresolved placeholder.
 
 ## PROD-L8.11 Delivery-Baseline Optional Authority Location
 
 During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`; optional authority belongs under `_hirmos/system/delivery/<delivery-id>/` or stays in `DELIVERY_SCOPE.md`. PROD-L8.13 Delivery Review Wording Record: status-aware wording verified and current-state-first routing explanation recorded.
 
-## Current-State Source Reading Record Record source-reading coverage before Design, Implementation, continuation, or close claims: `CURRENT_SYSTEM_STATE.md` first; active delivery/phase/session authority; active unresolved/carry-forward source; materially relevant requirements/design/evidence/archive source. Missing/stale/contradictory/inaccessible required sources route to unresolved handling or fail closed.
-
+## Current-State Source Reading Record
+Record source-reading coverage before Design, Implementation, continuation, or close claims: `CURRENT_SYSTEM_STATE.md` first; active delivery/phase/session authority; active unresolved/carry-forward source; materially relevant requirements/design/evidence/archive source. Missing/stale/contradictory/inaccessible required sources route to unresolved handling or fail closed.
 ## Runtime Freshness Reconciliation Record
 After each transition or implementation pass, refresh `SESSION_STATE.json`, Current Continuation Snapshot, command concordance, active controls, routing log, active phase, session scope preview, evidence claim reconciliation, and current-state active pointers. Stale sections that contradict machine state or active authority block readiness, completion, and close claims until reconciled or marked historical.
-
 ## Implementation-Unit Instantiation Timing Record
 When IU mode is active, record whether full IU artifacts were created before material code changes; retrospective IU creation requires an explicit correction and reconciliation before completion claims.
+
+## PROD-L8.19 Command Legality and Correction Ledger Concordance
+### Idle Continue Legality Record
+Record session status, mutation guard, and recovery command. If `SESSION_STATE.json.status = idle`, `hirmos continue` fails closed, performs no project/artifact mutation, and recommends `hirmos start`.
+
+### IU Pre-Execution Authority Record
+Record IU mode, pre-edit IU existence, pre-edit non-placeholder authority, and retrospective IU creation. In active IU mode, target `IU-xx.md` is execution authority; `SESSION_SCOPE.md` preview prose alone is insufficient.
+
+### Material Correction Command Ledger
+Record one row per material correction command/pass; do not compress file/evidence/runtime-changing corrections into `hirmos continue (×n)`. Columns: Seq, user command/trigger, prior state, correction type, reason, files/artifacts changed, evidence pointer, result.

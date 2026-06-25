@@ -170,3 +170,12 @@ A transition may refresh active pointers, but it must not claim accepted outcome
 ## Source Reading Contract for Future Sessions
 
 During Understand System State, HIRMOS must read `CURRENT_SYSTEM_STATE.md` first and then follow the mandatory navigation spine to active and materially relevant source artifacts. HIRMOS may scope historical depth to the request, but it must not design or implement from `CURRENT_SYSTEM_STATE.md` summaries alone when relevant canonical source artifacts exist.
+
+## PROD-L8.19 transition/close update split
+
+`CURRENT_SYSTEM_STATE.md` has two update classes:
+
+1. **Transition navigation updates** — active delivery, active phase, active session scope, carry-forward pointer, and next governed command may update during governed `start` / `continue` transitions.
+2. **Accepted-state close updates** — accepted-state summary, Work History Ledger outcome rows, latest-close metadata, completed delivery/session status, and accepted source indexes update during `hirmos close`.
+
+HIRMOS must not use this split to hide stale pointers. Any transition update must preserve source authority links and remain consistent with `SESSION_STATE.json`, `SESSION_EXECUTION.md`, delivery artifacts, and phase/session artifacts.

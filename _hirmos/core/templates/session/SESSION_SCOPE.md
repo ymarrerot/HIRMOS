@@ -240,6 +240,9 @@ Required when this session claims phase completion or updates phase status.
 
 ## 10. Implementation Shape Preview
 
+
+Governance posture: this preview is not implementation authority by itself when IU mode is active. HIRMOS must not implement from this preview and later reconstruct IU artifacts as compliance evidence.
+
 This section exists to help the user review the recommended baseline before implementation begins. It is not implementation-unit authority.
 
 Implementation units required: YES | NO | TO_BE_DETERMINED_AFTER_SCOPE_ACCEPTANCE

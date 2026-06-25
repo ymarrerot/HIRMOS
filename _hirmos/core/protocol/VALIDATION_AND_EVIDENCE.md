@@ -1,5 +1,10 @@
 # Validation and Evidence Protocol
 
+
+## Governance posture for evidence
+
+Evidence is the governed proof trail of authorized work, not an after-the-fact compliance artifact. HIRMOS must not create evidence records to make unauthorized implementation appear governed. If evidence records describe work that occurred before the required command state, scope authority, or IU authority existed, the record must identify a governance deviation/correction before readiness, completion, or close can be claimed.
+
 Status: core protocol.
 Purpose: define the minimum evidence discipline for trustworthy HIRMOS claims.
 
@@ -167,3 +172,15 @@ Validator checks must protect runtime safety and artifact authority before they 
 | Release-marker / plan-marker | Avoid | Historical implementation-plan markers should not be long-term validation authority. | `PROD-Lx` strings are not runtime invariants unless the phrase names a current contract. |
 
 Validator minimality rule: prefer structural/status checks over exact phrase checks. Keep wording checks only when the wording itself prevents an authority-safety failure, and express the failure in terms of state and authority rather than plan history.
+
+## PROD-L8.19 validator responsibility boundaries
+
+Validators should protect authority safety, state legality, freshness/concordance, chronology, and evidence-claim consistency. Validators should not enforce user-managed package/export hygiene as framework governance.
+
+For L8.19, validator-relevant risks are:
+
+- idle `hirmos continue` must not be represented as a legal mutation path;
+- IU-governed implementation must not claim normal governance when IU artifacts were created only after material edits;
+- material correction commands must be individually traceable in `SESSION_EXECUTION.md`;
+- archive/session chronology must be monotonic or explicitly explained;
+- delivery-plan active/pointer sections must not remain stale at close.

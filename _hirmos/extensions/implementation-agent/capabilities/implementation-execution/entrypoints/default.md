@@ -60,6 +60,12 @@ Do not execute from prose, checkpoint summaries, or old split artifacts. The IU 
 
 ## Required behavior
 
+
+### Governance posture check
+
+Implementation execution is not autonomous code editing followed by HIRMOS reporting. Before editing, confirm that the active IU is the execution authority and that the current command state permits implementation. If not, stop before mutation.
+
+
 1. Confirm and record this capability decision under `_hirmos/core/protocol/CAPABILITY_ROUTING.md` in `_hirmos/session/SESSION_EXECUTION.md`.
 2. Instantiate or update only the canonical artifacts required by the active request path.
 3. Produce non-placeholder content before claiming completion.
@@ -82,3 +88,8 @@ Before marking the capability complete, record exactly one producer outcome in `
 
 Record full item fields in `unresolved-items.md`, including current status, downstream impact, and revalidation point; do not duplicate the full field schema in this entrypoint.
 
+## PROD-L8.19 execution authority gate
+
+Before editing project files, implementation execution must verify that the target `IU-xx.md` existed before material changes and contains non-placeholder Unit Scope, Files / Areas, Acceptance Criteria, Verification Commands / Checks, and Evidence Requirements.
+
+If the IU is missing, placeholder-only, or was created retrospectively after implementation began, implementation execution must stop and route to correction/deviation handling. Do not execute from `SESSION_SCOPE.md` implementation-shape preview alone when IU mode is active.

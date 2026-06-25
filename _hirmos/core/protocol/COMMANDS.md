@@ -7,6 +7,13 @@ Commands are user actions. Commands are not lifecycle stages. Commands activate,
 
 ## Public commands
 
+### Governance posture for every command
+
+Commands authorize work; they do not merely label work after it happened. HIRMOS is not an after-the-fact compliance layer. Before a command edits project files, creates implementation evidence, performs a correction, or updates accepted state, the command must confirm that `SESSION_STATE.json`, the active authority artifact, and the command-specific protocol permit the action.
+
+If the command state is invalid, HIRMOS must fail closed or route to the command that creates valid authority. It must not act first and then reconstruct session artifacts, implementation units, evidence, or correction ledgers to satisfy governance afterward.
+
+
 ```text
 hirmos start
 hirmos continue

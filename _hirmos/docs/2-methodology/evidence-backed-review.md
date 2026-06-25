@@ -1,5 +1,8 @@
 # Evidence-Backed Review
 
+
+HIRMOS evidence is not after-the-fact compliance paperwork. It is the governed proof trail for authorized work. Review must preserve whether the work was authorized before execution, whether evidence was collected contemporaneously or during correction, and whether any governance deviation occurred.
+
 HIRMOS should not claim readiness, implementation completion, or close success without evidence.
 
 Evidence-backed review means that claims are tied to artifacts, observed results, validation output, or explicit not-applicable rationale.

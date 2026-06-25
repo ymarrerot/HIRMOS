@@ -259,3 +259,13 @@ When implementation starts or completes for this phase, HIRMOS must update the p
 | Phase lifecycle status matches active session state | MATCH / STALE / NOT_CHECKED | |
 | Phase Progress Ledger reflects current session work | MATCH / STALE / NOT_CHECKED | |
 | Acceptance evidence gate reflects current evidence level | MATCH / STALE / NOT_CHECKED | |
+
+## PROD-L8.19 Later Verification Update Record
+
+When a later session resolves a carry-forward item, runtime limitation, or evidence gap that affected this phase, append a current verification update instead of rewriting the original historical close verdict.
+
+| Update date/session | Later evidence source | Original limitation / carry-forward | Current verification posture | Phase status impact | Notes |
+|---|---|---|---|---|---|
+| | | | ACCEPTED / PARTIAL / BLOCKED / HISTORICAL_ONLY | | |
+
+The original phase close verdict remains historical. This section records whether later evidence changes the current interpretation future sessions should use.

@@ -4,6 +4,18 @@ This file records version-level operational notes for the installed HIRMOS frame
 
 ## Current baseline
 
+
+## PROD-L8.20 governance posture note
+
+HIRMOS must be treated as active governance, not an after-the-fact compliance layer. The model is the executor inside HIRMOS governance. Material implementation, correction, evidence, close, or accepted-state work requires valid command state and active authority before acting.
+
+If work occurs outside valid authority, HIRMOS must record a governance deviation/correction and reconcile it before readiness, completion, or close claims.
+
+
+## HIRMOS 1.1.2 baseline
+
+HIRMOS 1.1.2 is the governance posture and pre-execution authority stabilization baseline. It builds on the 1.1.1 current-state-first source-reading baseline by clarifying that HIRMOS is active governance authority, not after-the-fact compliance paperwork, and by strengthening idle command legality, implementation-unit timing, correction-ledger concordance, and close-time chronology/freshness guidance.
+
 ## HIRMOS 1.1.1 baseline
 
 HIRMOS 1.1.1 is the current-state-first source reading, runtime freshness, and complexity-pressure stabilization baseline. It builds on the 1.1.0 accepted-state navigation model by strengthening how HIRMOS follows source artifacts during Understand System State and how runtime artifacts stay fresh after governed transitions.
@@ -59,6 +71,10 @@ The CLI package version remains unchanged when the framework content changes but
 Release packaging must ship only canonical runtime surfaces, templates, docs, validators, and examples. Framework files must remain project-agnostic except for clearly labeled examples.
 
 
+## 1.1.2 stabilization note
+
+HIRMOS 1.1.2 includes governance-posture clarity, idle `hirmos continue` fail-closed behavior, implementation-unit pre-execution authority, correction-command ledger concordance, timestamp chronology guidance, delivery-plan close-time freshness, and carry-forward resolution concordance. No terminal CLI version bump is required because terminal install behavior did not change.
+
 ## 1.1.1 stabilization note
 
 HIRMOS 1.1.1 includes current-state-first source reading discipline, runtime freshness guidance, implementation-unit timing hardening, gated continue semantics, evidence claim reconciliation, accepted-state support minimality, protocol ownership guidance, validator minimality classes, capability taxonomy, and source-authority matrix stabilization. No terminal CLI version bump is required because terminal install behavior did not change.
@@ -70,3 +86,10 @@ HIRMOS 1.1.0 includes accepted-state navigation authority, source-artifact trace
 ## PROD-L8.15 current-state source reading and freshness
 
 Framework users should treat `CURRENT_SYSTEM_STATE.md` as the first read and navigation authority, then follow active and materially relevant source artifact pointers before design or implementation. Existing projects with a default `_hirmos/system/accepted-state/DECISION_LOG.md` may remove it unless explicit decision-log governance is active.
+
+## PROD-L8.19 command legality / IU authority / correction ledger hardening
+
+- Hardened idle-state `hirmos continue` semantics: no direct project-file mutation while no active governed session exists.
+- Hardened IU pre-execution authority: when IU mode is active, IU artifacts must exist before material code changes; retrospective IU creation is a governance deviation unless lightweight/no-IU mode was declared before edits.
+- Hardened correction-ledger expectations so material correction commands are recorded individually in `SESSION_EXECUTION.md`.
+- Hardened close-time chronology, delivery-plan freshness, and later carry-forward resolution concordance.

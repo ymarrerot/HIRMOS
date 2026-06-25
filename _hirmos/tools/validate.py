@@ -222,7 +222,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.1.1'
+expected_version = '1.1.2'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -1456,6 +1456,53 @@ for forbidden in ['session-scope-contract', 'phase-planning']:
 print('PASS: HIRMOS delivery / phase capability rewire static check')
 
 print('PASS: HIRMOS durable delivery templates and classification gate static check')
+
+
+
+# PROD-L8.19 static governance checks
+for rel, phrases in {
+    'core/protocol/COMMAND_STATE_MACHINE.md': ['PROD-L8.19 Idle Continue Fail-Closed Rule', 'must not mutate project files', 'must not modify project files'],
+    'core/commands/continue.md': ['PROD-L8.19 idle-state command legality', 'must fail closed before any project-file or artifact mutation', 'PROD-L8.19 IU pre-execution authority gate'],
+    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.19 Command Legality and Correction Ledger Concordance', 'Idle Continue Legality Record', 'IU Pre-Execution Authority Record', 'Material Correction Command Ledger'],
+    'core/templates/session/implementation-units/IU.md': ['PROD-L8.19 Pre-Execution Authority Declaration', 'must not be represented as normal pre-execution governance'],
+    'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': ['PROD-L8.19 pre-execution authority requirement', 'governance deviation/correction'],
+    'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['PROD-L8.19 execution authority gate', 'Do not execute from `SESSION_SCOPE.md` implementation-shape preview alone'],
+    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.19 archive chronology and carry-forward concordance', 'Session archive timestamp monotonicity', 'Delivery-plan multi-section freshness', 'Later carry-forward resolution concordance'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['PROD-L8.19 Close-Time Freshness Sweep', 'not stale or explicitly historical'],
+    'core/templates/system/delivery/phases/PHASE.md': ['PROD-L8.19 Later Verification Update Record', 'original historical close verdict'],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['PROD-L8.19 Transition / Close Chronology Note', 'Active navigation pointers may change during governed transitions'],
+    'core/protocol/CURRENT_SYSTEM_STATE.md': ['PROD-L8.19 transition/close update split', 'Transition navigation updates', 'Accepted-state close updates'],
+    'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.19 validator responsibility boundaries', 'should not enforce user-managed package/export hygiene'],
+}.items():
+    body = (root/rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            print(f'FAIL: PROD-L8.19 governance hardening surface {rel} missing {phrase}')
+            sys.exit(1)
+print('PASS: HIRMOS PROD-L8.19 command legality / IU authority / correction ledger static check')
+
+
+# PROD-L8.20 governance posture and model role clarity checks
+for rel, phrases in {
+    'AGENTS.md': ['Governance posture rule', 'not an after-the-fact compliance layer', 'executor inside HIRMOS governance'],
+    'core/bootstrap.md': ['Governance posture', 'active governance authority for the run', '16. Governance posture'],
+    'core/authority/LIFECYCLE.md': ['Governance posture', 'authority boundaries, not paperwork stages', 'retrospective decoration'],
+    'core/protocol/COMMANDS.md': ['Governance posture for every command', 'Commands authorize work', 'reconstruct session artifacts'],
+    'core/protocol/COMMAND_STATE_MACHINE.md': ['PROD-L8.20 Governance Posture Interpretation', 'precondition for action', 'not compliance documents'],
+    'core/commands/continue.md': ['Governance posture check', 'active governance', 'Do not patch first'],
+    'core/protocol/VALIDATION_AND_EVIDENCE.md': ['Governance posture for evidence', 'governed proof trail of authorized work', 'governance deviation/correction'],
+    'extensions/implementation-agent/entrypoints/default.md': ['Governance posture', 'execute inside HIRMOS governance', 'must not implement first'],
+    'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['Governance posture check', 'not autonomous code editing followed by HIRMOS reporting', 'stop before mutation'],
+    'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': ['Governance posture check', 'creates execution authority before material work', 'reconstruct task files after implementation'],
+    'core/templates/session/implementation-units/IU.md': ['Governance posture: this file is pre-execution authority', 'not an after-the-fact compliance report'],
+    'core/templates/session/SESSION_SCOPE.md': ['Governance posture: this preview is not implementation authority', 'reconstruct IU artifacts as compliance evidence'],
+    'extensions/system-state-agent/entrypoints/default.md': ['Governance posture check', 'governed synchronization', 'Do not convert ungoverned edits into accepted state'],
+}.items():
+    body = (root/rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.20 governance posture surface {rel} missing {phrase}')
+print('PASS: HIRMOS PROD-L8.20 governance posture and model role clarity static check')
 
 print('PASS: HIRMOS core authority/bootstrap static check')
 

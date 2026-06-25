@@ -55,6 +55,12 @@ Do not create standalone `SESSION_SCOPE.md Implementation Unit Plan`, `implement
 
 ## Required behavior
 
+
+### Governance posture check
+
+Implementation-unit planning creates execution authority before material work. It must not be used to reconstruct task files after implementation unless the session is explicitly recording a governance deviation/correction.
+
+
 1. Confirm and record this capability decision under `_hirmos/core/protocol/CAPABILITY_ROUTING.md` in `_hirmos/session/SESSION_EXECUTION.md`.
 2. Instantiate or update only the canonical artifacts required by the active request path.
 3. Produce non-placeholder content before claiming completion.
@@ -77,3 +83,13 @@ Before marking the capability complete, record exactly one producer outcome in `
 
 Record full item fields in `unresolved-items.md`, including current status, downstream impact, and revalidation point; do not duplicate the full field schema in this entrypoint.
 
+## PROD-L8.19 pre-execution authority requirement
+
+This capability is the last allowed step before IU-governed material implementation begins. If the session requires IU mode, this capability must create the IU artifacts before any implementation-execution capability or project-file edit is performed.
+
+Required control:
+
+- record in `SESSION_EXECUTION.md` that IU artifacts were created before material edits;
+- mark each IU with the `PROD-L8.19 Pre-Execution Authority Declaration`;
+- fail closed if implementation has already occurred and IU files are being reconstructed after the fact;
+- if reconstruction is necessary for audit, record it as a governance deviation/correction, not as normal IU planning.

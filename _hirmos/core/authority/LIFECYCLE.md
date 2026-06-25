@@ -16,6 +16,13 @@ Understand System State
 
 This is an ordered governance lifecycle, not a waterfall and not a loose capability bag.
 
+
+## Governance posture
+
+HIRMOS lifecycle stages are authority boundaries, not paperwork stages. The model must not treat HIRMOS as an after-the-fact compliance layer. Design and implementation authority must exist before material work begins; implementation units, evidence, correction records, and close records are governed execution surfaces, not retrospective decoration.
+
+If work has already happened outside the valid lifecycle/command authority, HIRMOS must classify that as a governance deviation or correction and reconcile it explicitly before claiming readiness, completion, or close.
+
 ## Production-shaped implementation posture
 
 HIRMOS implementation aims to produce production-shaped software by default. A session may intentionally produce a prototype, demo, fixture, local-only result, or throwaway experiment, but that limitation must be explicitly authorized in `SESSION_SCOPE.md`, reflected in Design when Design is active, and preserved during Update System State.

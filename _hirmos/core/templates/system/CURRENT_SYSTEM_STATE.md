@@ -395,3 +395,14 @@ Required concordance fields:
 Active navigation pointers may be refreshed during governed `hirmos start` / `hirmos continue` transitions when active delivery, phase, session, unresolved-register, or next-command pointers change. These pointer updates do not by themselves claim accepted completion.
 
 Accepted-state outcome rows, latest accepted close metadata, final Work History Ledger outcomes, accepted-state summary changes, and archive concordance are updated during `hirmos close`.
+
+## PROD-L8.19 Transition / Close Chronology Note
+
+Active navigation pointers may change during governed transitions such as delivery acceptance, phase instantiation, session-baseline creation, and correction-session start. Accepted-state summaries, Work History Ledger outcome rows, latest-close metadata, and completed/accepted history are updated at close.
+
+Current-state navigation must preserve chronology:
+
+- active pointers reflect the latest governed transition;
+- Work History Ledger outcome rows reflect closed/completed governed work;
+- if active/proposed rows are recorded before close, label them ACTIVE / PROPOSED, not accepted;
+- archive/session timestamps must be monotonic by governed session sequence unless an explicit exception is recorded.

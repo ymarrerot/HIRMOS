@@ -153,3 +153,18 @@ Freshness rule: after a delivery-baseline acceptance/amendment instantiates a ph
 Generated delivery-roadmap text must not imply that a delivery is accepted or active before the delivery baseline is accepted. When a delivery status is `PROPOSED` or `READY_FOR_BASELINE_REVIEW`, headings, summaries, and checkpoint-facing labels must use status-aware terms such as `Candidate Delivery`, `Proposed Delivery`, or `Delivery Under Baseline Review`. Reserve `Active Delivery` for post-acceptance statuses such as `ACTIVE`, `ACCEPTED`, `PARTIAL`, `BLOCKED`, or accepted carry-forward work.
 
 Generated artifacts should use current-state-first evidence to explain delivery shape: current system state, scope size, governance need, validation risk, continuity need, and artifact authority. Project-type labels may appear as evidence metadata only when useful; they must not be the primary reason for delivery/session/phase selection.
+
+## PROD-L8.19 Close-Time Freshness Sweep
+
+At every close affecting this delivery, reconcile all active/pointer sections, not only the newest appended note.
+
+| Section / pointer | Required current value | Actual value | Status | Notes |
+|---|---|---|---|---|
+| Active delivery | accepted/active/completed/deferred/cancelled as applicable | | PENDING | |
+| Active phase | current phase or none after completion | | PENDING | |
+| Current carry-forward | active item count and pointer | | PENDING | |
+| Current accepted-state version / latest close | current `CURRENT_SYSTEM_STATE.md` state/version/close pointer | | PENDING | |
+| Delivery Review / Active Context | not stale or explicitly historical | | PENDING | |
+| Status Update Log | material phase/session transitions recorded | | PENDING | |
+
+If an older section is retained for history, label it historical. Do not let stale active-context prose remain indistinguishable from current truth.

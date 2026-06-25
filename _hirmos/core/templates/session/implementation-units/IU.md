@@ -5,6 +5,9 @@ Purpose: define, execute, evidence, review, and retry one bounded implementation
 
 An Implementation Unit is a bounded execution authority record, not a generic task or prompt.
 
+
+Governance posture: this file is pre-execution authority, not an after-the-fact compliance report. When IU mode is active, this file must exist with non-placeholder authority before material code/configuration changes for this unit begin.
+
 ## 1. Unit Identity
 
 - Unit ID:
@@ -214,3 +217,15 @@ Append retry sections here when a retry is required. Do not create a separate re
 - Adopted phase item(s) satisfied by this unit: 
 - Evidence pointer(s): 
 - Remaining gap or carry-forward implication: NONE / RECORDED / BLOCKED / NOT_APPLICABLE
+
+## PROD-L8.19 Pre-Execution Authority Declaration
+
+This IU must exist as a non-placeholder execution authority before material implementation begins, unless the session explicitly declared lightweight/no-IU mode before implementation.
+
+- IU created before material code changes: YES / NO
+- If NO, governance deviation recorded in `SESSION_EXECUTION.md`: YES / NO / NOT_APPLICABLE
+- Pre-execution authority complete: YES / NO
+- First material edit allowed only after this declaration is YES: YES / NO
+- Evidence of pre-execution authority: `<SESSION_EXECUTION.md continuation pass / command ledger / timestamp / diff reference>`
+
+A retrospective IU may document what happened, but it must not be represented as normal pre-execution governance unless it actually existed before the material edits.

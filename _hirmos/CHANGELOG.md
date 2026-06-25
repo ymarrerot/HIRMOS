@@ -6,6 +6,17 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 ## Unreleased
 
+## 1.1.2 — Governance posture and pre-execution authority stabilization
+
+- Hardened HIRMOS governance posture so the framework is presented as active execution authority, not after-the-fact compliance paperwork.
+- Clarified model role: the model executes inside HIRMOS governance and must not implement first, then reconstruct implementation units, evidence, or ledger rows afterward.
+- Hardened idle `hirmos continue` command legality so idle continuations fail closed or route to governed start/correction flow before project-file changes.
+- Strengthened implementation-unit pre-execution authority: when IU mode is active, IU artifacts must exist before material code changes begin; retrospective IU creation is a governance deviation/correction.
+- Strengthened correction ledger concordance so material correction commands are recorded as distinct command-level passes rather than collapsed summaries.
+- Hardened close-time concordance guidance for timestamp chronology, delivery-plan freshness, and later carry-forward resolution evidence.
+- Preserved current-state-first source reading discipline, protocol ownership, validator minimality, capability taxonomy, and source-authority matrix from the 1.1.1 baseline.
+- CLI package version remains 1.3.4 because terminal install behavior did not change.
+
 ## 1.1.1 — Current-state source reading and complexity-pressure stabilization
 
 ### Changed
@@ -234,3 +245,10 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 - Hardened gated unresolved item continue semantics so pending user input cannot be silently accepted by bare `hirmos continue`.
 - Made `DECISION_LOG.md` conditional rather than a default accepted-state root artifact; `CARRY_FORWARD.md` remains active-only support.
 - Added reuse-first complexity-control doctrine before adding new governance surfaces.
+
+## PROD-L8.19 command legality / IU authority / correction ledger hardening
+
+- Hardened idle-state `hirmos continue` semantics: no direct project-file mutation while no active governed session exists.
+- Hardened IU pre-execution authority: when IU mode is active, IU artifacts must exist before material code changes; retrospective IU creation is a governance deviation unless lightweight/no-IU mode was declared before edits.
+- Hardened correction-ledger expectations so material correction commands are recorded individually in `SESSION_EXECUTION.md`.
+- Hardened close-time chronology, delivery-plan freshness, and later carry-forward resolution concordance.

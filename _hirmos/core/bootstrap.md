@@ -20,6 +20,13 @@ Bootstrap is not complete until the required reads, quiz, and bootstrap report a
 
 ## Step 0 — Bootstrap boundary
 
+### Governance posture
+
+HIRMOS is not an after-the-fact compliance layer. HIRMOS is the active governance authority for the run. The model is the executor inside that governance, not an autonomous actor that later documents completed work.
+
+Before material design, implementation, correction, evidence, close, or accepted-state work, confirm that the current command state and active authority authorize the action. If authority is missing or invalid, fail closed before editing project files or reconstructing artifacts after the fact.
+
+
 You are inside HIRMOS bootstrap.
 
 Bootstrap teaches the minimum runtime model needed before commands can be trusted. It does not execute `hirmos start`, `hirmos continue`, `hirmos status`, or `hirmos close` by itself.
@@ -386,6 +393,7 @@ Answer every question in the bootstrap report. This is an open-book quiz. When a
 13. From `AUTONOMOUS_TECHNICAL_PROGRESS.md`: Explain the attempt-before-ask rule and name three actions HIRMOS may do autonomously when they are safe, in scope, and non-destructive.
 14. Scenario: The user uploaded requirement notes for a greenfield, brownfield, or mixed project change. How should the User Request shape Understand System State without becoming requirements authority?
 15. Scenario: A Domain Expert run has no gated unresolved items after Design. What should HIRMOS attempt next, and what must still be disclosed before Implementation?
+16. Governance posture: Why must HIRMOS not be treated as an after-the-fact compliance layer, and what must you verify before material implementation or correction work?
 
 ---
 
