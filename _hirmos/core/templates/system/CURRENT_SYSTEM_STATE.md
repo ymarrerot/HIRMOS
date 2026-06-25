@@ -8,10 +8,12 @@
 > - Use canonical evidence states from `EVIDENCE.md` claim reconciliation.
 > - Keep accepted-state decision classifications separate from evidence status.
 
-Status: durable accepted-state record.
-Purpose: canonical merged current truth of the software system for future HIRMOS sessions, including accepted-state navigation and latest-close metadata.
+Status: durable accepted-state navigation authority.
+Purpose: canonical accepted current truth, accepted-state navigation, active governance pointers, latest-close metadata, and chronological source-artifact traceability for HIRMOS-governed work.
 
-This file is updated only by governed Update System State / normal close. It is merged current truth and accepted-state navigation metadata, not a session log.
+This file is updated only by governed Update System State / normal close. It is an index-first current-state authority: it records current navigation, concise accepted-state summaries, and source artifact pointers. It is not a cumulative requirements catalog, full design document, system-scope substitute, session log, delivery scope, evidence record, or archive manifest.
+
+Detailed source authority remains in delivery, phase, session, implementation, evidence, unresolved-item, and archive artifacts referenced below.
 
 ## 1. Current State Header
 
@@ -22,68 +24,14 @@ This file is updated only by governed Update System State / normal close. It is 
 | Last updated by session | |
 | Last accepted close archive | |
 | Last update date | |
-| Project type | |
+| Current-state evidence basis | source artifacts listed in Work History Ledger / Source Artifact Index |
+| Project-type evidence, if relevant | current-state evidence metadata only; not primary routing authority |
 | Active stack / stack contexts | |
 | Current confidence | unknown |
 
+## 2. Current Governance Context
 
-## 2. Accepted-State Navigation and Latest Close
-
-This section is part of `CURRENT_SYSTEM_STATE.md` so accepted-state navigation, latest-close metadata, and current truth cannot drift across separate files.
-
-### Accepted-State Files
-
-| Artifact | Purpose | Required | Last updated by session |
-|---|---|---:|---|
-| `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` | Canonical merged current truth and accepted-state navigation | yes | |
-| `_hirmos/system/accepted-state/CARRY_FORWARD.md` | Active unresolved / future-session obligations only | yes | |
-| `_hirmos/system/accepted-state/DECISION_LOG.md` | Durable accepted/rejected/superseded decisions | yes | |
-| `_hirmos/system/accepted-state/REQUIREMENTS.md` | Accepted requirements catalog and coverage map, when applicable | conditional | |
-
-### Latest Accepted Close
-
-- Session ID:
-- Archive path:
-- Archive manifest:
-- Close date:
-- Current system state version:
-- Accepted outcomes summary:
-- Post-close state consistency: unknown
-- Archive manifest concordance: unknown
-
-### Accepted-State Track Summary
-
-| Track | Current summary | Source section / artifact |
-|---|---|---|
-| Product / MVP scope | | Current System State §3 |
-| Delivery completion | | Current System State §4 |
-| Local runtime readiness | | Current System State §8 |
-| Runtime integration posture | | Current System State §7 |
-| Production readiness planning | | Current System State §9 |
-| Production provider readiness | | Current System State §9 |
-| Compliance / go-live readiness | | Current System State §9 |
-
-### Future Session Starting Notes
-
-Future sessions must read `CURRENT_SYSTEM_STATE.md` before treating archived session history, chat transcripts, summaries, or generated reports as current truth.
-
-## 3. Product State
-
-### Accepted product scope
-
-### Accepted roles / actors
-
-### Accepted workflows
-
-### Accepted MVP boundaries
-
-### Explicitly out of scope
-
-## 4. Delivery State
-
-### Active Development Context and Delivery Pointers
-
-This is the canonical pointer surface for durable delivery governance. It records only pointers and current delivery navigation. It must not duplicate the Delivery Plan, Delivery Scope, Phase scope, or session-local scope content.
+This is the canonical pointer surface for current accepted-state navigation. It records active and recommended governance pointers only; it must not duplicate delivery scope, phase scope, session scope, requirements, design, unresolved-item details, implementation details, evidence, or archive content.
 
 | Field | Value | Source / evidence |
 |---|---|---|
@@ -93,7 +41,10 @@ This is the canonical pointer surface for durable delivery governance. It record
 | Active delivery scope | none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | |
 | Active phase | none / `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` | |
 | Active phase lifecycle status | NOT_STARTED / READY_FOR_ADOPTION / ACTIVE / BLOCKED / PARTIAL / READY_FOR_ACCEPTANCE / ACCEPTED / DEFERRED / SUPERSEDED / CANCELLED / NOT_APPLICABLE | |
-| Active phase type | GREENFIELD / BROWNFIELD / MIXED / UNKNOWN / NOT_APPLICABLE | |
+| Active phase type | GREENFIELD / BROWNFIELD / MIXED / UNKNOWN / NOT_APPLICABLE | evidence metadata only |
+| Active session scope | none / `_hirmos/session/SESSION_SCOPE.md` | |
+| Delivery unresolved register | none / `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` | |
+| Session unresolved register | none / `_hirmos/session/unresolved-items.md` | |
 | Last accepted delivery | none / `<delivery-id>` | |
 | Last accepted phase | none / `<phase-id>` | |
 | Last accepted session/archive | none / `<archive path>` | |
@@ -102,12 +53,13 @@ This is the canonical pointer surface for durable delivery governance. It record
 | Next recommended phase | none / `<phase-id>` | |
 | Next governed command | `hirmos start` / `hirmos status` / `hirmos continue` / `hirmos close` / none | |
 
-
 Canonical literal pointer labels for validator/status checks:
 
 ```text
 Delivery roadmap: none / `_hirmos/system/delivery/DELIVERY_PLAN.md`
 Active delivery scope: none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
+Active phase: none / `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`
+Active session scope: none / `_hirmos/session/SESSION_SCOPE.md`
 Next recommended delivery: none / `<delivery-id>`
 Next recommended delivery scope: none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
 Archive manifest concordance: unknown / PASS / PARTIAL / BLOCKED
@@ -131,13 +83,129 @@ Pointer update rules:
 - UNKNOWN phase type must not support implementation readiness.
 - Current System State pointers must agree with the durable Delivery Plan row and adopted PHASE-xx.md file.
 
-
 - If the selected delivery shape requires durable delivery artifacts, this section must point to the durable Delivery Plan and active Phase before the next implementation-capable session claims readiness.
 - If a delivery is accepted, superseded, blocked, deferred, cancelled, or replaced at close, Update System State must update last/active/next delivery pointers or explicitly record why they are unchanged.
 - If a delivery is accepted and `DELIVERY_PLAN.md` contains a planned follow-up delivery whose relationship follows or depends on that accepted delivery, record `Next recommended delivery` and `Next recommended delivery scope`, or explicitly record why no next delivery is recommended.
 - If a phase is accepted, superseded, blocked, or replaced at close, Update System State must update these pointers or explicitly record why they are unchanged.
 - If delivery governance is not active, record `NO` or `NOT_APPLICABLE`; do not leave stale delivery or phase pointers from a prior delivery.
 - `hirmos status` must read this section before reporting active/next delivery work.
+
+## 3. Accepted-State Navigation and Latest Close
+
+This section is part of `CURRENT_SYSTEM_STATE.md` so accepted-state navigation, latest-close metadata, and current truth cannot drift across separate files.
+
+### Accepted-State Files
+
+| Artifact | Purpose | Required | Last updated by session |
+|---|---|---:|---|
+| `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` | Accepted-state navigation authority, current governance pointers, concise current-state summary, Work History Ledger, Source Artifact Index, and latest-close metadata | yes | |
+| `_hirmos/system/accepted-state/CARRY_FORWARD.md` | Active unresolved / future-session obligations only | yes | |
+| `_hirmos/system/accepted-state/DECISION_LOG.md` | Durable accepted/rejected/superseded decisions when decision-log governance is active | yes | |
+
+No default root accepted-state `REQUIREMENTS.md`, `DESIGN.md`, `SYSTEM_SCOPE.md`, `DECISIONS.md`, or `ACCEPTED_CHANGES.md` is created. Detailed requirements, design, and scope source authority remains at delivery, phase, session, implementation, evidence, unresolved-item, and archive levels.
+
+### Latest Accepted Close
+
+- Session ID:
+- Archive path:
+- Archive manifest:
+- Close date:
+- Current system state version:
+- Accepted outcomes summary:
+- Post-close state consistency: unknown
+- Archive manifest concordance: unknown
+
+### Future Session Starting Notes
+
+Future sessions must read `CURRENT_SYSTEM_STATE.md` before treating archived session history, chat transcripts, summaries, or generated reports as current truth.
+
+## 4. Accepted State Summary
+
+This section is a concise navigation summary only. It is not the complete requirements, design, scope, implementation, evidence, or decision authority. Detailed source authority remains in the delivery, phase, session, implementation, evidence, unresolved-item, and archive artifacts referenced in the Work History Ledger and Source Artifact Index.
+
+### Accepted product / system orientation
+
+### Accepted capabilities summary
+
+### Accepted boundaries summary
+
+### Important accepted constraints summary
+
+### Evidence and validation posture summary
+
+### Product State
+
+#### Accepted product scope summary
+
+#### Accepted roles / actors summary
+
+#### Accepted workflows summary
+
+#### Accepted MVP boundaries summary
+
+#### Explicitly out of scope summary
+
+## 5. Work History Ledger
+
+This chronological ledger records governed HIRMOS work outcomes and source authority paths. It is the durable traceability index for delivery, phase, session, implementation, correction, close, and material single-session work. It is not a command log and must not duplicate full requirements, design, scope, implementation, evidence, or archive content.
+
+| Date | Work ID | Type | Status | Authority | Source Artifacts | Accepted Output / Result |
+|---|---|---|---|---|---|---|
+| | | delivery baseline / phase-session baseline / single-session / implementation / correction / close | proposed / active / completed / deferred / blocked / cancelled / superseded / history-only | path or not applicable | paths | concise result and source pointer |
+
+Ledger rules:
+
+- Add or update one ledger row for each governed work outcome at normal close.
+- Track delivery baseline sessions, phase/session baseline sessions, single-session work, implementation sessions, correction sessions, completed deliveries, and material deferred/cancelled/superseded work.
+- Do not add routine `hirmos status` rows unless the command materially changes accepted state.
+- Requirements, design, and scope discovery are traced by source artifact path, not copied into this file as a cumulative catalog.
+- On-demand requirements/design/scope synthesis may be generated from this ledger and source artifacts, but generated synthesis is not source authority unless explicitly adopted under a future governed workflow.
+
+## 6. Source Artifact Index
+
+Use this index to make source requirements, design, scope, unresolved-item, evidence, delivery, phase, session, and archive artifacts discoverable without duplicating their content.
+
+### Delivery Authorities
+
+| Delivery ID | Status | Scope Authority | Optional Requirements Authority | Optional Design Authority | Unresolved Register |
+|---|---|---|---|---|---|
+| | | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | none / path | none / path | none / path |
+
+### Phase Authorities
+
+| Phase ID | Status | Phase Authority | Parent Delivery | Notes |
+|---|---|---|---|---|
+| | | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` | | |
+
+### Session Authorities
+
+| Session ID | Status | Session Authority | Archive Path | Notes |
+|---|---|---|---|---|
+| | | active / archived SESSION_SCOPE.md | | |
+
+### Requirement Sources
+
+| Source | Authority level | Status | Notes |
+|---|---|---|---|
+| | delivery / session / archive / generated synthesis | active / accepted / archived / superseded / not source authority | |
+
+### Design Sources
+
+| Source | Authority level | Status | Notes |
+|---|---|---|---|
+| | delivery / session / archive / generated synthesis | active / accepted / archived / superseded / not source authority | |
+
+### Evidence Sources
+
+| Source | Authority level | Status | Notes |
+|---|---|---|---|
+| | session / implementation-unit / archive | active / accepted / archived / superseded | |
+
+## 7. Delivery State
+
+### Active Development Context and Delivery Pointers
+
+This is the canonical pointer surface for durable delivery governance. It records only pointers and current delivery navigation. It must not duplicate the Delivery Plan, Delivery Scope, Phase scope, or session-local scope content.
 
 | Delivery Unit / Phase | Status | Accepted scope | Evidence / archive | Notes |
 |---|---|---|---|---|
@@ -149,14 +217,14 @@ Pointer update rules:
 - Rationale:
 - Required next command/action:
 
-## 5. Implementation State
+## 8. Implementation State
 
 | Capability / area | Current accepted implementation state | Evidence / archive | Limitations |
 |---|---|---|---|
 
 ### Rejected / not-applied implementation outcomes
 
-## 6. Technical / Architecture State
+## 9. Technical / Architecture State
 
 ### Stack
 
@@ -168,11 +236,11 @@ Pointer update rules:
 
 ### Important accepted technical decisions
 
-Reference durable decisions in `DECISION_LOG.md`.
+Reference durable decisions in `DECISION_LOG.md` when decision-log governance is active.
 
 ### Superseded technical decisions
 
-## 7. Runtime Integration State
+## 10. Runtime Integration State
 
 Use canonical posture values from `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md` only.
 
@@ -185,7 +253,7 @@ Use canonical posture values from `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND
 | Storage | | | | |
 | Deployment / hosting | | | | |
 
-## 8. Evidence State
+## 11. Evidence State
 
 Use canonical evidence states from `_hirmos/core/protocol/CLAIM_RECONCILIATION.md` only.
 
@@ -199,7 +267,7 @@ Use canonical evidence states from `_hirmos/core/protocol/CLAIM_RECONCILIATION.m
 | User environment verification | | | |
 | Production readiness verification | | | |
 
-## 9. Production Readiness State
+## 12. Production Readiness State
 
 Keep these tracks separate. Do not collapse planning into readiness.
 
@@ -211,21 +279,16 @@ Keep these tracks separate. Do not collapse planning into readiness.
 | Compliance / legal / operational readiness | | | |
 | Go-live approval | | | |
 
-## 10. Unresolved / Carry-Forward State
+## 13. Unresolved / Carry-Forward State
 
 Summarize active carry-forward items. Canonical active item details live in `CARRY_FORWARD.md`.
 
 | Item | Type | Owner | Future-session instruction | Source |
 |---|---|---|---|---|
 
-## 11. History / Traceability
+## 14. History / Traceability / Merge Notes
 
-| Session / archive | Sections changed | Accepted outcomes | Rejected / carried outcomes |
-|---|---|---|---|
-
-## Merge Notes
-
-Record only the latest merge note for current readability. Full history remains in session archives and `CURRENT_SYSTEM_STATE.md` History / Traceability.
+Record only the latest merge note for current readability. Full chronological navigation belongs in the Work History Ledger. Full detailed history remains in session archives and source artifacts.
 
 - Last merge summary:
 - Sections updated:
@@ -262,17 +325,6 @@ NOT_APPLICABLE
 
 Do not use shorthand values such as `observed`, `build pass`, `LOCAL_REAL`, `ACCEPTED_AT_CLOSE`, or `NOT_IMPLEMENTED` in posture/evidence/status fields. Put nuance in source/rationale/limitations fields.
 
-## Requirements Reference
-
-| Field | Value |
-|---|---|
-| Accepted requirements | `_hirmos/system/accepted-state/REQUIREMENTS.md` |
-| Baseline version | `<version or unknown>` |
-| Coverage posture | `<summary>` |
-| Incomplete / deferred requirements | `<summary or link to CARRY_FORWARD.md>` |
-
-`CURRENT_SYSTEM_STATE.md` summarizes accepted requirements coverage posture, but `REQUIREMENTS.md` remains the requirement catalog and coverage map.
-
 ## Cross-Run Lessons Applied
 
 Use this section when accepted state incorporates lessons from multiple candidate implementations, prototypes, generated apps, external spec-tool outputs, UX drafts, or prior self-runs.
@@ -282,7 +334,6 @@ Use this section when accepted state incorporates lessons from multiple candidat
 | | | requirements / design / implementation / UX / test / package / carry-forward | | |
 
 This section summarizes accepted lessons only. Rejected or deferred lessons belong in `DECISION_LOG.md` or `CARRY_FORWARD.md`.
-
 
 ### Close-Time Delivery Pointer Refresh Rule
 
@@ -302,18 +353,15 @@ If no pointer value changed, record that the value was explicitly verified uncha
 
 When a multi-session phase closes as `PARTIAL`, `BLOCKED`, or `DEFERRED`, Current System State must point to the still-active phase, the next phase, or the explicit carry-forward target. It must not imply that the Delivery Plan or project is complete when phase carry-forward obligations remain.
 
-
 ## Phase Acceptance Pointer Rule
 
 When a phase becomes `ACCEPTED`, Current System State must update active delivery pointers so the accepted phase is recorded as the last accepted phase, the next recommended phase is explicit, and no stale active phase pointer implies more work remains in the accepted phase unless an amendment or new phase is opened.
-
 
 ## Phase Lifecycle Status Pointer Rule
 
 `hirmos status` must read this accepted-state pointer section before reporting active delivery work and must surface a Phase Lifecycle Status Report with phase lifecycle status, phase type, Phase Entry Gate status, Phase Progress Ledger status, Carry-Forward Items status, Phase Acceptance Evidence Gate status, pointer concordance, blocked controls, and exactly one recommended next command.
 
 Current System State must remain pointer-only: it may point to Delivery Plan, Phase, archive, and evidence locations, but must not duplicate the detailed phase scope or acceptance evidence.
-
 
 ## Archive Manifest Concordance Rule
 

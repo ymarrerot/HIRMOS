@@ -59,12 +59,13 @@ _hirmos/system/accepted-state/
 
 The baseline accepted-state files are:
 
-- `CURRENT_SYSTEM_STATE.md` — canonical merged current truth, accepted-state navigation, active development-context pointers, and latest-close metadata;
+- `CURRENT_SYSTEM_STATE.md` — accepted-state navigation authority, current governance pointers, chronological Work History Ledger, Source Artifact Index, concise current-state summary, and latest-close metadata;
 - `CARRY_FORWARD.md` — active carry-forward obligations only;
-- `DECISION_LOG.md` — durable accepted, rejected, superseded, and replaced decisions;
-- `REQUIREMENTS.md` when requirements governance is active.
+- `DECISION_LOG.md` — durable accepted, rejected, superseded, and replaced decisions when decision-log governance is active.
 
-A session archive is not accepted state by itself. Archived artifacts are history. Only accepted outcomes merged into `CURRENT_SYSTEM_STATE.md` become current accepted state.
+Default HIRMOS must not create root accepted-state `REQUIREMENTS.md`, `DESIGN.md`, `SYSTEM_SCOPE.md`, `DECISIONS.md`, or `ACCEPTED_CHANGES.md`. Requirements, design, and scope remain source authorities at delivery/session/archive level unless a future explicit cumulative-governance mode is activated.
+
+A session archive is not accepted state by itself. Archived artifacts are history. Accepted outcomes become current accepted state by updating `CURRENT_SYSTEM_STATE.md` navigation, Work History Ledger, Source Artifact Index, and concise accepted-state summary as needed.
 
 ## Archive manifest
 
@@ -104,7 +105,7 @@ Normal close requires all checks below to pass:
 | Runtime integration | accepted state and close output do not claim more integration or production readiness than evidence supports. |
 | Delivery status | active Delivery / Phase status is reconciled with accepted outcomes and next recommendation when applicable. |
 | Archive completeness | all active session artifacts are archived or exceptions are recorded. |
-| Accepted-state application | accepted-state files are updated only with accepted outcomes, active carry-forward obligations, and durable decisions. |
+| Accepted-state application | accepted-state files are updated only with accepted outcomes, active carry-forward obligations, durable decisions, source artifact pointers, Work History Ledger rows, and current governance navigation. Detailed requirements/design/scope content is not copied into root accepted-state artifacts by default. |
 | Active-session reset | `_hirmos/session/` is reset to minimal idle scaffolding after normal close. |
 | Stale artifact scan | no active-session runtime artifact remains outside the allowed idle scaffolding. |
 | Post-close status | `hirmos status` after close reports no active session and points to the latest archive and current-state latest-close metadata. |
@@ -149,7 +150,7 @@ Close must be blocked when:
 - active-session reset would destroy unarchived artifacts;
 - stale active-session artifacts remain after reset;
 - close would require new Design or Implementation work;
-- accepted-state records would contradict the archive or active session evidence.
+- accepted-state records would contradict the archive, source artifact index, Work History Ledger, or active session evidence.
 
 ## Abort close
 
@@ -311,3 +312,16 @@ Active phase: _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
 A normal close must not leave accepted state pointing to `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` as active delivery authority. That path is legacy/historical only under the PROD-L model.
 
 Close is blocked if `ARCHIVE_MANIFEST.md`, archived `SESSION_STATE.json`, active reset `SESSION_STATE.json`, and `CURRENT_SYSTEM_STATE.md` disagree about the close verdict, accepted outcomes, carry-forward state, delivery pointer updates, or next governed command.
+
+
+## PROD-L8.14 accepted-state navigation authority
+
+At normal close, HIRMOS must update `CURRENT_SYSTEM_STATE.md` using an index-first model:
+
+1. Current Governance Context.
+2. Work History Ledger.
+3. Source Artifact Index.
+4. Accepted State Summary only when materially changed.
+5. Next recommended work / navigation.
+
+Close must not merge session or delivery requirements into `_hirmos/system/accepted-state/REQUIREMENTS.md` by default. Instead, it records the source artifact path and accepted result in `CURRENT_SYSTEM_STATE.md`. A cumulative root requirements baseline requires explicit future governance activation and close-time merge/deprecation controls.

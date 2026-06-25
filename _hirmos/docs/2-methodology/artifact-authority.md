@@ -30,3 +30,8 @@ Design owns governed requirements, design, scope, delivery structure, technical 
 For durable multi-session delivery, a Delivery Plan is needed. Separate phase files are required only when the selected delivery shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`.
 
 Durable delivery authority lives under `_hirmos/system/delivery/<delivery-id>/`, not under `_hirmos/session/`. Active sessions consume the durable Delivery Plan and `PHASE-xx.md` through `SESSION_SCOPE.md` and implementation units.
+
+
+## Accepted-state navigation authority
+
+`CURRENT_SYSTEM_STATE.md` is the accepted-state navigation authority. It maintains current governance pointers, latest-close metadata, Work History Ledger, Source Artifact Index, and concise accepted-state summaries. It is not the source authority for full requirements, design, scope, implementation, evidence, unresolved-item, or archive content. Those remain in delivery/session/archive artifacts.

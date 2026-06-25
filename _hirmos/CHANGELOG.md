@@ -6,6 +6,15 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 ## Unreleased
 
+## 1.1.0 — Accepted-state navigation authority and source-artifact traceability
+
+### Changed
+
+- Reframed `CURRENT_SYSTEM_STATE.md` as the accepted-state navigation authority with current governance pointers, Work History Ledger, Source Artifact Index, and concise source-linked summaries.
+- Removed default root accepted-state `REQUIREMENTS.md`; detailed requirements remain in delivery/session/archive source artifacts unless explicit cumulative requirements governance is activated.
+- Updated close/start/continue/status guidance so accepted-state updates are index-first: current pointers, ledger row, source artifact index, concise summary when material, and next navigation.
+- Added validator and regression coverage to fail default root accepted-state requirements/design/scope artifacts unless explicit governance activation metadata is present.
+
 ## 1.0.9 — Phase-baseline concordance and current-state-first delivery review stabilization
 
 ### Changed

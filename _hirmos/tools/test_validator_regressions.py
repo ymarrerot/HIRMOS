@@ -703,6 +703,14 @@ Status: READY_FOR_BASELINE_REVIEW
 """)
 
 
+def mutate_root_accepted_requirements_without_governance_fails(root: Path) -> None:
+    (root / "system" / "accepted-state" / "REQUIREMENTS.md").write_text("# REQUIREMENTS.md\n\nStatus: accepted requirements catalog.\n")
+
+
+def mutate_root_accepted_requirements_with_governance_passes(root: Path) -> None:
+    (root / "system" / "accepted-state" / "REQUIREMENTS.md").write_text("# REQUIREMENTS.md\n\nCumulative accepted requirements governance: ACTIVE\n\nStatus: explicitly governed cumulative accepted requirements baseline.\n")
+
+
 # retained marker: accepted-state index reappears
 CASES = [
     Case("valid baseline", mutate_none, True, "PASS:"),
@@ -747,6 +755,8 @@ CASES = [
     Case("delivery baseline with session DESIGN fails", mutate_delivery_baseline_with_session_design_fails, False, "delivery_baseline focus must store optional design authority"),
     Case("delivery baseline with delivery optional authority passes", mutate_delivery_baseline_with_delivery_optional_authority_passes, True, "PASS:"),
     Case("delivery baseline active wording fails", mutate_delivery_baseline_active_wording_fails, False, "delivery wording conflict"),
+    Case("root accepted-state requirements without governance fails", mutate_root_accepted_requirements_without_governance_fails, False, "default root accepted-state artifact exists"),
+    Case("root accepted-state requirements with governance passes", mutate_root_accepted_requirements_with_governance_passes, True, "PASS:"),
 ]
 
 

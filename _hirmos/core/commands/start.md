@@ -320,7 +320,7 @@ Before meaningful Design for governed software work, `hirmos start` must establi
 Required behavior:
 
 - inventory and classify material source inputs;
-- read `_hirmos/system/accepted-state/REQUIREMENTS.md` when it exists;
+- read `CURRENT_SYSTEM_STATE.md` Work History Ledger and Source Artifact Index for prior requirement source pointers;
 - instantiate `_hirmos/session/REQUIREMENTS.md` before Design relies on source requirements;
 - normalize material requirements into stable requirement IDs;
 - classify non-goals, gated/unresolved requirements, blocked inputs, duplicates, superseded items, and not-applicable items;
@@ -420,3 +420,8 @@ During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `
 ## PROD-L8.13 Delivery Review Wording
 
 When reporting delivery-baseline state, use status-aware delivery labels. Before baseline acceptance, use Candidate Delivery, Proposed Delivery, or Delivery Under Baseline Review. Use Active Delivery only after the baseline has been accepted/amended and the delivery is in a post-acceptance state. Explain routing from current-state-first evidence and governance need rather than from greenfield/brownfield labels alone.
+
+
+## PROD-L8.14 accepted-state navigation read rule
+
+`hirmos start` must treat `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` as the accepted-state navigation authority. It must read Current Governance Context, Work History Ledger, Source Artifact Index, active delivery/phase/session pointers, latest close metadata, and active carry-forward items before deciding whether the request continues active governance or starts new work. It must not require or infer a default root accepted-state `REQUIREMENTS.md`.

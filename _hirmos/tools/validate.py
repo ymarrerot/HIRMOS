@@ -58,7 +58,6 @@ required = [
     'core/protocol/CURRENT_SYSTEM_STATE.md',
     'core/protocol/REQUIREMENTS.md',
     'core/templates/session/REQUIREMENTS.md',
-    'system/accepted-state/REQUIREMENTS.md',
     'docs/2-methodology/requirements-and-coverage.md',
     'core/protocol/AUTONOMOUS_TECHNICAL_PROGRESS.md',
     'core/protocol/LOCAL_TECHNICAL_SETUP_AND_ROLE_WORKFLOW_SMOKE_CHECKS.md',
@@ -224,7 +223,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.0.9'
+expected_version = '1.1.0'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -2210,9 +2209,9 @@ require_phrases('archive/session-state integrity', {
 })
 
 require_phrases('durable current-system-state merge and accepted-state invariants', {
-    'core/protocol/CURRENT_SYSTEM_STATE.md': ['canonical accepted current truth', 'Required accepted-state artifacts', 'Accepted-state tracks', 'Close blocking rules', 'Accepted-state navigation and latest-close metadata live in `CURRENT_SYSTEM_STATE.md`', 'Accepted-State Artifact Invariants'],
-    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Product State', 'Delivery State', 'Runtime Integration State', 'Production Readiness State'],
-    'system/accepted-state/CURRENT_SYSTEM_STATE.md': ['canonical merged current truth', 'Production Readiness State', 'Accepted-State Artifact Invariants:'],
+    'core/protocol/CURRENT_SYSTEM_STATE.md': ['canonical accepted current truth', 'Required accepted-state artifacts', 'Accepted-state tracks', 'Close blocking rules', 'Accepted-state navigation and latest-close metadata live in `CURRENT_SYSTEM_STATE.md`', 'Accepted-State Artifact Invariants', 'Work History Ledger', 'Source Artifact Index'],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Product State', 'Delivery State', 'Runtime Integration State', 'Production Readiness State', 'Work History Ledger', 'Source Artifact Index'],
+    'system/accepted-state/CURRENT_SYSTEM_STATE.md': ['accepted-state navigation authority', 'Production Readiness State', 'Accepted-State Artifact Invariants:', 'Work History Ledger', 'Source Artifact Index'],
     'system/accepted-state/CARRY_FORWARD.md': ['Active Carry-Forward Items', 'Active-Only Rule', 'Do not maintain a closed carry-forward table', 'Accepted-State Artifact Invariants:'],
     'system/accepted-state/DECISION_LOG.md': ['Active Accepted Decisions', 'Superseded Decisions', 'Accepted-State Artifact Invariants:'],
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['CURRENT_SYSTEM_STATE.md', 'DECISION_LOG.md', 'accepted-state invariant'],
@@ -2660,12 +2659,30 @@ for legacy_path in [
 for required_path in [
     root/'core/protocol/REQUIREMENTS.md',
     root/'core/templates/session/REQUIREMENTS.md',
-    root/'system/accepted-state/REQUIREMENTS.md',
     root/'docs/2-methodology/requirements-and-coverage.md',
 ]:
     if not required_path.exists():
         fail(f'PROD-L8 canonical requirements path missing: {required_path.relative_to(root)}')
 print('PASS: HIRMOS PROD-L8 legacy surface removal and first-version alignment static check')
+
+# PROD-L8.14 accepted-state navigation authority checks
+css_body = (root/'system/accepted-state/CURRENT_SYSTEM_STATE.md').read_text(errors='ignore')
+for phrase in ['accepted-state navigation authority', 'Work History Ledger', 'Source Artifact Index', 'concise navigation summary only', 'not the complete requirements, design, scope']:
+    if phrase.lower() not in css_body.lower():
+        fail(f'PROD-L8.14 CURRENT_SYSTEM_STATE.md missing navigation/ledger phrase: {phrase}')
+for forbidden in ['system/accepted-state/REQUIREMENTS.md', 'system/accepted-state/DESIGN.md', 'system/accepted-state/SYSTEM_SCOPE.md', 'system/accepted-state/DECISIONS.md', 'system/accepted-state/ACCEPTED_CHANGES.md']:
+    path = root / forbidden
+    if path.exists():
+        body = path.read_text(errors='ignore')
+        if 'Cumulative accepted requirements governance: ACTIVE' not in body and 'Explicit accepted-state artifact governance: ACTIVE' not in body:
+            fail(f'PROD-L8.14 default root accepted-state artifact exists without explicit governance activation: {forbidden}')
+for rel in ['core/protocol/CURRENT_SYSTEM_STATE.md', 'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md', 'core/commands/close.md', 'docs/2-methodology/requirements-and-coverage.md']:
+    body = (root/rel).read_text(errors='ignore')
+    for phrase in ['Work History Ledger', 'Source Artifact Index']:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.14 {rel} missing {phrase}')
+print('PASS: HIRMOS PROD-L8.14 accepted-state navigation authority static check')
+
 
 
 # PROD-L8.5 session execution ledger slimming and responsibility realignment checks

@@ -291,8 +291,8 @@ Close must verify:
 - `_hirmos/session/REQUIREMENTS.md` exists for material requirements work;
 - every material in-scope requirement has a coverage status;
 - every material requirement is mapped to delivered work, carry-forward, gated/unresolved state, blocked state, rejection, or explicit not-applicable rationale;
-- `_hirmos/system/accepted-state/REQUIREMENTS.md` is created or updated when requirements remain relevant across sessions;
-- `CURRENT_SYSTEM_STATE.md` references the accepted requirements and summarizes coverage posture without replacing the requirement catalog.
+- `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` Work History Ledger and Source Artifact Index are updated with requirement source paths when requirements remain relevant across sessions;
+- `CURRENT_SYSTEM_STATE.md` references requirement source artifacts and summarizes coverage posture without replacing delivery/session requirement authority.
 
 If requirements coverage is incomplete or contradictory, terminal state is `Close Blocked` unless the incomplete coverage is explicitly accepted as carry-forward, deferred, blocked, or out of scope.
 
@@ -461,3 +461,8 @@ During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `
 ## PROD-L8.13 Delivery Review Wording
 
 When reporting delivery-baseline state, use status-aware delivery labels. Before baseline acceptance, use Candidate Delivery, Proposed Delivery, or Delivery Under Baseline Review. Use Active Delivery only after the baseline has been accepted/amended and the delivery is in a post-acceptance state. Explain routing from current-state-first evidence and governance need rather than from greenfield/brownfield labels alone.
+
+
+## PROD-L8.14 source-artifact traceability close rule
+
+`hirmos close` must update `CURRENT_SYSTEM_STATE.md` with a Work History Ledger row and Source Artifact Index changes for every governed accepted, deferred, blocked, cancelled, or superseded work outcome. Close must not copy detailed delivery/session requirements, design, or scope content into default root accepted-state artifacts. The accepted-state summary is concise navigation only; delivery/session/archive artifacts remain source authority.

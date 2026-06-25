@@ -1,13 +1,15 @@
 # Current System State Protocol
 
 Status: core protocol.
-Purpose: define the durable current system-state model that `hirmos close` must maintain.
+Purpose: define the durable accepted-state navigation model that `hirmos close`, `hirmos start`, `hirmos continue`, and `hirmos status` must maintain.
 
 ## Core rule
 
-`CURRENT_SYSTEM_STATE.md` is the canonical accepted current truth of the software system. HIRMOS close is not complete until accepted session outcomes are merged into `CURRENT_SYSTEM_STATE.md` or explicitly rejected / not applied with rationale.
+`CURRENT_SYSTEM_STATE.md` is the canonical accepted current truth and accepted-state navigation authority for the software system. HIRMOS close is not complete until accepted session outcomes are registered in `CURRENT_SYSTEM_STATE.md` or explicitly rejected / not applied with rationale.
 
-Session archives are history. Session artifacts are evidence. `CARRY_FORWARD.md` is active future work and unresolved continuation control. `DECISION_LOG.md` is durable decision support. None of those replace `CURRENT_SYSTEM_STATE.md`.
+`CURRENT_SYSTEM_STATE.md` is index-first. It summarizes current state, owns current governance pointers, records latest-close metadata, and maintains a chronological Work History Ledger and Source Artifact Index. It must not become a cumulative requirements catalog, full design document, system-scope substitute, command log, evidence store, or archive manifest.
+
+Session archives are history. Session artifacts are evidence. Delivery and session scope/requirements/design artifacts are source authorities at their level. `CARRY_FORWARD.md` is active future work and unresolved continuation control. `DECISION_LOG.md` is durable decision support when decision-log governance is active. None of those replace `CURRENT_SYSTEM_STATE.md`, and `CURRENT_SYSTEM_STATE.md` does not replace them.
 
 `CURRENT_SYSTEM_STATE.md` also owns accepted-state navigation and latest-close metadata. Accepted-state navigation and latest-close metadata live in `CURRENT_SYSTEM_STATE.md` to prevent drift between latest-close metadata and current truth.
 
@@ -21,216 +23,122 @@ _hirmos/system/accepted-state/
 
 It must contain these required files:
 
-| Artifact | Role | When to update | Must not be used as |
-|---|---|---|---|
-| `CURRENT_SYSTEM_STATE.md` | Primary merged current truth, accepted-state navigation, latest accepted close, and state version | Every normal close that accepts, rejects, supersedes, or carries material system truth | Append-only log, chat summary, session transcript, backlog |
-| `CARRY_FORWARD.md` | Active unresolved items, assumptions, risks, blockers, and future-session instructions only | Every close that leaves active follow-up items, and when carried items are resolved | Product backlog, accepted truth, or closed carry-forward history |
-| `DECISION_LOG.md` | Durable accepted decision ledger for material domain, technical, integration, production-readiness, and governance decisions | When accepted decisions are made, superseded, or rejected | Full design document or session-local technical review |
+| Artifact | Required | Responsibility |
+|---|---:|---|
+| `CURRENT_SYSTEM_STATE.md` | yes | accepted-state navigation authority, current governance pointers, latest-close metadata, Work History Ledger, Source Artifact Index, and concise current-state summary |
+| `CARRY_FORWARD.md` | yes | active unresolved / future-session obligations only |
+| `DECISION_LOG.md` | yes | durable accepted/rejected/superseded decision support when decision-log governance is active |
 
-Optional expansion files may be added later for large systems, but the baseline framework must start with these three required accepted-state artifacts. Do not split current truth into many required files until self-runs prove the single current-state artifact is too dense.
+Default HIRMOS must not create root accepted-state `REQUIREMENTS.md`, `DESIGN.md`, `SYSTEM_SCOPE.md`, `DECISIONS.md`, or `ACCEPTED_CHANGES.md`.
 
-## Supporting artifact responsibilities
-
-### CURRENT_SYSTEM_STATE.md
-
-Use this file to answer: **what is accepted as true about the system right now?**
-
-It must be merged and current. It is rewritten by accepted-state update. It should not grow as a chronological transcript.
-
-Required sections:
-
-1. Current State Header
-2. Accepted-State Navigation and Latest Close
-3. Product State
-4. Delivery State, including Active Development Context and Delivery Pointers
-5. Implementation State
-6. Technical / Architecture State
-7. Runtime Integration State
-8. Evidence State
-9. Production Readiness State
-10. Unresolved / Carry-Forward State
-11. History / Traceability
-
-### CARRY_FORWARD.md
-
-Use this file to answer: **what must a future session not forget?**
-
-It contains active unresolved items, assumptions, blockers, production/go-live blockers, evidence gaps, and required future-session instructions. Closed carry-forward history belongs in session archives and `CURRENT_SYSTEM_STATE.md` History / Traceability, not in this active register.
-
-### DECISION_LOG.md
-
-Use this file to answer: **which durable decisions are accepted, rejected, or superseded?**
-
-Session-local `DESIGN.md` technical review records decisions made during a session. `DECISION_LOG.md` records only accepted durable decisions that future sessions should rely on or revisit.
-
-
-
-## Active Development Context and Delivery Pointers
-
-When delivery governance is active, `CURRENT_SYSTEM_STATE.md` is the canonical place where future sessions discover the active durable delivery pointer set. It must record pointers only, not the Delivery Plan or Phase content itself.
-
-Required pointer fields when applicable:
-
-- Delivery governance active
-- Active delivery ID
-- Delivery roadmap path
-- Active delivery scope path
-- Active phase path
-- Active phase status
-- Last accepted delivery
-- Last accepted phase
-- Last accepted session/archive
-- Next recommended delivery
-- Next recommended delivery scope
-- Next recommended phase
-- Next governed command
-
-Update System State must refresh these pointers during normal close whenever a session creates, updates, accepts, blocks, supersedes, defers, cancels, or advances a durable delivery, Delivery Scope, Delivery Plan, or Phase file. If the pointers are unchanged, the close artifact must say so with evidence.
-
-When one delivery is accepted and a planned follow-up delivery is present in `DELIVERY_PLAN.md`, Update System State must record `Next recommended delivery` and `Next recommended delivery scope`, or explicitly record why no follow-up delivery is recommended.
-
-Future sessions must read these pointers during Understand System State before deciding that a request is safe for a single-session path. A stale or contradictory delivery pointer is a blocker for Design or Implementation readiness until reconciled.
-
-## Merge model
-
-`Update System State` must merge accepted outcomes into current state.
-
-Required close sequence:
-
-1. Read prior `CURRENT_SYSTEM_STATE.md`.
-2. Read `SESSION_EXECUTION.md` close/update control pointers, `SESSION_EXECUTION.md` close controls, `EVIDENCE.md` claim reconciliation when material claims exist, and relevant session evidence.
-3. Classify each material outcome as accepted, rejected / not applied, evidence-only, superseded, or carry-forward.
-4. Merge accepted and superseded truth into `CURRENT_SYSTEM_STATE.md`.
-5. Update `DECISION_LOG.md` for accepted/rejected/superseded decisions.
-6. Update `CARRY_FORWARD.md` for unresolved or future-session items.
-7. Update the accepted-state navigation and latest-close sections inside `CURRENT_SYSTEM_STATE.md`.
-8. Archive the session.
-9. Reset active session state.
-10. Verify that current state, carry-forward, decision log, archive manifest, and active session state agree.
+If a project explicitly activates cumulative accepted requirements governance in the future, root accepted-state `REQUIREMENTS.md` must include explicit cumulative-governance metadata, source traceability, add/amend/remove/supersede/deprecate controls, and close-time merge verification. Without that explicit governance mode, detailed requirements remain in delivery/session/archive source artifacts and are discoverable through `CURRENT_SYSTEM_STATE.md` Work History Ledger and Source Artifact Index.
 
 ## Accepted-state tracks
 
-Do not collapse different truth tracks into one vague claim.
+`CURRENT_SYSTEM_STATE.md` must maintain these tracks:
 
-At minimum, `CURRENT_SYSTEM_STATE.md` must distinguish:
+1. Current State Header.
+2. Current Governance Context.
+3. Accepted-State Navigation and Latest Close.
+4. Accepted State Summary, explicitly marked as a concise navigation summary only.
+5. Work History Ledger.
+6. Source Artifact Index.
+7. Delivery State.
+8. Implementation State.
+9. Technical / Architecture State.
+10. Runtime Integration State.
+11. Evidence State.
+12. Production Readiness State.
+13. Unresolved / Carry-Forward State.
+14. History / Traceability / Merge Notes.
 
-| Track | Meaning |
-|---|---|
-| MVP / delivery completion | Delivery Units accepted as implemented for the agreed MVP scope. |
-| Local runtime readiness | App was locally configured and smoke-tested in the recorded environment. |
-| Runtime integration posture | Database/auth/messaging/storage/etc. posture using canonical posture values. |
-| Production readiness planning | Plan or recommendations exist. This is not go-live approval. |
-| Production provider readiness | Production credentials, providers, callbacks, sender identities, secrets, jobs, deployment, and provider evidence are verified. |
-| Compliance / go-live readiness | Legal/compliance/operations approval exists when applicable. |
+The Accepted State Summary must state that it is not the complete requirements, design, scope, implementation, evidence, or decision authority. Detailed source authority remains in the source artifacts referenced by the ledger and index.
 
-Firm rule: do not state “production ready” when only production-readiness planning was accepted.
+## Work History Ledger rule
 
-## Update classification
+Every normal close that creates, accepts, amends, completes, defers, blocks, cancels, supersedes, or archives governed HIRMOS work must add or update a chronological Work History Ledger row.
 
-Use these classifications for material outcomes:
+The ledger records governed work outcomes, not every command. Routine `hirmos status` calls do not receive ledger rows unless they materially change accepted state.
 
-- `ACCEPTED_CURRENT_TRUTH`
-- `SUPERSEDED_CURRENT_TRUTH`
-- `REJECTED_NOT_APPLIED`
-- `EVIDENCE_ONLY`
-- `CARRY_FORWARD`
-- `BLOCKED`
+The ledger must identify:
 
-Only `ACCEPTED_CURRENT_TRUTH` and `SUPERSEDED_CURRENT_TRUTH` change `CURRENT_SYSTEM_STATE.md`. All others must be recorded in archive, carry-forward, or decision log as appropriate.
+- date;
+- work id;
+- work type;
+- status;
+- authority path;
+- source artifact paths;
+- accepted output / result.
 
-## Future-session rule
+This ledger is the default solution to scattered requirements/design/scope/evidence authority. It points to sources rather than copying them into a cumulative root artifact.
 
-Future HIRMOS sessions must read `CURRENT_SYSTEM_STATE.md` as the primary accepted current-state source. They may inspect archives for evidence and history, but must not reconstruct current truth from chat memory or archives when `CURRENT_SYSTEM_STATE.md` exists.
+## Source Artifact Index rule
+
+`CURRENT_SYSTEM_STATE.md` must keep material source authorities discoverable. The Source Artifact Index may include delivery authorities, phase authorities, session authorities, requirement sources, design sources, and evidence sources.
+
+Requirements, design, and scope sources remain authoritative where originated:
+
+- delivery-level `DELIVERY_SCOPE.md`, optional delivery `REQUIREMENTS.md`, optional delivery `DESIGN.md`;
+- phase `PHASE-xx.md`;
+- session `SESSION_SCOPE.md`, optional session `REQUIREMENTS.md`, optional session `DESIGN.md`;
+- archived source artifacts after close.
+
+On-demand synthesis may be generated from these source artifacts when needed, but a generated synthesis is not source authority unless explicitly adopted by a governed future workflow.
 
 ## Close blocking rules
 
-Normal close is blocked when:
+Close is blocked if:
 
-- `CURRENT_SYSTEM_STATE.md` is missing;
-- accepted outcomes are not mapped to current-state sections;
-- material claims require `EVIDENCE.md` claim reconciliation but it is missing;
-- `CURRENT_SYSTEM_STATE.md` latest-close metadata points to a different latest archive than the close transaction;
-- carry-forward items in session artifacts are not reflected in `CARRY_FORWARD.md` or explicitly rejected;
-- durable decisions are not reflected in `DECISION_LOG.md` or explicitly rejected;
-- production-readiness planning, provider readiness, and go-live readiness are collapsed into one ambiguous state;
-- post-close `SESSION_STATE.json` and archive manifest contradict the accepted-state update.
+- active governance pointers would be stale or inconsistent after close;
+- accepted output lacks a Work History Ledger row;
+- material source authorities are not discoverable from the Source Artifact Index or Work History Ledger;
+- `CURRENT_SYSTEM_STATE.md` presents a concise summary as complete requirements/design/scope authority;
+- root accepted-state `REQUIREMENTS.md`, `DESIGN.md`, `SYSTEM_SCOPE.md`, `DECISIONS.md`, or `ACCEPTED_CHANGES.md` is created without explicit governed activation metadata;
+- accepted-state records contradict source artifacts, archive manifest, active carry-forward, or session close verification.
 
-## User-facing status rule
+## Future sessions
 
-`hirmos status` must prefer `CURRENT_SYSTEM_STATE.md` for accepted current truth. It should show concise current state, active/carry-forward blockers, latest archive, and one primary next action.
+Future sessions must read these pointers before planning or implementation:
 
-## Understand System State enforcement
+- current governance context;
+- Work History Ledger;
+- Source Artifact Index;
+- active delivery / phase / session pointers;
+- latest accepted close metadata;
+- active carry-forward items.
 
-Before HIRMOS performs meaningful Design or Implementation, Understand System State must resolve the accepted current-state source.
+Future sessions must not reconstruct current truth from chat memory, old transcripts, or scattered archives when `CURRENT_SYSTEM_STATE.md` exists.
 
-Required sequence:
+## Accepted-State Artifact Invariants
 
-1. Check `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`.
-2. If it exists, read it first and treat it as the primary accepted current-state source.
-3. If it is missing, record whether this is a new installation or an integrity failure.
-4. Read `CARRY_FORWARD.md` and `DECISION_LOG.md` as supporting accepted-state artifacts when present.
-5. Consult session archives only as history/evidence or to investigate contradictions. Archives are not the current system state.
-6. Record source status, contradictions, and confidence in `_hirmos/session/DESIGN.md`.
-7. Mark the current-system-state-first execution controls in `_hirmos/session/SESSION_EXECUTION.md`.
-
-Firm rule: HIRMOS must not claim Design readiness, Implementation readiness, Implementation completion, or Update System State readiness unless current-system-state-first controls are satisfied or explicitly not applicable with rationale.
-
-## Accepted-state artifact invariants and canonical value protection
-
-Accepted-state artifacts are update targets, but they are not free-form scratchpads. Every accepted-state artifact must preserve its invariant block when updated.
-
-Required accepted-state invariant block:
-
-```text
-Accepted-State Artifact Invariants:
-- This file is part of durable accepted state.
-- Preserve this invariant block during Update System State.
-- Do not replace this file with a chat summary or session-local artifact.
-- Use canonical runtime posture values from RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md.
-- Use canonical evidence states from EVIDENCE.md claim reconciliation.
-- Keep accepted-state decision classifications separate from evidence status.
-```
-
-`CURRENT_SYSTEM_STATE.md` is the only current-truth artifact and owns accepted-state navigation/latest-close metadata. `CARRY_FORWARD.md` and `DECISION_LOG.md` support it and must preserve their distinct roles.
-
-Canonical accepted-state field rules:
-
-| Field type | Required value source |
-|---|---|
-| Runtime posture | canonical posture values from `RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md` only |
-| Evidence state | canonical evidence states from `EVIDENCE.md` claim reconciliation only |
-| Update classification | update classifications from this protocol only |
-| Decision state | accepted/rejected/superseded decision records in `DECISION_LOG.md`; not evidence status |
-| Source note / rationale | free text allowed, but it must not replace canonical status fields |
-
-Before normal close, Update System State must scan accepted-state updates for noncanonical values in status/posture/evidence fields. If found, close is blocked until values are translated.
-
-y copy of current truth.
-
-
-## Close-Time Delivery Pointer Refresh
-
-`CURRENT_SYSTEM_STATE.md` must be refreshed during close whenever delivery governance was active or required. The refresh must be sourced from `SESSION_EXECUTION.md` close/update control pointers, the durable Delivery Plan, the adopted Phase file, and archive evidence.
-
-A future session must not trust delivery pointers that were not refreshed or explicitly verified unchanged at the last delivery-governed close.
-
+`CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, and `DECISION_LOG.md` must preserve their accepted-state invariant blocks. They must use canonical runtime posture values, canonical evidence states, and separate decision classifications from evidence status.
 
 ## PROD-L6 accepted-state delivery pointer model
 
-When durable delivery governance is active, `CURRENT_SYSTEM_STATE.md` must use the PROD-L delivery authority model:
-
-```text
 Delivery roadmap: `_hirmos/system/delivery/DELIVERY_PLAN.md`
 Active delivery scope: `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
-Active phase: `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`
-```
+Archive manifest concordance: unknown / PASS / PARTIAL / BLOCKED
 
-It must not use `_hirmos/system/delivery/<delivery-id>/DELIVERY_PLAN.md` as the active delivery authority for new work. Completed or historical prior artifacts may be mentioned only as history, not as current active pointers.
+## Required pointer fields
 
-Future sessions must read these pointers before selecting delivery, phase, or single-session routing. If the pointers are missing, stale, or contradictory to the delivery roadmap/register, active delivery scope, phase file, or latest archive manifest, the command must fail closed until accepted-state reconciliation occurs.
+Required pointer fields include Active Development Context and Delivery Pointers, Next recommended delivery, Next recommended delivery scope, and Next recommended phase.
 
-## Archive manifest concordance
+## Close-Time Delivery Pointer Refresh
 
-The latest close metadata in `CURRENT_SYSTEM_STATE.md` must agree with `_hirmos/system/history/sessions/<session-id>/ARCHIVE_MANIFEST.md` when a normal close has occurred. The archive manifest is a history-only concordance record; it does not replace `CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, or `DECISION_LOG.md`.
+Close must refresh current delivery/phase/session pointers from accepted close evidence or record that each value was explicitly verified unchanged. Missing, stale, or contradictory pointer updates block normal close.
 
-Close is blocked when archive manifest concordance shows accepted outcomes, delivery pointer updates, active carry-forward items, archived session-state normalization, or active-session reset disagree with accepted state.
+## Phase Progress Pointer Rule
+
+When a multi-session phase closes as partial, blocked, or deferred, `CURRENT_SYSTEM_STATE.md` must point to the still-active phase, the next phase, or explicit carry-forward target.
+
+## Phase Acceptance Pointer Rule
+
+When a phase becomes accepted, `CURRENT_SYSTEM_STATE.md` must record the last accepted phase, next recommended phase, and whether no active phase remains.
+
+## Phase Lifecycle Status Pointer Rule
+
+`hirmos status` must read `CURRENT_SYSTEM_STATE.md` delivery pointers before reporting active delivery work and must surface pointer concordance.
+
+Close is blocked when delivery or phase pointers are not refreshed or explicitly verified unchanged.
+
+Active carry-forward details live in CARRY_FORWARD.md; closed carry-forward history belongs in session archives and CURRENT_SYSTEM_STATE.md Work History Ledger / History / Traceability.

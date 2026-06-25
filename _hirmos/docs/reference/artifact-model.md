@@ -161,3 +161,10 @@ When `SESSION_STATE.json.session_focus = delivery_baseline`, the active authorit
 - `_hirmos/system/delivery/<delivery-id>/DESIGN.md` when separate delivery-level design authority is justified.
 
 During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`. If separate optional authority is not justified, requirements and design decisions remain inside `DELIVERY_SCOPE.md` only. Session-level optional authority artifacts become applicable only after the flow advances to a bounded `phase_session_baseline` or `session_baseline` focus.
+
+
+## PROD-L8.14 accepted-state navigation authority
+
+Durable accepted-state navigation lives in `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`. It owns current governance pointers, latest-close metadata, Work History Ledger, Source Artifact Index, and concise accepted-state summaries. It does not replace delivery/session requirements, design, scope, unresolved-item, implementation, evidence, or archive artifacts as source authorities.
+
+Default HIRMOS does not create root accepted-state `REQUIREMENTS.md`, `DESIGN.md`, `SYSTEM_SCOPE.md`, `DECISIONS.md`, or `ACCEPTED_CHANGES.md`. Requirements/design/scope remain at the delivery/session/archive level and are discoverable through `CURRENT_SYSTEM_STATE.md`.

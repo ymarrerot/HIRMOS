@@ -1,67 +1,33 @@
-# Requirements and Coverage Mapping
+# Requirements and Coverage
 
-HIRMOS uses `REQUIREMENTS.md` to prevent requirement loss across long AI-assisted delivery runs.
+HIRMOS requirements are scoped source authorities, not default root accepted-state artifacts.
 
-Raw inputs such as uploaded requirements, notes, prototypes, screenshots, UI notes, and conversation context are source material. They become governed requirements only after they are inventoried, classified, normalized, source-mapped, and either accepted into scope or explicitly marked non-goal, gated, blocked, deferred, duplicate, superseded, or not applicable.
+Default HIRMOS does not create `_hirmos/system/accepted-state/REQUIREMENTS.md`. Requirements originate and remain authoritative at the delivery, phase, session, or archive level unless a future explicit cumulative accepted requirements governance mode is activated.
 
-## Main artifact
+## Source locations
 
-```text
-_hirmos/session/REQUIREMENTS.md
-```
+Requirements may live in:
 
-The active session baseline controls Design and Delivery Plan coverage.
+- `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`;
+- optional `_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md` when delivery-level requirements need their own authority;
+- `_hirmos/session/SESSION_SCOPE.md`;
+- optional `_hirmos/session/REQUIREMENTS.md` when session-level requirements need their own authority;
+- archived delivery/session artifacts after close.
 
-Accepted cross-session baseline:
+`CURRENT_SYSTEM_STATE.md` answers where requirement sources are and what accepted work changed. It does not replace those sources as a complete requirements catalog.
 
-```text
-_hirmos/system/accepted-state/REQUIREMENTS.md
-```
+## Accepted-state navigation
 
-Future sessions read the accepted baseline with `CURRENT_SYSTEM_STATE.md` so they understand both current product truth and remaining requirement coverage.
+`_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` must keep requirements discoverable through its Work History Ledger and Source Artifact Index. It may include concise accepted-state summaries, but those summaries are navigation summaries only.
 
-## Supporting inputs
+## Coverage
 
-- `DESIGN.md` source matrix: source inventory and evidence extraction.
-- `DESIGN.md` source matrix: prototype-derived evidence, intended/observed behavior separation, business logic, data contracts, integrations, conflicts, and missing production concerns.
-- `unresolved-items.md`: gated or unresolved requirement decisions.
-- `DELIVERY_PLAN.md`: delivery-unit mapping.
-- `EVIDENCE.md` claim reconciliation: evidence status for claims, not requirements coverage.
+Coverage should be verified against the active authority level:
 
-## Rule of thumb
+- delivery baseline coverage against `DELIVERY_SCOPE.md` and optional delivery `REQUIREMENTS.md`;
+- phase/session coverage against `PHASE-xx.md`, `SESSION_SCOPE.md`, and optional session `REQUIREMENTS.md`;
+- close-time accepted coverage against source artifacts, evidence, archive manifest, and `CURRENT_SYSTEM_STATE.md` ledger/index updates.
 
-`REQUIREMENTS.md` answers what must be satisfied and where it is mapped.
+## On-demand synthesis
 
-`CURRENT_SYSTEM_STATE.md` answers what is accepted current truth now.
-
-`EVIDENCE.md` claim reconciliation answers what evidence supports claims.
-
-
-## Prior framework refinements
-
-HIRMOS keeps the current compact artifact model, but applies these lessons from the prior requirements-input-pack / requirements-SoT and prototype-ingestion work:
-
-- strong intake comes before strong requirements;
-- intake artifacts are governed but non-authoritative;
-- confirmed facts, assumptions, research-backed defaults, declared delivery targets, proposed delivery targets, open questions, and pending confirmations must not be collapsed;
-- prototype behavior is evidence, not authority;
-- single prototypes require intended/observed/business-logic/data/integration/risk extraction;
-- multiple prototypes require prototype-specific findings plus set-level reconciliation;
-- conflicts and variants must be visible before requirements normalization;
-- workflow-heavy requirements need explicit flows, alternates, edge cases, and expected outcomes;
-- Design must route back when requirements are too vague to support implementation.
-
-## Cross-run synthesis and requirement coverage
-
-When HIRMOS compares multiple runs, generated apps, prototypes, external spec-tool outputs, or UX-first tools, the comparison is useful only if its lessons are routed back into the current HIRMOS authority model.
-
-Use this routing:
-
-- product coverage gaps → `REQUIREMENTS.md`;
-- UX/operator-flow strengths → UI/UX requirement IDs, delivery-unit acceptance criteria, and role workflow smoke checks;
-- engineering strengths → `DESIGN.md` technical review and implementation-unit criteria;
-- testing strengths → stack evidence commands and role/workflow smoke checks;
-- artifact/state weaknesses → close/update-state and claim reconciliation;
-- package/handoff weaknesses → packaging protocol and package-cleanliness evidence.
-
-This keeps cross-run learning useful without adding a separate comparison artifact layer to normal HIRMOS operation.
+A complete current requirements artifact may be generated on demand from `CURRENT_SYSTEM_STATE.md`, delivery/session/archive source artifacts, and close records. That generated artifact is a synthesis, not source authority, unless explicitly adopted under a governed future workflow.

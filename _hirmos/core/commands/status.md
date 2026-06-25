@@ -340,3 +340,8 @@ During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `
 ## PROD-L8.13 Delivery Review Wording
 
 When reporting delivery-baseline state, use status-aware delivery labels. Before baseline acceptance, use Candidate Delivery, Proposed Delivery, or Delivery Under Baseline Review. Use Active Delivery only after the baseline has been accepted/amended and the delivery is in a post-acceptance state. Explain routing from current-state-first evidence and governance need rather than from greenfield/brownfield labels alone.
+
+
+## PROD-L8.14 accepted-state navigation status rule
+
+`hirmos status` must report from `CURRENT_SYSTEM_STATE.md` Current Governance Context, Work History Ledger, Source Artifact Index, active delivery/phase/session pointers, and latest accepted close metadata. Status output must distinguish concise accepted-state summaries from source authorities and must not claim root accepted-state `REQUIREMENTS.md` or `DESIGN.md` exists by default.

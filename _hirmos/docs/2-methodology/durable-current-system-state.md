@@ -14,14 +14,14 @@ These are the supporting artifacts for durable current-state management.
 
 | Artifact | Use it for | Do not use it for |
 |---|---|---|
-| `CURRENT_SYSTEM_STATE.md` | canonical merged current truth | session log or backlog |
+| `CURRENT_SYSTEM_STATE.md` | accepted-state navigation authority | session log or backlog |
 | `CARRY_FORWARD.md` | unresolved/future-session obligations | accepted feature list |
 | `DECISION_LOG.md` | durable accepted/rejected/superseded decisions | full design doc |
 | session archives | historical evidence | current truth substitute |
 
 ## Close rule
 
-`hirmos close` is not complete until accepted session outcomes are merged into `CURRENT_SYSTEM_STATE.md` or explicitly rejected / not applied.
+`hirmos close` is not complete until accepted session outcomes are registered in `CURRENT_SYSTEM_STATE.md` navigation, Work History Ledger, Source Artifact Index, and concise summary as needed or explicitly rejected / not applied.
 
 ## Why this exists
 
