@@ -269,3 +269,40 @@ When a later session resolves a carry-forward item, runtime limitation, or evide
 | | | | ACCEPTED / PARTIAL / BLOCKED / HISTORICAL_ONLY | | |
 
 The original phase close verdict remains historical. This section records whether later evidence changes the current interpretation future sessions should use.
+
+## PROD-L8.21 Close-Time Phase Concordance Sweep
+
+At close, every active/current section in this phase file must be reconciled. If the phase top-level status is `ACCEPTED`, `PARTIAL`, `BLOCKED`, or `DEFERRED`, lower sections must not still claim `READY_FOR_ADOPTION`, `not started`, `PENDING`, `NOT_ASSESSED`, or `not yet closed` as current truth unless those rows are explicitly labeled historical.
+
+| Section / field | Current value | Expected close value | Status | Notes |
+|---|---|---|---|---|
+| Lifecycle status | | ACCEPTED / PARTIAL / BLOCKED / DEFERRED | PENDING | |
+| Phase Progress Ledger | | current or historical-labeled | PENDING | |
+| Exit criteria | | assessed or carry-forward recorded | PENDING | |
+| Binary Exit Criteria | | PASS / PARTIAL / BLOCKED / DEFERRED | PENDING | |
+| Phase Acceptance Evidence Gate | | COMPLETE / PARTIAL / BLOCKED / NOT_APPLICABLE | PENDING | |
+| Close-Time Phase Status Update | | closed/current or historical-labeled | PENDING | |
+
+## PROD-L8.22 Phase Review Gate
+
+Close-time phase acceptance requires an evidence-backed phase review gate. The phase review gate uses this phase artifact, active or archived `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, implementation units, `EVIDENCE.md`, unresolved/carry-forward records, and final codebase inspection when applicable.
+
+Required fields:
+
+- Reviewed phase:
+- Source authority reviewed:
+- Session/IU evidence reviewed:
+- Actual final codebase reviewed: YES / NO / NOT_APPLICABLE
+- Files or areas inspected:
+- Unit coverage reviewed: PASS / PARTIAL / BLOCKED / FAILED / NOT_APPLICABLE
+- Cross-unit integration reviewed: PASS / PARTIAL / BLOCKED / FAILED / NOT_APPLICABLE
+- Scope coverage result: PASS / PARTIAL / BLOCKED / FAILED
+- Runtime evidence level: NOT_CLAIMED / NOT_RUN / LOCAL_RUNTIME_VERIFIED / USER_ENVIRONMENT_VERIFIED / BLOCKED / NOT_APPLICABLE
+- Production evidence level: NOT_CLAIMED / NOT_RUN / PRODUCTION_READINESS_VERIFIED / BLOCKED / NOT_APPLICABLE
+- Remaining gaps:
+- Carry-forward items affecting phase acceptance:
+- Final phase review result: PASS / PARTIAL / BLOCKED / FAILED
+- Why this result is honest:
+- What is not claimed:
+
+A phase may be implementation-accepted while runtime or production verification remains partial, blocked, or explicitly not claimed. The phase file must not retain stale pending/not-started body sections that contradict the final phase review gate unless those rows are explicitly labeled historical.

@@ -93,3 +93,9 @@ Record full item fields in `unresolved-items.md`, including current status, down
 Before editing project files, implementation execution must verify that the target `IU-xx.md` existed before material changes and contains non-placeholder Unit Scope, Files / Areas, Acceptance Criteria, Verification Commands / Checks, and Evidence Requirements.
 
 If the IU is missing, placeholder-only, or was created retrospectively after implementation began, implementation execution must stop and route to correction/deviation handling. Do not execute from `SESSION_SCOPE.md` implementation-shape preview alone when IU mode is active.
+
+## PROD-L8.21 execution authorization proof
+
+Before material edits, implementation execution must verify `SESSION_EXECUTION.md` contains a current `PROD-L8.21 IU Set Authority Checkpoint` with `Authorization decision: IMPLEMENTATION_AUTHORIZED`, unless the session explicitly declared `LIGHTWEIGHT_NO_IU` before implementation began.
+
+Do not treat thin IU stubs or retrospective IU files as execution authority.

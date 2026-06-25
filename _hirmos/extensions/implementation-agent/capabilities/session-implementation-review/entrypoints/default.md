@@ -83,3 +83,25 @@ Before marking the capability complete, record exactly one producer outcome in `
 
 Record full item fields in `unresolved-items.md`, including current status, downstream impact, and revalidation point; do not duplicate the full field schema in this entrypoint.
 
+
+# PROD-L8.22 Session Implementation Review Gate
+
+This capability performs an aggregate evidence-backed review. It must not pass a session merely because implementation units individually claim completion.
+
+Required review dimensions:
+
+- source session authority reviewed;
+- IU set and unit review records reviewed;
+- actual final codebase reviewed: `YES` / `NO` / `NOT_APPLICABLE`;
+- scope coverage result;
+- cross-unit integration result;
+- architecture/preservation alignment;
+- validation evidence;
+- runtime/provider evidence level;
+- production evidence level;
+- unresolved/carry-forward impact;
+- final result: `PASS`, `PARTIAL`, `BLOCKED`, `FAILED`, or `NOT_APPLICABLE`;
+- why the result is honest;
+- what is not claimed.
+
+If evidence is insufficient for a broad claim, downgrade the claim instead of treating the review as passed.

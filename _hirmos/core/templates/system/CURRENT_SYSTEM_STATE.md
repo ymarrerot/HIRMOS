@@ -406,3 +406,9 @@ Current-state navigation must preserve chronology:
 - Work History Ledger outcome rows reflect closed/completed governed work;
 - if active/proposed rows are recorded before close, label them ACTIVE / PROPOSED, not accepted;
 - archive/session timestamps must be monotonic by governed session sequence unless an explicit exception is recorded.
+
+## PROD-L8.21 Source Artifact Index Placeholder Rule
+
+The Source Artifact Index must avoid blank placeholder rows. For each inactive optional source class, use explicit values such as `none`, `not separately created`, `not yet created`, `not evaluated`, or a concrete source path.
+
+Blank cells are not valid current-state navigation because future sessions cannot distinguish missing information from intentionally absent source authority.

@@ -161,3 +161,24 @@ Required delivery-level evidence:
 | Accepted state updated? | PASS / PARTIAL / FAIL / NOT_APPLICABLE | |
 
 Delivery verdict: accepted / partial / blocked / failed
+
+## PROD-L8.22 Delivery Review Gate Authority
+
+Delivery close requires an evidence-backed delivery review gate before claiming delivery acceptance. The delivery review gate aggregates accepted phase review gates, active/carry-forward records, runtime evidence, production posture, and final current-state pointers.
+
+Required fields:
+
+- Delivery reviewed:
+- Phases reviewed:
+- Accepted source artifacts reviewed:
+- Cross-phase integration reviewed: PASS / PARTIAL / BLOCKED / FAILED / NOT_APPLICABLE
+- End-to-end workflow evidence: PASS / PARTIAL / BLOCKED / FAILED / NOT_RUN / NOT_APPLICABLE
+- Requirements/scope coverage posture: PASS / PARTIAL / BLOCKED / FAILED
+- Runtime evidence level: NOT_CLAIMED / NOT_RUN / LOCAL_RUNTIME_VERIFIED / USER_ENVIRONMENT_VERIFIED / BLOCKED / NOT_APPLICABLE
+- Production evidence level: NOT_CLAIMED / NOT_RUN / PRODUCTION_READINESS_VERIFIED / BLOCKED / NOT_APPLICABLE
+- Carry-forward items affecting acceptance:
+- Final delivery result: PASS / PARTIAL / BLOCKED / FAILED
+- What is not claimed:
+- Why this result is honest:
+
+A delivery review must not claim full MVP/runtime/production acceptance when only implementation acceptance or static validation evidence exists. Stale delivery-plan sections must be reconciled or labeled historical before delivery close success is claimed.

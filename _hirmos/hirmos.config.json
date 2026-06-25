@@ -1,7 +1,7 @@
 {
   "framework": {
     "name": "HIRMOS",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "architecture": "current-state-first-orchestration"
   },
   "interaction_mode": "domain_expert",

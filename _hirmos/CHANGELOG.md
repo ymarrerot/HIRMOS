@@ -6,6 +6,16 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 ## Unreleased
 
+## 1.1.3 — IU authority and evidence-backed review stabilization
+
+- Added IU Set Authority Checkpoint expectations so implementation-unit mode proves IU files, coverage, non-placeholder review, sequencing, and authorization before material code changes.
+- Defined a minimum substantive IU contract for IU-mode work, preventing thin implementation units from acting as execution authority.
+- Hardened close-time concordance for phase body sections, delivery-plan pointer sections, current-state source index placeholders, carry-forward active-only invariants, and timestamp completeness.
+- Strengthened evidence semantics so implementation acceptance, runtime verification, and production verification remain distinct claims.
+- Salvaged legacy evidence-backed review discipline into existing session, phase, and delivery review gates without reintroducing legacy artifact sprawl.
+- Preserved HIRMOS governance posture that the framework is active authority, not after-the-fact compliance paperwork.
+- CLI package version remains 1.3.4 because terminal install behavior did not change.
+
 ## 1.1.2 — Governance posture and pre-execution authority stabilization
 
 - Hardened HIRMOS governance posture so the framework is presented as active execution authority, not after-the-fact compliance paperwork.
@@ -252,3 +262,17 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 - Hardened IU pre-execution authority: when IU mode is active, IU artifacts must exist before material code changes; retrospective IU creation is a governance deviation unless lightweight/no-IU mode was declared before edits.
 - Hardened correction-ledger expectations so material correction commands are recorded individually in `SESSION_EXECUTION.md`.
 - Hardened close-time chronology, delivery-plan freshness, and later carry-forward resolution concordance.
+
+## PROD-L8.21 IU set authority and close-time concordance hardening
+
+- Added an IU Set Authority Checkpoint in `SESSION_EXECUTION.md` to prove IU authority before material edits.
+- Added minimum IU content requirements so thin stubs cannot authorize implementation in IU mode.
+- Added close-time concordance sweeps for phase files, delivery plan pointers, current-state source indexes, carry-forward invariants, and evidence semantics.
+- Clarified evidence levels: implementation accepted, runtime verified, and production verified.
+
+## PROD-L8.22 phase and delivery review gate hardening
+
+- Added evidence-backed session, phase, and delivery review gate discipline using existing artifacts.
+- Required review gates to distinguish implementation accepted, runtime verified, and production verified claims.
+- Added actual-codebase-reviewed expectations for implementation review boundaries.
+- Hardened close so higher-level acceptance cannot overclaim beyond the evidence level proven.

@@ -12,6 +12,10 @@ HIRMOS must be treated as active governance, not an after-the-fact compliance la
 If work occurs outside valid authority, HIRMOS must record a governance deviation/correction and reconcile it before readiness, completion, or close claims.
 
 
+## HIRMOS 1.1.3 baseline
+
+HIRMOS 1.1.3 is the IU authority and evidence-backed review stabilization baseline. It builds on the 1.1.2 governance-posture baseline by requiring IU Set Authority Checkpoints before material edits when IU mode is active, enforcing substantive IU contracts, strengthening close-time concordance, and distinguishing implementation acceptance from runtime and production verification.
+
 ## HIRMOS 1.1.2 baseline
 
 HIRMOS 1.1.2 is the governance posture and pre-execution authority stabilization baseline. It builds on the 1.1.1 current-state-first source-reading baseline by clarifying that HIRMOS is active governance authority, not after-the-fact compliance paperwork, and by strengthening idle command legality, implementation-unit timing, correction-ledger concordance, and close-time chronology/freshness guidance.
@@ -71,6 +75,10 @@ The CLI package version remains unchanged when the framework content changes but
 Release packaging must ship only canonical runtime surfaces, templates, docs, validators, and examples. Framework files must remain project-agnostic except for clearly labeled examples.
 
 
+## 1.1.3 stabilization note
+
+HIRMOS 1.1.3 includes IU Set Authority Checkpoints, minimum IU content standards, phase/delivery evidence-backed review gates, close-time concordance sweeps, and stricter evidence semantics separating implementation acceptance from runtime and production verification. No terminal CLI version bump is required because terminal install behavior did not change.
+
 ## 1.1.2 stabilization note
 
 HIRMOS 1.1.2 includes governance-posture clarity, idle `hirmos continue` fail-closed behavior, implementation-unit pre-execution authority, correction-command ledger concordance, timestamp chronology guidance, delivery-plan close-time freshness, and carry-forward resolution concordance. No terminal CLI version bump is required because terminal install behavior did not change.
@@ -93,3 +101,11 @@ Framework users should treat `CURRENT_SYSTEM_STATE.md` as the first read and nav
 - Hardened IU pre-execution authority: when IU mode is active, IU artifacts must exist before material code changes; retrospective IU creation is a governance deviation unless lightweight/no-IU mode was declared before edits.
 - Hardened correction-ledger expectations so material correction commands are recorded individually in `SESSION_EXECUTION.md`.
 - Hardened close-time chronology, delivery-plan freshness, and later carry-forward resolution concordance.
+
+## PROD-L8.21 IU set authority and close-time concordance hardening
+
+If IU mode is active, create substantive IU files and record the IU Set Authority Checkpoint before material code changes. Close must reconcile phase, delivery, current-state, carry-forward, and evidence semantics before success claims.
+
+## PROD-L8.22 Review Gate Hardening
+
+Review and close flows now require explicit session/phase/delivery review gate discipline. Existing projects should preserve final-result honesty by recording what was reviewed, what evidence was available, whether the actual codebase was reviewed, and what runtime or production claims are not made.

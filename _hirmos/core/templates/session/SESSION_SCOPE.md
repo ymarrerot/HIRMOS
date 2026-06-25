@@ -394,3 +394,9 @@ When implementation-unit artifacts are later created, this preview must be recon
 | | `implementation-units/IU-xx.md` / `EVIDENCE.md` | PENDING / SATISFIED / PARTIAL / BLOCKED | |
 
 A preview row must not remain `PENDING` after implementation-unit records exist unless the row is explicitly not adopted, deferred, or blocked.
+
+## PROD-L8.21 Session-to-IU Coverage Requirement
+
+When the selected implementation shape uses implementation units, `SESSION_SCOPE.md` must identify adopted implementation scope items clearly enough for the IU Set Coverage Map in `SESSION_EXECUTION.md` to prove coverage before material edits.
+
+Implementation Shape Preview is not execution authority. Execution authority begins only after accepted session scope plus complete IU Set Authority Checkpoint.

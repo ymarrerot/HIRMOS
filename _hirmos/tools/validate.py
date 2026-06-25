@@ -222,7 +222,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.1.2'
+expected_version = '1.1.3'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -3090,3 +3090,44 @@ plan_template_body = (root/'core/templates/system/delivery/DELIVERY_PLAN.md').re
 if re.search(r'^##\s+Active Delivery\s*$', plan_template_body, re.I | re.M):
     fail('PROD-L8.13 DELIVERY_PLAN.md template must not use a bare Active Delivery heading for pre-acceptance contexts')
 print('PASS: HIRMOS PROD-L8.13 delivery review wording static check')
+
+# PROD-L8.21 IU set authority, minimum unit contract, and close-time concordance checks
+for rel, phrases in {
+    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.21 IU Set Authority Checkpoint', 'IMPLEMENTATION_AUTHORIZED', 'IU Set Coverage Map', 'Minimum IU content standard'],
+    'core/templates/session/implementation-units/IU.md': ['PROD-L8.21 Minimum IU Contract', 'Source Scope Traceability', 'Minimum Contract Self-Check', 'Failure / route-back condition'],
+    'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': ['PROD-L8.21 IU set authority planning', 'IU Set Authority Checkpoint', 'IMPLEMENTATION_AUTHORIZED'],
+    'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['PROD-L8.21 execution authorization proof', 'Authorization decision: IMPLEMENTATION_AUTHORIZED', 'thin IU stubs'],
+    'core/templates/session/SESSION_SCOPE.md': ['PROD-L8.21 Session-to-IU Coverage Requirement', 'Implementation Shape Preview is not execution authority'],
+    'core/templates/system/delivery/phases/PHASE.md': ['PROD-L8.21 Close-Time Phase Concordance Sweep', 'not yet closed', 'explicitly labeled historical'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['PROD-L8.21 Delivery Close Concordance Sweep', 'stale active/pointer sections block delivery-close success claims'],
+    'core/templates/session/EVIDENCE.md': ['PROD-L8.21 Acceptance Evidence Semantics', 'Implementation accepted', 'Runtime verified', 'Production verified'],
+    'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.21 Acceptance Evidence Semantics', 'implementation accepted', 'runtime verified', 'production verified'],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['PROD-L8.21 Source Artifact Index Placeholder Rule', 'none', 'not separately created'],
+    'system/accepted-state/CARRY_FORWARD.md': ['PROD-L8.21 Carry-Forward Template Concordance', 'Active-Only Rule'],
+    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.21 close-time concordance hardening', 'timestamp completeness and monotonicity', 'evidence semantics separation'],
+}.items():
+    body = (root/rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.21 IU/close concordance surface {rel} missing phrase: {phrase}')
+print('PASS: HIRMOS PROD-L8.21 IU set authority and close-time concordance static check')
+
+
+# PROD-L8.22 phase and delivery evidence-backed review gate checks
+for rel, phrases in {
+    'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.22 Evidence-Backed Review Gate Salvage', 'Aggregate review gate rule', 'Actual-codebase review rule'],
+    'core/templates/session/EVIDENCE.md': ['PROD-L8.22 Review Gate Evidence', 'Actual codebase reviewed', 'What is not claimed'],
+    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.22 Session / Phase / Delivery Review Gate Ledger', 'Review boundary', 'What is not claimed'],
+    'core/templates/system/delivery/phases/PHASE.md': ['PROD-L8.22 Phase Review Gate', 'Actual final codebase reviewed', 'Why this result is honest'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['PROD-L8.22 Delivery Review Gate', 'End-to-end workflow evidence', 'What is not claimed'],
+    'core/templates/system/delivery/DELIVERY_SCOPE.md': ['PROD-L8.22 Delivery Review Gate Authority', 'Requirements/scope coverage posture', 'Production evidence level'],
+    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.22 phase and delivery evidence-backed review gates', 'Phase review gate', 'Delivery review gate'],
+    'extensions/implementation-agent/capabilities/session-implementation-review/entrypoints/default.md': ['PROD-L8.22 Session Implementation Review Gate', 'actual final codebase reviewed', 'what is not claimed'],
+    'extensions/implementation-agent/capabilities/validation-review/entrypoints/default.md': ['PROD-L8.22 Validation Review Gate Discipline', 'claims not supported'],
+    'docs/2-methodology/evidence-backed-review.md': ['PROD-L8.22 Review Gate Salvage', 'A passing static check is not a delivery review'],
+}.items():
+    body = (root/rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.22 review gate surface {rel} missing phrase: {phrase}')
+print('PASS: HIRMOS PROD-L8.22 phase and delivery review gate static check')

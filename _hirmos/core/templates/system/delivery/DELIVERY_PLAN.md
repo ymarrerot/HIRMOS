@@ -168,3 +168,40 @@ At every close affecting this delivery, reconcile all active/pointer sections, n
 | Status Update Log | material phase/session transitions recorded | | PENDING | |
 
 If an older section is retained for history, label it historical. Do not let stale active-context prose remain indistinguishable from current truth.
+
+## PROD-L8.21 Delivery Close Concordance Sweep
+
+At delivery close or phase close affecting this roadmap, all current pointer sections must be reconciled together. It is not enough to append a new close note while earlier active-context or accepted-state pointer sections remain stale.
+
+| Pointer / section | Required close-time truth | Current value | Status | Notes |
+|---|---|---|---|---|
+| Current system state version / latest close | matches `CURRENT_SYSTEM_STATE.md` | | PENDING | |
+| Active / final delivery status | matches delivery close result | | PENDING | |
+| Active / final phase pointer | current phase or none after delivery completion | | PENDING | |
+| Carry-forward pointer and active item count | matches `CARRY_FORWARD.md` | | PENDING | |
+| Delivery Review / Active Context | current or explicitly historical | | PENDING | |
+| Active Development Context | current or explicitly historical | | PENDING | |
+| Delivery Status Update Log | material phase/session transitions recorded | | PENDING | |
+
+Fail-closed rule: stale active/pointer sections block delivery-close success claims unless they are updated or explicitly labeled historical.
+
+## PROD-L8.22 Delivery Review Gate
+
+Delivery close requires an evidence-backed delivery review gate before claiming delivery acceptance. The delivery review gate aggregates accepted phase review gates, active/carry-forward records, runtime evidence, production posture, and final current-state pointers.
+
+Required fields:
+
+- Delivery reviewed:
+- Phases reviewed:
+- Accepted source artifacts reviewed:
+- Cross-phase integration reviewed: PASS / PARTIAL / BLOCKED / FAILED / NOT_APPLICABLE
+- End-to-end workflow evidence: PASS / PARTIAL / BLOCKED / FAILED / NOT_RUN / NOT_APPLICABLE
+- Requirements/scope coverage posture: PASS / PARTIAL / BLOCKED / FAILED
+- Runtime evidence level: NOT_CLAIMED / NOT_RUN / LOCAL_RUNTIME_VERIFIED / USER_ENVIRONMENT_VERIFIED / BLOCKED / NOT_APPLICABLE
+- Production evidence level: NOT_CLAIMED / NOT_RUN / PRODUCTION_READINESS_VERIFIED / BLOCKED / NOT_APPLICABLE
+- Carry-forward items affecting acceptance:
+- Final delivery result: PASS / PARTIAL / BLOCKED / FAILED
+- What is not claimed:
+- Why this result is honest:
+
+A delivery review must not claim full MVP/runtime/production acceptance when only implementation acceptance or static validation evidence exists. Stale delivery-plan sections must be reconciled or labeled historical before delivery close success is claimed.

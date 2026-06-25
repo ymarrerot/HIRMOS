@@ -21,3 +21,7 @@ Purpose: preserve active unresolved items, assumptions, risks, production-readin
 ## Active-Only Rule
 
 This file contains active carry-forward items only. When an item is resolved, remove it from this active table and record the resolution in the closing session archive and `CURRENT_SYSTEM_STATE.md` History / Traceability / Merge Notes. Do not maintain a closed carry-forward table here.
+
+## PROD-L8.21 Carry-Forward Template Concordance
+
+`CARRY_FORWARD.md` must preserve the exact `Active-Only Rule` invariant while keeping closed/resolved/deferred items out of the active register. If no active carry-forward exists, state that explicitly instead of leaving placeholders.

@@ -93,3 +93,9 @@ Required control:
 - mark each IU with the `PROD-L8.19 Pre-Execution Authority Declaration`;
 - fail closed if implementation has already occurred and IU files are being reconstructed after the fact;
 - if reconstruction is necessary for audit, record it as a governance deviation/correction, not as normal IU planning.
+
+## PROD-L8.21 IU set authority planning
+
+Before implementation execution, this capability must generate or verify the complete IU set and then record the `PROD-L8.21 IU Set Authority Checkpoint` in `SESSION_EXECUTION.md`.
+
+The IU set must map adopted phase/session scope to IU files, prove minimum IU contract completeness, identify sequencing/dependencies, and return `IMPLEMENTATION_AUTHORIZED` only when the set is non-placeholder and complete.

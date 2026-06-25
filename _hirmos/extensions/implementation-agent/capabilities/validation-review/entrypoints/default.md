@@ -90,3 +90,18 @@ When material runtime services are involved, follow `_hirmos/core/protocol/RUNTI
 Record or consume `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` as required by execution controls.
 
 Do not claim fixture/mock/boundary/local/production integration levels beyond what the active artifacts and evidence support.
+
+# PROD-L8.22 Validation Review Gate Discipline
+
+Validation review must classify the exact evidence level proven. Build, lint, typecheck, and static tests support implementation acceptance only; they do not by themselves prove local runtime behavior, provider behavior, role workflow readiness, or production readiness.
+
+Required output when material:
+
+- evidence reviewed;
+- command/log evidence reviewed;
+- actual codebase reviewed: `YES` / `NO` / `NOT_APPLICABLE`;
+- runtime evidence level;
+- production evidence level;
+- final validation result;
+- claims supported;
+- claims not supported.

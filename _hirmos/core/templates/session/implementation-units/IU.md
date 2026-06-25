@@ -229,3 +229,46 @@ This IU must exist as a non-placeholder execution authority before material impl
 - Evidence of pre-execution authority: `<SESSION_EXECUTION.md continuation pass / command ledger / timestamp / diff reference>`
 
 A retrospective IU may document what happened, but it must not be represented as normal pre-execution governance unless it actually existed before the material edits.
+
+## PROD-L8.21 Minimum IU Contract
+
+When IU mode is active, this IU is not valid execution authority unless the following fields are non-placeholder and specific to the adopted session/phase scope. A title/status/scope stub is not sufficient.
+
+Required non-placeholder fields:
+
+- Unit identity
+- Objective
+- Source scope item(s)
+- In scope
+- Out of scope
+- Files / areas or inspection plan
+- Implementation requirements
+- Verification / evidence requirements
+- Binary acceptance criteria
+- Pre-execution checks
+- Failure / route-back condition
+
+### Source Scope Traceability
+
+- Source delivery / phase:
+- Source `SESSION_SCOPE.md` item(s):
+- Source unresolved / carry-forward item(s), if any:
+- Related IU dependencies:
+
+### Minimum Contract Self-Check
+
+| Required field | Non-placeholder? | Evidence / section |
+|---|---|---|
+| Unit identity | YES / NO | |
+| Objective | YES / NO | |
+| Source scope item(s) | YES / NO | |
+| In scope | YES / NO | |
+| Out of scope | YES / NO | |
+| Files / areas or inspection plan | YES / NO | |
+| Implementation requirements | YES / NO | |
+| Verification / evidence requirements | YES / NO | |
+| Binary acceptance criteria | YES / NO | |
+| Pre-execution checks | YES / NO | |
+| Failure / route-back condition | YES / NO | |
+
+If any required field is `NO`, this IU blocks implementation authorization until amended or the session explicitly switches to governed lightweight/no-IU mode before material edits.

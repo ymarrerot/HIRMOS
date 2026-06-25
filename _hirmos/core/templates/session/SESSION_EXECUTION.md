@@ -1,12 +1,8 @@
 # Session Execution
-
 Status: active-session execution ledger.
 Purpose: provide the compact continuation handoff and append-only command/control ledger for the current HIRMOS session.
-
 `SESSION_EXECUTION.md` records what happened, which boundary controls were checked, what changed during commands/continuation passes, and which governed command is safe next. It must not own scope, requirements, design decisions, evidence details, unresolved-item details, accepted-state truth, or archive transaction details.
-
 Authoritative references:
-
 - Machine state: `_hirmos/session/SESSION_STATE.json`
 - Session scope authority when bounded session scope exists: `_hirmos/session/SESSION_SCOPE.md`
 - Session unresolved-item details when session-level items exist: `_hirmos/session/unresolved-items.md`
@@ -15,9 +11,7 @@ Authoritative references:
 - Delivery authority when active: `_hirmos/system/delivery/DELIVERY_PLAN.md`, `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`, and `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`
 - Accepted state: `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, and conditional `DECISION_LOG.md` when active
 - Archive transaction: `_hirmos/system/history/sessions/<session-id>/ARCHIVE_MANIFEST.md`
-
 ## Current Continuation Snapshot
-
 This is the required human-readable resume surface. Keep it near the top and update it before surfacing readiness, completion, blocked, status, or close claims.
 
 | Field | Current value | Backing authority / evidence |
@@ -573,3 +567,9 @@ Record IU mode, pre-edit IU existence, pre-edit non-placeholder authority, and r
 
 ### Material Correction Command Ledger
 Record one row per material correction command/pass; do not compress file/evidence/runtime-changing corrections into `hirmos continue (×n)`. Columns: Seq, user command/trigger, prior state, correction type, reason, files/artifacts changed, evidence pointer, result.
+
+## PROD-L8.21 IU Set Authority Checkpoint
+Before material edits, IU-mode sessions must record set-level execution authority: IU mode; implementation shape; source phase/session authority; IU files created before material edits; non-placeholder review; scope coverage; uncovered items; sequencing/dependencies; authorization decision `IMPLEMENTATION_AUTHORIZED` / `BLOCKED` / `LIGHTWEIGHT_NO_IU`; first material edit allowed; timing evidence. Fail closed if missing, placeholder-only, inconsistent, or recorded after implementation evidence/project-file changes; record governance deviation instead of normal authorization. Minimum IU content standard: independently reviewable, failure-contained, mapped to source scope, sequenced/dependency-aware when needed, and covering adopted scope without hidden gaps. IU Set Coverage Map: source scope item → source artifact → IU file(s) → coverage status → notes.
+
+## PROD-L8.22 Session / Phase / Delivery Review Gate Ledger
+At review/close boundaries, append one concise Review boundary row per session, phase, or delivery review gate: boundary, source authority, evidence reviewed, actual codebase reviewed (`YES`/`NO`/`NOT_APPLICABLE`), scope/integration result, runtime/production posture, final result (`PASS`/`PARTIAL`/`BLOCKED`/`FAILED`), and what is not claimed. Rows must be contemporaneous; higher-level reviews aggregate lower-level evidence; missing codebase/runtime/production evidence must downgrade or narrow the claim.

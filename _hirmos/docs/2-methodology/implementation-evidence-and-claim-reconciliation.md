@@ -58,3 +58,30 @@ Technical Supervisor and Framework Diagnostics modes can expose deeper evidence 
 ## Canonical values in generated artifacts
 
 Generated HIRMOS artifacts must use the canonical evidence states from `EVIDENCE.md` claim reconciliation. Do not use shorthand such as `observed`, `build pass`, `accepted at close`, or `deferred` as evidence states. Translate them into canonical values and explain nuance in rationale fields.
+
+## PROD-L8.21 Acceptance Evidence Semantics
+
+HIRMOS must distinguish three acceptance levels and must not collapse them into a single `PASS` claim.
+
+| Evidence level | Meaning | Allowed claim |
+|---|---|---|
+| Implementation accepted | Scope was implemented and code/static evidence passed | implementation accepted |
+| Runtime verified | Local runtime/user-flow/provider behavior was exercised and passed | runtime verified |
+| Production verified | Deployment/production-like constraints were exercised or explicitly assessed | production verified |
+
+A delivery or phase may be implementation-accepted while runtime/provider/production verification remains pending, partial, blocked, or carry-forward. Close summaries must not claim full MVP/runtime/production acceptance unless the corresponding evidence level is complete.
+
+## PROD-L8.22 Review Gate Salvage
+
+HIRMOS preserves legacy evidence-backed review discipline through existing artifacts instead of restoring legacy review files.
+
+Review gates must answer:
+
+- What authority was reviewed?
+- What evidence was reviewed?
+- Was the final codebase or file state inspected?
+- Does the evidence prove unit, session, phase, delivery, runtime, or production claims?
+- What remains unproven?
+- Why is the terminal state honest?
+
+A passing static check is not a delivery review. A completed implementation unit is not a phase review. A phase review is not a delivery review unless cross-phase behavior and delivery-level acceptance posture are reviewed.

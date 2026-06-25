@@ -184,3 +184,56 @@ For L8.19, validator-relevant risks are:
 - material correction commands must be individually traceable in `SESSION_EXECUTION.md`;
 - archive/session chronology must be monotonic or explicitly explained;
 - delivery-plan active/pointer sections must not remain stale at close.
+
+## PROD-L8.21 Acceptance Evidence Semantics
+
+HIRMOS must distinguish three acceptance levels and must not collapse them into a single `PASS` claim.
+
+| Evidence level | Meaning | Allowed claim |
+|---|---|---|
+| Implementation accepted | Scope was implemented and code/static evidence passed | implementation accepted |
+| Runtime verified | Local runtime/user-flow/provider behavior was exercised and passed | runtime verified |
+| Production verified | Deployment/production-like constraints were exercised or explicitly assessed | production verified |
+
+A delivery or phase may be implementation-accepted while runtime/provider/production verification remains pending, partial, blocked, or carry-forward. Close summaries must not claim full MVP/runtime/production acceptance unless the corresponding evidence level is complete.
+
+## PROD-L8.22 Evidence-Backed Review Gate Salvage
+
+Legacy review discipline is preserved through existing HIRMOS surfaces, not through new review artifacts. HIRMOS must not collapse unit success, static validation, runtime behavior, production readiness, and delivery acceptance into one generic `PASS` claim.
+
+### Aggregate review gate rule
+
+A session, phase, or delivery review must be evidence-backed and must include an honest terminal state. A higher-level review may not pass merely because individual implementation units have local completion records. It must review the aggregate scope against the accepted authority and the evidence actually available.
+
+Required review dimensions when applicable:
+
+- source authority reviewed;
+- implementation units or session work reviewed;
+- actual final codebase/files reviewed: `YES` / `NO` / `NOT_APPLICABLE`;
+- scope coverage reviewed;
+- cross-unit or cross-phase integration reviewed;
+- architecture/preservation alignment reviewed;
+- validation evidence reviewed;
+- runtime/provider evidence level reviewed;
+- production evidence level reviewed;
+- unresolved or carry-forward impact reviewed;
+- final review result and why that result is honest;
+- explicit `not claimed` statements for evidence levels not proven.
+
+### Review result vocabulary
+
+Use review results that preserve terminal-state honesty:
+
+```text
+PASS
+PARTIAL
+BLOCKED
+FAILED
+NOT_APPLICABLE
+```
+
+A `PASS` review requires evidence for the claim level being passed. If runtime or production evidence is missing, the review must be `PARTIAL`, `BLOCKED`, or `PASS` only for the narrower level such as implementation accepted.
+
+### Actual-codebase review rule
+
+When implementation changed project files, review records must state whether the final working copy or final archived file state was inspected. Chat summaries and intended diffs are not sufficient review evidence.

@@ -362,3 +362,48 @@ When a later session resolves a carry-forward item that limited earlier phase ac
 - explicitly mark the original phase verdict as historical and point to the later resolution record.
 
 The original close verdict may remain historically true, but current navigation must not leave future sessions believing the carry-forward is still unresolved.
+
+## PROD-L8.21 close-time concordance hardening
+
+Close must perform a cross-artifact concordance sweep before success claims:
+
+- archived session timestamp completeness and monotonicity;
+- `PHASE-xx.md` close-time phase concordance sweep;
+- `DELIVERY_PLAN.md` delivery close concordance sweep;
+- `CURRENT_SYSTEM_STATE.md` source-artifact index placeholder cleanup;
+- `CARRY_FORWARD.md` Active-Only Rule template concordance;
+- evidence semantics separation: implementation accepted vs runtime verified vs production verified.
+
+A close may append historical records, but current pointer sections must be fresh or explicitly historical before HIRMOS claims close success.
+
+## PROD-L8.22 phase and delivery evidence-backed review gates
+
+Close must run evidence-backed review gates before updating accepted state.
+
+### Phase review gate
+
+For each phase being accepted, partially accepted, blocked, or failed, close must reconcile:
+
+- phase authority and adopted scope;
+- session and IU execution evidence;
+- actual final codebase review where project files changed;
+- unit-level completion and cross-unit integration;
+- runtime/provider evidence level;
+- production evidence level;
+- unresolved and carry-forward impact;
+- final phase result and what is not claimed.
+
+### Delivery review gate
+
+For each delivery being accepted, partially accepted, blocked, or failed, close must reconcile:
+
+- all phase review gates;
+- cross-phase integration;
+- end-to-end workflow evidence;
+- requirements/scope coverage posture;
+- runtime/provider evidence level;
+- production evidence level;
+- carry-forward items affecting acceptance;
+- final delivery result and what is not claimed.
+
+Close must not claim full delivery, MVP, runtime, or production success when the available evidence only supports implementation acceptance. When evidence is partial, the honest terminal state is `PARTIAL`, `BLOCKED`, or a narrower `implementation accepted` claim.

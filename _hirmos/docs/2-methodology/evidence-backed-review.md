@@ -55,3 +55,18 @@ Use the owning artifact for the evidence type:
 - `EVIDENCE.md` and `implementation-units/IU-xx.md` review for implementation evidence and completion decisions.
 
 If the right artifact is missing, the truthful result is blocked or downgraded. Do not use another artifact as a substitute owner.
+
+## PROD-L8.22 Review Gate Salvage
+
+HIRMOS preserves legacy evidence-backed review discipline through existing artifacts instead of restoring legacy review files.
+
+Review gates must answer:
+
+- What authority was reviewed?
+- What evidence was reviewed?
+- Was the final codebase or file state inspected?
+- Does the evidence prove unit, session, phase, delivery, runtime, or production claims?
+- What remains unproven?
+- Why is the terminal state honest?
+
+A passing static check is not a delivery review. A completed implementation unit is not a phase review. A phase review is not a delivery review unless cross-phase behavior and delivery-level acceptance posture are reviewed.
