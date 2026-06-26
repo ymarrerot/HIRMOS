@@ -412,3 +412,7 @@ Current-state navigation must preserve chronology:
 The Source Artifact Index must avoid blank placeholder rows. For each inactive optional source class, use explicit values such as `none`, `not separately created`, `not yet created`, `not evaluated`, or a concrete source path.
 
 Blank cells are not valid current-state navigation because future sessions cannot distinguish missing information from intentionally absent source authority.
+
+
+## PROD-L8.23 Generated Source Index Concordance
+Generated Source Artifact Index rows must not be blank placeholders. Use concrete paths, `none`, `not separately created`, `not evaluated`, or `not yet created`. Blank requirement/design/evidence source rows are stale navigation surfaces.

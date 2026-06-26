@@ -205,3 +205,7 @@ Required fields:
 - Why this result is honest:
 
 A delivery review must not claim full MVP/runtime/production acceptance when only implementation acceptance or static validation evidence exists. Stale delivery-plan sections must be reconciled or labeled historical before delivery close success is claimed.
+
+
+## PROD-L8.23 Delivery Status Log Completeness
+Generated delivery plans should make phase close chronology inspectable. When phase files exist with accepted/closed status, the Delivery Status Update Log or equivalent close chronology must include material phase close rows or explicitly state why a phase close row is not applicable. Stale active/pointer sections must be reconciled or explicitly labeled historical before final delivery close claims.

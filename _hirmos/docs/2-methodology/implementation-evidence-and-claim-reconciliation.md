@@ -85,3 +85,7 @@ Review gates must answer:
 - Why is the terminal state honest?
 
 A passing static check is not a delivery review. A completed implementation unit is not a phase review. A phase review is not a delivery review unless cross-phase behavior and delivery-level acceptance posture are reviewed.
+
+
+## PROD-L8.23 Generated-Run Validation Boundary
+A generated run must be evaluated against its produced artifacts, not only against shipped framework templates. Runtime evidence and IU authority are credible only when the generated session archives contain the required authority checkpoint, substantive IU contracts, coverage mapping, timestamp completeness, and reconciled review/close records.

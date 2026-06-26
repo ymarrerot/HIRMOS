@@ -272,3 +272,7 @@ Required non-placeholder fields:
 | Failure / route-back condition | YES / NO | |
 
 If any required field is `NO`, this IU blocks implementation authorization until amended or the session explicitly switches to governed lightweight/no-IU mode before material edits.
+
+
+## PROD-L8.23 Generated IU Runtime-Enforcement Notes
+Generated IU files are runtime authority records and are validator-inspectable. A generated IU is invalid if it contains only title/status/objective/scope or a bare `created before code changes` assertion or thin IU self-attestation. To pass generated-run validation in IU mode, this artifact must retain substantive, non-placeholder content for the minimum contract fields above and must be referenced by the session-level IU Set Coverage Map in `SESSION_EXECUTION.md`.

@@ -306,3 +306,7 @@ Required fields:
 - What is not claimed:
 
 A phase may be implementation-accepted while runtime or production verification remains partial, blocked, or explicitly not claimed. The phase file must not retain stale pending/not-started body sections that contradict the final phase review gate unless those rows are explicitly labeled historical.
+
+
+## PROD-L8.23 Generated Phase Close Concordance
+Generated phase files are invalidly stale if the current lifecycle status is `ACCEPTED` while current exit/binary criteria remain `PENDING` or `NOT_ASSESSED` outside an explicitly labeled historical section. Close must reconcile current criteria, mark old sections historical, or downgrade the phase result.

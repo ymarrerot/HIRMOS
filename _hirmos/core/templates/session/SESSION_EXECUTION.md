@@ -557,7 +557,6 @@ Record source-reading coverage before Design, Implementation, continuation, or c
 After each transition or implementation pass, refresh `SESSION_STATE.json`, Current Continuation Snapshot, command concordance, active controls, routing log, active phase, session scope preview, evidence claim reconciliation, and current-state active pointers. Stale sections that contradict machine state or active authority block readiness, completion, and close claims until reconciled or marked historical.
 ## Implementation-Unit Instantiation Timing Record
 When IU mode is active, record whether full IU artifacts were created before material code changes; retrospective IU creation requires an explicit correction and reconciliation before completion claims.
-
 ## PROD-L8.19 Command Legality and Correction Ledger Concordance
 ### Idle Continue Legality Record
 Record session status, mutation guard, and recovery command. If `SESSION_STATE.json.status = idle`, `hirmos continue` fails closed, performs no project/artifact mutation, and recommends `hirmos start`.
@@ -567,9 +566,10 @@ Record IU mode, pre-edit IU existence, pre-edit non-placeholder authority, and r
 
 ### Material Correction Command Ledger
 Record one row per material correction command/pass; do not compress file/evidence/runtime-changing corrections into `hirmos continue (×n)`. Columns: Seq, user command/trigger, prior state, correction type, reason, files/artifacts changed, evidence pointer, result.
-
 ## PROD-L8.21 IU Set Authority Checkpoint
 Before material edits, IU-mode sessions must record set-level execution authority: IU mode; implementation shape; source phase/session authority; IU files created before material edits; non-placeholder review; scope coverage; uncovered items; sequencing/dependencies; authorization decision `IMPLEMENTATION_AUTHORIZED` / `BLOCKED` / `LIGHTWEIGHT_NO_IU`; first material edit allowed; timing evidence. Fail closed if missing, placeholder-only, inconsistent, or recorded after implementation evidence/project-file changes; record governance deviation instead of normal authorization. Minimum IU content standard: independently reviewable, failure-contained, mapped to source scope, sequenced/dependency-aware when needed, and covering adopted scope without hidden gaps. IU Set Coverage Map: source scope item → source artifact → IU file(s) → coverage status → notes.
-
 ## PROD-L8.22 Session / Phase / Delivery Review Gate Ledger
 At review/close boundaries, append one concise Review boundary row per session, phase, or delivery review gate: boundary, source authority, evidence reviewed, actual codebase reviewed (`YES`/`NO`/`NOT_APPLICABLE`), scope/integration result, runtime/production posture, final result (`PASS`/`PARTIAL`/`BLOCKED`/`FAILED`), and what is not claimed. Rows must be contemporaneous; higher-level reviews aggregate lower-level evidence; missing codebase/runtime/production evidence must downgrade or narrow the claim.
+
+## PROD-L8.23 Generated-Run IU Enforcement Checkpoint
+Generated IU-mode sessions must include a current `PROD-L8.21 IU Set Authority Checkpoint` before material edits with `Authorization decision: IMPLEMENTATION_AUTHORIZED` / `BLOCKED` / `LIGHTWEIGHT_NO_IU`, `IU files created before material edits: YES`, `Non-placeholder IU review: PASS`, `IU Set Coverage Map`, and timing evidence. Missing checkpoint, coverage map, authorization decision, or thin IU self-attestation fails generated-run validation even when framework templates pass static validation.

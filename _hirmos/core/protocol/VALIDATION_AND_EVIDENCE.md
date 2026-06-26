@@ -237,3 +237,17 @@ A `PASS` review requires evidence for the claim level being passed. If runtime o
 ### Actual-codebase review rule
 
 When implementation changed project files, review records must state whether the final working copy or final archived file state was inspected. Chat summaries and intended diffs are not sufficient review evidence.
+
+
+## PROD-L8.23 Generated-Run Runtime Artifact Validation
+Validators must distinguish framework-template validation from generated-run validation. A framework can pass static validation while a generated project run fails runtime-artifact validation. When generated artifacts exist, validation should inspect them for authority safety and concordance, including IU authority checkpoints, minimum IU substance, timestamp completeness, phase close freshness, delivery close-log freshness, and evidence-claim honesty.
+
+Runtime generated-artifact validation may fail:
+
+- IU-mode sessions with IU files but no `PROD-L8.21 IU Set Authority Checkpoint`.
+- IU-mode sessions missing an authorization decision: `IMPLEMENTATION_AUTHORIZED`, `BLOCKED`, or `LIGHTWEIGHT_NO_IU`.
+- IU-mode sessions missing an IU Set Coverage Map from source scope to IU files.
+- Generated IU files below the minimum IU contract standard.
+- Archived `SESSION_STATE.json` files with null `created_at`, `updated_at`, or missing run context.
+- Accepted phase files with current binary exit criteria still `PENDING` or `NOT_ASSESSED` outside explicitly historical sections.
+- Delivery status logs that omit material phase close rows when phase files are accepted/closed.

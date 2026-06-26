@@ -106,7 +106,7 @@ By default, `hirmos init` downloads the latest HIRMOS framework release from Git
 To install a specific framework release:
 
 ```bash
-hirmos init --version 1.1.3
+hirmos init --version 1.1.4
 ```
 
 `hirmos init --version X.Y.Z` resolves the GitHub framework release tag `vX.Y.Z` and downloads the corresponding `hirmos-framework.zip` release asset.

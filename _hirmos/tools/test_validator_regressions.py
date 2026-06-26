@@ -711,6 +711,100 @@ def mutate_root_accepted_requirements_with_governance_passes(root: Path) -> None
     (root / "system" / "accepted-state" / "REQUIREMENTS.md").write_text("# REQUIREMENTS.md\n\nCumulative accepted requirements governance: ACTIVE\n\nStatus: explicitly governed cumulative accepted requirements baseline.\n")
 
 
+
+def _write_generated_history_session(root: Path, *, checkpoint: bool = True, thin_iu: bool = False, null_timestamps: bool = False, no_iu: bool = False) -> Path:
+    sess = root / "system" / "history" / "sessions" / "2026-01-01-iu-fixture"
+    iu_dir = sess / "implementation-units"
+    iu_dir.mkdir(parents=True, exist_ok=True)
+    state = {
+        "schema_version": "session-state-v1",
+        "status": "archived",
+        "session_id": "2026-01-01-iu-fixture",
+        "lifecycle_stage": "implementation_complete",
+        "created_at": None if null_timestamps else "2026-01-01T00:00:00Z",
+        "updated_at": None if null_timestamps else "2026-01-01T00:10:00Z",
+        "run_context": None if null_timestamps else {"run_started_at_utc": "2026-01-01T00:00:00Z", "source": "fixture"},
+    }
+    (sess / "SESSION_STATE.json").write_text(json.dumps(state, indent=2) + "\n")
+    if checkpoint:
+        (sess / "SESSION_EXECUTION.md").write_text("""# SESSION_EXECUTION.md
+
+## PROD-L8.21 IU Set Authority Checkpoint
+Authorization decision: IMPLEMENTATION_AUTHORIZED
+IU files created before material edits: YES
+IU Set Coverage Map
+| Source scope item | Source artifact | IU file(s) | Coverage status | Notes |
+|---|---|---|---|---|
+| SR-01 | SESSION_SCOPE.md | IU-01.md | COVERED | fixture |
+""")
+    else:
+        (sess / "SESSION_EXECUTION.md").write_text("# SESSION_EXECUTION.md\n\nImplementation completed.\n")
+    if no_iu:
+        return sess
+    if thin_iu:
+        (iu_dir / "IU-01.md").write_text("# IU-01\nStatus: complete\nObjective: fixture\nPre-Execution: IU created before code changes — YES\n")
+    else:
+        (iu_dir / "IU-01.md").write_text("""# IU-01 — Fixture Implementation Unit
+
+## 1. Unit Identity
+- Unit ID: IU-01
+- Objective source: fixture
+- Source Scope item(s): SR-01
+
+## 2. Unit Scope
+### Objective
+Implement fixture behavior.
+### Context
+Fixture context.
+### In Scope
+- Fixture file change.
+### Out of Scope
+- Unrelated work.
+### Files / Areas
+- app/fixture.ts
+### Preservation Rules
+- Preserve fixture boundaries.
+### Implementation Requirements
+- Implement the requested fixture behavior.
+### Verification Commands / Checks
+- fixture check
+### Evidence Requirements
+- fixture evidence
+### Runtime Integration Posture
+| Area | Authorized posture | Allowed fallback | Required environment/config | Evidence required |
+|---|---|---|---|---|
+| fixture | boundary | none | none | command output |
+### Binary Acceptance Criteria
+| Criterion | Evidence required | Pass/Fail basis |
+|---|---|---|
+| fixture works | command output | pass/fail |
+
+## 3. Pre-Execution Checks
+| Check | Result | Evidence / notes |
+|---|---|---|
+| Unit authority record is non-placeholder | YES | fixture |
+| Failure / route-back condition recorded | YES | route back if fixture check fails |
+
+## 4. Execution Record
+### Failure / route-back condition
+Route back if required fixture verification fails.
+### Actions Performed
+Pending.
+""")
+    return sess
+
+
+def mutate_generated_iu_session_missing_checkpoint_fails(root: Path) -> None:
+    _write_generated_history_session(root, checkpoint=False, thin_iu=False)
+
+
+def mutate_generated_iu_session_thin_iu_fails(root: Path) -> None:
+    _write_generated_history_session(root, checkpoint=True, thin_iu=True)
+
+
+def mutate_generated_archived_session_null_timestamps_fails(root: Path) -> None:
+    _write_generated_history_session(root, checkpoint=True, thin_iu=False, null_timestamps=True, no_iu=True)
+
 # retained marker: accepted-state index reappears
 CASES = [
     Case("valid baseline", mutate_none, True, "PASS:"),
@@ -757,6 +851,9 @@ CASES = [
     Case("delivery baseline active wording fails", mutate_delivery_baseline_active_wording_fails, False, "delivery wording conflict"),
     Case("root accepted-state requirements without governance fails", mutate_root_accepted_requirements_without_governance_fails, False, "default root accepted-state artifact exists"),
     Case("root accepted-state requirements with governance passes", mutate_root_accepted_requirements_with_governance_passes, True, "PASS:"),
+    Case("generated IU session missing checkpoint fails", mutate_generated_iu_session_missing_checkpoint_fails, False, "missing SESSION_EXECUTION marker"),
+    Case("generated IU session thin IU fails", mutate_generated_iu_session_thin_iu_fails, False, "generated IU too thin"),
+    Case("generated archived session null timestamps fails", mutate_generated_archived_session_null_timestamps_fails, False, "missing created_at"),
 ]
 
 

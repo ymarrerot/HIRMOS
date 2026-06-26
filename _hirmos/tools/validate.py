@@ -222,7 +222,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.1.3'
+expected_version = '1.1.4'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -3131,3 +3131,128 @@ for rel, phrases in {
         if phrase.lower() not in body.lower():
             fail(f'PROD-L8.22 review gate surface {rel} missing phrase: {phrase}')
 print('PASS: HIRMOS PROD-L8.22 phase and delivery review gate static check')
+
+
+# PROD-L8.23 generated-run IU enforcement and runtime artifact validator hardening
+for rel, phrases in {
+    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.23 Generated-Run IU Enforcement Checkpoint', 'IU files created before material edits', 'IU Set Coverage Map'],
+    'core/templates/session/implementation-units/IU.md': ['PROD-L8.23 Generated IU Runtime-Enforcement Notes', 'thin IU self-attestation'],
+    'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.23 Generated-Run Runtime Artifact Validation', 'generated-run validation', 'minimum IU contract'],
+    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.23 Generated-Run Close Concordance Validation', 'timestamp completeness', 'delivery-plan status-log coverage'],
+    'core/templates/system/delivery/phases/PHASE.md': ['PROD-L8.23 Generated Phase Close Concordance', 'NOT_ASSESSED'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['PROD-L8.23 Delivery Status Log Completeness', 'phase close chronology'],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['PROD-L8.23 Generated Source Index Concordance', 'Blank requirement/design/evidence source rows'],
+    'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': ['PROD-L8.23 Generated-Run Enforcement Duty', 'Thin generated IU stubs'],
+    'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['PROD-L8.23 Runtime Authority Enforcement', 'must not proceed on transcript claims'],
+    'docs/2-methodology/implementation-evidence-and-claim-reconciliation.md': ['PROD-L8.23 Generated-Run Validation Boundary', 'generated session archives'],
+}.items():
+    body = (root/rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.23 generated-run enforcement surface {rel} missing phrase: {phrase}')
+
+
+def _generated_session_dirs():
+    dirs = []
+    history = root / 'system/history/sessions'
+    if history.exists():
+        for child in sorted(history.iterdir()):
+            if child.is_dir() and ((child / 'SESSION_EXECUTION.md').exists() or (child / 'SESSION_STATE.json').exists()):
+                dirs.append(child)
+    active = root / 'session'
+    if active.exists() and ((active / 'SESSION_EXECUTION.md').exists() or any((active / 'implementation-units').glob('IU-*.md'))):
+        # The shipped framework idle template has no real session id and no IUs; runtime checks below no-op unless real artifacts exist.
+        dirs.append(active)
+    return dirs
+
+
+def _iu_files(session_dir):
+    paths = []
+    for sub in ['implementation-units', 'implementation_units']:
+        d = session_dir / sub
+        if d.exists():
+            paths.extend(sorted(p for p in d.glob('IU-*.md') if p.is_file()))
+    return paths
+
+
+def _nonblank_lines(text):
+    return [ln.strip() for ln in text.splitlines() if ln.strip()]
+
+
+def _runtime_session_state_is_real(state):
+    sid = (state.get('session_id') or '').strip()
+    status = (state.get('status') or '').strip()
+    return bool(sid) or status not in ('idle', '')
+
+for session_dir in _generated_session_dirs():
+    iu_paths = _iu_files(session_dir)
+    execution_path = session_dir / 'SESSION_EXECUTION.md'
+    execution_body = execution_path.read_text(errors='ignore') if execution_path.exists() else ''
+
+    if iu_paths:
+        required_execution_markers = [
+            'PROD-L8.21 IU Set Authority Checkpoint',
+            'IU Set Coverage Map',
+        ]
+        for marker in required_execution_markers:
+            if marker.lower() not in execution_body.lower():
+                fail(f'PROD-L8.23 generated IU-mode session {session_dir.relative_to(root)} missing SESSION_EXECUTION marker: {marker}')
+        if not re.search(r'Authorization decision\s*:\s*(IMPLEMENTATION_AUTHORIZED|BLOCKED|LIGHTWEIGHT_NO_IU)', execution_body, re.I):
+            fail(f'PROD-L8.23 generated IU-mode session {session_dir.relative_to(root)} missing authorization decision')
+        if not re.search(r'IU files created before material edits\s*:\s*YES', execution_body, re.I):
+            fail(f'PROD-L8.23 generated IU-mode session {session_dir.relative_to(root)} missing pre-material-edit IU timing proof')
+
+    for iu_path in iu_paths:
+        txt = iu_path.read_text(errors='ignore')
+        low = txt.lower()
+        lines = _nonblank_lines(txt)
+        if len(lines) < 30:
+            fail(f'PROD-L8.23 generated IU too thin: {iu_path.relative_to(root)} has {len(lines)} nonblank lines')
+        required_iw = ['objective', 'source scope', 'in scope', 'out of scope', 'implementation requirements', 'verification', 'evidence', 'acceptance criteria', 'pre-execution', 'failure']
+        missing_iw = [p for p in required_iw if p not in low]
+        if missing_iw:
+            fail(f'PROD-L8.23 generated IU missing minimum contract fields in {iu_path.relative_to(root)}: {missing_iw}')
+
+    state_path = session_dir / 'SESSION_STATE.json'
+    if state_path.exists() and session_dir.name != 'session':
+        try:
+            state = json.loads(state_path.read_text())
+        except Exception as exc:
+            fail(f'PROD-L8.23 archived SESSION_STATE.json invalid JSON at {state_path.relative_to(root)}: {exc}')
+        if _runtime_session_state_is_real(state):
+            for key in ['created_at', 'updated_at']:
+                if not state.get(key):
+                    fail(f'PROD-L8.23 archived SESSION_STATE.json missing {key}: {state_path.relative_to(root)}')
+            if state.get('run_context') is None:
+                fail(f'PROD-L8.23 archived SESSION_STATE.json missing run_context: {state_path.relative_to(root)}')
+
+# Phase close freshness checks for generated delivery phase files only.
+delivery_root = root / 'system/delivery'
+if delivery_root.exists():
+    for phase_path in delivery_root.glob('*/phases/PHASE-*.md'):
+        txt = phase_path.read_text(errors='ignore')
+        if re.search(r'Lifecycle status\s*:\s*ACCEPTED', txt, re.I):
+            # A current accepted phase may preserve older NOT_ASSESSED only if those sections are explicitly historical.
+            if re.search(r'Binary Exit Criteria[\s\S]{0,2500}(NOT_ASSESSED|PENDING)', txt, re.I) and not re.search(r'historical|superseded|prior state', txt, re.I):
+                fail(f'PROD-L8.23 accepted generated phase has current stale binary exit criteria: {phase_path.relative_to(root)}')
+
+    plan = delivery_root / 'DELIVERY_PLAN.md'
+    if plan.exists():
+        plan_txt = plan.read_text(errors='ignore')
+        accepted_phase_ids = []
+        for phase_path in delivery_root.glob('*/phases/PHASE-*.md'):
+            txt = phase_path.read_text(errors='ignore')
+            if re.search(r'Lifecycle status\s*:\s*(ACCEPTED|CLOSED|PARTIAL)', txt, re.I):
+                accepted_phase_ids.append(phase_path.stem)
+        for phase_id in accepted_phase_ids:
+            if not re.search(rf'{re.escape(phase_id)}[^\n]{{0,160}}(ACCEPTED|CLOSED|PARTIAL|completed|closed)', plan_txt, re.I):
+                fail(f'PROD-L8.23 DELIVERY_PLAN.md missing close/status row for {phase_id}')
+
+# Current system state source index placeholder check for generated current-state files.
+css = root / 'system/accepted-state/CURRENT_SYSTEM_STATE.md'
+if css.exists():
+    css_txt = css.read_text(errors='ignore')
+    if re.search(r'\|\s*(Requirement Sources|Design Sources|Evidence Sources)\s*\|\s*\|', css_txt, re.I):
+        fail('PROD-L8.23 CURRENT_SYSTEM_STATE.md contains blank Source Artifact Index placeholder rows')
+
+print('PASS: HIRMOS PROD-L8.23 generated-run IU enforcement and runtime artifact validator hardening static/runtime check')

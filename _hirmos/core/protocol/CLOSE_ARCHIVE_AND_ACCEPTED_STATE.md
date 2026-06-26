@@ -407,3 +407,7 @@ For each delivery being accepted, partially accepted, blocked, or failed, close 
 - final delivery result and what is not claimed.
 
 Close must not claim full delivery, MVP, runtime, or production success when the available evidence only supports implementation acceptance. When evidence is partial, the honest terminal state is `PARTIAL`, `BLOCKED`, or a narrower `implementation accepted` claim.
+
+
+## PROD-L8.23 Generated-Run Close Concordance Validation
+Close/archive must leave generated artifacts validator-inspectable, not merely plausible. Before close succeeds, HIRMOS should verify generated runtime artifacts for timestamp completeness, monotonic archive chronology, phase-current-body concordance, delivery-plan status-log coverage, carry-forward status accuracy, and evidence-claim separation. If any generated artifact remains stale or contradictory, close must downgrade the result, mark the stale section as historical, or fail closed until reconciled.

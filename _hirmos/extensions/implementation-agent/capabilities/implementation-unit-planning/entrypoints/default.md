@@ -99,3 +99,7 @@ Required control:
 Before implementation execution, this capability must generate or verify the complete IU set and then record the `PROD-L8.21 IU Set Authority Checkpoint` in `SESSION_EXECUTION.md`.
 
 The IU set must map adopted phase/session scope to IU files, prove minimum IU contract completeness, identify sequencing/dependencies, and return `IMPLEMENTATION_AUTHORIZED` only when the set is non-placeholder and complete.
+
+
+## PROD-L8.23 Generated-Run Enforcement Duty
+This capability must produce generated IU artifacts that can pass runtime validation, not only framework-template validation. Before implementation execution, it must update `SESSION_EXECUTION.md` with the IU authority checkpoint, authorization decision, non-placeholder IU review, and IU Set Coverage Map. Thin generated IU stubs are invalid when IU mode is active.

@@ -1,3 +1,10 @@
+# Upgrade Guide
+
+## HIRMOS 1.1.4 baseline
+
+HIRMOS 1.1.4 is the generated-run IU enforcement stabilization baseline. It builds on 1.1.3 by validating generated session archives, not only framework templates, for IU Set Authority Checkpoints, implementation authorization, IU coverage mapping, minimum IU substance, timestamp completeness, stale accepted-phase exit criteria, delivery status-log completeness, and source-index placeholder cleanup.
+
+
 # HIRMOS Version Guide
 
 This file records version-level operational notes for the installed HIRMOS framework.
@@ -75,6 +82,10 @@ The CLI package version remains unchanged when the framework content changes but
 Release packaging must ship only canonical runtime surfaces, templates, docs, validators, and examples. Framework files must remain project-agnostic except for clearly labeled examples.
 
 
+## 1.1.4 stabilization note
+
+HIRMOS 1.1.4 includes generated-run IU enforcement and runtime artifact validator hardening. It materially changes validation behavior for generated project runs by failing IU-mode sessions that lack the L8.21 IU Set Authority Checkpoint, an implementation authorization decision, IU coverage mapping, or substantive IU files. No terminal CLI version bump is required because terminal install behavior did not change.
+
 ## 1.1.3 stabilization note
 
 HIRMOS 1.1.3 includes IU Set Authority Checkpoints, minimum IU content standards, phase/delivery evidence-backed review gates, close-time concordance sweeps, and stricter evidence semantics separating implementation acceptance from runtime and production verification. No terminal CLI version bump is required because terminal install behavior did not change.
@@ -109,3 +120,7 @@ If IU mode is active, create substantive IU files and record the IU Set Authorit
 ## PROD-L8.22 Review Gate Hardening
 
 Review and close flows now require explicit session/phase/delivery review gate discipline. Existing projects should preserve final-result honesty by recording what was reviewed, what evidence was available, whether the actual codebase was reviewed, and what runtime or production claims are not made.
+## PROD-L8.23 Generated-Run Validation Upgrade Note
+
+HIRMOS now validates generated runtime artifacts more aggressively. Existing generated runs may fail if IU-mode sessions lack a `PROD-L8.21 IU Set Authority Checkpoint`, an explicit authorization decision, an IU Set Coverage Map, substantive IU files, or complete archived session timestamps. This is intentional: framework-template compliance is no longer enough to prove generated-run governance.
+

@@ -1,3 +1,14 @@
+# Changelog
+
+## 1.1.4 — Generated-run IU enforcement stabilization
+
+- Bumped framework metadata and validator expected version to 1.1.4.
+- Stabilizes generated-run IU enforcement introduced after 1.1.3.
+- Validator now protects generated session archives for IU Set Authority Checkpoints, implementation authorization decisions, IU coverage maps, and substantive IU files when IU mode is active.
+- Runtime artifact validation also checks timestamp completeness, stale accepted phase exit criteria, delivery status-log completeness, and source-index placeholder cleanup.
+- No terminal CLI version bump; CLI package remains 1.3.4.
+
+
 # HIRMOS Changelog
 
 This changelog records user-visible changes to the HIRMOS framework payload.
@@ -276,3 +287,11 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 - Required review gates to distinguish implementation accepted, runtime verified, and production verified claims.
 - Added actual-codebase-reviewed expectations for implementation review boundaries.
 - Hardened close so higher-level acceptance cannot overclaim beyond the evidence level proven.
+## PROD-L8.23 — Generated-Run IU Enforcement and Runtime Artifact Validator Hardening
+
+- Added generated-run validation for IU-mode sessions, not just static framework templates.
+- Validator now fails generated sessions with IU files but no IU Set Authority Checkpoint, no authorization decision, no IU Set Coverage Map, or no proof that IU files existed before material edits.
+- Validator now fails thin generated IU files below the minimum IU contract standard.
+- Added runtime checks for archived SESSION_STATE timestamp/run-context completeness, accepted phase stale binary-exit criteria, delivery status-log phase close coverage, and blank source-index placeholders.
+- Added regression cases for missing IU checkpoints, thin generated IUs, and null archived session timestamps.
+

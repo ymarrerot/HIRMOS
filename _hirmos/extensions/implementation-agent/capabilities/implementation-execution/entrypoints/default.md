@@ -99,3 +99,7 @@ If the IU is missing, placeholder-only, or was created retrospectively after imp
 Before material edits, implementation execution must verify `SESSION_EXECUTION.md` contains a current `PROD-L8.21 IU Set Authority Checkpoint` with `Authorization decision: IMPLEMENTATION_AUTHORIZED`, unless the session explicitly declared `LIGHTWEIGHT_NO_IU` before implementation began.
 
 Do not treat thin IU stubs or retrospective IU files as execution authority.
+
+
+## PROD-L8.23 Runtime Authority Enforcement
+Before material edits, implementation execution must inspect generated `SESSION_EXECUTION.md` and generated IU files. If the IU Set Authority Checkpoint, authorization decision, coverage map, or minimum IU contract is missing, execution must fail closed or route back to IU planning. It must not proceed on transcript claims or IU self-attestation alone.
