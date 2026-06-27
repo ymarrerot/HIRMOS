@@ -144,16 +144,17 @@ Route back or block when:
 
 ## Interaction-mode visibility
 
-- `domain_expert`: show concise project-type rationale and user-owned implications.
-- `technical_supervisor`: show evidence, confidence, conflicts, and routing impact.
-- `framework_diagnostics`: show full classification signals, controls, route-backs, and capability decisions.
+By default, show concise project-type rationale and user-owned implications. Surface evidence, confidence, conflicts, routing impact, full classification signals, controls, route-backs, and capability decisions when requested or when risk, blocker state, validation failure, or inspection need requires it.
 
-Interaction modes change visibility, not classification rigor.
+The canonical interaction posture changes visibility, not classification rigor.
 
 
 ## Delivery shape fields
 
 Project-type classification must include delivery shape, not only greenfield/brownfield labels.
+
+
+Delivery shape honesty: project-type labels are routing evidence only. HIRMOS must select the smallest sufficient governed delivery shape for the real software work and must not escalate shape because the run is used for framework testing, inspection, or dogfood evaluation. Token and interaction cost are secondary to honest delivery shape, but must be considered when a heavier shape does not materially improve implementation truth, validation, continuity, or accepted-state integrity.
 
 Required fields:
 

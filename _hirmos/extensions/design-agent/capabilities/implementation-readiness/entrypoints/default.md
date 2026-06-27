@@ -9,7 +9,7 @@ Decide whether Design has produced enough governed authority for Implementation 
 ### Produces
 
 - `_hirmos/session/SESSION_EXECUTION.md readiness gate updates`
-- domain_expert or technical_supervisor checkpoint basis when readiness or blockers must be surfaced
+- canonical interaction posture checkpoint basis when readiness or blockers must be surfaced
 
 ### Terminal States
 
@@ -58,13 +58,13 @@ This capability inherits shared extension rules from `_hirmos/extensions/design-
 
 - Session Scope authorizes exactly what Implementation may do.
 
-## Interaction-mode visibility
+## Canonical interaction posture visibility
 
-Use the active interaction mode from `_hirmos/core/authority/INTERACTION_MODES.md` and the parent extension default entrypoint visibility rule.
+Use the canonical HIRMOS interaction posture from `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail.
 
-- `domain_expert`: surface only user-owned decisions, blockers, readiness/completion status, and concise artifact pointers.
-- `technical_supervisor`: surface capability result, assumptions, artifacts/evidence, and review implications.
-- `framework_diagnostics`: surface activation reason, entrypoint path, controls, artifacts, unresolved-item contribution, route-back decisions, and terminal-state basis.
+- By default, surface only user-owned decisions, blockers, readiness/completion status, and concise artifact pointers.
+- Surface capability result, assumptions, artifacts/evidence, and review implications when requested or needed for responsible review.
+- Surface activation reason, entrypoint path, controls, artifacts, unresolved-item contribution, route-back decisions, and terminal-state basis when validation failure, blocker state, route-back, or inspection need requires it.
 
 ## Unresolved-item producer obligation
 
@@ -123,3 +123,8 @@ This capability participates in the command-selected focus route. Before claimin
 - exactly one next governed command when the route cannot proceed.
 
 The capability must not compensate for missing authority by creating legacy session-local delivery files or by duplicating full delivery authority inside `SESSION_SCOPE.md`.
+
+### Delivery shape honesty and cost-aware routing
+
+When this capability records or consumes a delivery shape, it must use the smallest sufficient governed shape for the real software work. It must not select durable delivery or phase files because the framework is being tested, inspected, or dogfooded. It must surface a compact tradeoff when the selected shape affects user interaction or token cost: technically possible simpler shape, why that shape is acceptable or insufficient, why the selected shape is necessary, and the risk if the work is compressed into a smaller shape.
+

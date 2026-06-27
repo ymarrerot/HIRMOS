@@ -53,7 +53,7 @@ Capability entrypoints may also define:
 - required inputs;
 - execution controls contributed;
 - required behavior;
-- interaction-mode visibility;
+- canonical interaction posture visibility;
 - unresolved-item producer obligations.
 
 ## Producer discipline

@@ -14,6 +14,7 @@ Bootstrap is not complete until the required reads, quiz, and bootstrap report a
 - Do not begin runtime command execution until bootstrap passes.
 - Do not claim command readiness until the bootstrap report says bootstrap passed.
 - Do not answer quiz questions from memory when the question names an authority or protocol file.
+- Do not treat chat memory, compressed chat summaries, or prior model recollection as bootstrap evidence.
 - If a required file is missing or contradictory, fail closed and report the issue.
 
 ---
@@ -48,9 +49,34 @@ Rules:
 - Use installed `_hirmos/` files and current project files as the source of truth for this run.
 - Do not rely on prior HIRMOS memory, prior chat context, old packages, or expected file contents.
 - Verify every claim about created, updated, missing, validated, ready, complete, or archived files against the active working copy.
+- Recover bootstrap discipline from active durable artifacts, archived bootstrap reports, or core authority/protocol files. Do not recover it from chat memory or compressed chat summaries.
 - If state is unclear, stop and re-check the governing file or artifact.
 
 Before leaving this step, verify that you can identify the project root and installed `_hirmos/` folder.
+
+
+---
+
+## Step 1A — General run preflight
+
+Before any governed runtime command proceeds, verify the minimum installed HIRMOS runtime surface required for the requested command and current integration context. This applies to every project and run; do not create or infer a special run category.
+
+Required preflight checks:
+
+- `_hirmos/AGENTS.md` exists and has been followed for the current agent/context;
+- `_hirmos/hirmos.config.json` exists;
+- required core authority/protocol files from bootstrap Step 2 exist;
+- the requested command spec exists under `_hirmos/core/commands/<command>.md`;
+- integration registry/templates exist when the current tool integration depends on `_hirmos/integrations/agent-tools/registry.json`;
+- fallback bootstrap through `_hirmos/AGENTS.md` is explicitly recorded when an optional integration surface is missing but the command can proceed safely.
+
+Classify preflight result as:
+
+- `PRECHECK_PASS` — required runtime surface exists;
+- `PRECHECK_WARNING` — a non-required integration/setup surface is missing, but fallback bootstrap is sufficient for the requested command;
+- `PRECHECK_BLOCKER` — a required command, core, session, or integration surface is missing or contradictory.
+
+Preflight results must be recorded in the bootstrap report or `SESSION_EXECUTION.md` before command execution. If preflight is a blocker, stop before lifecycle work and recommend exactly one governed recovery action.
 
 ---
 
@@ -62,7 +88,7 @@ Read these files in full during bootstrap:
 _hirmos/hirmos.config.json
 _hirmos/core/authority/LIFECYCLE.md
 _hirmos/core/authority/ONBOARDING_PRINCIPLES.md
-_hirmos/core/authority/INTERACTION_MODES.md
+_hirmos/core/authority/INTERACTION_POSTURE.md
 _hirmos/core/authority/ARTIFACT_MODEL.md
 _hirmos/core/authority/EXECUTION_CONTROL_GOVERNANCE.md
 _hirmos/core/protocol/UNRESOLVED_ITEMS.md
@@ -132,7 +158,7 @@ _hirmos/core/protocol/CAPABILITY_ROUTING.md
 
 ---
 
-## Step 4 — Onboarding principles and interaction modes
+## Step 4 — Onboarding principles and canonical interaction posture
 
 Operational summary:
 
@@ -143,21 +169,15 @@ HIRMOS must remain:
 - Rigorous underneath
 - Progressive disclosure
 
-Supported interaction modes:
+HIRMOS has one user-facing interaction posture. It is not a configurable mode.
 
-```text
-domain_expert
-technical_supervisor
-framework_diagnostics
-```
-
-Interaction modes change visibility, density, pause cadence, and inspection detail. They do not change lifecycle obligations, artifact obligations, unresolved-item governance, execution controls, evidence requirements, validation requirements, or state-update safety.
+The canonical posture keeps user-facing output concise by default, includes artifact paths for governed claims and obligations, preserves rigorous lifecycle/evidence/validation rules underneath, and exposes more detail when the user asks or when risk, blocker state, validation failure, or inspection need requires it.
 
 Authorities:
 
 ```text
 _hirmos/core/authority/ONBOARDING_PRINCIPLES.md
-_hirmos/core/authority/INTERACTION_MODES.md
+_hirmos/core/authority/INTERACTION_POSTURE.md
 ```
 
 ---
@@ -376,13 +396,25 @@ During bootstrap, remember these firm evidence and readiness rules:
 
 ## Step 12 — Bootstrap quiz
 
-Answer every question in the bootstrap report. This is an open-book quiz. When a question names a file, read that file and answer from it.
+Answer every question in the bootstrap report. This is an open-book quiz. When a question names a file, read that file and answer from it unless the same answer is revalidated from a durable active artifact or archived bootstrap report.
+
+Every session bootstrap report must include the complete compact answer set. A later session may reuse prior bootstrap knowledge only when it is recovered from a durable source and cited. The allowed recovery sources are active artifacts, archived bootstrap reports under `_hirmos/system/history/sessions/**/bootstrap/BOOTSTRAP_REPORT.md` or equivalent archived session bootstrap paths, and the core authority/protocol files named by the quiz. chat memory, compressed chat summaries, prior model memory, or unstated recollection are not valid recovery sources.
+
+For each answer, record:
+
+```text
+Answer:
+Source:
+Recovery method:
+```
+
+Allowed recovery methods are `NEWLY_ANSWERED_FROM_CORE`, `REVALIDATED_FROM_ACTIVE_ARTIFACT`, `REVALIDATED_FROM_ARCHIVED_BOOTSTRAP`, and `REANSWERED_FROM_CORE_BECAUSE_PRIOR_BOOTSTRAP_NOT_FOUND`. If a durable prior answer is missing or uncertain, reread the corresponding authority/protocol file and answer again.
 
 1. Working-copy authority: What must you do before claiming that a file, artifact, validation, readiness state, or close result exists?
 2. From `LIFECYCLE.md`: What are the responsibilities of Understand System State, Design, Implementation, and Update System State?
 3. From `LIFECYCLE.md`: If Implementation discovers new system truth that invalidates Design, what must happen?
 4. From `ONBOARDING_PRINCIPLES.md`: List the four onboarding principles and explain how they constrain output design.
-5. From `INTERACTION_MODES.md`: Name two things interaction modes may change and four things they must not change.
+5. From `INTERACTION_POSTURE.md`: What is HIRMOS's single user-facing interaction posture, when should visible detail increase, and what governance obligations must never change?
 6. From `ARTIFACT_MODEL.md`: Why are source inputs not governed requirements authority?
 7. From `CURRENT_SYSTEM_STATE.md`: What is canonical merged current truth, and why are session archives not current state by themselves?
 8. From `EXECUTION_CONTROL_GOVERNANCE.md`: Which execution-control statuses block readiness, completion, or close claims?
@@ -392,7 +424,7 @@ Answer every question in the bootstrap report. This is an open-book quiz. When a
 12. From `VALIDATION_AND_EVIDENCE.md`: What distinction must evidence preserve between observed, inferred, assumed, unknown, blocked, not run, and not applicable?
 13. From `AUTONOMOUS_TECHNICAL_PROGRESS.md`: Explain the attempt-before-ask rule and name three actions HIRMOS may do autonomously when they are safe, in scope, and non-destructive.
 14. Scenario: The user uploaded requirement notes for a greenfield, brownfield, or mixed project change. How should the User Request shape Understand System State without becoming requirements authority?
-15. Scenario: A Domain Expert run has no gated unresolved items after Design. What should HIRMOS attempt next, and what must still be disclosed before Implementation?
+15. Scenario: A governed run has no gated unresolved items after Design. What should HIRMOS attempt next under the canonical interaction posture, and what must still be disclosed before Implementation?
 16. Governance posture: Why must HIRMOS not be treated as an after-the-fact compliance layer, and what must you verify before material implementation or correction work?
 
 ---
@@ -420,8 +452,14 @@ PASS or BLOCKED
 ## Files Read
 - list required files read during bootstrap
 
-## Quiz Answers
+## Bootstrap Discipline Answer Recovery
+- allowed recovery methods used for the answer set
+- durable sources used, including active artifacts, archived bootstrap reports, or core authority/protocol files
+
+## Bootstrap Discipline Answers
 - answer all Step 12 questions
+- each answer includes Answer, Source, and Recovery method
+- no answer relies on chat memory or compressed chat summaries
 
 ## Uncertainty / Missing Files
 - list any missing or contradictory authority
@@ -430,7 +468,7 @@ PASS or BLOCKED
 - state whether bootstrap-only completion is the only allowed action, or name the user-requested HIRMOS command that may be resolved next
 ```
 
-Bootstrap passes only when the report exists, the quiz is answered, and no blocking uncertainty remains.
+Bootstrap passes only when the report exists, every Step 12 quiz answer is present with a durable source and allowed recovery method, no answer relies on chat memory or compressed chat summaries, and no blocking uncertainty remains.
 
 ---
 

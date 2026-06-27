@@ -31,8 +31,10 @@ Use status-aware wording. Before acceptance, describe this as a Candidate Delive
 ### Recommended delivery shape
 
 - Shape: `DELIVERY_BASELINE`
-- Current-state evidence that durable delivery governance is needed:
+- Current-state evidence that durable delivery governance is needed for the real software work:
+- Technically possible simpler shape:
 - Why the smaller single-session shape is not sufficient for this current state and scope:
+- Why added delivery governance is worth the user interaction / token-cost overhead:
 - Why phase files are not instantiated yet:
 
 ### Delivery phase coverage
@@ -132,11 +134,14 @@ Ask for technical review summary
 Stop / do not continue
 ```
 
-## Interaction-mode density
+## Canonical interaction posture density
 
-- `domain_expert`: show concise recommendations, phase coverage, why decisions matter, and clear options. Link technical details instead of expanding them by default.
-- `technical_supervisor`: include artifact paths, technical-review items, phase coverage assignments, and challenge/change paths.
-- `framework_diagnostics`: include `session_focus`, capability route, item classifications, artifact concordance notes, and validation status.
+Use `_hirmos/core/authority/INTERACTION_POSTURE.md`: simple by default, transparent by design, rigorous underneath, and progressively disclosed. Keep the checkpoint concise while including artifact paths for governed claims and increasing detail when risk, blocker state, validation failure, route-back, or user request requires it.
+
+
+- By default, show concise recommendations, phase coverage, why decisions matter, and clear options. Link technical details instead of expanding them by default.
+- Include artifact paths, technical-review items, phase coverage assignments, and challenge/change paths when they are needed for responsible review.
+- Surface `session_focus`, capability route, item classifications, artifact concordance notes, and validation status when requested or when risk, blocker state, validation failure, or inspection need requires it.
 
 ## Hard rules
 

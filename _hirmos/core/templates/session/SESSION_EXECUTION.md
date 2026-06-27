@@ -42,14 +42,13 @@ Fail-closed rule: if this snapshot is missing, placeholder-only, or contradicts 
 | Session ID | |
 | Active command | |
 | User request | |
-| Interaction mode | |
+| Canonical interaction posture | One HIRMOS posture: simple by default, transparent by design, rigorous underneath, progressive in disclosure. |
 | Active lifecycle stage before command | |
 | Active lifecycle stage after command | |
 | Continuation state | |
 | Recommended next governed command | |
 ## Machine Command State Concordance
 `SESSION_STATE.json` is the machine command-state authority. This section is an explanatory mirror only. If this section disagrees with `SESSION_STATE.json`, HIRMOS must fail closed.
-
 | Field | SESSION_STATE.json value | SESSION_EXECUTION.md value | Concordance | Notes |
 |---|---|---|---|---|
 | status | | | NOT_CHECKED | |
@@ -88,7 +87,8 @@ This checklist records whether owning artifacts were reviewed at each lifecycle 
 
 | Control | Owning artifact | Required before | Status | Evidence / pointer |
 |---|---|---|---|---|
-| Bootstrap control | `bootstrap/BOOTSTRAP_REPORT.md` | command resolution | PENDING | |
+| Bootstrap control | `bootstrap/BOOTSTRAP_REPORT.md` | command resolution | PENDING | Must include complete discipline answers, durable sources, and allowed recovery methods; chat-memory recovery is invalid. |
+| General Run Preflight Control | `_hirmos/AGENTS.md` / `_hirmos/hirmos.config.json` / command spec / integration registry when required | before command execution | PENDING | Record `PRECHECK_PASS`, `PRECHECK_WARNING`, or `PRECHECK_BLOCKER`; warnings must name fallback authority, blockers stop lifecycle work. |
 | Command control | command spec / `COMMAND_STATE_MACHINE.md` | every command | PENDING | |
 | Working-copy control | project root / `_hirmos/` | meaningful mutation | PENDING | |
 | Current-system-state-first control | `CURRENT_SYSTEM_STATE.md` | design / implementation | PENDING | |
@@ -538,11 +538,9 @@ Required controls applied here:
 HIRMOS must not claim a lifecycle boundary complete merely because intended work was described clearly. It may claim the boundary only when this execution ledger self-validates that required controls were satisfied and recorded.
 
 ## PROD-L8.10 Delivery-Baseline Session Surface Minimality Record
-
 Record delivery-baseline minimality in pointer form: Session unresolved register = NOT_APPLICABLE / absent; Delivery unresolved register = `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`; Session Scope = NOT_APPLICABLE / absent; Active authority = `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`. A delivery-baseline checkpoint must point to the delivery unresolved register and must not create an empty session unresolved placeholder.
 
 ## PROD-L8.11 Delivery-Baseline Optional Authority Location
-
 During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`; optional authority belongs under `_hirmos/system/delivery/<delivery-id>/` or stays in `DELIVERY_SCOPE.md`. PROD-L8.13 Delivery Review Wording Record: status-aware wording verified and current-state-first routing explanation recorded.
 
 ## Current-State Source Reading Record
@@ -564,7 +562,6 @@ Record one row per material correction command/pass; do not compress file/eviden
 Before material edits, IU-mode sessions must record set-level execution authority: IU mode; implementation shape; source phase/session authority; IU files created before material edits; non-placeholder review; scope coverage; uncovered items; sequencing/dependencies; authorization decision `IMPLEMENTATION_AUTHORIZED` / `BLOCKED` / `LIGHTWEIGHT_NO_IU`; first material edit allowed; timing evidence. Fail closed if missing, placeholder-only, inconsistent, or recorded after implementation evidence/project-file changes; record governance deviation instead of normal authorization. Minimum IU content standard: independently reviewable, failure-contained, mapped to source scope, sequenced/dependency-aware when needed, covering adopted scope without hidden gaps, and carrying explicit `LLM Write Permission:` lines for sealed contract and append-only record sections. IU Set Coverage Map: source scope item → source artifact → IU file(s) → coverage status → notes.
 ## PROD-L8.22 Session / Phase / Delivery Review Gate Ledger
 At review/close boundaries, append one concise Review boundary row per session, phase, or delivery review gate: boundary, source authority, evidence reviewed, actual codebase reviewed (`YES`/`NO`/`NOT_APPLICABLE`), scope/integration result, runtime/production posture, final result (`PASS`/`PARTIAL`/`BLOCKED`/`FAILED`), and what is not claimed. Rows must be contemporaneous; higher-level reviews aggregate lower-level evidence; missing codebase/runtime/production evidence must downgrade or narrow the claim.
-
 ## PROD-L8.25 Sealed IU Contract / Append-Only Record Boundary — When IU mode is active, record before material edits: target IU files, contract sections sealed, append-only sections available, first material edit not started, and `LLM Write Permission:` lines present. After material edits begin, sealed contract sections remain unchanged unless route-back reopens/supersedes the contract; execution/review/retry/handoff updates are append-only records, not contract rewrites.
 ## PROD-L8.24 Pre-Execution Ledger Enforcement
 Generated IU-mode sessions must make pre-execution authority observable before material edits. Required active-ledger marker: **Pre-Material-Edit Ledger Row** with timestamp, session id, source authority, IU files verified, `IU Set Authority Checkpoint present: YES`, `Authorization decision: IMPLEMENTATION_AUTHORIZED`, `Material implementation started: NO`, `First material-edit command/event: NOT_STARTED`, `Retrospective checkpoint or IU expansion: NO`; `Retrospective sealed-contract mutation: NO`, and evidence paths. Before the first material project-file edit, add a **Material Edit Start Record** pointing back to that row; it must appear later than the pre-edit row. IU authority first created/expanded during close, archive normalization, or validator cleanup is a governance deviation and cannot be represented as clean authority.
@@ -572,3 +569,7 @@ Generated IU-mode sessions must make pre-execution authority observable before m
 Generated IU-mode sessions must include a current `PROD-L8.21 IU Set Authority Checkpoint` before material edits with `Authorization decision: IMPLEMENTATION_AUTHORIZED` / `BLOCKED` / `LIGHTWEIGHT_NO_IU`, `IU files created before material edits: YES`, `Non-placeholder IU review: PASS`, `IU Set Coverage Map`, and timing evidence. Missing checkpoint, coverage map, authorization decision, or thin IU self-attestation fails generated-run validation even when framework templates pass static validation.
 ## PROD-L8.26 Delivery Close Simplification Control
 For delivery-governed close, record pointer-only controls: delivery close posture updated; delivery unresolved register reconciled live-only; current-state navigation updated/verified; Runtime evidence claim scope; production evidence claim scope; overclaims downgraded; archive/session-state normalization and timestamp chronology reviewed. Details live in delivery/evidence/archive/current-state artifacts.
+## PROD-L8.27 Pre-Archive Validation / Archive Immutability Control
+Record before archive: pre-archive validation gate run on active artifacts; active validation result; active fixes applied before archive only; archive snapshot created after validation decision; Historical archive mutation after snapshot; failure class (`ACTIVE_FIXABLE` / `ARCHIVE_TRANSACTION_REPAIRABLE` / `ARCHIVE_HISTORICAL_IMMUTABLE`). Rule: IU authority, pre-execution checkpoints, review gates, execution status, and evidence content must be corrected before archive while active, or recorded as partial/blocked/governance deviation. After archive, historical governance/evidence artifacts are immutable; do not patch historical archives so the framework validator passes.
+## PROD-L8.28 Generated IU Instantiation / Active Close Concordance Control
+Record before archive when IU mode is active: full generated IU sealed contract sections and `LLM Write Permission:` lines before execution; append-only Execution Record with actions/files/validation/claim evidence/result; append-only Unit Review with request-to-result review, validation review, claim reconciliation, review status, and Unit Result; no applicable IU remains `Execution status: NOT_STARTED` or `Review status: PENDING` while implementation completion is claimed; Test / Fixture / Validator Change Rationale completed when needed; delivery/phase/session close posture reconciled with IU execution/review statuses. Fail closed if any required check is unresolved, failed, or contradictory.

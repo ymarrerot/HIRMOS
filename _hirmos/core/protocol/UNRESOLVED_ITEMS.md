@@ -101,7 +101,7 @@ Every unresolved item must preserve these minimum fields in the register:
 - source evidence;
 - classification;
 - decision owner;
-- visibility mode;
+- visibility posture;
 - affected lifecycle boundary;
 - current status;
 - current recommendation;
@@ -163,30 +163,17 @@ The feed must include:
 
 The feed is the source for user-facing unresolved-item checkpoint output. It is not a substitute for the full inventory.
 
-## Domain Expert checkpoint behavior
+## Canonical checkpoint behavior
 
-For `domain_expert` mode:
+Under the canonical interaction posture:
 
 - gated user-owned Domain/Risk/Resource/Approval items must be surfaced clearly;
 - HIRMOS should recommend a baseline when safe;
 - accepted baseline decisions must be recorded in disposition history;
 - non-gating assumptions may be carried but must be disclosed at the appropriate checkpoint;
 - technical assumptions should be reviewable through technical-review artifacts when relevant;
-- internal classification tables should not be exposed by default.
-
-## Technical Supervisor checkpoint behavior
-
-For `technical_supervisor` mode:
-
-- surface gated items, technical-review items, and non-gating assumptions with artifact references;
-- show affected implementation/readiness/evidence implications;
-- keep diagnostic mechanics summarized unless requested.
-
-## Framework Diagnostics checkpoint behavior
-
-For `framework_diagnostics` mode:
-
-- expose producer contributions, reconciliation decisions, classification changes, controls affected, and route-back triggers.
+- governed references should include artifact paths;
+- diagnostic mechanics remain available in artifacts and should be surfaced when requested or when needed to explain risk, blocker state, validation failure, or route-back.
 
 ## Blocking rules
 

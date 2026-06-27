@@ -207,3 +207,7 @@ Simplification rule: detailed DAC, phase, session, IU, runtime, and production e
 Hardening rule: a final delivery result must not claim `LOCAL_E2E_VERIFIED`, `PRODUCTION_VERIFIED`, or full delivery `PASS` when the supporting critical-flow, provider, browser, image-generation, database, or production evidence is `NOT_RUN`, `BLOCKED`, or absent. Use `CLOSED_PARTIAL`, `PARTIAL`, or a narrower implementation-accepted claim when runtime or production evidence is incomplete.
 
 Close concordance rule: after delivery close, rows that still show `planned`, `ready_for_adoption`, `PENDING`, `NOT_STARTED`, or similar pre-close values must be either updated to current truth, explicitly marked `historical baseline snapshot`, or replaced by compact source pointers. Stale current rows are close-blocking concordance defects.
+
+## PROD-L8.28 Active Close Concordance
+
+Delivery/phase close posture must be reconciled with active IU execution and review state before archive. Do not mark a phase or delivery accepted/closed when applicable generated IUs remain thin, unexecuted, unreviewed, status-contradictory, or missing evidence-backed results. Use partial/blocked/route-back posture when evidence does not support clean acceptance.

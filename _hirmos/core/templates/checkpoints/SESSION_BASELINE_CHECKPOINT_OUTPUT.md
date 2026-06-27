@@ -35,7 +35,10 @@ Summarize the bounded work scope in plain language. Use domain language first. A
 
 - Shape: `SINGLE_SESSION_MINIMAL` | `SINGLE_SESSION_VERTICAL_SLICE` | `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` | `DELIVERY_PHASE_SESSION`
 - Session focus: `minimal_session` | `session_baseline` | `phase_session_baseline`
-- Why this shape/focus was chosen:
+- Why this shape/focus was chosen for the real software work:
+- Technically possible simpler shape:
+- Why simpler shape is acceptable or insufficient:
+- User interaction / token-cost impact:
 - Why implementation-unit files are not instantiated yet:
 
 ### Decisions needing your action
@@ -135,6 +138,10 @@ Mark item 2 uncertain
 Ask for technical review summary
 Stop / do not continue
 ```
+
+## Canonical interaction posture density
+
+Use `_hirmos/core/authority/INTERACTION_POSTURE.md`: simple by default, transparent by design, rigorous underneath, and progressively disclosed. Keep the session-baseline checkpoint concise while including artifact paths for governed claims, unresolved items, carry-forward items, parent delivery/phase authority, and implementation-readiness claims. Increase visible detail when risk, blocker state, validation failure, route-back, or user request requires it.
 
 ## Hard rules
 

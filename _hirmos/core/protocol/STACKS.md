@@ -143,9 +143,7 @@ Cross-stack units must explain:
 
 ## Interaction-mode visibility
 
-- `domain_expert`: show simple stack/project-type rationale and only material implications.
-- `technical_supervisor`: show stack evidence, context boundaries, commands, conflicts, and implementation implications.
-- `framework_diagnostics`: show full stack-resolution and context-routing records.
+By default, show simple stack/project-type rationale and only material implications. Surface stack evidence, context boundaries, commands, conflicts, implementation implications, full stack-resolution, and context-routing records when requested or when risk, blocker state, validation failure, or inspection need requires it.
 
 ## Failure and route-back conditions
 

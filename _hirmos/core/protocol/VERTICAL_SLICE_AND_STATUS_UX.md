@@ -69,11 +69,11 @@ HIRMOS should always try to make these clear:
 5. what the next recommended action is;
 6. what the next recommended Phase is when the current unit closes.
 
-This is required for all interaction modes, but the level of detail changes by mode.
+This is required under the canonical interaction posture. The level of detail increases when the user asks, risk/blocker state requires explanation, validation fails, or inspection is necessary.
 
-## Domain Expert status UX
+## Canonical status UX
 
-In `domain_expert` mode, status and checkpoint output should be concise.
+By default, status and checkpoint output should be concise.
 
 Show:
 
@@ -87,9 +87,9 @@ Show:
 
 Do not expose capability routing, all execution-control rows, or template mechanics unless they create a user decision or blocker.
 
-## Technical Supervisor status UX
+## Progressive disclosure status UX
 
-In `technical_supervisor` mode, status and checkpoint output should include:
+When requested or when needed to explain risk, blocker state, validation failure, route-back, or evidence posture, status and checkpoint output should include:
 
 - active Phase / Phase status;
 - source artifacts;
@@ -97,11 +97,8 @@ In `technical_supervisor` mode, status and checkpoint output should include:
 - implementation authorization status;
 - validation/evidence status;
 - runtime integration posture summary when material;
-- next command and next delivery recommendation.
-
-## Framework Diagnostics status UX
-
-In `framework_diagnostics` mode, status and checkpoint output should include full lifecycle boundary, control, capability, artifact, unresolved-item, evidence, route-back, and Phase status details.
+- next command and next delivery recommendation;
+- lifecycle boundary, controls, capability decisions, artifact state, unresolved-item details, route-back, and Phase status details.
 
 ## Next command recommendation rule
 
@@ -134,7 +131,7 @@ Do not imply the next phase is authorized unless its source authority artifact i
 
 ## Status command rule
 
-`hirmos status` should produce a concise status report by default and support deeper inspection through interaction mode or explicit user request.
+`hirmos status` should produce a concise status report by default and support deeper inspection through explicit user request, validation failure, blocker state, route-back, or evidence posture needs.
 
 It must report:
 

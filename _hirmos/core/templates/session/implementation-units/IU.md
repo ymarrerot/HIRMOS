@@ -283,3 +283,19 @@ LLM Write Permission: Immutable after contract seal unless route-back occurs.
 LLM Write Permission: Immutable after contract seal unless route-back occurs.
 
 Generated IU artifacts must not rely on thin IU self-attestation. They must contain sealed, non-placeholder contract authority before implementation and append-only execution/review evidence after implementation begins.
+
+## PROD-L8.28 Generated IU Full Instantiation and Active Close Concordance
+
+LLM Write Permission: Immutable after contract seal unless route-back occurs.
+
+Generated IU artifacts must instantiate the full sealed-section model before implementation execution. A thin generated IU stub is invalid even when it says `Contract status: SEALED` or `Contract sealed before material edits: YES`.
+
+Before material implementation starts, each generated IU must contain non-placeholder content for all required contract authority areas: Unit Identity / Contract Metadata, Unit Scope / Authority, Objective, Context, In Scope, Out of Scope, Files / Areas, Preservation Rules, Implementation Requirements, Verification Commands / Checks, Evidence Requirements, Runtime Integration Posture, Binary Acceptance Criteria, Pre-Execution Checks, PROD-L8.21 Minimum IU Contract, and all applicable `LLM Write Permission:` lines.
+
+Before active close can be claimed, each generated IU that contributed to implementation completion must contain append-only Execution Record and Unit Review content with concrete actions, changed files, validation/check evidence, claim evidence, execution result, review status, unit result, and any required Test / Fixture / Validator Change Rationale. A session or phase must not claim implementation completion when any applicable IU remains `Execution status: NOT_STARTED`, `Review status: PENDING`, or lacks an evidence-backed Unit Result.
+
+## Canonical interaction posture visibility
+
+LLM Write Permission: Append-only guidance section; do not use this section to change sealed IU contract authority.
+
+Use `_hirmos/core/authority/INTERACTION_POSTURE.md` when surfacing IU status to the user: keep the user-facing summary concise, include artifact paths for IU authority/evidence/review claims, and disclose additional details when validation failure, blocker state, retry, route-back, or user request requires it.

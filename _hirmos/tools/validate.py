@@ -35,7 +35,7 @@ required = [
     'core/bootstrap.md',
     'core/authority/LIFECYCLE.md',
     'core/authority/ONBOARDING_PRINCIPLES.md',
-    'core/authority/INTERACTION_MODES.md',
+    'core/authority/INTERACTION_POSTURE.md',
     'core/authority/ARTIFACT_MODEL.md',
     'core/authority/EXECUTION_CONTROL_GOVERNANCE.md',
     'core/authority/BEYOND_CLEAR_SPECS.md',
@@ -119,7 +119,7 @@ required = [
     'docs/reference/runtime-surfaces.md',
     'docs/reference/glossary.md',
     'docs/reference/stacks.md',
-    'docs/reference/interaction-modes.md',
+    'docs/reference/interaction-posture.md',
 ]
 missing = [p for p in required if not (root / p).exists()]
 if missing:
@@ -222,7 +222,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.1.6'
+expected_version = '1.1.7'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -1060,11 +1060,11 @@ if 'allowed_next_commands' not in state or 'recommended_next_command' not in sta
 
 # durable delivery governance checks
 for rel, phrases in {
-    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'DELIVERY_SCOPE.md'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'DELIVERY_SCOPE.md', 'real software work', 'User interaction / token-cost impact'],
     'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Index', 'Delivery Coverage Matrix', 'Status Update Log'],
     'core/templates/system/delivery/DELIVERY_SCOPE.md': ['Authorized Outcome', 'Scoped Requirements', 'Production-Shaped Engineering Gate', 'Delivery Close Verification'],
     'core/templates/system/delivery/phases/PHASE.md': ['Phase Scope', 'Source Delivery Scope', 'Binary Exit Criteria', 'Session Handoff', 'Entry criteria status'],
-    'core/templates/session/SESSION_SCOPE.md': ['Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Selected shape justification'],
+    'core/templates/session/SESSION_SCOPE.md': ['Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Selected shape justification', 'User interaction / token-cost impact'],
     'core/templates/session/SESSION_EXECUTION.md': ['Delivery Shape Decision Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
     'core/protocol/PROJECT_TYPES.md': ['Delivery shape fields', 'Delivery governance required: YES / NO / UNCERTAIN'],
     'core/protocol/COMMAND_STATE_MACHINE.md': ['Delivery Shape Decision state gate', 'must not recommend `hirmos continue`'],
@@ -1394,11 +1394,11 @@ if 'allowed_next_commands' not in state or 'recommended_next_command' not in sta
 
 # durable delivery governance checks
 for rel, phrases in {
-    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'DELIVERY_SCOPE.md'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'DELIVERY_SCOPE.md', 'real software work', 'User interaction / token-cost impact'],
     'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Index', 'Delivery Coverage Matrix', 'Status Update Log'],
     'core/templates/system/delivery/DELIVERY_SCOPE.md': ['Authorized Outcome', 'Scoped Requirements', 'Production-Shaped Engineering Gate', 'Delivery Close Verification'],
     'core/templates/system/delivery/phases/PHASE.md': ['Phase Scope', 'Source Delivery Scope', 'Binary Exit Criteria', 'Session Handoff', 'Entry criteria status'],
-    'core/templates/session/SESSION_SCOPE.md': ['Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Selected shape justification'],
+    'core/templates/session/SESSION_SCOPE.md': ['Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Selected shape justification', 'User interaction / token-cost impact'],
     'core/templates/session/SESSION_EXECUTION.md': ['Delivery Shape Decision Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
     'core/protocol/PROJECT_TYPES.md': ['Delivery shape fields', 'Delivery governance required: YES / NO / UNCERTAIN'],
     'core/protocol/COMMAND_STATE_MACHINE.md': ['Delivery Shape Decision state gate', 'must not recommend `hirmos continue`'],
@@ -1570,7 +1570,7 @@ for ext, caps in expected_extensions.items():
             print(f'FAIL: capability entrypoint missing: {cap_ep.relative_to(root)}')
             sys.exit(1)
         ep_body = cap_ep.read_text()
-        for phrase in ['Execution Contract','Purpose','Produces','Terminal States','Activation triggers','Required inputs','Execution controls contributed','Required behavior','Interaction-mode visibility']:
+        for phrase in ['Execution Contract','Purpose','Produces','Terminal States','Activation triggers','Required inputs','Execution controls contributed','Required behavior','Canonical interaction posture visibility']:
             if phrase not in ep_body:
                 print(f'FAIL: capability entrypoint {cap_ep.relative_to(root)} missing {phrase}')
                 sys.exit(1)
@@ -1758,7 +1758,7 @@ for phrase in [
 
 for phrase in [
     'id;', 'title;', 'description;', 'source evidence;', 'classification;',
-    'decision owner;', 'visibility mode;', 'affected lifecycle boundary;',
+    'decision owner;', 'visibility posture;', 'affected lifecycle boundary;',
     'current status;', 'current recommendation;', 'downstream impact;',
     'disposition history;', 'revalidation point;'
 ]:
@@ -1841,7 +1841,7 @@ checkpoint_protocol = (root/'core/protocol/GOVERNED_CHECKPOINTS.md').read_text()
 for phrase in [
     'Checkpoint types',
     'Required Current Continuation Snapshot',
-    'Domain Expert rendering',
+    'Canonical user-facing rendering',
     'Unresolved-item checkpoint rule',
     'Checkpoint completion',
 ]:
@@ -2044,7 +2044,7 @@ for phrase in [
         sys.exit(1)
 
 for rel, phrases in {
-    'core/authority/INTERACTION_MODES.md': ['Runtime integration visibility', 'primary HIRMOS recommendation'],
+    'core/authority/INTERACTION_POSTURE.md': ['Runtime integration and production-readiness visibility', 'primary HIRMOS recommendation'],
     'core/protocol/VALIDATION_AND_EVIDENCE.md': ['Runtime integration evidence', 'production-provider verification'],
     'core/protocol/SESSION_ARTIFACTS.md': ['Runtime integration readiness artifact'],
     'core/protocol/GOVERNED_CHECKPOINTS.md': ['Production readiness checkpoints'],
@@ -2216,7 +2216,7 @@ for rel, phrases in {
     'extensions/design-agent/entrypoints/default.md': ['Autonomous technical authorization discipline', 'authorize safe local/default technical progress'],
     'extensions/system-state-agent/entrypoints/default.md': ['Autonomous technical discovery discipline', 'package scripts'],
     'core/templates/session/SESSION_SCOPE.md': ['Autonomous Technical Progress Authorization'],
-    'core/authority/INTERACTION_MODES.md': ['Autonomous technical progress visibility'],
+    'core/authority/INTERACTION_POSTURE.md': ['Autonomous technical progress visibility'],
     'core/protocol/GOVERNED_CHECKPOINTS.md': ['Autonomous technical decision checkpoints'],
     'core/protocol/COMMANDS.md': ['Autonomous technical progress command rule'],
     'docs/2-methodology/autonomous-technical-progress.md': ['Autonomous Technical Progress'],
@@ -3284,6 +3284,9 @@ _RETROSPECTIVE_GOVERNANCE_PATTERNS = [
     r'retrofit(?:ted|ting)?\s+(?:the\s+)?IU',
     r'backfill(?:ed|ing)?\s+(?:the\s+)?IU',
     r'validator cleanup',
+    r'patching historical archives',
+    r'patch(?:ed|ing)?\s+(?:the\s+)?historical archives?\s+so\s+.*validator\s+passes',
+    r'patch(?:ed|ing)?\s+(?:historical\s+)?archives?\s+.*to\s+satisfy\s+the\s+validator',
 ]
 
 def _section_after_heading(body: str, heading_pattern: str, max_chars: int | None = None) -> str:
@@ -3473,4 +3476,242 @@ if re.search(r'\b(PASS|CLOSED_ACCEPTED|LOCAL_E2E_VERIFIED|LOCAL_RUNTIME_VERIFIED
             fail('PROD-L8.26 delivery/current-state runtime or production claim is overbroad while material evidence is not run/blocked/absent')
 
 print('PASS: HIRMOS PROD-L8.26 delivery close concordance simplification and evidence posture hardening static/runtime check')
+
+# PROD-L8.27 pre-archive validation gate and archive immutability
+for rel, phrases in {
+    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.27 Pre-Archive Validation Gate and Archive Immutability', 'ACTIVE_FIXABLE', 'ARCHIVE_TRANSACTION_REPAIRABLE', 'ARCHIVE_HISTORICAL_IMMUTABLE', 'do not rewrite history'],
+    'core/commands/close.md': ['PROD-L8.27 Pre-Archive Validation Gate and Archive Immutability', 'run the active-session validator before archive preservation', 'Historical governance/evidence failures must not be patched'],
+    'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.27 Pre-Archive Validation and Historical Archive Integrity', 'lifecycle-aware', 'archive-historical-immutable'],
+    'core/protocol/SESSION_ARTIFACTS.md': ['PROD-L8.27 Archive Immutability Artifact Rule', 'archive is historical evidence'],
+    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.27 Pre-Archive Validation / Archive Immutability Control', 'Pre-archive validation gate run on active artifacts', 'Historical archive mutation after snapshot'],
+    'core/templates/system/history/sessions/ARCHIVE_MANIFEST.md': ['PROD-L8.27 Pre-Archive Validation and Archive Immutability', 'Archive snapshot is historical evidence, not a workspace'],
+}.items():
+    body = (root / rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.27 archive immutability surface {rel} missing phrase: {phrase}')
+
+# Runtime guard: generated archives must not admit historical governance patching as the way to satisfy validation.
+_ARCHIVE_PATCHING_PATTERNS = [
+    r'patching historical archives',
+    r'patch(?:ed|ing)?\s+(?:the\s+)?historical archives?\s+so\s+.*validator\s+passes',
+    r'patch(?:ed|ing)?\s+(?:historical\s+)?archives?\s+.*to\s+satisfy\s+the\s+validator',
+    r'expanding archived IU files',
+    r'adding the required IU authority checkpoint\s+to\s+the\s+archived',
+]
+for session_dir in _generated_session_dirs():
+    if session_dir == root / 'session':
+        continue
+    archive_text = ''
+    for md in session_dir.rglob('*.md'):
+        archive_text += '\n' + md.read_text(errors='ignore')[:200000]
+    for pattern in _ARCHIVE_PATCHING_PATTERNS:
+        if re.search(pattern, archive_text, re.I):
+            fail(f'PROD-L8.27 archived session admits historical governance patching instead of archive immutability in {session_dir.relative_to(root)}: {pattern}')
+
+# Runtime guard: if an archive records historical immutable defects, it must not also claim clean normal-close success.
+for session_dir in _generated_session_dirs():
+    if session_dir == root / 'session':
+        continue
+    manifest = session_dir / 'ARCHIVE_MANIFEST.md'
+    execp = session_dir / 'SESSION_EXECUTION.md'
+    combined = ''
+    if manifest.exists():
+        combined += manifest.read_text(errors='ignore')
+    if execp.exists():
+        combined += '\n' + execp.read_text(errors='ignore')
+    if re.search(r'ARCHIVE_HISTORICAL_IMMUTABLE|GOVERNANCE_DEVIATION', combined, re.I):
+        if re.search(r'Close output may claim normal close success\s*\|\s*YES|Terminal state\s*:\s*(Closed\s*/\s*Archived|CLOSED_ACCEPTED)', combined, re.I):
+            fail(f'PROD-L8.27 archive with historical immutable defect claims clean normal close: {session_dir.relative_to(root)}')
+
+print('PASS: HIRMOS PROD-L8.27 pre-archive validation gate and archive immutability static/runtime check')
+
+# PROD-L8.28 generated IU instantiation and active close concordance
+for rel, phrases in {
+    'core/templates/session/implementation-units/IU.md': ['PROD-L8.28 Generated IU Full Instantiation and Active Close Concordance', 'thin generated IU stub is invalid', 'Review status: PENDING'],
+    'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': ['PROD-L8.28 Generated IU Instantiation Duty', 'not a short status stub', 'do not rely on later close/archive cleanup'],
+    'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['PROD-L8.28 Execution-Time Full-IU Guard', 'reject thin generated IU stubs', 'Test / Fixture / Validator Change Rationale'],
+    'extensions/implementation-agent/capabilities/implementation-unit-review/entrypoints/default.md': ['PROD-L8.28 Active Close Unit Review Gate', 'Review status: PENDING', 'Do not repair sealed contract authority during review'],
+    'extensions/implementation-agent/capabilities/session-implementation-review/entrypoints/default.md': ['PROD-L8.28 Active Close Concordance Review', 'must not claim implementation complete', 'Aggregate review'],
+    'extensions/implementation-agent/capabilities/retry-escalation/entrypoints/default.md': ['PROD-L8.28 Retry Boundary for Thin or Incomplete IUs', 'not a normal retry target after implementation', 'archive immutability'],
+    'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.28 Generated IU Instantiation and Active Close Concordance', 'Historical archives must not be expanded'],
+    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.28 Generated IU Instantiation and Active Close Concordance', 'Active close must fail closed', 'Historical archives must not be expanded'],
+    'core/protocol/SESSION_ARTIFACTS.md': ['PROD-L8.28 Generated IU Instantiation and Active Close Concordance', 'close-eligible', 'Historical archives must not be expanded'],
+    'core/commands/close.md': ['PROD-L8.28 Generated IU Active Close Gate', 'Do not archive first and then expand historical IU files'],
+    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.28 Generated IU Instantiation / Active Close Concordance Control', 'No applicable IU remains `Execution status: NOT_STARTED`'],
+}.items():
+    body = (root / rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.28 generated IU/active close surface {rel} missing phrase: {phrase}')
+
+_L8_28_CONTRACT_MARKERS = [
+    'Unit Identity / Contract Metadata',
+    'Unit Scope / Authority',
+    'Objective',
+    'In Scope',
+    'Out of Scope',
+    'Implementation Requirements',
+    'Verification Commands / Checks',
+    'Evidence Requirements',
+    'Runtime Integration Posture',
+    'Binary Acceptance Criteria',
+    'Pre-Execution Checks',
+    'PROD-L8.21 Minimum IU Contract',
+]
+_L8_28_RECORD_MARKERS = [
+    'Execution Record',
+    'Actions Performed',
+    'Files / Artifacts Changed',
+    'Validation / Checks Performed',
+    'Claim Evidence Produced',
+    'Execution Result',
+    'Unit Review',
+    'Request-to-Result Review',
+    'Validation Review',
+    'Claim Reconciliation',
+    'Unit Result',
+]
+
+def _session_claims_implementation_complete(session_dir, execution_body):
+    combined = execution_body
+    for name in ['SESSION_SCOPE.md', 'EVIDENCE.md']:
+        p = session_dir / name
+        if p.exists():
+            combined += '\n' + p.read_text(errors='ignore')[:120000]
+    return bool(re.search(r'(implementation\s+(?:complete|completed)|phase\s+(?:accepted|closed)|delivery\s+(?:accepted|closed)|CLOSED_PARTIAL|CLOSED_ACCEPTED|PASS_WITH_LIMITATIONS|Unit Result\s*:\s*PASS)', combined, re.I))
+
+for session_dir in _generated_session_dirs():
+    iu_paths = _iu_files(session_dir)
+    if not iu_paths:
+        continue
+    execution_path = session_dir / 'SESSION_EXECUTION.md'
+    execution_body = execution_path.read_text(errors='ignore') if execution_path.exists() else ''
+    claims_complete = _session_claims_implementation_complete(session_dir, execution_body)
+    for iu_path in iu_paths:
+        txt = iu_path.read_text(errors='ignore')
+        low = txt.lower()
+        lines = _nonblank_lines(txt)
+        if len(lines) < 55:
+            fail(f'PROD-L8.28 generated IU full instantiation missing: {iu_path.relative_to(root)} has only {len(lines)} nonblank lines')
+        permission_count = len(re.findall(r'LLM Write Permission\s*:', txt, re.I))
+        if permission_count < 7:
+            fail(f'PROD-L8.28 generated IU missing section write-permission prominence in {iu_path.relative_to(root)}: found {permission_count}')
+        missing_contract = [m for m in _L8_28_CONTRACT_MARKERS if m.lower() not in low]
+        if missing_contract:
+            fail(f'PROD-L8.28 generated IU missing full sealed-contract markers in {iu_path.relative_to(root)}: {missing_contract}')
+        if claims_complete or re.search(r'Execution status\s*:\s*(COMPLETED|BLOCKED|FAILED|ROUTE_BACK_REQUIRED)', txt, re.I):
+            missing_records = [m for m in _L8_28_RECORD_MARKERS if m.lower() not in low]
+            if missing_records:
+                fail(f'PROD-L8.28 generated IU missing append-only execution/review markers in {iu_path.relative_to(root)}: {missing_records}')
+        if claims_complete:
+            if re.search(r'Execution status\s*:\s*NOT_STARTED', txt, re.I):
+                fail(f'PROD-L8.28 IU status contradicts implementation-complete close claim in {iu_path.relative_to(root)}: Execution status NOT_STARTED')
+            if re.search(r'Review status\s*:\s*PENDING', txt, re.I):
+                fail(f'PROD-L8.28 IU status contradicts implementation-complete close claim in {iu_path.relative_to(root)}: Review status PENDING')
+            if not re.search(r'Unit Result\s*:\s*(PASS|PASS_WITH_LIMITATIONS|FAIL|BLOCKED|ROUTE_BACK_REQUIRED)', txt, re.I):
+                fail(f'PROD-L8.28 IU lacks evidence-backed Unit Result before implementation-complete close claim: {iu_path.relative_to(root)}')
+
+# Delivery active close concordance: closed/partial delivery files must not preserve current planned/not-instantiated phase rows.
+delivery_root = root / 'system/delivery'
+if delivery_root.exists():
+    for scope_path in delivery_root.glob('*/DELIVERY_SCOPE.md'):
+        txt = scope_path.read_text(errors='ignore')
+        if re.search(r'Delivery status\s*:\s*(CLOSED|CLOSED_PARTIAL|CLOSED_ACCEPTED|ACCEPTED)', txt, re.I):
+            if re.search(r'\bplanned\s*\|\s*not instantiated\b|\bPENDING\b|\bNOT_ASSESSED\b', txt, re.I) and not re.search(r'historical|superseded|prior baseline|not current close posture', txt, re.I):
+                fail(f'PROD-L8.28 closed delivery scope preserves current stale planned/pending/not-assessed rows: {scope_path.relative_to(root)}')
+    plan = delivery_root / 'DELIVERY_PLAN.md'
+    if plan.exists():
+        plan_txt = plan.read_text(errors='ignore')
+        closed_scope_exists = any(re.search(r'Delivery status\s*:\s*(CLOSED|CLOSED_PARTIAL|CLOSED_ACCEPTED|ACCEPTED)', p.read_text(errors='ignore'), re.I) for p in delivery_root.glob('*/DELIVERY_SCOPE.md'))
+        if closed_scope_exists and re.search(r'Delivery status\s*:\s*active|current/final phase\s*:\s*PHASE-0?1\s*\(ready_for_adoption\)', plan_txt, re.I):
+            fail('PROD-L8.28 DELIVERY_PLAN.md contradicts closed delivery scope with stale active/current-phase posture')
+
+print('PASS: HIRMOS PROD-L8.28 generated IU instantiation and active close concordance static/runtime check')
+
+
+
+# PROD-L8.29E context-resilient bootstrap discipline checks
+for rel, phrases in {
+    'core/bootstrap.md': [
+        'complete compact answer set',
+        'REVALIDATED_FROM_ARCHIVED_BOOTSTRAP',
+        'chat memory, compressed chat summaries, prior model memory, or unstated recollection are not valid recovery sources',
+    ],
+    'core/templates/session/bootstrap/BOOTSTRAP_REPORT.md': [
+        'Bootstrap Discipline Answer Recovery',
+        'Bootstrap Discipline Answers',
+        'Recovery method:',
+        'REANSWERED_FROM_CORE_BECAUSE_PRIOR_BOOTSTRAP_NOT_FOUND',
+    ],
+    'core/protocol/SESSION_ARTIFACTS.md': [
+        'complete compact discipline answer set',
+        'chat memory, compressed chat summaries, and prior model recollection are not valid bootstrap recovery sources',
+    ],
+    'core/commands/start.md': [
+        'complete discipline answers',
+        'durable answer source/recovery method missing',
+    ],
+    'core/protocol/COMMANDS.md': [
+        'durable source and allowed recovery method',
+        'compressed chat summaries',
+    ],
+}.items():
+    body = (root / rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase not in body:
+            fail(f'PROD-L8.29E {rel} missing context-resilient bootstrap phrase: {phrase}')
+print('PASS: HIRMOS PROD-L8.29E context-resilient bootstrap discipline static check')
+
+# PROD-L8.29F run preflight and follow-up command clarity checks
+l829f_required = {
+    'core/protocol/COMMANDS.md': ['General run preflight', 'PRECHECK_PASS', 'PRECHECK_WARNING', 'PRECHECK_BLOCKER', 'not create special run-category'],
+    'core/commands/start.md': ['General run preflight', 'Follow-up work after no active session exists', 'hirmos start "Run local E2E smokes for <delivery-id> and update evidence posture"'],
+    'core/commands/status.md': ['Post-close follow-up command clarity', 'There is no active session, so `hirmos continue` is not applicable'],
+    'core/commands/close.md': ['Post-close follow-up guidance', 'There is no active session, so `hirmos continue` is not applicable'],
+    'core/templates/session/bootstrap/BOOTSTRAP_REPORT.md': ['General Run Preflight', 'PRECHECK_PASS | PRECHECK_WARNING | PRECHECK_BLOCKER'],
+    'core/templates/session/SESSION_EXECUTION.md': ['General Run Preflight Control', 'PRECHECK_PASS', 'PRECHECK_WARNING', 'PRECHECK_BLOCKER'],
+}
+for rel, phrases in l829f_required.items():
+    text = (root / rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase not in text:
+            fail(f'PROD-L8.29F {rel} missing run-preflight/follow-up phrase: {phrase}')
+print('PASS: HIRMOS PROD-L8.29F run preflight and follow-up command clarity static check')
+
+
+# PROD-L8.29G delivery shape honesty and cost-aware routing checks
+l829g_required = {
+    'core/protocol/DELIVERY_GOVERNANCE.md': [
+        'Delivery shape honesty and cost-aware routing',
+        'real software work',
+        'Technically possible simpler shape:',
+        'User interaction / token-cost impact:',
+        'Token and interaction cost are secondary to honest delivery shape',
+    ],
+    'core/commands/start.md': [
+        'Technically possible simpler shape:',
+        'Why selected shape is necessary for this real software work:',
+        'User interaction / token-cost impact:',
+    ],
+    'core/templates/session/SESSION_SCOPE.md': [
+        'Technically possible simpler shape:',
+        'User interaction / token-cost impact:',
+        'Delivery shape must be justified by the real software work',
+    ],
+    'core/templates/checkpoints/DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md': [
+        'Current-state evidence that durable delivery governance is needed for the real software work:',
+        'Why added delivery governance is worth the user interaction / token-cost overhead:',
+    ],
+    'core/templates/checkpoints/SESSION_BASELINE_CHECKPOINT_OUTPUT.md': [
+        'Why this shape/focus was chosen for the real software work:',
+        'User interaction / token-cost impact:',
+    ],
+}
+for rel, phrases in l829g_required.items():
+    text = (root / rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase not in text:
+            fail(f'PROD-L8.29G {rel} missing delivery-shape honesty phrase: {phrase}')
+print('PASS: HIRMOS PROD-L8.29G delivery shape honesty and cost-aware routing static check')
 

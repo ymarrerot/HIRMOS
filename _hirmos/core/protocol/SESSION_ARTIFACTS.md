@@ -74,7 +74,7 @@ _hirmos/session/
 | `DESIGN.md` | substantial design/current-state/technical-review/readiness work is needed | current-state basis, source matrix, design, technical review, implementation readiness basis |
 | `EVIDENCE.md` | nontrivial implementation or material claims/evidence exist | command evidence, runtime evidence, production-shaped evidence, claim reconciliation, close evidence handoff |
 | `implementation-units/IU-xx.md` | nontrivial implementation unit exists | sealed unit contract authority plus append-only execution, review, retry, handoff records |
-| `bootstrap/BOOTSTRAP_REPORT.md` | governed session startup / new chat bootstrap | bootstrap findings and initialization evidence |
+| `bootstrap/BOOTSTRAP_REPORT.md` | governed session startup / new chat/context bootstrap | bootstrap findings, complete compact discipline answers, durable recovery sources, and initialization evidence |
 | `stack-resolution.json` | stack selection materially affects routing/evidence | machine-readable stack resolution only |
 
 ## Consolidated responsibilities
@@ -125,13 +125,13 @@ A fresh framework must not ship with pre-populated runtime artifacts such as `SE
 
 ## Governed session activation
 
-A governed session is active only when `_hirmos/session/SESSION_EXECUTION.md` exists and records session identity, active command, User Request, interaction mode, lifecycle stage, continuation state, required execution controls, and references to required major artifacts.
+A governed session is active only when `_hirmos/session/SESSION_EXECUTION.md` exists and records session identity, active command, User Request, canonical interaction posture acknowledgement, lifecycle stage, continuation state, required execution controls, and references to required major artifacts.
 
 `hirmos start` must instantiate `_hirmos/session/SESSION_EXECUTION.md` before lifecycle work begins.
 
 ## Mandatory governed-session artifacts
 
-A governed software session must create or update `_hirmos/session/bootstrap/BOOTSTRAP_REPORT.md` during bootstrap/startup and must keep `SESSION_EXECUTION.md` Current Continuation Snapshot current for continuation state.
+A governed software session must create or update `_hirmos/session/bootstrap/BOOTSTRAP_REPORT.md` during bootstrap/startup and must keep `SESSION_EXECUTION.md` Current Continuation Snapshot current for continuation state. The bootstrap report must include every bootstrap quiz answer with a durable source and recovery method; chat memory, compressed chat summaries, and prior model recollection are not valid bootstrap recovery sources.
 
 A governed software session must instantiate these before claiming Implementation Readiness:
 
@@ -150,7 +150,7 @@ HIRMOS must not tell the user that an artifact exists, is ready, can be inspecte
 
 ## Instantiation principle
 
-`hirmos start` and `hirmos continue` instantiate only the artifacts required by the active request path, lifecycle boundary, execution controls, delivery shape, project state, and interaction mode.
+`hirmos start` and `hirmos continue` instantiate only the artifacts required by the active request path, lifecycle boundary, execution controls, delivery shape, project state, and canonical interaction posture.
 
 Every artifact instantiation must be recorded in `_hirmos/session/SESSION_EXECUTION.md` under `Artifact Instantiation Log` with target artifact, source template, lifecycle stage, reason required, and non-placeholder check status.
 
@@ -158,7 +158,7 @@ Every artifact instantiation must be recorded in `_hirmos/session/SESSION_EXECUT
 
 ### Bootstrap
 
-Must create or update `_hirmos/session/bootstrap/BOOTSTRAP_REPORT.md` for governed session startup and new-chat continuation. Bootstrap report creation does not by itself create an active governed session.
+Must create or update `_hirmos/session/bootstrap/BOOTSTRAP_REPORT.md` for governed session startup and new-chat/context continuation. Bootstrap report creation does not by itself create an active governed session. Every bootstrap report must include the complete compact discipline answer set recovered from active artifacts, archived bootstrap reports, or core authority/protocol files.
 
 ### User Request / source intake
 
@@ -205,7 +205,7 @@ Do not create separate close-checklist, system-state-update, archive-manifest, c
 
 ## Delivery governance artifacts
 
-HIRMOS uses the smallest sufficient governed delivery shape for greenfield, brownfield, and mixed work.
+HIRMOS uses the smallest sufficient governed delivery shape for greenfield, brownfield, mixed, and new-product work. Delivery shape is chosen for the real software work, not for framework testing, inspection, dogfood context, or project-type labels.
 
 Durable delivery authority lives under:
 
@@ -333,3 +333,17 @@ When `SESSION_STATE.json.session_focus = delivery_baseline`, the active authorit
 - `_hirmos/system/delivery/<delivery-id>/DESIGN.md` when separate delivery-level design authority is justified.
 
 During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`. If separate optional authority is not justified, requirements and design decisions remain inside `DELIVERY_SCOPE.md` only. Session-level optional authority artifacts become applicable only after the flow advances to a bounded `phase_session_baseline` or `session_baseline` focus.
+
+## PROD-L8.27 Archive Immutability Artifact Rule
+
+Active session artifacts are working authorities until the pre-archive validation gate completes. Once copied to `_hirmos/system/history/sessions/<session-id>/`, the archive is historical evidence.
+
+- Active IU/SESSION/EVIDENCE artifacts may be corrected before archive when validation finds `ACTIVE_FIXABLE` defects.
+- Archived artifacts may receive only archive transaction repairs (`ARCHIVE_TRANSACTION_REPAIRABLE`) such as manifest/path/reset-machine-state corrections.
+- Archived historical governance/evidence defects (`ARCHIVE_HISTORICAL_IMMUTABLE`) must be recorded as limitations, governance deviations, supersession notes, or carry-forward items; they must not be rewritten in place.
+
+## PROD-L8.28 Generated IU Instantiation and Active Close Concordance
+
+Generated implementation-unit artifacts must be validated while the session is active and before archive. A generated IU is close-eligible only when its sealed contract sections were fully instantiated before execution and its append-only Execution Record and Unit Review contain concrete evidence-backed completion/review results.
+
+Active close must fail closed, downgrade to partial, or route back when IU status contradicts session/phase/delivery close claims. In particular, implementation-complete, phase-accepted, delivery-accepted, or delivery-closed claims are invalid when any applicable IU remains `Execution status: NOT_STARTED`, `Review status: PENDING`, lacks Unit Result, lacks validation/evidence comparison, or lacks a required Test / Fixture / Validator Change Rationale. Historical archives must not be expanded to repair these defects after snapshot; apply PROD-L8.27 archive immutability instead.

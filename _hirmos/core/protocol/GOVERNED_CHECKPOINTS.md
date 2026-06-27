@@ -3,7 +3,7 @@
 Status: core protocol.
 Purpose: define how HIRMOS surfaces user-facing checkpoints without heavy output-governance machinery.
 
-Governed checkpoints are user-facing outputs that can affect continuation. They must be concise for the active interaction mode and backed by existing session artifacts.
+Governed checkpoints are user-facing outputs that can affect continuation. They must follow the canonical HIRMOS interaction posture and be backed by existing session artifacts.
 
 ## Required rule
 
@@ -29,7 +29,7 @@ Before surfacing a governed checkpoint, verify and record in `SESSION_EXECUTION.
 
 - checkpoint type;
 - active lifecycle boundary;
-- interaction mode;
+- canonical interaction posture acknowledgement;
 - backing artifacts;
 - relevant execution controls and statuses;
 - unresolved-item status;
@@ -44,9 +44,9 @@ The snapshot must summarize the current lifecycle stage, terminal state, authori
 
 Status-only command output may be read-only and does not require a snapshot update unless it changes continuation state.
 
-## Domain Expert rendering
+## Canonical user-facing rendering
 
-In `domain_expert` mode, the checkpoint should show only:
+By default, the checkpoint should show only:
 
 - what HIRMOS understood or completed;
 - what HIRMOS needs from the user, if anything;
@@ -58,13 +58,9 @@ In `domain_expert` mode, the checkpoint should show only:
 
 Do not expose execution-control tables, capability routing, or internal diagnostics by default.
 
-## Technical Supervisor rendering
+## Progressive disclosure and inspection
 
-In `technical_supervisor` mode, include artifact pointers, assumptions, risks, validation/evidence status, and implementation/readiness implications.
-
-## Framework Diagnostics rendering
-
-In `framework_diagnostics` mode, include lifecycle boundary, capability routing, execution controls, unresolved classification, route-back triggers, and validation details.
+Include artifact pointers, assumptions, risks, validation/evidence status, implementation/readiness implications, lifecycle boundary, capability routing, execution controls, unresolved classification, route-back triggers, and validation details when the user asks, validation fails, blocker state requires explanation, or inspection is necessary to act responsibly.
 
 ## Unresolved-item checkpoint rule
 
@@ -91,7 +87,7 @@ When HIRMOS approaches production-readiness or release-readiness, a governed che
 
 The checkpoint must be backed by `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` when material integration areas exist.
 
-In `domain_expert` mode, the checkpoint should surface:
+Under the canonical posture, the checkpoint should surface:
 
 - current implementation level in plain language;
 - HIRMOS primary recommendation for each material production choice;
@@ -114,14 +110,14 @@ A governed checkpoint must surface autonomous technical decisions when they beco
 
 Use `_hirmos/session/DESIGN.md` as the backing artifact for technical decisions and `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` for material integration posture.
 
-In `domain_expert` mode, summarize only:
+By default, summarize only:
 
 - the decision HIRMOS made or recommends;
 - why it is safe or why it needs review;
 - what remains blocked before production readiness;
 - one primary next action.
 
-In `technical_supervisor` mode, include alternatives, evidence, risks, and review triggers.
+Include alternatives, evidence, risks, and review triggers when requested or when needed to explain a material decision, blocker, route-back, or evidence gap.
 
 ## Local setup and role-workflow smoke evidence
 

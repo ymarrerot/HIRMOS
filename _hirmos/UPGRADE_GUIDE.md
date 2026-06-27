@@ -91,6 +91,11 @@ Release packaging must ship only canonical runtime surfaces, templates, docs, va
 
 
 
+## 1.1.7 stabilization note
+
+HIRMOS 1.1.7 includes the canonical single interaction posture, interaction-mode config/CLI removal, extension/template realignment, context-resilient bootstrap discipline, general run preflight classification, follow-up command clarity, and delivery-shape honesty/cost-aware routing. No terminal CLI version bump is required because terminal command behavior did not change.
+
+
 ## 1.1.6 stabilization note
 
 HIRMOS 1.1.6 includes sealed IU contract sections, append-only execution/review records, separated contract/execution/review status semantics, test/fixture/validator change rationale, delivery close concordance simplification, and evidence posture hardening for implementation/runtime/production claim separation. No terminal CLI version bump is required because terminal install behavior did not change.

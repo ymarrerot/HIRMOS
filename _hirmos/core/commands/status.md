@@ -54,7 +54,7 @@ If command legality cannot be determined, status must return `Status Blocked By 
 
 - active session id, if any;
 - active command;
-- interaction mode;
+- canonical interaction posture acknowledgement;
 - active lifecycle boundary;
 - continuation state;
 - pending or blocked execution controls;
@@ -120,6 +120,21 @@ After normal close, `hirmos status` must report:
 - one primary next command/action when supported.
 
 If `_hirmos/session/SESSION_STATE.json` claims an active session after close while the archive or close controls claim success, status must report an integrity conflict instead of trusting either surface silently.
+
+
+### Post-close follow-up command clarity
+
+When no active session exists, `hirmos status` must not recommend `hirmos continue`. If status identifies optional follow-up work from Current System State, carry-forward, delivery scope, or archive evidence, it must surface exact `hirmos start "..."` command examples and artifact paths.
+
+Examples:
+
+```text
+There is no active session, so `hirmos continue` is not applicable.
+Primary next command: `hirmos start "Run local E2E smokes for <delivery-id> and update evidence posture"`
+Source artifacts: `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`, `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`, `_hirmos/system/accepted-state/CARRY_FORWARD.md` when applicable.
+```
+
+Status must present follow-up work as bounded new governed work grounded in existing artifacts, not as a special run category.
 
 ## Claim reconciliation behavior
 

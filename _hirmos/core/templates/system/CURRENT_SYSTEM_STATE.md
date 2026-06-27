@@ -90,6 +90,13 @@ Pointer update rules:
 - If delivery governance is not active, record `NO` or `NOT_APPLICABLE`; do not leave stale delivery or phase pointers from a prior delivery.
 - `hirmos status` must read this section before reporting active/next delivery work.
 
+
+Follow-up command guidance:
+
+- When no active session exists, `hirmos continue` is not applicable.
+- Optional follow-up work such as local E2E smokes, delivery close review, evidence-posture update, or production-readiness review should be started with `hirmos start "<bounded follow-up objective>"` and grounded in the current-state, delivery, carry-forward, unresolved-register, and archive pointers recorded here.
+- Do not create a special run category or follow-up intent taxonomy by default; artifact-grounded `hirmos start` routing is the default.
+
 ## 3. Accepted-State Navigation and Latest Close
 
 This section is part of `CURRENT_SYSTEM_STATE.md` so accepted-state navigation, latest-close metadata, and current truth cannot drift across separate files.

@@ -49,7 +49,7 @@ If Design authorizes a weaker prototype, fixture, local-only, or demo-only resul
 3. Design may satisfy requirements/design/planning requests without activating Implementation.
 4. Design may route back to Understand System State when evidence is missing, stale, contradictory, or too narrow.
 5. Design may authorize Implementation only through a ready focus-specific authority chain: a ready Session Scope for single-session work, or an accepted delivery baseline plus ready phase/session scope for delivery-governed work.
-6. Interaction modes change visibility, not Design authority.
+6. The canonical interaction posture changes visibility, not Design authority.
 
 ### Source input surfaces
 
@@ -61,7 +61,7 @@ Design may inspect `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, `_hi
 2. Use `_hirmos/core/protocol/CAPABILITY_ROUTING.md` to decide which design capabilities are `REQUIRED`, `OPTIONAL`, `SKIPPED`, `NOT_APPLICABLE`, or `BLOCKED`.
 3. Produce governed requirements before system/application design relies on requirement authority.
 4. Produce system/application design from governed requirements plus system-state evidence.
-5. Decide the smallest sufficient governed delivery shape using `DELIVERY_GOVERNANCE.md`; do not equate broad greenfield or brownfield work with automatic multi-session delivery.
+5. Decide the smallest sufficient governed delivery shape using `DELIVERY_GOVERNANCE.md`; do not equate broad greenfield, brownfield, app-like, or framework-evaluated work with automatic multi-session delivery.
 6. Produce technical review material when assumptions, risks, or reviewer inspection paths exist.
 7. If `session_focus = delivery_baseline`, produce delivery-baseline authority and stop at Delivery Baseline — Review or Change; do not create `SESSION_SCOPE.md`, phase files, or implementation units by default.
 8. If `session_focus = phase_session_baseline`, instantiate only the next needed phase file, create/narrow `SESSION_SCOPE.md`, and stop at Session Baseline — Review or Change before implementation.
@@ -93,7 +93,7 @@ DELIVERY_PHASE_SESSION / phase_session_baseline
 
 For durable delivery work, Design must first produce a delivery baseline under `_hirmos/system/delivery/<delivery-id>/` and stop at `Delivery Baseline — Review or Change`. It must not create `SESSION_SCOPE.md`, `PHASE-xx.md`, or implementation units before delivery-baseline acceptance by default. After acceptance or amendment, Design may instantiate the next needed phase file and create the bounded phase/session `SESSION_SCOPE.md`.
 
-Design must explain why the selected shape is safer than smaller alternatives and why larger alternatives would add unnecessary governance overhead. For a single-session shape, the Session Scope must record affirmative bounded-scope safety evidence.
+Design must explain why the selected shape is necessary for the real software work, why a technically possible simpler shape is acceptable or insufficient, and why larger alternatives would add unnecessary governance/token overhead. For a single-session shape, the Session Scope must record affirmative bounded-scope safety evidence.
 
 ### Design authority rules
 
@@ -102,11 +102,11 @@ Design must explain why the selected shape is safer than smaller alternatives an
 - The Session Scope is downstream implementation authority and must be used by implementation unit planning, implementation unit review, session implementation review, and Update System State readiness.
 - Design must use project type, active stack, and stack contexts as routing/evidence inputs, not unchecked authority.
 
-### Interaction-mode visibility
+### Canonical interaction posture visibility
 
-- `domain_expert`: surface user-owned decisions, recommended baseline, blockers, implementation-readiness summary, and concise artifact/reviewer pointers.
-- `technical_supervisor`: surface artifact status, technical assumptions, readiness rationale, delivery/phase/session-scope mapping, and evidence implications.
-- `framework_diagnostics`: surface routing, controls, artifact instantiation, unresolved-item contributions, route-backs, and validation/evidence details.
+- By default, surface user-owned decisions, recommended baseline, blockers, implementation-readiness summary, and concise artifact/reviewer pointers.
+- Surface artifact status, technical assumptions, readiness rationale, delivery/phase/session-scope mapping, and evidence implications when requested or needed for responsible review.
+- Surface routing, controls, artifact instantiation, unresolved-item contributions, route-backs, and validation/evidence details when validation failure, blocker state, route-back, or inspection need requires it.
 
 ### Terminal outcomes
 

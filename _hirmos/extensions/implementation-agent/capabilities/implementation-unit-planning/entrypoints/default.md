@@ -68,13 +68,13 @@ Implementation-unit planning creates sealed execution authority before material 
 4. Preserve lifecycle ownership boundaries; route back in `SESSION_EXECUTION.md` when evidence invalidates an earlier stage.
 5. Apply the extension method and this capability-specific execution surface; do not execute from chat summaries or raw inputs alone.
 
-## Interaction-mode visibility
+## Canonical interaction posture visibility
 
-Use the active interaction mode from `_hirmos/core/authority/INTERACTION_MODES.md` and the parent extension default entrypoint visibility rule.
+Use the canonical HIRMOS interaction posture from `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail.
 
-- `domain_expert`: surface only user-owned decisions, blockers, readiness/completion status, and concise artifact pointers.
-- `technical_supervisor`: surface capability result, assumptions, artifacts/evidence, and review implications.
-- `framework_diagnostics`: surface activation reason, entrypoint path, controls, artifacts, unresolved-item contribution, route-back decisions, and terminal-state basis.
+- By default, surface only user-owned decisions, blockers, readiness/completion status, and concise artifact pointers.
+- Surface capability result, assumptions, artifacts/evidence, and review implications when requested or needed for responsible review.
+- Surface activation reason, entrypoint path, controls, artifacts, unresolved-item contribution, route-back decisions, and terminal-state basis when validation failure, blocker state, route-back, or inspection need requires it.
 
 ## Unresolved-item producer obligation
 
@@ -118,3 +118,23 @@ Before implementation, planning must support the `PROD-L8.21 IU Set Authority Ch
 ## PROD-L8.23 Generated-Run Enforcement Duty
 
 Thin generated IU stubs are not sufficient execution authority. Generated sessions must produce sealed, non-placeholder IU contracts before material edits and must not expand IU contract authority retrospectively.
+
+## PROD-L8.28 Generated IU Instantiation Duty
+
+Implementation-unit planning must instantiate the full IU sealed-section model, not a short status stub. Before authorizing implementation, each IU file must include non-placeholder contract content and `LLM Write Permission:` lines for every major section in `_hirmos/core/templates/session/implementation-units/IU.md`.
+
+Required generated IU contract areas before execution:
+
+- Unit Identity / Contract Metadata;
+- Unit Scope / Authority;
+- Objective, Context, In Scope, Out of Scope, Files / Areas, Preservation Rules;
+- Implementation Requirements;
+- Verification Commands / Checks;
+- Evidence Requirements;
+- Runtime Integration Posture;
+- Binary Acceptance Criteria;
+- Pre-Execution Checks;
+- PROD-L8.21 Minimum IU Contract;
+- Failure / route-back condition.
+
+If any generated IU lacks these areas or contains placeholder-only content, return `BLOCKED` or `ROUTE_BACK_REQUIRED`; do not authorize implementation and do not rely on later close/archive cleanup to expand the IU.

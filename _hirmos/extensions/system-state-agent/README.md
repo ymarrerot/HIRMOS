@@ -44,3 +44,8 @@ The system-state-agent method is:
 ## Rule
 
 Capabilities execute only when selected by Core command, lifecycle, capability-routing, and execution-control rules. Capability completion must be recorded in `_hirmos/session/SESSION_EXECUTION.md`.
+
+
+## Canonical interaction posture
+
+System-state-agent follows the single HIRMOS user-facing posture in `_hirmos/core/authority/INTERACTION_POSTURE.md`: simple by default, transparent by design, rigorous underneath, and progressively disclosed. User-facing summaries should include artifact paths when referencing current-state, unresolved-item, carry-forward, evidence, archive, or accepted-state claims.

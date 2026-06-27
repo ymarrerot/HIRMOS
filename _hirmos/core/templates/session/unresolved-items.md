@@ -65,7 +65,7 @@ Every material unresolved item must preserve the minimum fields from `_hirmos/co
 - Source evidence:
 - Classification: GATED | NON_GATING | TECHNICAL_REVIEW | RESOLVED | DUPLICATE | NOT_APPLICABLE
 - Decision owner:
-- Visibility mode: domain_expert | technical_supervisor | framework_diagnostics | internal
+- Visibility posture: user-facing | technical-review | internal-note
 - Affected lifecycle boundary:
 - Current status: OPEN | BLOCKED | CARRIED | RESOLVED | DUPLICATE | NOT_APPLICABLE
 - Current recommendation:

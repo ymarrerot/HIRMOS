@@ -26,9 +26,21 @@ Do not perform work first and reconstruct HIRMOS artifacts afterward. If the act
 
 ## Bootstrap-per-agent rule
 
-For every new LLM, agent, chat, or context window, complete HIRMOS bootstrap before performing HIRMOS-governed work.
+For every new LLM, agent, chat, compressed chat state, or context window, complete HIRMOS bootstrap before performing HIRMOS-governed work.
 
-Do not assume a previous agent, chat, or context completed bootstrap for the current context.
+Do not assume a previous agent, chat, compressed summary, or context completed bootstrap for the current context. Bootstrap discipline must be recovered from durable active artifacts, archived bootstrap reports, or core authority/protocol files, not from chat memory.
+
+
+## General run preflight rule
+
+Before any governed runtime command (`hirmos start`, `hirmos continue`, `hirmos status`, or `hirmos close`) proceeds beyond bootstrap, verify the minimum installed HIRMOS surface required for that command and current integration context. This applies to every project and run; HIRMOS has no special run category.
+
+Run preflight must classify missing or contradictory runtime surfaces as:
+
+- `PRECHECK_WARNING` when fallback bootstrap can safely continue and the missing surface is not required for the requested command;
+- `PRECHECK_BLOCKER` when the requested command, selected integration, or validator expectation depends on the missing surface.
+
+If an AI-tool integration is expected but its generated registry or managed files are missing, report the exact setup command or artifact needed, then continue only when `_hirmos/AGENTS.md` and core bootstrap provide sufficient fallback authority. Do not hide the preflight issue or let it masquerade as a session-governance failure.
 
 ## HIRMOS command-intent rule
 

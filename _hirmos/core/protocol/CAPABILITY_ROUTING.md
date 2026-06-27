@@ -265,11 +265,9 @@ Capabilities must not hide unresolved items inside local prose.
 
 ## Interaction-mode visibility
 
-Interaction modes change how capability routing is surfaced, not whether routing happens.
+The canonical interaction posture changes how capability routing is surfaced, not whether routing happens.
 
-- `domain_expert` normally hides capability-routing details unless a decision or blocker requires them.
-- `technical_supervisor` may summarize active capabilities, artifacts, assumptions, and evidence.
-- `framework_diagnostics` should expose capability decisions, entrypoints, skipped/not-applicable reasons, controls, and route-back triggers.
+HIRMOS normally hides capability-routing details unless a decision, blocker, validation failure, route-back, or inspection need requires them. Capability decisions, entrypoints, skipped/not-applicable reasons, controls, and route-back triggers remain recorded in governed artifacts and may be surfaced through progressive disclosure.
 
 ## Governed checkpoint contribution rule
 

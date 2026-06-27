@@ -52,7 +52,7 @@ Every advancing command must establish relevant controls before claiming progres
 - bootstrap control;
 - command control;
 - working-copy control;
-- interaction-mode control;
+- canonical interaction posture control;
 - lifecycle-boundary control;
 - snapshot-backed checkpoint control;
 - unresolved-item control when decisions or assumptions exist;

@@ -52,7 +52,7 @@ Start here:
 - [Runtime Surfaces](reference/runtime-surfaces.md)
 - [Glossary](reference/glossary.md)
 - [Stacks](reference/stacks.md)
-- [Interaction Modes](reference/interaction-modes.md)
+- [Interaction Posture](reference/interaction-posture.md)
 
 ## Decide what you want to do next
 

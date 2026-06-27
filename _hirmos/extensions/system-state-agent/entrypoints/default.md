@@ -35,6 +35,10 @@ System-state updates are governed synchronization, not after-the-fact cleanup fo
 5. Record capability decisions in `_hirmos/session/SESSION_EXECUTION.md`.
 6. Do not claim capability completion until expected artifacts/evidence exist or are explicitly not applicable.
 
+## Canonical interaction posture visibility
+
+Use `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail. Include artifact paths when referencing current-state, unresolved-item, carry-forward, delivery, evidence, archive, or accepted-state claims.
+
 ## Shared Extension Method
 
 ### Method invariants

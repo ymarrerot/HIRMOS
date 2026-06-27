@@ -43,9 +43,9 @@ Prepare the Delivery Baseline — Review or Change checkpoint without instantiat
 - focus-specific checkpoint control
 - unresolved-item target control
 
-## Interaction-mode visibility
+## Canonical interaction posture visibility
 
-Use the active interaction mode from `_hirmos/core/authority/INTERACTION_MODES.md`.
+Use the canonical HIRMOS interaction posture from `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail.
 
 ## Unresolved-item producer obligation
 

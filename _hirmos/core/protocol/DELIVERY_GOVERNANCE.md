@@ -28,11 +28,13 @@ Separate delivery-level `REQUIREMENTS.md` and `DESIGN.md` remain conditional, no
 
 ## Core rule
 
-HIRMOS must use the smallest governed delivery shape that preserves engineering quality, implementation truth, continuity, validation, and accepted-state integrity.
+HIRMOS must use the smallest governed delivery shape that preserves engineering quality, implementation truth, continuity, validation, accepted-state integrity, and practical user interaction cost.
 
-This rule is project-type neutral. Multi-session delivery is selected because the work needs durable multi-session governance, not because the project is labeled greenfield, brownfield, large, app-like, or existing-system work.
+This rule is project-type neutral and run-purpose neutral. HIRMOS always chooses delivery shape for the real software work at hand; it must not choose a heavier or different shape because the framework is being tested, inspected, or dogfooded. Framework maintainers evaluate HIRMOS through artifacts, transcript review, validation, and repeated real-work runs; HIRMOS itself must not create a separate testing lane.
 
-HIRMOS must not escalate work to multi-session delivery merely because it is greenfield, broad, or app-like. HIRMOS must also not force work into one session when the smaller shape would hide important risk, weaken validation, fragment accepted-state continuity, or make the work impossible to review safely.
+Multi-session delivery is selected because the work needs durable multi-session governance, not because the project is labeled greenfield, brownfield, large, app-like, existing-system work, or framework evaluation.
+
+HIRMOS must not escalate work to multi-session delivery merely because it is greenfield, broad, app-like, or being used for framework validation. HIRMOS must also not force work into one session when the smaller shape would hide important risk, weaken validation, fragment accepted-state continuity, or make the work impossible to review safely.
 
 ## Delivery shape decision gate
 
@@ -43,8 +45,11 @@ What is the smallest sufficient governed delivery shape for this request?
 Answer: SINGLE_SESSION_VERTICAL_SLICE / SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS / MULTI_SESSION_DELIVERY / MULTI_SESSION_DELIVERY_WITH_PHASE_FILES / UNCERTAIN.
 Evidence:
 Decision factors:
-Smaller-shape safety analysis:
+Technically possible simpler shape:
+Why simpler shape is acceptable or insufficient:
+Why selected shape is necessary for this real software work:
 Larger-shape overhead analysis:
+User interaction / token-cost impact:
 Required durable delivery artifacts, if any:
 If UNCERTAIN, what must be inspected before deciding?
 ```
@@ -84,11 +89,30 @@ Use when separate phase scopes materially improve safety, reviewability, or cont
 
 Escalate from a smaller shape only when the smaller shape would materially weaken implementation truth, production-shaped engineering quality, reviewability, validation/evidence quality, continuity across sessions, accepted-state preservation, user decision safety, or preservation/regression safety for existing systems.
 
-If a larger shape is selected, HIRMOS must also explain why the smaller shape is insufficient.
+If a larger shape is selected, HIRMOS must also explain why the smaller shape is insufficient for the real software work and why the added governance overhead is worth the user interaction and token cost.
 
 ## De-escalation criteria
 
-Avoid multi-session delivery or phase files when the work can be kept coherent as one vertical slice, implementation units provide enough internal structure, phase files would split one architecture decision unnecessarily, or the user would pay governance overhead without better evidence or safer accepted state.
+Avoid multi-session delivery or phase files when the work can be kept coherent as one vertical slice, implementation units provide enough internal structure, phase files would split one architecture decision unnecessarily, or the user would pay governance/token overhead without better evidence, safer accepted state, or materially clearer implementation boundaries.
+
+
+## Delivery shape honesty and cost-aware routing
+
+Delivery shape selection must be honest to the project, not optimized for framework inspection. HIRMOS must behave the same way for a real user request whether or not a maintainer later audits the run.
+
+When recommending a delivery shape, HIRMOS must surface a compact tradeoff summary:
+
+```text
+Recommended delivery shape:
+Technically possible simpler shape:
+Why simpler shape is acceptable or insufficient:
+Why heavier shape is justified, if selected:
+User interaction / token-cost impact:
+Risk if compressed into a smaller shape:
+Artifact paths created only if selected shape requires them:
+```
+
+Token and interaction cost are secondary to honest delivery shape, but they are real user costs. HIRMOS must not spend them on avoidable governance surfaces when a simpler governed shape preserves implementation truth, reviewability, validation, continuity, and accepted-state integrity.
 
 ## Delivery activation and update rules
 
@@ -312,6 +336,6 @@ During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `
 
 Delivery artifacts and checkpoints must be status-aware. Before a delivery baseline is accepted, generated text must describe the delivery as a Candidate Delivery, Proposed Delivery, or Delivery Under Baseline Review. `Active Delivery` is reserved for post-acceptance delivery states such as `ACTIVE`, `ACCEPTED`, `PARTIAL`, `BLOCKED`, or accepted carry-forward work.
 
-Generated artifacts must explain delivery shape from current-state-first evidence: inspected system state, scope size, governance need, validation risk, continuity need, and authority boundaries. Project-type labels such as greenfield, brownfield, mixed, or unknown may be recorded as supporting evidence metadata or phase-control routing metadata, but they must not be the primary user-facing justification for delivery governance, session scope, or phase creation.
+Generated artifacts must explain delivery shape from current-state-first evidence: inspected system state, scope size, governance need, validation risk, continuity need, authority boundaries, and practical user interaction/token cost. Project-type labels such as greenfield, brownfield, mixed, or unknown may be recorded as supporting evidence metadata or phase-control routing metadata, but they must not be the primary user-facing justification for delivery governance, session scope, or phase creation. Framework testing, inspection, or dogfood context must not be used as a reason to select a heavier delivery shape.
 
 When the delivery status is `READY_FOR_BASELINE_REVIEW`, the roadmap/register may identify the candidate delivery and its delivery authority, but it must not imply implementation authority. Implementation remains unauthorized until the delivery baseline is accepted/amended and narrowed into phase/session authority.

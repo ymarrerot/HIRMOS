@@ -37,8 +37,10 @@ CURRENT_SYSTEM_STATE.md
 Compatibility label: Delivery-Need Classification Source.
 
 - Delivery shape: SINGLE_SESSION_VERTICAL_SLICE | SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS | MULTI_SESSION_DELIVERY | MULTI_SESSION_DELIVERY_WITH_PHASE_FILES
-- Why durable delivery governance is / is not necessary:
-- Why smaller shape was insufficient when delivery governance is active:
+- Why durable delivery governance is / is not necessary for the real software work:
+- Technically possible simpler shape:
+- Why smaller shape was acceptable or insufficient when delivery governance is active:
+- Why added governance is worth / not worth the user interaction and token-cost overhead:
 - Why phase files are / are not needed:
 
 ## Delivery Shape Decision Source
@@ -152,7 +154,7 @@ Freshness rule: after a delivery-baseline acceptance/amendment instantiates a ph
 
 Generated delivery-roadmap text must not imply that a delivery is accepted or active before the delivery baseline is accepted. When a delivery status is `PROPOSED` or `READY_FOR_BASELINE_REVIEW`, headings, summaries, and checkpoint-facing labels must use status-aware terms such as `Candidate Delivery`, `Proposed Delivery`, or `Delivery Under Baseline Review`. Reserve `Active Delivery` for post-acceptance statuses such as `ACTIVE`, `ACCEPTED`, `PARTIAL`, `BLOCKED`, or accepted carry-forward work.
 
-Generated artifacts should use current-state-first evidence to explain delivery shape: current system state, scope size, governance need, validation risk, continuity need, and artifact authority. Project-type labels may appear as evidence metadata only when useful; they must not be the primary reason for delivery/session/phase selection.
+Generated artifacts should use current-state-first evidence to explain delivery shape: current system state, scope size, governance need, validation risk, continuity need, artifact authority, and practical user interaction/token cost. Project-type labels may appear as evidence metadata only when useful; they must not be the primary reason for delivery/session/phase selection. Framework testing, inspection, or dogfood context must not be used as a reason to select a heavier delivery shape.
 
 ## PROD-L8.19 Close-Time Freshness Sweep
 
@@ -227,3 +229,7 @@ At delivery close, update only the compact delivery status and pointer fields ne
 - source pointer to archive/evidence/carry-forward records.
 
 If older active-context rows are retained, label them `historical baseline snapshot` or update them. Do not leave stale active context as current truth.
+
+## PROD-L8.28 Active Close Concordance
+
+Delivery/phase close posture must be reconciled with active IU execution and review state before archive. Do not mark a phase or delivery accepted/closed when applicable generated IUs remain thin, unexecuted, unreviewed, status-contradictory, or missing evidence-backed results. Use partial/blocked/route-back posture when evidence does not support clean acceptance.

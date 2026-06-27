@@ -441,3 +441,51 @@ Close must block or downgrade when:
 - close chronology contains impossible timestamp ordering without an explicit exception.
 
 Use `CLOSED_PARTIAL`, `ACCEPTED_WITH_LIMITATIONS`, `PARTIAL`, `NOT_RUN`, `BLOCKED`, or carry-forward when those are the honest states. Implementation acceptance is allowed without claiming runtime or production verification.
+
+## PROD-L8.27 Pre-Archive Validation Gate and Archive Immutability
+
+Close/archive must validate fixable active work before creating historical archives. This updates the existing close transaction model; it does not create a new artifact authority.
+
+### Pre-archive validation gate
+
+Before archive preservation begins, HIRMOS must run an active-session validation gate over the active close surfaces:
+
+- `_hirmos/session/SESSION_SCOPE.md` close verification;
+- `_hirmos/session/SESSION_EXECUTION.md` close controls, IU timing controls, review gates, and evidence pointers;
+- `_hirmos/session/implementation-units/IU-xx.md` sealed contract sections and append-only execution/review records when IU mode is active;
+- `_hirmos/session/EVIDENCE.md` when present;
+- `_hirmos/session/unresolved-items.md` or the active delivery unresolved register, depending on session focus;
+- active delivery/phase/delivery-scope/current-state close posture when delivery governance is active.
+
+If the pre-archive validation gate fails, HIRMOS may correct active artifacts, route back, block, or close partial with an explicit governance deviation. HIRMOS must not archive first and then repair historical authority/evidence to make the validator pass.
+
+### Archive immutability boundary
+
+After the archive snapshot is created under `_hirmos/system/history/sessions/<session-id>/`, archived historical governance and evidence artifacts are immutable evidence. HIRMOS must not edit archived IU contracts, pre-execution checkpoints, review gates, execution status, evidence posture, or session authority content to satisfy a validator after the fact.
+
+Allowed post-archive repair is limited to archive transaction mechanics:
+
+- fixing a missing or incorrect `ARCHIVE_MANIFEST.md` inventory row;
+- correcting archive path/copy/packaging mistakes;
+- normalizing archived `SESSION_STATE.json` to terminal/history-only state when the archive transaction created the wrong machine-state copy;
+- adding an external corrective/supersession note or marking a governance deviation.
+
+Historical governance gaps discovered after archive are `ARCHIVE_HISTORICAL_IMMUTABLE`: record the limitation, downgrade/block close as needed, and carry forward a process/framework issue. Do not rewrite history.
+
+### Failure classes
+
+Validator and close messages should classify failures as:
+
+| Failure class | Meaning | Allowed response |
+|---|---|---|
+| `ACTIVE_FIXABLE` | Active close artifact is still mutable before archive. | Fix active artifact, route back, block, or close partial. |
+| `ARCHIVE_TRANSACTION_REPAIRABLE` | Archive packaging/reset mechanics are wrong. | Repair archive transaction mechanics and record the repair. |
+| `ARCHIVE_HISTORICAL_IMMUTABLE` | Historical authority/evidence was missing, thin, stale, or contradictory when archived. | Do not patch history; record governance deviation, supersession note, blocked/partial close, or carry-forward. |
+
+Normal close success requires a recorded pre-archive validation result of `PASS` or an honest partial/blocked result that explains the unresolved active-validation failure before archiving.
+
+## PROD-L8.28 Generated IU Instantiation and Active Close Concordance
+
+Generated implementation-unit artifacts must be validated while the session is active and before archive. A generated IU is close-eligible only when its sealed contract sections were fully instantiated before execution and its append-only Execution Record and Unit Review contain concrete evidence-backed completion/review results.
+
+Active close must fail closed, downgrade to partial, or route back when IU status contradicts session/phase/delivery close claims. In particular, implementation-complete, phase-accepted, delivery-accepted, or delivery-closed claims are invalid when any applicable IU remains `Execution status: NOT_STARTED`, `Review status: PENDING`, lacks Unit Result, lacks validation/evidence comparison, or lacks a required Test / Fixture / Validator Change Rationale. Historical archives must not be expanded to repair these defects after snapshot; apply PROD-L8.27 archive immutability instead.

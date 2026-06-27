@@ -275,3 +275,21 @@ Recommended compact posture dimensions for close summaries:
 | Final result | CLOSED_ACCEPTED / CLOSED_PARTIAL / BLOCKED / FAILED / DEFERRED / SUPERSEDED |
 
 Do not use `PASS` as a substitute for all three evidence dimensions. If runtime or production evidence is not run, state that limitation and use a narrower implementation-accepted or partial result.
+
+## PROD-L8.27 Pre-Archive Validation and Historical Archive Integrity
+
+Validation is lifecycle-aware. Active artifacts and archived artifacts are not validated with the same mutation semantics.
+
+- `ACTIVE_FIXABLE`: active-session validation failure before archive; HIRMOS may correct the active artifact, route back, block, or close partial.
+- `ARCHIVE_TRANSACTION_REPAIRABLE`: archive packaging, manifest, copied-path, reset, or archived-machine-state normalization issue; HIRMOS may repair the archive transaction mechanics and record the repair.
+- `ARCHIVE_HISTORICAL_IMMUTABLE`: archived historical authority/evidence was missing, thin, stale, contradictory, or created too late; HIRMOS must not rewrite the historical archive to satisfy validation.
+
+Generated-run validation must run before archive whenever possible. If a generated IU-mode session fails minimum IU contract, sealed-section, pre-material-edit, evidence, or review-gate validation after it has already been archived, the correct result is governance deviation / partial / blocked / corrective note, not retrospective expansion of archived IU files.
+
+Validators should use messages that tell the model whether a failure is active-fixable, archive-transaction-repairable, or archive-historical-immutable. This gives the model an honest non-patching path when validation fails after archive.
+
+## PROD-L8.28 Generated IU Instantiation and Active Close Concordance
+
+Generated implementation-unit artifacts must be validated while the session is active and before archive. A generated IU is close-eligible only when its sealed contract sections were fully instantiated before execution and its append-only Execution Record and Unit Review contain concrete evidence-backed completion/review results.
+
+Active close must fail closed, downgrade to partial, or route back when IU status contradicts session/phase/delivery close claims. In particular, implementation-complete, phase-accepted, delivery-accepted, or delivery-closed claims are invalid when any applicable IU remains `Execution status: NOT_STARTED`, `Review status: PENDING`, lacks Unit Result, lacks validation/evidence comparison, or lacks a required Test / Fixture / Validator Change Rationale. Historical archives must not be expanded to repair these defects after snapshot; apply PROD-L8.27 archive immutability instead.

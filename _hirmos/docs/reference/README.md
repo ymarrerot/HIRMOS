@@ -13,7 +13,7 @@ Reference pages are practical orientation material. Core authority/protocol file
 - [Runtime Surfaces](runtime-surfaces.md) — how install, framework, session, system, docs, and extension surfaces relate.
 - [Glossary](glossary.md) — common HIRMOS terms.
 - [Stacks](stacks.md) — stack-package orientation.
-- [Interaction Modes](interaction-modes.md) — supported interaction-mode concepts.
+- [Interaction Posture](interaction-posture.md) — single HIRMOS user-facing posture and progressive-disclosure rules.
 
 ## Common lookups
 
@@ -26,7 +26,7 @@ Reference pages are practical orientation material. Core authority/protocol file
 | What `_hirmos/` areas are for | [Runtime Surfaces](runtime-surfaces.md) |
 | What a HIRMOS term means | [Glossary](glossary.md) |
 | How stack packages fit | [Stacks](stacks.md) |
-| How interaction modes work | [Interaction Modes](interaction-modes.md) |
+| How HIRMOS interaction posture works | [Interaction Posture](interaction-posture.md) |
 
 ## Reference posture
 

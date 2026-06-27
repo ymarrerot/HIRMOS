@@ -24,6 +24,10 @@ This template is not a session artifact. It prevents free-form checkpoint output
 - Do not create or reference full implementation-unit artifacts before the relevant baseline has been accepted or amended.
 - Recommend exactly one next governed command when the baseline is acceptable: `hirmos continue`.
 
+## Canonical interaction posture density
+
+Use `_hirmos/core/authority/INTERACTION_POSTURE.md`: simple by default, transparent by design, rigorous underneath, and progressively disclosed. Checkpoint output must stay concise while including artifact paths for governed claims. Increase visible detail only when risk, blocker state, validation failure, route-back, or user request requires it.
+
 ## Required continuation semantics
 
 For `delivery_baseline`, the output must say:

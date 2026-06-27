@@ -50,13 +50,13 @@ This capability inherits shared extension rules from `_hirmos/extensions/design-
 4. Preserve lifecycle ownership boundaries; route back in `SESSION_EXECUTION.md` when evidence invalidates an earlier stage.
 5. Apply the extension method and this capability-specific execution surface; do not execute from chat summaries or raw inputs alone.
 
-## Interaction-mode visibility
+## Canonical interaction posture visibility
 
-Use the active interaction mode from `_hirmos/core/authority/INTERACTION_MODES.md` and the parent extension default entrypoint visibility rule.
+Use the canonical HIRMOS interaction posture from `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail.
 
-- `domain_expert`: surface only user-owned decisions, blockers, readiness/completion status, and concise artifact pointers.
-- `technical_supervisor`: surface capability result, assumptions, artifacts/evidence, and review implications.
-- `framework_diagnostics`: surface activation reason, entrypoint path, controls, artifacts, unresolved-item contribution, route-back decisions, and terminal-state basis.
+- By default, surface only user-owned decisions, blockers, readiness/completion status, and concise artifact pointers.
+- Surface capability result, assumptions, artifacts/evidence, and review implications when requested or needed for responsible review.
+- Surface activation reason, entrypoint path, controls, artifacts, unresolved-item contribution, route-back decisions, and terminal-state basis when validation failure, blocker state, route-back, or inspection need requires it.
 
 ## Unresolved-item producer obligation
 
@@ -113,3 +113,8 @@ Compatibility note: Phase Scope language now means durable `_hirmos/system/deliv
 ## PROD-L8.13 Current-State-First Generated Artifact Cleanup
 
 Generated artifacts and checkpoint text must explain routing from current system state, scope size, validation risk, continuity need, and artifact-authority requirements. Do not use greenfield/brownfield labels as the primary reason for delivery/session/phase selection. If a project-type label is useful, record it as supporting evidence metadata or phase-control routing metadata only.
+
+### Delivery shape honesty and cost-aware routing
+
+When this capability records or consumes a delivery shape, it must use the smallest sufficient governed shape for the real software work. It must not select durable delivery or phase files because the framework is being tested, inspected, or dogfooded. It must surface a compact tradeoff when the selected shape affects user interaction or token cost: technically possible simpler shape, why that shape is acceptable or insufficient, why the selected shape is necessary, and the risk if the work is compressed into a smaller shape.
+

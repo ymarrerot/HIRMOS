@@ -39,6 +39,14 @@ When the command reaches Design, Implementation, or close/update-state for softw
 ## Required behavior
 
 
+
+### General run preflight
+
+Before close mutates accepted state or archive artifacts, `hirmos close` must apply the general run preflight from `_hirmos/core/protocol/COMMANDS.md`. A missing optional integration surface is a `PRECHECK_WARNING` only when fallback authority and active close artifacts are sufficient; missing active session, command, archive, or validator-required surfaces are `PRECHECK_BLOCKER`.
+
+Preflight classification must be recorded before close proceeds. A preflight blocker stops before archive preservation.
+
+
 ### Beyond Clear Specs execution-control subset
 
 This command applies the execution-control subset of `_hirmos/core/authority/BEYOND_CLEAR_SPECS.md` through `SESSION_EXECUTION.md`: clear command/boundary controls, strict self-validation before surfaced claims, append-only evidence/control records, and fail-closed behavior when the active artifacts do not support the claim.
@@ -98,6 +106,28 @@ _hirmos/session/bootstrap/.gitkeep
 ```
 
 Abort close preserves available artifacts and blocked reasons in history but must not present aborted work as accepted system state.
+
+
+## Post-close follow-up guidance
+
+After a successful normal close resets the active session to idle, `hirmos close` must recommend exactly one primary governed next command from the legal idle command set. If optional follow-up work remains, the command guidance must explain that `hirmos continue` is not applicable because there is no active session, and that follow-up work begins with `hirmos start` grounded in current-state/delivery/archive artifacts.
+
+Use concise examples when applicable:
+
+```text
+There is no active session, so `hirmos continue` is not applicable.
+
+To run local E2E smokes for the delivery:
+  hirmos start "Run local E2E smokes for <delivery-id> and update evidence posture"
+
+To run delivery close review:
+  hirmos start "Run delivery close review for <delivery-id>"
+
+To start unrelated work:
+  hirmos start "<new work objective>"
+```
+
+The guidance must include paths to the governed sources that justify the follow-up when known, such as `CURRENT_SYSTEM_STATE.md`, `DELIVERY_SCOPE.md`, `DELIVERY_PLAN.md`, `CARRY_FORWARD.md`, delivery unresolved register, or archive manifest. Do not create a separate follow-up intent taxonomy unless later evidence proves artifact-grounded `hirmos start` routing is insufficient.
 
 ## Required close controls
 
@@ -483,3 +513,22 @@ For delivery-governed close, apply the simplified close ownership model before s
 6. Downgrade or block any broad runtime/production claim contradicted by `NOT_RUN`, `BLOCKED`, absent, or partial evidence.
 
 Close may claim implementation acceptance when code/static evidence supports it, but must not claim full local E2E, user-environment, provider, or production verification unless that evidence actually exists.
+
+## PROD-L8.27 Pre-Archive Validation Gate and Archive Immutability
+
+`hirmos close` must run the active-session validator before archive preservation. The command sequence is:
+
+1. complete scope/evidence/review reconciliation while artifacts are still active;
+2. run the pre-archive validation gate on active session, IU, evidence, unresolved, delivery/phase, and current-state close surfaces;
+3. if the gate fails, fix active artifacts only, route back, block, or select an honest partial/governance-deviation close;
+4. archive only after active validation passes or after the partial/blocked verdict is explicitly recorded;
+5. treat the archived snapshot as immutable historical evidence;
+6. after archive, repair only archive transaction mechanics, never historical IU authority, pre-execution checkpoints, review gates, or evidence content.
+
+If close encounters validator failures in an archived session, classify them as `ARCHIVE_TRANSACTION_REPAIRABLE` or `ARCHIVE_HISTORICAL_IMMUTABLE`. Historical governance/evidence failures must not be patched in the archive to create a clean close claim.
+
+## PROD-L8.28 Generated IU Active Close Gate
+
+Before archive preservation, `hirmos close` must verify active generated IU concordance. If IU mode was active, every applicable IU must have a fully instantiated sealed contract, append-only Execution Record, append-only Unit Review, non-pending execution/review statuses, evidence-backed Unit Result, and any required Test / Fixture / Validator Change Rationale.
+
+If this gate fails while artifacts are active, fix active artifacts only when the correction reflects actual pre-existing active evidence; otherwise route back, close partial/blocked, or record a governance deviation. Do not archive first and then expand historical IU files to make validation pass.

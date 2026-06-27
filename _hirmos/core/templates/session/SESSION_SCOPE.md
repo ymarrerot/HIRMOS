@@ -10,7 +10,7 @@ This artifact is the complete active session authority and acceptance root. Impl
 - Session ID:
 - Session title:
 - User request / command:
-- Interaction mode:
+- Canonical interaction posture:
 - Session type: design-only | implementation | review | close/update-state | other
 - Current lifecycle boundary:
 - Current System State basis: `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`
@@ -111,8 +111,12 @@ Answer: SINGLE_SESSION_VERTICAL_SLICE | SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS
 - Project type: GREENFIELD | BROWNFIELD_TARGETED | BROWNFIELD_MULTISESSION | MIXED | UNKNOWN
 - Evidence:
 - Decision factors:
-- Smaller-shape safety analysis:
+- Technically possible simpler shape:
+- Why simpler shape is acceptable or insufficient:
+- Why selected shape is necessary for this real software work:
 - Larger-shape overhead analysis:
+- User interaction / token-cost impact:
+- Risk if compressed into a smaller shape:
 - Triggers considered:
 - Triggers ruled out:
 - Selected shape justification:
@@ -134,7 +138,8 @@ Fail-closed rule:
 - `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` requires implementation units that collectively cover authorized scope after the session scope baseline is accepted or amended. Before acceptance, do not create full implementation-unit artifacts; record only a compact implementation-shape preview when needed for review.
 - `MULTI_SESSION_DELIVERY` requires a durable Delivery Plan and Delivery Scope before implementation authorization.
 - `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` requires a durable Delivery Plan, Delivery Scope, and adopted phase file before implementation authorization.
-- The selected shape must be the smallest shape that preserves engineering quality, implementation truth, validation, continuity, and accepted-state integrity.
+- The selected shape must be the smallest shape that preserves engineering quality, implementation truth, validation, continuity, accepted-state integrity, and practical user interaction cost.
+- Delivery shape must be justified by the real software work, not by framework testing, inspection, or dogfood context.
 
 ## 7. Production-Shaped Engineering Gate
 

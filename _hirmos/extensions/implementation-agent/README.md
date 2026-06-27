@@ -2,7 +2,7 @@
 
 The `implementation-agent` provides HIRMOS Implementation-stage capabilities.
 
-Core owns lifecycle authority, command routing, interaction modes, execution controls, unresolved-item governance, and accepted-state update safety. This extension performs bounded Implementation work only when selected by Core routing and active execution controls.
+Core owns lifecycle authority, command routing, canonical interaction posture, execution controls, unresolved-item governance, and accepted-state update safety. This extension performs bounded Implementation work only when selected by Core routing and active execution controls.
 
 ## Shared method
 

@@ -82,11 +82,13 @@ Retry must be evidence-based and bounded. Retry is valid only when the failed at
 
 Implementation routes back when it discovers missing authority, contradictory current state, unsafe scope, unresolved gated decisions, invalid Design assumptions, or evidence that the active unit/session cannot be completed safely.
 
-### Interaction-Mode Visibility
+### Canonical interaction posture visibility
 
-- `domain_expert`: surface user-owned decisions, blockers, concise status, completion/readiness, or artifact pointers.
-- `technical_supervisor`: surface changed files, validation/evidence, assumptions, limitations, and review implications.
-- `framework_diagnostics`: surface routing, controls, artifacts, unresolved-item contributions, route-backs, retries, and terminal-state basis.
+Use `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail.
+
+- By default, surface user-owned decisions, blockers, concise status, completion/readiness, or artifact pointers.
+- Include artifact paths when referencing scope, IU authority, evidence, validation, unresolved items, carry-forward, route-back, review, or accepted-state claims.
+- Surface changed files, validation/evidence, assumptions, limitations, review implications, routing, controls, unresolved-item contributions, route-backs, retries, and terminal-state basis when requested or when responsible review requires it.
 
 ### Completion Rule
 

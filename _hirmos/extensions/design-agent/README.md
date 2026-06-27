@@ -20,7 +20,7 @@ Read `entrypoints/default.md` before running any design-agent capability; it con
 
 ## Responsibility boundary
 
-The extension supports Design. Core owns the lifecycle, commands, execution controls, artifact model, interaction modes, unresolved-item governance, and accepted-state safety.
+The extension supports Design. Core owns the lifecycle, commands, execution controls, artifact model, canonical interaction posture, unresolved-item governance, and accepted-state safety.
 
 Design outputs are authority for downstream Implementation only when they are recorded in active-session artifacts and required execution controls are satisfied.
 

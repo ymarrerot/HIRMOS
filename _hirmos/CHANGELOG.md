@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.7 — Single interaction posture and context-resilient routing stabilization
+
+- Bumped framework metadata and validator expected version to 1.1.7.
+- Replaced configurable interaction modes with one canonical HIRMOS interaction posture: simple by default, transparent by design, rigorous underneath, and progressive in disclosure.
+- Removed legacy configurable interaction-posture config/CLI support, preserving concise domain-owner-facing behavior as the sole user-facing posture through core authority and templates.
+- Realigned extension and checkpoint templates so governed claims surface concise artifact paths while detailed rigor remains in artifacts and validators.
+- Added context-resilient bootstrap discipline: every session bootstrap report must include complete compact discipline answers recovered from durable active artifacts, archived bootstrap reports, or core protocols, not chat memory.
+- Added general run preflight classification (`PRECHECK_PASS`, `PRECHECK_WARNING`, `PRECHECK_BLOCKER`) and clearer follow-up `hirmos start` command guidance when no active session exists.
+- Added delivery-shape honesty and cost-aware routing guidance so selected delivery shape is justified by real software scope, risk, evidence, continuity, and user/token cost—not testing context.
+- No terminal CLI version bump; CLI package remains 1.3.4.
+
 ## 1.1.6 — Sealed IU contracts and delivery close evidence-posture stabilization
 
 - Bumped framework metadata and validator expected version to 1.1.6.

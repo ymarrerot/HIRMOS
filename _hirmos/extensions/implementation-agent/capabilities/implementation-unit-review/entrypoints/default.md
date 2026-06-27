@@ -75,13 +75,13 @@ Retry decisions must be appended in the same `IU-xx.md` artifact under `## 6. Re
 4. Preserve lifecycle ownership boundaries; route back in `SESSION_EXECUTION.md` when evidence invalidates an earlier stage.
 5. Apply the extension method and this capability-specific execution surface; do not execute from chat summaries or raw inputs alone.
 
-## Interaction-mode visibility
+## Canonical interaction posture visibility
 
-Use the active interaction mode from `_hirmos/core/authority/INTERACTION_MODES.md` and the parent extension default entrypoint visibility rule.
+Use the canonical HIRMOS interaction posture from `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail.
 
-- `domain_expert`: surface only user-owned decisions, blockers, readiness/completion status, and concise artifact pointers.
-- `technical_supervisor`: surface capability result, assumptions, artifacts/evidence, and review implications.
-- `framework_diagnostics`: surface activation reason, entrypoint path, controls, artifacts, unresolved-item contribution, route-back decisions, and terminal-state basis.
+- By default, surface only user-owned decisions, blockers, readiness/completion status, and concise artifact pointers.
+- Surface capability result, assumptions, artifacts/evidence, and review implications when requested or needed for responsible review.
+- Surface activation reason, entrypoint path, controls, artifacts, unresolved-item contribution, route-back decisions, and terminal-state basis when validation failure, blocker state, route-back, or inspection need requires it.
 
 ## Unresolved-item producer obligation
 
@@ -96,3 +96,9 @@ Record full item fields in `unresolved-items.md`, including current status, down
 ## PROD-L8.25 Sealed IU Review Guard
 
 During review, compare the final implementation against the sealed contract as it existed before material edits. Do not improve contract wording, scope mapping, acceptance criteria, verification commands, or evidence requirements during review. If tests, fixtures, mocks, snapshots, validators, expected-output files, or regression fixtures changed, the review must check that the Execution Record includes a Test / Fixture / Validator Change Rationale and must judge whether realism/coverage was preserved or improved rather than weakened.
+
+## PROD-L8.28 Active Close Unit Review Gate
+
+Before a unit may contribute to phase/session close, review must append a concrete Unit Review result inside the IU. A generated IU with `Review status: PENDING`, missing Unit Result, missing Request-to-Result Review, or missing validation/evidence comparison cannot support implementation-complete, phase-accepted, or delivery-close claims.
+
+If the sealed contract is thin, placeholder-only, missing required generated IU sections, or appears to have been expanded after implementation, review must record `ROUTE_BACK_REQUIRED` or a governance deviation. Do not repair sealed contract authority during review.

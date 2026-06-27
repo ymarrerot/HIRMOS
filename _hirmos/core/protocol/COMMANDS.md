@@ -40,7 +40,22 @@ hirmos close
 
 No command may execute until bootstrap has passed for the current agent/context.
 
-Bootstrap completion means the bootstrap report exists and records a passed quiz. Acknowledging files were read is not enough.
+Bootstrap completion means the bootstrap report exists, records a passed quiz, includes every bootstrap discipline answer with durable source and allowed recovery method, and does not rely on chat memory or compressed chat summaries. Acknowledging files were read is not enough.
+
+
+## General run preflight
+
+Before any public command advances work, HIRMOS must verify the minimum installed runtime surface required for the requested command and current integration context. This is a general run rule for every project; HIRMOS must not create special run-category routing or setup semantics.
+
+Required preflight classification:
+
+| Classification | Meaning | Required behavior |
+|---|---|---|
+| `PRECHECK_PASS` | Required command/core/session/integration surface exists. | Continue to command-state gate. |
+| `PRECHECK_WARNING` | A non-required or optional integration/setup surface is missing, but fallback bootstrap authority is sufficient. | Surface the warning, record fallback authority, and continue only if the requested command remains legal. |
+| `PRECHECK_BLOCKER` | Required command/core/session/integration surface is missing or contradictory. | Stop before lifecycle work and recommend exactly one governed recovery action. |
+
+Missing integration registry or generated AI-tool files are preflight issues, not implementation/session-governance failures by themselves. If the selected integration depends on `_hirmos/integrations/agent-tools/registry.json` and it is missing, surface the setup action, for example `hirmos init --integration <tool>`, or record that fallback bootstrap through `_hirmos/AGENTS.md` is sufficient for the current command.
 
 ## Advancing command rule
 
@@ -153,7 +168,7 @@ At minimum, capability routing is material when:
 
 When routing is material, the runner must read `_hirmos/core/protocol/CAPABILITY_ROUTING.md`, resolve the required extension and capability entrypoints through the installed manifests, and record the capability decision in `_hirmos/session/SESSION_EXECUTION.md`.
 
-Commands must not expose capability routing details in `domain_expert` mode unless the routing creates a user decision, blocker, or inspectable checkpoint.
+Commands must not expose capability routing details by default unless the routing creates a user decision, blocker, validation failure, route-back, or inspectable checkpoint.
 
 
 ## Runtime integration command discipline

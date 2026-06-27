@@ -92,7 +92,7 @@ Design may authorize fixture/demo or boundary work only when the Session Scope a
 
 ## Domain Expert visibility rule
 
-In `domain_expert` mode, HIRMOS should avoid interrupting the user with low-level integration choices while safe local/default progress is possible.
+Under the canonical interaction posture, HIRMOS should avoid interrupting the user with low-level integration choices while safe local/default progress is possible.
 
 HIRMOS must surface integration choices to the Domain Expert when:
 

@@ -240,7 +240,7 @@ The CLI must never overwrite user-owned content outside the HIRMOS managed block
 
 The CLI must treat `_hirmos/hirmos.config.json` as project-local HIRMOS configuration metadata.
 
-It is not runtime truth and not workflow authority.
+It is not runtime truth and not workflow authority. It must not configure user-facing interaction modes; HIRMOS uses the single canonical interaction posture authority.
 
 Expected shape:
 
@@ -253,7 +253,6 @@ Expected shape:
   "stack": {
     "active_stack": "generic"
   },
-  "interaction_mode": "domain_expert",
   "integrations": {
     "installed": []
   }
@@ -265,14 +264,14 @@ Merge rules:
 - parse JSON strictly;
 - fail clearly if invalid;
 - preserve unknown fields;
-- preserve existing `stack`, `hirmos`, and `interaction_mode` fields;
+- preserve existing `stack`, `hirmos`, and unknown fields;
 - create `integrations.installed` if missing;
 - append selected integration ids if missing;
 - do not remove existing integration ids;
 - normalize installed integration order according to registry order;
 - preserve ids already present but unknown to the current registry only if they are already installed;
 - write formatted JSON with two-space indentation and a trailing newline.
-- treat missing `interaction_mode` as `domain_expert`; fail closed elsewhere if a present value is unsupported.
+- interaction posture is not configurable through project config; HIRMOS uses the canonical posture authority in `_hirmos/core/authority/INTERACTION_POSTURE.md`.
 
 Example:
 
@@ -287,7 +286,6 @@ Before:
   "stack": {
     "active_stack": "generic"
   },
-  "interaction_mode": "domain_expert",
   "integrations": {
     "installed": ["agents"]
   }
@@ -311,7 +309,6 @@ After:
   "stack": {
     "active_stack": "generic"
   },
-  "interaction_mode": "domain_expert",
   "integrations": {
     "installed": ["agents", "claude", "cursor", "copilot"]
   }
@@ -469,3 +466,8 @@ for npm publishing and contributor visibility.
 - No extension installation.
 - No integration removal command.
 - No package publishing automation.
+
+
+## General run preflight note
+
+Installed projects should treat missing generated integration files as general run preflight issues, not special run-category failures. If a user installed from `dist` without generating an integration, HIRMOS can still bootstrap through `_hirmos/AGENTS.md` when that fallback is sufficient, but integration-specific affordances require the corresponding `hirmos init --integration <tool>` output and registry/templates.

@@ -37,11 +37,12 @@ HIRMOS should reveal more detail when:
 - decisions are gated;
 - technical review is needed;
 - validation fails;
-- the interaction mode requires more detail;
-- the session is in a diagnostic or supervisor context.
+- the user requests deeper inspection;
+- validation fails or evidence is incomplete;
+- blocker, route-back, or limitation state needs explanation.
 
-## Relationship to interaction modes
+## Relationship to the canonical interaction posture
 
-Interaction modes are one mechanism for applying these principles.
+HIRMOS has one user-facing interaction posture, defined by `_hirmos/core/authority/INTERACTION_POSTURE.md`.
 
-They may change visibility and pause cadence. They must not change HIRMOS governance obligations.
+The posture applies these principles without configurable mode branching. Visible detail may increase when the user asks, risk increases, validation fails, blocker state requires explanation, or inspection is necessary. Visible detail must not change HIRMOS governance obligations.

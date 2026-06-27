@@ -100,3 +100,16 @@ Use when delivery governance was active.
 | Close output may claim normal close success | YES / NO |
 | Latest archive pointer eligible for CURRENT_SYSTEM_STATE.md | YES / NO |
 | Limitations / notes | |
+
+## 10. PROD-L8.27 Pre-Archive Validation and Archive Immutability
+
+| Check | Result | Notes |
+|---|---|---|
+| Pre-archive validation gate was run before archive snapshot | PASS / PARTIAL / BLOCKED | |
+| Active artifacts were corrected only before archive | PASS / PARTIAL / NOT_APPLICABLE | |
+| Archive snapshot is historical evidence, not a workspace | PASS / BLOCKED | |
+| Post-archive repairs, if any, were transaction-only | PASS / PARTIAL / NOT_APPLICABLE | |
+| Historical governance/evidence patching occurred | NO / GOVERNANCE_DEVIATION | |
+| Failure class, if unresolved | ACTIVE_FIXABLE / ARCHIVE_TRANSACTION_REPAIRABLE / ARCHIVE_HISTORICAL_IMMUTABLE / NOT_APPLICABLE | |
+
+Archive transaction repairs may fix manifest/copy/path/reset mechanics. They must not expand archived IU contracts, add missing pre-execution checkpoints, add missing review gates, rewrite execution status, or change historical evidence posture to obtain a clean validator result.
