@@ -220,6 +220,11 @@ Required review dimensions when applicable:
 - final review result and why that result is honest;
 - explicit `not claimed` statements for evidence levels not proven.
 
+
+### Test / Fixture / Validator Change Rationale
+
+When implementation modifies tests, fixtures, mocks, snapshots, validators, expected-output files, regression fixtures, or generated expected-output artifacts, the owning execution record must include a concise rationale explaining why the change was required and why realism or coverage is preserved or improved. Reviews must explicitly judge whether these changes weakened validation, preserved validation, or improved validation.
+
 ### Review result vocabulary
 
 Use review results that preserve terminal-state honesty:
@@ -251,3 +256,22 @@ Runtime generated-artifact validation may fail:
 - Archived `SESSION_STATE.json` files with null `created_at`, `updated_at`, or missing run context.
 - Accepted phase files with current binary exit criteria still `PENDING` or `NOT_ASSESSED` outside explicitly historical sections.
 - Delivery status logs that omit material phase close rows when phase files are accepted/closed.
+
+
+## PROD-L8.24 Pre-Execution Ledger and Generated Review Validation
+Generated-run validation must reject retrospective validator compliance. IU-mode generated sessions must contain a `Pre-Material-Edit Ledger Row` before a `Material Edit Start Record`, with `Material implementation started: NO` and `Retrospective checkpoint or IU expansion: NO`. Validator-satisfying IU authority added during close/archive cleanup is not clean governance. Generated phase and delivery close artifacts must instantiate the L8.22 review gates with concrete codebase, scope, integration, runtime, production, final-result, honest-result, and not-claimed fields. Runtime/provider/production claims must be scoped per accepted requirement or DAC item; broad `LOCAL_RUNTIME_VERIFIED` claims are invalid when related critical-flow evidence is `NOT_RUN` or absent.
+
+## PROD-L8.26 Evidence Posture Simplification
+
+Evidence posture must distinguish implementation acceptance from runtime and production verification.
+
+Recommended compact posture dimensions for close summaries:
+
+| Dimension | Allowed compact values |
+|---|---|
+| Implementation coverage | NOT_STARTED / PARTIAL / COMPLETE / NOT_APPLICABLE |
+| Local runtime evidence | NOT_CLAIMED / NOT_RUN / PARTIAL / LOCAL_E2E_VERIFIED / BLOCKED / NOT_APPLICABLE |
+| Production evidence | NOT_CLAIMED / NOT_RUN / STAGING_VERIFIED / PRODUCTION_VERIFIED / BLOCKED / NOT_APPLICABLE |
+| Final result | CLOSED_ACCEPTED / CLOSED_PARTIAL / BLOCKED / FAILED / DEFERRED / SUPERSEDED |
+
+Do not use `PASS` as a substitute for all three evidence dimensions. If runtime or production evidence is not run, state that limitation and use a narrower implementation-accepted or partial result.

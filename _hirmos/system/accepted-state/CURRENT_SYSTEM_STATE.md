@@ -182,37 +182,37 @@ Use this index to make source requirements, design, scope, unresolved-item, evid
 
 | Delivery ID | Status | Scope Authority | Optional Requirements Authority | Optional Design Authority | Unresolved Register |
 |---|---|---|---|---|---|
-| | | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | none / path | none / path | none / path |
+| none | not yet created | none | none | none | none |
 
 ### Phase Authorities
 
 | Phase ID | Status | Phase Authority | Parent Delivery | Notes |
 |---|---|---|---|---|
-| | | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` | | |
+| none | not yet created | none | none | no active phase |
 
 ### Session Authorities
 
 | Session ID | Status | Session Authority | Archive Path | Notes |
 |---|---|---|---|---|
-| | | active / archived SESSION_SCOPE.md | | |
+| none | idle | none | none | no active session scope |
 
 ### Requirement Sources
 
 | Source | Authority level | Status | Notes |
 |---|---|---|---|
-| | delivery / session / archive / generated synthesis | active / accepted / archived / superseded / not source authority | |
+| none | not separately created | not source authority | no separate requirements/design source yet |
 
 ### Design Sources
 
 | Source | Authority level | Status | Notes |
 |---|---|---|---|
-| | delivery / session / archive / generated synthesis | active / accepted / archived / superseded / not source authority | |
+| none | not separately created | not source authority | no separate requirements/design source yet |
 
 ### Evidence Sources
 
 | Source | Authority level | Status | Notes |
 |---|---|---|---|
-| | session / implementation-unit / archive | active / accepted / archived / superseded | |
+| none | not evaluated | not yet created | no evidence source yet |
 
 ## 7. Delivery State
 

@@ -209,3 +209,21 @@ A delivery review must not claim full MVP/runtime/production acceptance when onl
 
 ## PROD-L8.23 Delivery Status Log Completeness
 Generated delivery plans should make phase close chronology inspectable. When phase files exist with accepted/closed status, the Delivery Status Update Log or equivalent close chronology must include material phase close rows or explicitly state why a phase close row is not applicable. Stale active/pointer sections must be reconciled or explicitly labeled historical before final delivery close claims.
+
+
+## PROD-L8.24 Generated Delivery Review Gate Validation
+A generated delivery close must instantiate the delivery review gate with concrete values, not preserve it as unused template text. Required generated values include phases reviewed, accepted source artifacts reviewed, cross-phase integration reviewed, end-to-end workflow evidence, requirements/scope coverage posture, runtime evidence level, production evidence level, carry-forward impact, final delivery result, what is not claimed, and why the result is honest. The delivery close chronology must include each material phase close or explicitly classify an omitted phase close row as not applicable.
+
+## PROD-L8.26 Delivery Close Concordance Simplification
+
+The roadmap/register records delivery navigation and status history only. It must not duplicate full delivery evidence or full phase close records.
+
+At delivery close, update only the compact delivery status and pointer fields needed for future navigation:
+
+- Delivery status and final/next phase pointer;
+- Delivery Status Update Log row;
+- Delivery Navigation next-delivery / next-phase recommendation;
+- source pointer to `DELIVERY_SCOPE.md` Compact Delivery Close Posture;
+- source pointer to archive/evidence/carry-forward records.
+
+If older active-context rows are retained, label them `historical baseline snapshot` or update them. Do not leave stale active context as current truth.

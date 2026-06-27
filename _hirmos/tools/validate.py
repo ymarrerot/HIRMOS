@@ -222,7 +222,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.1.4'
+expected_version = '1.1.6'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -1332,7 +1332,7 @@ for phrase in [
 template_expectations = {
     'SESSION_SCOPE.md': ['Authorized Scope', 'Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Unresolved Items Control', 'Session Satisfaction Review and Close Verification', 'Fail-closed result'],
     'unresolved-items.md': ['Producer Contributions', 'Active Gated Items', 'Disposition History', 'Protocol authority'],
-    'implementation-units/IU.md': ['Unit Scope', 'Execution Record', 'Unit Review', 'Does the actual implementation satisfy 100%', 'Retry Decision', 'Evidence from Failed Attempt', 'Escalation Condition'],
+    'implementation-units/IU.md': ['Unit Scope / Authority', 'LLM Write Permission:', 'Execution Record', 'Unit Review', 'Does the actual implementation satisfy 100%', 'Retry Decision', 'Evidence from Failed Attempt', 'Escalation Condition'],
     'DESIGN.md': ['Current-State Basis', 'Governed Requirements', 'Delivery Shape Decision', 'Technical Review and Implementation Readiness Basis'],
     'EVIDENCE.md': ['Command Evidence', 'Runtime and Critical-Flow Evidence', 'Production-Shaped Engineering Evidence', 'Claim Reconciliation Summary', 'Close / Archive Evidence'],
     'SESSION_EXECUTION.md': ['Active Execution Controls', 'Artifact Instantiation Log', 'Close / Archive / Reset Invariant Controls'],
@@ -1707,8 +1707,8 @@ for phrase in [
 
 implementation_entrypoints = {
     'implementation-unit-planning': ['Method', 'implementation-units/IU-xx.md', 'collectively cover 100%'],
-    'implementation-execution': ['Method', 'Read the target `IU-xx.md` artifact directly', 'modify only files/areas authorized'],
-    'implementation-unit-review': ['Method', 'Unit review is local, specific, and evidence-based', 'A unit is not complete until local review is recorded'],
+    'implementation-execution': ['Method', 'Read the target `IU-xx.md` artifact directly', 'Modify only files/areas authorized', 'sealed IU contract'],
+    'implementation-unit-review': ['Method', 'Unit review is local, specific, and evidence-based', 'A unit is not complete until local review is appended', 'sealed contract sections'],
     'validation-review': ['Method', 'Validation review must distinguish run evidence from claims', 'not-run or not-applicable checks'],
     'retry-escalation': ['Method', 'Retry is not a second attempt at arbitrary implementation', 'route back instead of retrying'],
 }
@@ -1721,7 +1721,7 @@ for cap, phrases in implementation_entrypoints.items():
             sys.exit(1)
 
 implementation_templates = {
-    'implementation-units/IU.md': ['Unit Scope', 'Execution Record', 'Unit Review', 'Does the actual implementation satisfy 100%', 'Request-to-Result Review', 'Retry / Route-Back Decision', 'Not Run / Not Applicable Checks', 'Retry Decision', 'Evidence from Failed Attempt', 'Escalation Condition'],
+    'implementation-units/IU.md': ['Unit Scope / Authority', 'LLM Write Permission:', 'Contract status:', 'Execution status:', 'Review status:', 'Execution Record', 'Unit Review', 'Does the actual implementation satisfy 100%', 'Request-to-Result Review', 'Retry / Route-Back Decision', 'Not Run / Not Applicable Checks', 'Retry Decision', 'Evidence from Failed Attempt', 'Escalation Condition'],
     'EVIDENCE.md': ['Evidence Claims', 'Not Run / Not Applicable', 'Scope Coverage', 'Evidence Limitations'],
 }
 for name, phrases in implementation_templates.items():
@@ -2471,7 +2471,8 @@ for phrase in [
 # Implementation-unit consolidation must be structural.
 iu_template = (root / 'core/templates/session/implementation-units/IU.md').read_text()
 for phrase in [
-    'Unit Scope',
+    'Unit Scope / Authority',
+    'LLM Write Permission:',
     'Execution Record',
     'Unit Review',
     'Retries',
@@ -3256,3 +3257,220 @@ if css.exists():
         fail('PROD-L8.23 CURRENT_SYSTEM_STATE.md contains blank Source Artifact Index placeholder rows')
 
 print('PASS: HIRMOS PROD-L8.23 generated-run IU enforcement and runtime artifact validator hardening static/runtime check')
+
+# PROD-L8.24 pre-execution ledger enforcement and generated review gate validation
+for rel, phrases in {
+    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.24 Pre-Execution Ledger Enforcement', 'Pre-Material-Edit Ledger Row', 'Material Edit Start Record', 'Retrospective checkpoint or IU expansion'],
+    'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.24 Pre-Execution Ledger and Generated Review Validation', 'retrospective validator compliance', 'generated phase and delivery close artifacts'],
+    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.24 Retrospective Governance Close Guard', 'must not create or expand pre-execution authority for the first time'],
+    'core/templates/system/delivery/phases/PHASE.md': ['PROD-L8.24 Generated Phase Review Gate Validation', 'Actual final codebase reviewed', 'What is not claimed'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['PROD-L8.24 Generated Delivery Review Gate Validation', 'end-to-end workflow evidence', 'why the result is honest'],
+    'core/templates/system/delivery/DELIVERY_SCOPE.md': ['PROD-L8.24 Delivery Scope Close Concordance', 'planned', 'NOT_STARTED'],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['PROD-L8.24 Source Artifact Index Runtime Placeholder Guard', 'delivery / session / archive / generated synthesis'],
+    'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': ['PROD-L8.24 Pre-Execution Ledger Duty', 'Retrospective checkpoint or IU expansion: NO'],
+    'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['PROD-L8.24 Material Edit Start Gate', 'Material Edit Start Record'],
+    'extensions/implementation-agent/capabilities/session-implementation-review/entrypoints/default.md': ['PROD-L8.24 Generated Review Gate Validation', 'what is not claimed'],
+    'docs/2-methodology/implementation-evidence-and-claim-reconciliation.md': ['PROD-L8.24 Retrospective Compliance Boundary', 'active ledger must prove pre-execution authorization'],
+}.items():
+    body = (root/rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.24 pre-execution/review surface {rel} missing phrase: {phrase}')
+
+_RETROSPECTIVE_GOVERNANCE_PATTERNS = [
+    r'adding the required IU authority checkpoint',
+    r'expanding archived IU files',
+    r'to satisfy the validator',
+    r'retrofit(?:ted|ting)?\s+(?:the\s+)?IU',
+    r'backfill(?:ed|ing)?\s+(?:the\s+)?IU',
+    r'validator cleanup',
+]
+
+def _section_after_heading(body: str, heading_pattern: str, max_chars: int | None = None) -> str:
+    match = re.search(heading_pattern, body, re.I)
+    if not match:
+        return ''
+    tail = body[match.start():]
+    nxt = re.search(r'\n##\s+', tail[len(match.group(0)):])
+    section = tail if not nxt else tail[:len(match.group(0)) + nxt.start()]
+    return section[:max_chars] if max_chars else section
+
+
+def _contains_concrete_review_gate(body: str, gate: str, required_fields: list[str]) -> tuple[bool, list[str]]:
+    # Accept both exact PROD-L8.22 heading and generated headings that include the gate name.
+    if gate.lower() not in body.lower():
+        return False, required_fields
+    section = _section_after_heading(body, rf'##[^\n]*{re.escape(gate)}[^\n]*') or body
+    missing = []
+    for field in required_fields:
+        if not re.search(rf'{re.escape(field)}\s*:\s*(?!\s*$)(?!\s*(TBD|TODO|PENDING|NOT_STARTED|NOT_ASSESSED)\s*$).+', section, re.I | re.M):
+            missing.append(field)
+    return not missing, missing
+
+
+def _delivery_scope_stale_after_close(scope_txt: str) -> bool:
+    finalish = re.search(r'(Delivery close|Final delivery|Delivery status|Lifecycle status)[^\n]{0,80}(ACCEPTED|CLOSED|PARTIAL|PASS)', scope_txt, re.I)
+    stale = re.search(r'\b(ready_for_adoption|planned|PENDING|NOT_STARTED)\b', scope_txt, re.I)
+    if finalish and stale and not re.search(r'historical|superseded|prior state|baseline snapshot', scope_txt, re.I):
+        return True
+    return False
+
+for session_dir in _generated_session_dirs():
+    iu_paths = _iu_files(session_dir)
+    execution_path = session_dir / 'SESSION_EXECUTION.md'
+    execution_body = execution_path.read_text(errors='ignore') if execution_path.exists() else ''
+    if iu_paths:
+        for pattern in _RETROSPECTIVE_GOVERNANCE_PATTERNS:
+            if re.search(pattern, execution_body, re.I):
+                fail(f'PROD-L8.24 generated session contains retrospective IU governance wording in {session_dir.relative_to(root)}: {pattern}')
+        required_l824 = [
+            'PROD-L8.24 Pre-Execution Ledger Enforcement',
+            'Pre-Material-Edit Ledger Row',
+            'Material Edit Start Record',
+        ]
+        for marker in required_l824:
+            if marker.lower() not in execution_body.lower():
+                fail(f'PROD-L8.24 generated IU-mode session {session_dir.relative_to(root)} missing pre-execution ledger marker: {marker}')
+        pre_idx = execution_body.lower().find('pre-material-edit ledger row')
+        start_idx = execution_body.lower().find('material edit start record')
+        auth_idx = execution_body.lower().find('prod-l8.21 iu set authority checkpoint')
+        if not (pre_idx >= 0 and auth_idx >= 0 and pre_idx <= auth_idx):
+            fail(f'PROD-L8.24 generated IU-mode session {session_dir.relative_to(root)} must record pre-material-edit ledger before/with IU authority checkpoint')
+        if start_idx < 0 or not (pre_idx < start_idx):
+            fail(f'PROD-L8.24 generated IU-mode session {session_dir.relative_to(root)} must record material edit start after pre-material-edit ledger')
+        pre_section = execution_body[pre_idx:start_idx if start_idx > pre_idx else len(execution_body)]
+        if not re.search(r'Material implementation started\s*:\s*NO', pre_section, re.I):
+            fail(f'PROD-L8.24 generated IU-mode session {session_dir.relative_to(root)} missing Material implementation started: NO before edits')
+        if not re.search(r'Retrospective checkpoint or IU expansion\s*:\s*NO', pre_section, re.I):
+            fail(f'PROD-L8.24 generated IU-mode session {session_dir.relative_to(root)} missing Retrospective checkpoint or IU expansion: NO before edits')
+        if re.search(r'Retrospective checkpoint or IU expansion\s*:\s*YES', execution_body, re.I):
+            fail(f'PROD-L8.24 generated IU-mode session {session_dir.relative_to(root)} admits retrospective IU checkpoint/expansion; not clean governance')
+
+# Generated phase review-gate instantiation checks.
+if delivery_root.exists():
+    phase_required = [
+        'Actual final codebase reviewed',
+        'Scope coverage result',
+        'Runtime evidence level',
+        'Production evidence level',
+        'Final phase review result',
+        'Why this result is honest',
+        'What is not claimed',
+    ]
+    for phase_path in delivery_root.glob('*/phases/PHASE-*.md'):
+        txt = phase_path.read_text(errors='ignore')
+        if re.search(r'Lifecycle status\s*:\s*(ACCEPTED|CLOSED|PARTIAL)', txt, re.I):
+            ok, missing = _contains_concrete_review_gate(txt, 'Phase Review Gate', phase_required)
+            if not ok:
+                fail(f'PROD-L8.24 generated phase missing concrete review gate fields in {phase_path.relative_to(root)}: {missing}')
+
+    delivery_required = [
+        'Phases reviewed',
+        'Accepted source artifacts reviewed',
+        'Cross-phase integration reviewed',
+        'End-to-end workflow evidence',
+        'Requirements/scope coverage posture',
+        'Runtime evidence level',
+        'Production evidence level',
+        'Final delivery result',
+        'What is not claimed',
+        'Why this result is honest',
+    ]
+    plan = delivery_root / 'DELIVERY_PLAN.md'
+    if plan.exists():
+        plan_txt = plan.read_text(errors='ignore')
+        if re.search(r'(Final delivery result|Delivery status|Lifecycle status)\s*:\s*(PASS|PARTIAL|ACCEPTED|CLOSED|FAILED|BLOCKED)', plan_txt, re.I):
+            ok, missing = _contains_concrete_review_gate(plan_txt, 'Delivery Review Gate', delivery_required)
+            if not ok:
+                fail(f'PROD-L8.24 DELIVERY_PLAN.md missing concrete delivery review gate fields: {missing}')
+    for scope_path in delivery_root.glob('*/DELIVERY_SCOPE.md'):
+        scope_txt = scope_path.read_text(errors='ignore')
+        if _delivery_scope_stale_after_close(scope_txt):
+            fail(f'PROD-L8.24 generated DELIVERY_SCOPE.md has stale close concordance: {scope_path.relative_to(root)}')
+
+# Stronger source-index placeholder validation for generated current-state files.
+css = root / 'system/accepted-state/CURRENT_SYSTEM_STATE.md'
+if css.exists():
+    css_txt = css.read_text(errors='ignore')
+    source_section = _section_after_heading(css_txt, r'##\s*\d*\.?\s*Source Artifact Index[^\n]*') or css_txt
+    placeholder_patterns = [
+        r'^\|\s*\|\s*delivery\s*/\s*session\s*/\s*archive\s*/\s*generated synthesis\s*\|',
+        r'^\|\s*\|\s*[^|]+\|\s*(active\s*/\s*accepted\s*/\s*archived\s*/\s*superseded\s*/\s*not source authority)',
+        r'^\|\s*(Requirement Sources|Design Sources|Evidence Sources)\s*\|\s*\|',
+    ]
+    for pattern in placeholder_patterns:
+        if re.search(pattern, css_txt, re.I | re.M):
+            fail('PROD-L8.24 CURRENT_SYSTEM_STATE.md contains generated Source Artifact Index placeholder row')
+
+# Scoped runtime/provider claim concordance. Do not allow broad verified claims when corresponding critical-flow evidence is explicitly not run.
+combined_generated_text = ''
+for rel_root in [root / 'system/accepted-state', root / 'system/delivery']:
+    if rel_root.exists():
+        for md in rel_root.rglob('*.md'):
+            combined_generated_text += '\n' + md.read_text(errors='ignore')[:200000]
+if re.search(r'LOCAL_RUNTIME_VERIFIED|USER_ENVIRONMENT_VERIFIED|PRODUCTION_READINESS_VERIFIED', combined_generated_text, re.I) and re.search(r'critical[- ]flow|end[- ]to[- ]end|browser|provider|openai|image', combined_generated_text, re.I) and re.search(r'NOT_RUN|not run|not verified|absent', combined_generated_text, re.I):
+    if not re.search(r'(scoped per|per DAC|per requirement|limited to|not claimed for|except|partial)', combined_generated_text, re.I):
+        fail('PROD-L8.24 runtime/provider verification claim is not scoped while related critical-flow evidence is not run')
+
+print('PASS: HIRMOS PROD-L8.24 pre-execution ledger enforcement and generated review gate validation static/runtime check')
+
+# PROD-L8.26 delivery close concordance simplification and evidence posture hardening
+for rel, phrases in {
+    'core/templates/system/delivery/DELIVERY_SCOPE.md': ['PROD-L8.26 Delivery Close Concordance Simplification and Evidence Posture Hardening', 'Compact Delivery Close Posture', 'pointer', 'must not claim `LOCAL_E2E_VERIFIED`'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['PROD-L8.26 Delivery Close Concordance Simplification', 'roadmap/register records delivery navigation and status history only'],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['PROD-L8.26 Accepted-State Navigation Simplification and Evidence Posture', 'pointer-complete, not evidence-complete'],
+    'core/templates/system/delivery/unresolved-items.md': ['PROD-L8.26 Live-Only Close Reconciliation', 'live delivery-level unresolved items only'],
+    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.26 Delivery Close Concordance Simplification and Evidence Posture Hardening', 'reduce duplicated close truth', 'dangerous evidence contradictions'],
+    'core/commands/close.md': ['PROD-L8.26 Delivery Close Concordance Simplification and Evidence Posture Hardening', 'simplified close ownership model'],
+    'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.26 Evidence Posture Simplification', 'Implementation coverage', 'Local runtime evidence', 'Production evidence'],
+    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.26 Delivery Close Simplification Control', 'Runtime evidence claim scope'],
+}.items():
+    body = (root / rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.26 delivery/evidence simplification surface {rel} missing phrase: {phrase}')
+
+# Generated archive SESSION_STATE normalization guard.
+for session_dir in _generated_session_dirs():
+    if session_dir == root / 'session':
+        continue
+    state_path = session_dir / 'SESSION_STATE.json'
+    if state_path.exists():
+        try:
+            state = json.loads(state_path.read_text(errors='ignore'))
+        except Exception:
+            state = {}
+        serialized = json.dumps(state).lower()
+        status = str(state.get('status', '')).lower()
+        lifecycle = str(state.get('lifecycle_stage', '')).lower()
+        if status in {'active', 'in_progress'} or lifecycle in {'implementation', 'implementation_complete', 'close_ready', 'active'}:
+            fail(f'PROD-L8.26 archived SESSION_STATE.json remains active in {state_path.relative_to(root)}')
+        if re.search(r'_hirmos/session/(SESSION_SCOPE|SESSION_EXECUTION|unresolved-items|EVIDENCE|implementation-units/IU-)', serialized, re.I):
+            if not re.search(r'history|archiv|closed|terminal', serialized, re.I):
+                fail(f'PROD-L8.26 archived SESSION_STATE.json points to active session authority without history normalization in {state_path.relative_to(root)}')
+
+# Generated delivery unresolved live-only guard: closed/accepted delivery should not retain current OPEN/PENDING delivery items without carry-forward/blocking disclosure.
+if delivery_root.exists():
+    for unresolved_path in delivery_root.glob('*/unresolved-items.md'):
+        utxt = unresolved_path.read_text(errors='ignore')
+        parent_scope = unresolved_path.parent / 'DELIVERY_SCOPE.md'
+        stxt = parent_scope.read_text(errors='ignore') if parent_scope.exists() else ''
+        closedish = re.search(r'(Delivery result|Delivery verdict|Delivery status|Final delivery result)\s*:\s*(CLOSED|ACCEPTED|PASS|PARTIAL|CLOSED_ACCEPTED|CLOSED_PARTIAL)', stxt, re.I)
+        stale_open = re.search(r'Status\s*:\s*(OPEN|PENDING|CARRIED|REVIEWABLE)\b', utxt, re.I)
+        has_disposition = re.search(r'(CARRY_FORWARD|BLOCKING|SUPERSEDED|RECONCILED|ACCEPTED_WITH_LIMITATIONS|live-only)', utxt, re.I)
+        if closedish and stale_open and not has_disposition:
+            fail(f'PROD-L8.26 delivery unresolved register has stale open current items after close: {unresolved_path.relative_to(root)}')
+
+# Generated delivery/current-state runtime overclaim guard.
+combined_delivery_state_text = ''
+for rel_root in [root / 'system/accepted-state', root / 'system/delivery']:
+    if rel_root.exists():
+        for md in rel_root.rglob('*.md'):
+            combined_delivery_state_text += '\n' + md.read_text(errors='ignore')[:200000]
+if re.search(r'\b(PASS|CLOSED_ACCEPTED|LOCAL_E2E_VERIFIED|LOCAL_RUNTIME_VERIFIED|USER_ENVIRONMENT_VERIFIED|PRODUCTION_VERIFIED|PRODUCTION_READINESS_VERIFIED)\b', combined_delivery_state_text, re.I):
+    if re.search(r'(critical[- ]flow|end[- ]to[- ]end|browser|provider|openai|image|production|database)', combined_delivery_state_text, re.I) and re.search(r'\b(NOT_RUN|not run|not verified|absent|BLOCKED)\b', combined_delivery_state_text, re.I):
+        if not re.search(r'(CLOSED_PARTIAL|ACCEPTED_WITH_LIMITATIONS|implementation accepted|implementation-only|limited to|not claimed for|partial|downgraded|carry-forward)', combined_delivery_state_text, re.I):
+            fail('PROD-L8.26 delivery/current-state runtime or production claim is overbroad while material evidence is not run/blocked/absent')
+
+print('PASS: HIRMOS PROD-L8.26 delivery close concordance simplification and evidence posture hardening static/runtime check')
+

@@ -71,3 +71,17 @@ For each item:
 ## Delivery Close Review
 
 At delivery close, HIRMOS must verify that every open delivery-level item is accepted, deferred with carry-forward, superseded, or explicitly blocking the delivery verdict.
+
+## PROD-L8.26 Live-Only Close Reconciliation
+
+At delivery close, this register should contain live delivery-level unresolved items only. Items resolved by accepted phase/session work must be marked `SUPERSEDED`, `ACCEPTED`, `REVALIDATED`, or moved into a compact resolved-history note; they must not remain current `OPEN`, `CARRIED`, `REVIEWABLE`, or `PENDING` if accepted artifacts contradict them.
+
+Close must classify each item as one of:
+
+- `RECONCILED` — resolved or adopted by accepted phase/session work;
+- `CARRY_FORWARD` — still active and intentionally carried;
+- `BLOCKING` — prevents delivery close;
+- `SUPERSEDED` — no longer current due to accepted delivery/phase/session outcome;
+- `NOT_APPLICABLE` — no longer relevant.
+
+Do not preserve stale open delivery assumptions as active truth after a delivery is closed or accepted with limitations.

@@ -470,3 +470,16 @@ When reporting delivery-baseline state, use status-aware delivery labels. Before
 ## Source Traceability Close Gate
 
 Before normal close, HIRMOS must verify that every accepted outcome has a discoverable source authority through `CURRENT_SYSTEM_STATE.md` Work History Ledger and Source Artifact Index. Close must not merge detailed requirements/design/scope into root accepted-state artifacts by default. It must register source pointers and accepted outcomes, not duplicate source content.
+
+## PROD-L8.26 Delivery Close Concordance Simplification and Evidence Posture Hardening
+
+For delivery-governed close, apply the simplified close ownership model before surfacing success:
+
+1. Update `DELIVERY_SCOPE.md` compact delivery close posture and historicalize or reconcile stale planning rows.
+2. Update `DELIVERY_PLAN.md` roadmap/navigation rows only; do not duplicate full delivery evidence there.
+3. Reconcile `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` to live-only current items.
+4. Update `CURRENT_SYSTEM_STATE.md` as accepted-state navigation and compact evidence posture only.
+5. Normalize `ARCHIVE_MANIFEST.md` and archived `SESSION_STATE.json` so history is terminal and active session reset is verified.
+6. Downgrade or block any broad runtime/production claim contradicted by `NOT_RUN`, `BLOCKED`, absent, or partial evidence.
+
+Close may claim implementation acceptance when code/static evidence supports it, but must not claim full local E2E, user-environment, provider, or production verification unless that evidence actually exists.

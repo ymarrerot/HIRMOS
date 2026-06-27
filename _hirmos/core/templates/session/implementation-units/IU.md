@@ -1,14 +1,15 @@
 # Implementation Unit
 
 Status: active-session implementation-unit Main Artifact.
-Purpose: define, execute, evidence, review, and retry one bounded implementation unit in a single self-contained artifact.
+Purpose: define a sealed execution contract for one bounded implementation unit, then preserve append-only execution, review, retry, and handoff records in clearly separated sections.
 
 An Implementation Unit is a bounded execution authority record, not a generic task or prompt.
 
+Governance posture: this file is pre-execution authority, not an after-the-fact compliance report. It is pre-execution authority first. When IU mode is active, the IU Contract sections must exist with non-placeholder authority before material code/configuration changes for this unit begin. After the contract is sealed and material implementation starts, contract sections are immutable unless route-back explicitly reopens or supersedes the contract. Execution, review, retry, and handoff sections are append-only records and must not be used to rewrite sealed authority.
 
-Governance posture: this file is pre-execution authority, not an after-the-fact compliance report. When IU mode is active, this file must exist with non-placeholder authority before material code/configuration changes for this unit begin.
+## 1. Unit Identity / Contract Metadata
 
-## 1. Unit Identity
+LLM Write Permission: Mutable only before contract seal; immutable after seal unless route-back records contract reopening or supersession.
 
 - Unit ID:
 - Name:
@@ -19,9 +20,15 @@ Governance posture: this file is pre-execution authority, not an after-the-fact 
 - Root path:
 - Cross-stack unit: yes / no
 - If cross-stack, involved contexts and justification:
-- Unit status: planned | approved | in_progress | complete | partial | failed | blocked | route_back_required
+- Contract status: DRAFT | SEALED | REOPENED_BY_ROUTE_BACK | SUPERSEDED
+- Contract sealed before material edits: YES | NO | NOT_APPLICABLE
+- Contract seal timestamp / evidence pointer:
+- Contract reopened after material edits: NO | YES_WITH_ROUTE_BACK
+- Route-back / supersession pointer, if any:
 
-## 2. Unit Scope
+## 2. Unit Scope / Authority
+
+LLM Write Permission: Immutable after contract seal unless route-back occurs. Do not edit this section to record execution status, evidence, review findings, or validator cleanup.
 
 ### Objective
 
@@ -73,6 +80,8 @@ The unit must not silently substitute fixture/mock/boundary-only work for a requ
 
 ## 3. Pre-Execution Checks
 
+LLM Write Permission: Mutable only before contract seal; immutable after material implementation starts unless route-back occurs.
+
 | Check | Result | Evidence / notes |
 |---|---|---|
 | Unit authority record is non-placeholder | | |
@@ -81,8 +90,18 @@ The unit must not silently substitute fixture/mock/boundary-only work for a requ
 | Target files inspected before editing | | |
 | Required dependencies/context available | | |
 | Out-of-scope guard understood | | |
+| Contract status is SEALED before material edits | | |
+| Contract sections will remain immutable during execution | | |
 
 ## 4. Execution Record
+
+LLM Write Permission: Append-only after execution starts; executor may append implementation actions, changed files, validation, evidence, limitations, and issues. Do not modify sealed contract sections.
+
+### Execution Status
+
+- Execution status: NOT_STARTED | IN_PROGRESS | COMPLETED | BLOCKED | FAILED | ROUTE_BACK_REQUIRED
+- Execution start timestamp / evidence pointer:
+- Execution completion timestamp / evidence pointer:
 
 ### Actions Performed
 
@@ -101,6 +120,16 @@ State how execution stayed within this Implementation Unit and the Session Scope
 
 | Check / command | Result | Output/log location | Notes |
 |---|---|---|---|
+
+### Test / Fixture / Validator Change Rationale
+
+Required when implementation modifies tests, fixtures, mocks, snapshots, validators, expected-output files, regression fixtures, or generated expected-output artifacts.
+
+- Changed test / fixture / validator files:
+- Why the change was required:
+- Why realism or coverage is preserved or improved:
+- Risk that validation was weakened:
+- Reviewer attention needed:
 
 ### Runtime Integration Execution Evidence
 
@@ -124,12 +153,15 @@ List blockers, deviations, failures, scope risks, or route-back triggers.
 
 ## 5. Unit Review
 
+LLM Write Permission: Append-only after execution completes; reviewer may append evidence-backed review results, retry decision, route-back decision, and honest limitations. Do not modify sealed contract sections.
+
 Does the actual implementation satisfy 100% of this implementation unit authority record?
 
 - Answer: YES | NO | PARTIAL
 - Evidence:
 - Gaps:
 - Deferred items:
+- Review status: PENDING | PASS | PASS_WITH_LIMITATIONS | FAIL | BLOCKED | ROUTE_BACK_REQUIRED
 
 ### Request-to-Result Review
 
@@ -145,6 +177,11 @@ Does the actual implementation satisfy 100% of this implementation unit authorit
 
 | Check | Run? | Result | Evidence location | Notes |
 |---|---:|---|---|---|
+
+### Test / Fixture / Validator Change Review
+
+| Changed file/category | Rationale present? | Preserves or improves realism/coverage? | Weakening risk | Reviewer result |
+|---|---:|---:|---|---|
 
 ### Not Run / Not Applicable Checks
 
@@ -164,8 +201,9 @@ Does the actual implementation satisfy 100% of this implementation unit authorit
 ### Retry / Route-Back Decision
 
 - Retry required:
-- Retry allowed within current scope:
+- Retry allowed within current sealed scope:
 - Route-back required:
+- Contract change required:
 - Reason:
 
 ### Unit Result
@@ -176,7 +214,9 @@ Does the actual implementation satisfy 100% of this implementation unit authorit
 
 ## 6. Retries
 
-Append retry sections here when a retry is required. Do not create a separate retry artifact.
+LLM Write Permission: Append-only. Retry within sealed scope may be appended here. Scope, source authority, acceptance-criteria, or contract changes require route-back and a new/reopened sealed contract version.
+
+Append retry sections here when a retry is required. Do not create a separate retry artifact. Do not edit sealed contract sections to make a retry pass. If the retry requires changing scope, source authority, acceptance criteria, or implementation requirements, record route-back and create a new/reopened sealed contract version before further material edits.
 
 ### Retry <n> Contract
 
@@ -188,6 +228,7 @@ Append retry sections here when a retry is required. Do not create a separate re
 - Allowed retry scope:
 - Not allowed:
 - Changed assumptions / route-back need:
+- Contract change required: YES | NO
 - Retry steps:
 - Verification and evidence:
 - Escalation Condition:
@@ -205,6 +246,8 @@ Append retry sections here when a retry is required. Do not create a separate re
 
 ## 7. Handoff
 
+LLM Write Permission: Append-only summary after review; must point to execution/review evidence and must not change sealed contract authority.
+
 - Session Scope coverage item(s) satisfied:
 - Remaining gaps:
 - Carry-forward candidates:
@@ -213,66 +256,30 @@ Append retry sections here when a retry is required. Do not create a separate re
 
 ## Phase Acceptance Evidence Contribution
 
+LLM Write Permission: Append-only summary after review; must point to evidence/review records and must not change sealed contract authority.
+
 - Phase acceptance contribution: COMPLETE / PARTIAL / BLOCKED / NOT_APPLICABLE
 - Adopted phase item(s) satisfied by this unit: 
 - Evidence pointer(s): 
 - Remaining gap or carry-forward implication: NONE / RECORDED / BLOCKED / NOT_APPLICABLE
 
+
 ## PROD-L8.19 Pre-Execution Authority Declaration
 
-This IU must exist as a non-placeholder execution authority before material implementation begins, unless the session explicitly declared lightweight/no-IU mode before implementation.
+LLM Write Permission: Append-only governance note; do not use this section to repair sealed contract authority after execution.
 
-- IU created before material code changes: YES / NO
-- If NO, governance deviation recorded in `SESSION_EXECUTION.md`: YES / NO / NOT_APPLICABLE
-- Pre-execution authority complete: YES / NO
-- First material edit allowed only after this declaration is YES: YES / NO
-- Evidence of pre-execution authority: `<SESSION_EXECUTION.md continuation pass / command ledger / timestamp / diff reference>`
-
-A retrospective IU may document what happened, but it must not be represented as normal pre-execution governance unless it actually existed before the material edits.
+This IU must be represented as pre-execution governance before material implementation begins. If the IU contract was created, expanded, sealed, or materially corrected after project-file changes began, that must be recorded as a governance deviation/correction and must not be represented as normal pre-execution governance.
 
 ## PROD-L8.21 Minimum IU Contract
 
-When IU mode is active, this IU is not valid execution authority unless the following fields are non-placeholder and specific to the adopted session/phase scope. A title/status/scope stub is not sufficient.
+LLM Write Permission: Immutable after contract seal unless route-back occurs.
 
-Required non-placeholder fields:
-
-- Unit identity
-- Objective
-- Source scope item(s)
-- In scope
-- Out of scope
-- Files / areas or inspection plan
-- Implementation requirements
-- Verification / evidence requirements
-- Binary acceptance criteria
-- Pre-execution checks
-- Failure / route-back condition
-
-### Source Scope Traceability
-
-- Source delivery / phase:
-- Source `SESSION_SCOPE.md` item(s):
-- Source unresolved / carry-forward item(s), if any:
-- Related IU dependencies:
-
-### Minimum Contract Self-Check
-
-| Required field | Non-placeholder? | Evidence / section |
-|---|---|---|
-| Unit identity | YES / NO | |
-| Objective | YES / NO | |
-| Source scope item(s) | YES / NO | |
-| In scope | YES / NO | |
-| Out of scope | YES / NO | |
-| Files / areas or inspection plan | YES / NO | |
-| Implementation requirements | YES / NO | |
-| Verification / evidence requirements | YES / NO | |
-| Binary acceptance criteria | YES / NO | |
-| Pre-execution checks | YES / NO | |
-| Failure / route-back condition | YES / NO | |
-
-If any required field is `NO`, this IU blocks implementation authorization until amended or the session explicitly switches to governed lightweight/no-IU mode before material edits.
-
+- Source Scope Traceability:
+- Minimum Contract Self-Check:
+- Failure / route-back condition:
 
 ## PROD-L8.23 Generated IU Runtime-Enforcement Notes
-Generated IU files are runtime authority records and are validator-inspectable. A generated IU is invalid if it contains only title/status/objective/scope or a bare `created before code changes` assertion or thin IU self-attestation. To pass generated-run validation in IU mode, this artifact must retain substantive, non-placeholder content for the minimum contract fields above and must be referenced by the session-level IU Set Coverage Map in `SESSION_EXECUTION.md`.
+
+LLM Write Permission: Immutable after contract seal unless route-back occurs.
+
+Generated IU artifacts must not rely on thin IU self-attestation. They must contain sealed, non-placeholder contract authority before implementation and append-only execution/review evidence after implementation begins.

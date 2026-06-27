@@ -310,3 +310,7 @@ A phase may be implementation-accepted while runtime or production verification 
 
 ## PROD-L8.23 Generated Phase Close Concordance
 Generated phase files are invalidly stale if the current lifecycle status is `ACCEPTED` while current exit/binary criteria remain `PENDING` or `NOT_ASSESSED` outside an explicitly labeled historical section. Close must reconcile current criteria, mark old sections historical, or downgrade the phase result.
+
+
+## PROD-L8.24 Generated Phase Review Gate Validation
+A generated phase with `Lifecycle status: ACCEPTED`, `CLOSED`, or `PARTIAL` must instantiate the phase review gate with concrete values, not leave the L8.22 template as unused guidance. Required generated values include `Actual final codebase reviewed`, `Scope coverage result`, `Runtime evidence level`, `Production evidence level`, `Final phase review result`, `Why this result is honest`, and `What is not claimed`. Close must also reconcile or explicitly historicalize stale `PENDING`, `PLANNED`, `READY_FOR_ADOPTION`, `NOT_STARTED`, or `NOT_ASSESSED` sections that contradict the final phase status.

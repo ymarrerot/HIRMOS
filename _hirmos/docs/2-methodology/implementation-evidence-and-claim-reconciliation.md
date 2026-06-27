@@ -89,3 +89,7 @@ A passing static check is not a delivery review. A completed implementation unit
 
 ## PROD-L8.23 Generated-Run Validation Boundary
 A generated run must be evaluated against its produced artifacts, not only against shipped framework templates. Runtime evidence and IU authority are credible only when the generated session archives contain the required authority checkpoint, substantive IU contracts, coverage mapping, timestamp completeness, and reconciled review/close records.
+
+
+## PROD-L8.24 Retrospective Compliance Boundary
+A generated run is not clean merely because the archive was edited until validation passed. HIRMOS must be able to show that IU authority and generated review gates existed at the right lifecycle boundary. The active ledger must prove pre-execution authorization before material edits, and phase/delivery close must prove acceptance without overclaiming runtime/provider/production evidence.

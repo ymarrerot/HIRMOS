@@ -182,3 +182,28 @@ Required fields:
 - Why this result is honest:
 
 A delivery review must not claim full MVP/runtime/production acceptance when only implementation acceptance or static validation evidence exists. Stale delivery-plan sections must be reconciled or labeled historical before delivery close success is claimed.
+
+
+## PROD-L8.24 Delivery Scope Close Concordance
+At delivery close, this `DELIVERY_SCOPE.md` must not remain as a stale baseline-only authority when phases have moved to accepted/closed/partial states. Phase status rows, DAC rows, and delivery close verification must be reconciled, explicitly historicalized, or downgraded. Current rows that still say `planned`, `ready_for_adoption`, `PENDING`, or `NOT_STARTED` while final phase/delivery artifacts claim accepted/closed status are close-blocking concordance defects.
+
+## PROD-L8.26 Delivery Close Concordance Simplification and Evidence Posture Hardening
+
+`DELIVERY_SCOPE.md` remains the delivery authority, but delivery close must not turn this file into a duplicated evidence ledger. At delivery or phase close, update this file with a compact final posture and source pointers, then historicalize or reconcile stale planning rows.
+
+### Compact Delivery Close Posture
+
+| Posture dimension | Current close posture | Authoritative source / pointer | Limitation / next action |
+|---|---|---|---|
+| Delivery result | OPEN / CLOSED_ACCEPTED / CLOSED_PARTIAL / BLOCKED / FAILED / DEFERRED / SUPERSEDED | archive / phase / session pointer | |
+| Implementation coverage | NOT_STARTED / PARTIAL / COMPLETE / NOT_APPLICABLE | phase/session close pointer | |
+| Local runtime evidence | NOT_CLAIMED / NOT_RUN / PARTIAL / LOCAL_E2E_VERIFIED / BLOCKED / NOT_APPLICABLE | `EVIDENCE.md` / IU evidence / archive | |
+| Production evidence | NOT_CLAIMED / NOT_RUN / STAGING_VERIFIED / PRODUCTION_VERIFIED / BLOCKED / NOT_APPLICABLE | `EVIDENCE.md` / carry-forward / archive | |
+| Delivery unresolved register | LIVE_OPEN / RECONCILED / CARRY_FORWARD / BLOCKING / NOT_APPLICABLE | `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` | |
+| Current-state navigation | UPDATED / VERIFIED_UNCHANGED / BLOCKED | `CURRENT_SYSTEM_STATE.md` | |
+
+Simplification rule: detailed DAC, phase, session, IU, runtime, and production evidence remains in phase/session/evidence/archive artifacts. This file records the compact close posture and pointers only.
+
+Hardening rule: a final delivery result must not claim `LOCAL_E2E_VERIFIED`, `PRODUCTION_VERIFIED`, or full delivery `PASS` when the supporting critical-flow, provider, browser, image-generation, database, or production evidence is `NOT_RUN`, `BLOCKED`, or absent. Use `CLOSED_PARTIAL`, `PARTIAL`, or a narrower implementation-accepted claim when runtime or production evidence is incomplete.
+
+Close concordance rule: after delivery close, rows that still show `planned`, `ready_for_adoption`, `PENDING`, `NOT_STARTED`, or similar pre-close values must be either updated to current truth, explicitly marked `historical baseline snapshot`, or replaced by compact source pointers. Stale current rows are close-blocking concordance defects.

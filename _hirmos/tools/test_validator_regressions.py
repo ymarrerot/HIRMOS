@@ -729,13 +729,34 @@ def _write_generated_history_session(root: Path, *, checkpoint: bool = True, thi
     if checkpoint:
         (sess / "SESSION_EXECUTION.md").write_text("""# SESSION_EXECUTION.md
 
+## PROD-L8.24 Pre-Execution Ledger Enforcement
+
+### Pre-Material-Edit Ledger Row
+Timestamp: 2026-01-01T00:01:00Z
+Active session id: 2026-01-01-iu-fixture
+Source phase/session authority: SESSION_SCOPE.md SR-01
+IU files verified: implementation-units/IU-01.md
+IU Set Authority Checkpoint present: YES
+Authorization decision: IMPLEMENTATION_AUTHORIZED
+Material implementation started: NO
+First material-edit command/event: NOT_STARTED
+Retrospective checkpoint or IU expansion: NO
+Evidence path(s): SESSION_EXECUTION.md, implementation-units/IU-01.md
+
 ## PROD-L8.21 IU Set Authority Checkpoint
 Authorization decision: IMPLEMENTATION_AUTHORIZED
 IU files created before material edits: YES
+Non-placeholder IU review: PASS
 IU Set Coverage Map
 | Source scope item | Source artifact | IU file(s) | Coverage status | Notes |
 |---|---|---|---|---|
 | SR-01 | SESSION_SCOPE.md | IU-01.md | COVERED | fixture |
+
+## Material Edit Start Record
+Timestamp: 2026-01-01T00:02:00Z
+Command/trigger: fixture implementation
+Files/areas about to be edited: app/fixture.ts
+Authorization pointer: Pre-Material-Edit Ledger Row
 """)
     else:
         (sess / "SESSION_EXECUTION.md").write_text("# SESSION_EXECUTION.md\n\nImplementation completed.\n")
@@ -805,6 +826,37 @@ def mutate_generated_iu_session_thin_iu_fails(root: Path) -> None:
 def mutate_generated_archived_session_null_timestamps_fails(root: Path) -> None:
     _write_generated_history_session(root, checkpoint=True, thin_iu=False, null_timestamps=True, no_iu=True)
 
+
+
+def mutate_generated_iu_session_retrospective_cleanup_fails(root: Path) -> None:
+    sess = _write_generated_history_session(root, checkpoint=True, thin_iu=False)
+    p = sess / "SESSION_EXECUTION.md"
+    p.write_text(p.read_text() + "\n## Close Cleanup\nAdding the required IU authority checkpoint to satisfy the validator.\n")
+
+
+def mutate_generated_phase_missing_review_gate_fails(root: Path) -> None:
+    phase = root / "system" / "delivery" / "fixture-delivery" / "phases" / "PHASE-01.md"
+    phase.parent.mkdir(parents=True, exist_ok=True)
+    phase.write_text("""# PHASE-01
+Lifecycle status: ACCEPTED
+
+## Binary Exit Criteria
+| Criterion | Status |
+|---|---|
+| fixture | PASS |
+""")
+
+
+def mutate_generated_current_state_placeholder_row_fails(root: Path) -> None:
+    css = root / "system" / "accepted-state" / "CURRENT_SYSTEM_STATE.md"
+    css.write_text(css.read_text() + """
+
+## 6. Source Artifact Index
+| Source class | Source path | Status | Notes |
+|---|---|---|---|
+| | delivery / session / archive / generated synthesis | active / accepted / archived / superseded / not source authority | |
+""")
+
 # retained marker: accepted-state index reappears
 CASES = [
     Case("valid baseline", mutate_none, True, "PASS:"),
@@ -854,6 +906,9 @@ CASES = [
     Case("generated IU session missing checkpoint fails", mutate_generated_iu_session_missing_checkpoint_fails, False, "missing SESSION_EXECUTION marker"),
     Case("generated IU session thin IU fails", mutate_generated_iu_session_thin_iu_fails, False, "generated IU too thin"),
     Case("generated archived session null timestamps fails", mutate_generated_archived_session_null_timestamps_fails, False, "missing created_at"),
+    Case("generated IU retrospective cleanup fails", mutate_generated_iu_session_retrospective_cleanup_fails, False, "retrospective IU governance"),
+    Case("generated accepted phase missing review gate fails", mutate_generated_phase_missing_review_gate_fails, False, "missing concrete review gate"),
+    Case("generated current state placeholder row fails", mutate_generated_current_state_placeholder_row_fails, False, "placeholder row"),
 ]
 
 

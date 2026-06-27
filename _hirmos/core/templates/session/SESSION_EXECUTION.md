@@ -13,7 +13,6 @@ Authoritative references:
 - Archive transaction: `_hirmos/system/history/sessions/<session-id>/ARCHIVE_MANIFEST.md`
 ## Current Continuation Snapshot
 This is the required human-readable resume surface. Keep it near the top and update it before surfacing readiness, completion, blocked, status, or close claims.
-
 | Field | Current value | Backing authority / evidence |
 |---|---|---|
 | Last updated | | |
@@ -36,11 +35,8 @@ This is the required human-readable resume surface. Keep it near the top and upd
 | Next safe governed command | | `SESSION_STATE.json.recommended_next_command` |
 | What the next model must not do | | Boundary Control Checklist / Terminal State |
 | Resume instructions | | This snapshot + backing artifacts |
-
 Fail-closed rule: if this snapshot is missing, placeholder-only, or contradicts `SESSION_STATE.json`, the active authority, the focus-appropriate unresolved register, or the append-only ledger, HIRMOS must reconcile it or stop at `Blocked / Fail-Closed` before surfacing continuation, readiness, completion, or close claims. During `delivery_baseline`, `_hirmos/session/unresolved-items.md` must be recorded as `NOT_APPLICABLE`; delivery unresolved details are in `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`.
-
 ## Command Resolution
-
 | Field | Value |
 |---|---|
 | Session ID | |
@@ -51,9 +47,7 @@ Fail-closed rule: if this snapshot is missing, placeholder-only, or contradicts 
 | Active lifecycle stage after command | |
 | Continuation state | |
 | Recommended next governed command | |
-
 ## Machine Command State Concordance
-
 `SESSION_STATE.json` is the machine command-state authority. This section is an explanatory mirror only. If this section disagrees with `SESSION_STATE.json`, HIRMOS must fail closed.
 
 | Field | SESSION_STATE.json value | SESSION_EXECUTION.md value | Concordance | Notes |
@@ -562,14 +556,19 @@ When IU mode is active, record whether full IU artifacts were created before mat
 Record session status, mutation guard, and recovery command. If `SESSION_STATE.json.status = idle`, `hirmos continue` fails closed, performs no project/artifact mutation, and recommends `hirmos start`.
 
 ### IU Pre-Execution Authority Record
-Record IU mode, pre-edit IU existence, pre-edit non-placeholder authority, and retrospective IU creation. In active IU mode, target `IU-xx.md` is execution authority; `SESSION_SCOPE.md` preview prose alone is insufficient.
+Record IU mode, pre-edit IU existence, pre-edit non-placeholder sealed contract authority, and retrospective IU creation or contract mutation. In active IU mode, the sealed contract sections of target `IU-xx.md` are execution authority; append-only execution/review sections are evidence records; `SESSION_SCOPE.md` preview prose alone is insufficient.
 
 ### Material Correction Command Ledger
 Record one row per material correction command/pass; do not compress file/evidence/runtime-changing corrections into `hirmos continue (×n)`. Columns: Seq, user command/trigger, prior state, correction type, reason, files/artifacts changed, evidence pointer, result.
 ## PROD-L8.21 IU Set Authority Checkpoint
-Before material edits, IU-mode sessions must record set-level execution authority: IU mode; implementation shape; source phase/session authority; IU files created before material edits; non-placeholder review; scope coverage; uncovered items; sequencing/dependencies; authorization decision `IMPLEMENTATION_AUTHORIZED` / `BLOCKED` / `LIGHTWEIGHT_NO_IU`; first material edit allowed; timing evidence. Fail closed if missing, placeholder-only, inconsistent, or recorded after implementation evidence/project-file changes; record governance deviation instead of normal authorization. Minimum IU content standard: independently reviewable, failure-contained, mapped to source scope, sequenced/dependency-aware when needed, and covering adopted scope without hidden gaps. IU Set Coverage Map: source scope item → source artifact → IU file(s) → coverage status → notes.
+Before material edits, IU-mode sessions must record set-level execution authority: IU mode; implementation shape; source phase/session authority; IU files created before material edits; non-placeholder review; scope coverage; uncovered items; sequencing/dependencies; authorization decision `IMPLEMENTATION_AUTHORIZED` / `BLOCKED` / `LIGHTWEIGHT_NO_IU`; first material edit allowed; timing evidence. Fail closed if missing, placeholder-only, inconsistent, or recorded after implementation evidence/project-file changes; record governance deviation instead of normal authorization. Minimum IU content standard: independently reviewable, failure-contained, mapped to source scope, sequenced/dependency-aware when needed, covering adopted scope without hidden gaps, and carrying explicit `LLM Write Permission:` lines for sealed contract and append-only record sections. IU Set Coverage Map: source scope item → source artifact → IU file(s) → coverage status → notes.
 ## PROD-L8.22 Session / Phase / Delivery Review Gate Ledger
 At review/close boundaries, append one concise Review boundary row per session, phase, or delivery review gate: boundary, source authority, evidence reviewed, actual codebase reviewed (`YES`/`NO`/`NOT_APPLICABLE`), scope/integration result, runtime/production posture, final result (`PASS`/`PARTIAL`/`BLOCKED`/`FAILED`), and what is not claimed. Rows must be contemporaneous; higher-level reviews aggregate lower-level evidence; missing codebase/runtime/production evidence must downgrade or narrow the claim.
 
+## PROD-L8.25 Sealed IU Contract / Append-Only Record Boundary — When IU mode is active, record before material edits: target IU files, contract sections sealed, append-only sections available, first material edit not started, and `LLM Write Permission:` lines present. After material edits begin, sealed contract sections remain unchanged unless route-back reopens/supersedes the contract; execution/review/retry/handoff updates are append-only records, not contract rewrites.
+## PROD-L8.24 Pre-Execution Ledger Enforcement
+Generated IU-mode sessions must make pre-execution authority observable before material edits. Required active-ledger marker: **Pre-Material-Edit Ledger Row** with timestamp, session id, source authority, IU files verified, `IU Set Authority Checkpoint present: YES`, `Authorization decision: IMPLEMENTATION_AUTHORIZED`, `Material implementation started: NO`, `First material-edit command/event: NOT_STARTED`, `Retrospective checkpoint or IU expansion: NO`; `Retrospective sealed-contract mutation: NO`, and evidence paths. Before the first material project-file edit, add a **Material Edit Start Record** pointing back to that row; it must appear later than the pre-edit row. IU authority first created/expanded during close, archive normalization, or validator cleanup is a governance deviation and cannot be represented as clean authority.
 ## PROD-L8.23 Generated-Run IU Enforcement Checkpoint
 Generated IU-mode sessions must include a current `PROD-L8.21 IU Set Authority Checkpoint` before material edits with `Authorization decision: IMPLEMENTATION_AUTHORIZED` / `BLOCKED` / `LIGHTWEIGHT_NO_IU`, `IU files created before material edits: YES`, `Non-placeholder IU review: PASS`, `IU Set Coverage Map`, and timing evidence. Missing checkpoint, coverage map, authorization decision, or thin IU self-attestation fails generated-run validation even when framework templates pass static validation.
+## PROD-L8.26 Delivery Close Simplification Control
+For delivery-governed close, record pointer-only controls: delivery close posture updated; delivery unresolved register reconciled live-only; current-state navigation updated/verified; Runtime evidence claim scope; production evidence claim scope; overclaims downgraded; archive/session-state normalization and timestamp chronology reviewed. Details live in delivery/evidence/archive/current-state artifacts.

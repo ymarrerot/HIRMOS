@@ -4,11 +4,11 @@
 
 ### Purpose
 
-Define a bounded retry, escalation, or route-back after a failed, partial, blocked, or route-back-required implementation unit review.
+Define a bounded append-only retry, escalation, or route-back after a failed, partial, blocked, or route-back-required implementation unit review.
 
 ### Produces
 
-- retry contract/evidence/review sections appended to the same `_hirmos/session/implementation-units/IU-xx.md` artifact
+- retry contract/evidence/review sections appended to the same `_hirmos/session/implementation-units/IU-xx.md` artifact without editing sealed contract sections
 - `_hirmos/session/SESSION_EXECUTION.md` retry/escalation control update
 - unresolved-item updates when retry changes assumptions, blockers, or user decisions
 
@@ -45,13 +45,13 @@ Retry is not a second attempt at arbitrary implementation. It must route back in
 Retry must:
 
 1. Use evidence from the failed attempt.
-2. Preserve the original Unit Scope.
-3. Append a bounded retry section inside the same `IU-xx.md`.
+2. Preserve the original sealed Unit Scope / Authority.
+3. Append a bounded retry section inside the same `IU-xx.md` without editing sealed contract sections.
 4. State allowed retry scope and forbidden work.
 5. State verification and escalation conditions.
-6. Route back instead of retrying blindly if the failure exposes invalid scope, design, or current-state assumptions.
+6. Route back instead of retrying blindly if the failure exposes invalid scope, design, current-state assumptions, acceptance criteria, or contract authority.
 
-Do not create standalone `implementation-units/IU-xx.md` artifacts.
+Do not create standalone `implementation-units/IU-xx.md` artifacts, and do not modify sealed IU contract authority to make a retry pass.
 
 
 
@@ -80,3 +80,8 @@ Before marking the capability complete, record exactly one producer outcome in `
 
 Record full item fields in `unresolved-items.md`, including current status, downstream impact, and revalidation point; do not duplicate the full field schema in this entrypoint.
 
+
+
+## PROD-L8.25 Retry Mutation Guard
+
+A retry may append evidence and review records within the same IU only when it remains inside the sealed contract. If the retry requires new scope, different source authority, changed acceptance criteria, or modified implementation requirements, record `ROUTE_BACK_REQUIRED` and create a new/reopened sealed contract version before further material edits.

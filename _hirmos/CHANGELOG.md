@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.1.6 — Sealed IU contracts and delivery close evidence-posture stabilization
+
+- Bumped framework metadata and validator expected version to 1.1.6.
+- Introduces sealed IU contract sections with prominent LLM Write Permission lines so IU authority remains immutable after contract seal unless route-back occurs.
+- Separates contract, execution, review, retry, and handoff status semantics so implementation completion no longer requires mutating sealed IU authority.
+- Adds append-only execution/review record expectations for IU-mode sessions, including explicit test/fixture/validator change rationale when validation assets are modified.
+- Simplifies delivery close concordance by making DELIVERY_SCOPE.md a compact close-posture and source-pointer authority instead of a duplicated evidence ledger.
+- Hardens evidence posture so implementation acceptance, local runtime evidence, and production verification remain separate claims, preventing broad runtime/production overclaims when E2E evidence is NOT_RUN, BLOCKED, or absent.
+- Strengthens delivery unresolved-register reconciliation, current-state navigation posture, archived session-state normalization, and close-time contradiction checks.
+- No terminal CLI version bump; CLI package remains 1.3.4.
+
+## 1.1.5 — Pre-execution ledger and generated review-gate stabilization
+
+- Bumped framework metadata and validator expected version to 1.1.5.
+- Stabilizes pre-execution ledger enforcement introduced after 1.1.4.
+- Generated IU-mode sessions must now show a pre-material-edit ledger row before material implementation start, plus an IU Set Authority Checkpoint, authorization decision, and explicit non-retrospective posture.
+- Validator now rejects retrospective IU authority/compliance patterns such as adding checkpoints or expanding archived IU files during close solely to satisfy validation.
+- Generated accepted/closed/partial phases and delivery closes must instantiate concrete evidence-backed review-gate fields, including codebase review, evidence levels, honest result rationale, and non-claims.
+- Hardens delivery-scope close concordance, current-state source-index placeholder detection, and broad runtime/provider/production claim checks.
+- No terminal CLI version bump; CLI package remains 1.3.4.
+
 ## 1.1.4 — Generated-run IU enforcement stabilization
 
 - Bumped framework metadata and validator expected version to 1.1.4.
@@ -295,3 +316,10 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 - Added runtime checks for archived SESSION_STATE timestamp/run-context completeness, accepted phase stale binary-exit criteria, delivery status-log phase close coverage, and blank source-index placeholders.
 - Added regression cases for missing IU checkpoints, thin generated IUs, and null archived session timestamps.
 
+
+
+## PROD-L8.24 — Pre-Execution Ledger Enforcement and Generated Review Gate Validation
+- Requires generated IU-mode sessions to record a Pre-Material-Edit Ledger Row before material implementation begins.
+- Rejects retrospective IU checkpoint / IU expansion during close as clean governance.
+- Validates generated phase and delivery review gates for concrete evidence-backed acceptance fields.
+- Hardens delivery-scope, source-index, and scoped runtime/provider claim concordance checks.

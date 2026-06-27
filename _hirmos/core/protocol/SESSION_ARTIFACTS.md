@@ -73,7 +73,7 @@ _hirmos/session/
 | `REQUIREMENTS.md` | requirements materially govern scope; target name `REQUIREMENTS.md` | normalized requirements, source traceability, requirement coverage |
 | `DESIGN.md` | substantial design/current-state/technical-review/readiness work is needed | current-state basis, source matrix, design, technical review, implementation readiness basis |
 | `EVIDENCE.md` | nontrivial implementation or material claims/evidence exist | command evidence, runtime evidence, production-shaped evidence, claim reconciliation, close evidence handoff |
-| `implementation-units/IU-xx.md` | nontrivial implementation unit exists | unit authority record, evidence, review, retry history, result |
+| `implementation-units/IU-xx.md` | nontrivial implementation unit exists | sealed unit contract authority plus append-only execution, review, retry, handoff records |
 | `bootstrap/BOOTSTRAP_REPORT.md` | governed session startup / new chat bootstrap | bootstrap findings and initialization evidence |
 | `stack-resolution.json` | stack selection materially affects routing/evidence | machine-readable stack resolution only |
 
@@ -220,7 +220,7 @@ Every implementation-capable session must record the Delivery Shape Decision in 
 
 ## Session Scope and Implementation Unit rule
 
-Every implementation session must have a governed `SESSION_SCOPE.md`. Every non-trivial implementation unit must use one self-contained `implementation-units/IU-xx.md` artifact that includes the unit authority record, evidence, review, result, and retries when needed.
+Every implementation session must have a governed `SESSION_SCOPE.md`. Every non-trivial implementation unit must use one self-contained `implementation-units/IU-xx.md` artifact with separated mutation zones: sealed contract authority, append-only execution record, append-only review record, append-only retry records, and append-only handoff evidence. The contract authority sections must not be edited after seal/material implementation starts unless route-back explicitly reopens or supersedes the contract.
 
 ## Naming rules
 

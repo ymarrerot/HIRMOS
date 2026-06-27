@@ -411,3 +411,33 @@ Close must not claim full delivery, MVP, runtime, or production success when the
 
 ## PROD-L8.23 Generated-Run Close Concordance Validation
 Close/archive must leave generated artifacts validator-inspectable, not merely plausible. Before close succeeds, HIRMOS should verify generated runtime artifacts for timestamp completeness, monotonic archive chronology, phase-current-body concordance, delivery-plan status-log coverage, carry-forward status accuracy, and evidence-claim separation. If any generated artifact remains stale or contradictory, close must downgrade the result, mark the stale section as historical, or fail closed until reconciled.
+
+
+## PROD-L8.24 Retrospective Governance Close Guard
+Close/archive may normalize evidence and reconcile accepted state, but it must not create or expand pre-execution authority for the first time and then represent the session as cleanly governed. If close detects missing IU authority, missing pre-material-edit ledger proof, missing generated review gates, stale delivery scope/phase status, or source-index placeholders, close must record a governance deviation, downgrade acceptance, or block close until corrected through governed recovery.
+
+## PROD-L8.26 Delivery Close Concordance Simplification and Evidence Posture Hardening
+
+When close affects durable delivery work, HIRMOS must reduce duplicated close truth and harden only dangerous evidence contradictions.
+
+Ownership model:
+
+- `DELIVERY_SCOPE.md` owns compact delivery close posture and delivery authority pointers.
+- `PHASE-xx.md` owns phase-level outcome and phase review posture.
+- archived `SESSION_SCOPE.md`, implementation units, and `EVIDENCE.md` own session-level details.
+- `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` owns live delivery-level unresolved items only.
+- `CURRENT_SYSTEM_STATE.md` owns accepted-state navigation and compact current evidence posture only.
+- `ARCHIVE_MANIFEST.md` owns archive completeness and reset concordance only.
+
+Close must not duplicate full evidence tables across all of those surfaces. It must update compact status/pointer rows and archive/evidence source pointers.
+
+Close must block or downgrade when:
+
+- delivery close claims full `PASS`, `LOCAL_E2E_VERIFIED`, `LOCAL_RUNTIME_VERIFIED`, `USER_ENVIRONMENT_VERIFIED`, `PRODUCTION_VERIFIED`, or `PRODUCTION_READINESS_VERIFIED` while material critical-flow/provider/browser/image/database/production evidence is `NOT_RUN`, `BLOCKED`, absent, or explicitly not verified;
+- `DELIVERY_SCOPE.md` remains in current rows with stale `planned`, `ready_for_adoption`, `PENDING`, or `NOT_STARTED` values after final delivery/phase/session acceptance;
+- delivery unresolved items remain current `OPEN`, `CARRIED`, `REVIEWABLE`, or `PENDING` while accepted phase/session outcomes contradict them;
+- `CURRENT_SYSTEM_STATE.md` contains generated placeholder Source Artifact Index rows or broad runtime/production claims unsupported by evidence;
+- archived `SESSION_STATE.json` remains active or points active authority to reset active-session paths;
+- close chronology contains impossible timestamp ordering without an explicit exception.
+
+Use `CLOSED_PARTIAL`, `ACCEPTED_WITH_LIMITATIONS`, `PARTIAL`, `NOT_RUN`, `BLOCKED`, or carry-forward when those are the honest states. Implementation acceptance is allowed without claiming runtime or production verification.

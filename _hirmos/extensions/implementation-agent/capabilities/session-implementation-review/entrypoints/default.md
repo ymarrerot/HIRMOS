@@ -48,13 +48,13 @@ This capability inherits shared extension rules from `_hirmos/extensions/impleme
 Session implementation review is the aggregate review above local unit review. It must:
 
 1. Inspect every applicable IU artifact.
-2. Confirm every completed unit contains execution evidence and a Unit Review verdict.
+2. Confirm every completed unit contains a sealed contract, append-only execution evidence, and a Unit Review verdict.
 3. Confirm the combined units satisfy 100% of `SESSION_SCOPE.md`, or record exact gaps/deferred items/blockers.
 4. Complete `_hirmos/session/SESSION_SCOPE.md` close verification promised-vs-verified coverage.
 5. Reconcile unresolved items by direct review of `_hirmos/session/unresolved-items.md`.
 6. Decide whether implementation completion may be claimed or must fail closed.
 
-Implementation completion cannot be claimed merely because all individual units passed; the combined implementation must satisfy the Session Scope or explicitly fail/partial/defer under the `SESSION_SCOPE.md` close verification review rules.
+Implementation completion cannot be claimed merely because all individual units passed or because IU files were cleaned up after execution; the combined implementation must satisfy the Session Scope or explicitly fail/partial/defer under the `SESSION_SCOPE.md` close verification review rules.
 
 
 
@@ -91,7 +91,7 @@ This capability performs an aggregate evidence-backed review. It must not pass a
 Required review dimensions:
 
 - source session authority reviewed;
-- IU set and unit review records reviewed;
+- IU set, sealed contract posture, execution records, and unit review records reviewed;
 - actual final codebase reviewed: `YES` / `NO` / `NOT_APPLICABLE`;
 - scope coverage result;
 - cross-unit integration result;
@@ -105,3 +105,12 @@ Required review dimensions:
 - what is not claimed.
 
 If evidence is insufficient for a broad claim, downgrade the claim instead of treating the review as passed.
+
+
+## PROD-L8.24 Generated Review Gate Validation
+Session implementation review must instantiate the L8.22 review gate in generated artifacts, not only rely on template doctrine. Record actual final codebase reviewed, files inspected, scope coverage, cross-unit integration, runtime/provider evidence level, production evidence level, final result, why the result is honest, and what is not claimed. Missing generated review-gate fields must downgrade or block close acceptance.
+
+
+## PROD-L8.25 Sealed IU Aggregate Review Guard
+
+Aggregate implementation review must verify that completed IU files preserve sealed contract authority and separate it from append-only execution/review records. If a sealed contract section was edited after material implementation began without an explicit route-back/reopen/supersede record, the session cannot claim clean implementation acceptance. Downgrade, block, or route back instead of normalizing the artifact during review or close.

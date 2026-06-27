@@ -1,5 +1,13 @@
 # Upgrade Guide
 
+## HIRMOS 1.1.6 baseline
+
+HIRMOS 1.1.6 is the sealed IU contract and delivery close evidence-posture stabilization baseline. It builds on 1.1.5 by separating immutable IU contract authority from append-only execution/review records, adding LLM Write Permission lines to implementation-unit sections, requiring rationale when tests/fixtures/validators are modified, simplifying delivery close concordance into compact posture/source-pointer summaries, and hardening evidence claims so implementation acceptance, local runtime verification, and production verification remain distinct. No terminal CLI version bump is required because terminal install behavior did not change.
+
+## HIRMOS 1.1.5 baseline
+
+HIRMOS 1.1.5 is the pre-execution ledger and generated review-gate stabilization baseline. It builds on 1.1.4 by making IU pre-execution authority observable in the active ledger, rejecting retrospective IU authority or validator-compliance cleanup, and validating concrete phase/delivery evidence-backed review gates in generated project runs. It also strengthens delivery-scope close concordance, source-index placeholder detection, and broad runtime/provider/production claim checks.
+
 ## HIRMOS 1.1.4 baseline
 
 HIRMOS 1.1.4 is the generated-run IU enforcement stabilization baseline. It builds on 1.1.3 by validating generated session archives, not only framework templates, for IU Set Authority Checkpoints, implementation authorization, IU coverage mapping, minimum IU substance, timestamp completeness, stale accepted-phase exit criteria, delivery status-log completeness, and source-index placeholder cleanup.
@@ -82,6 +90,15 @@ The CLI package version remains unchanged when the framework content changes but
 Release packaging must ship only canonical runtime surfaces, templates, docs, validators, and examples. Framework files must remain project-agnostic except for clearly labeled examples.
 
 
+
+## 1.1.6 stabilization note
+
+HIRMOS 1.1.6 includes sealed IU contract sections, append-only execution/review records, separated contract/execution/review status semantics, test/fixture/validator change rationale, delivery close concordance simplification, and evidence posture hardening for implementation/runtime/production claim separation. No terminal CLI version bump is required because terminal install behavior did not change.
+
+## 1.1.5 stabilization note
+
+HIRMOS 1.1.5 includes pre-execution ledger enforcement and generated review-gate validation. It materially changes validation behavior for generated project runs by failing IU-mode sessions where IU authority cannot be proven before material implementation, where IU authority artifacts appear to be retrofitted during close/archive cleanup, or where accepted phase/delivery artifacts lack concrete evidence-backed review-gate fields. No terminal CLI version bump is required because terminal install behavior did not change.
+
 ## 1.1.4 stabilization note
 
 HIRMOS 1.1.4 includes generated-run IU enforcement and runtime artifact validator hardening. It materially changes validation behavior for generated project runs by failing IU-mode sessions that lack the L8.21 IU Set Authority Checkpoint, an implementation authorization decision, IU coverage mapping, or substantive IU files. No terminal CLI version bump is required because terminal install behavior did not change.
@@ -124,3 +141,10 @@ Review and close flows now require explicit session/phase/delivery review gate d
 
 HIRMOS now validates generated runtime artifacts more aggressively. Existing generated runs may fail if IU-mode sessions lack a `PROD-L8.21 IU Set Authority Checkpoint`, an explicit authorization decision, an IU Set Coverage Map, substantive IU files, or complete archived session timestamps. This is intentional: framework-template compliance is no longer enough to prove generated-run governance.
 
+
+
+## PROD-L8.24 — Pre-Execution Ledger Enforcement and Generated Review Gate Validation
+- Requires generated IU-mode sessions to record a Pre-Material-Edit Ledger Row before material implementation begins.
+- Rejects retrospective IU checkpoint / IU expansion during close as clean governance.
+- Validates generated phase and delivery review gates for concrete evidence-backed acceptance fields.
+- Hardens delivery-scope, source-index, and scoped runtime/provider claim concordance checks.

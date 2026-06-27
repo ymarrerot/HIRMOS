@@ -182,37 +182,37 @@ Use this index to make source requirements, design, scope, unresolved-item, evid
 
 | Delivery ID | Status | Scope Authority | Optional Requirements Authority | Optional Design Authority | Unresolved Register |
 |---|---|---|---|---|---|
-| | | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | none / path | none / path | none / path |
+| none | not yet created | none | none | none | none |
 
 ### Phase Authorities
 
 | Phase ID | Status | Phase Authority | Parent Delivery | Notes |
 |---|---|---|---|---|
-| | | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` | | |
+| none | not yet created | none | none | no active phase |
 
 ### Session Authorities
 
 | Session ID | Status | Session Authority | Archive Path | Notes |
 |---|---|---|---|---|
-| | | active / archived SESSION_SCOPE.md | | |
+| none | idle | none | none | no active session scope |
 
 ### Requirement Sources
 
 | Source | Authority level | Status | Notes |
 |---|---|---|---|
-| | delivery / session / archive / generated synthesis | active / accepted / archived / superseded / not source authority | |
+| none | not separately created | not source authority | no separate requirements/design source yet |
 
 ### Design Sources
 
 | Source | Authority level | Status | Notes |
 |---|---|---|---|
-| | delivery / session / archive / generated synthesis | active / accepted / archived / superseded / not source authority | |
+| none | not separately created | not source authority | no separate requirements/design source yet |
 
 ### Evidence Sources
 
 | Source | Authority level | Status | Notes |
 |---|---|---|---|
-| | session / implementation-unit / archive | active / accepted / archived / superseded | |
+| none | not evaluated | not yet created | no evidence source yet |
 
 ## 7. Delivery State
 
@@ -416,3 +416,20 @@ Blank cells are not valid current-state navigation because future sessions canno
 
 ## PROD-L8.23 Generated Source Index Concordance
 Generated Source Artifact Index rows must not be blank placeholders. Use concrete paths, `none`, `not separately created`, `not evaluated`, or `not yet created`. Blank requirement/design/evidence source rows are stale navigation surfaces.
+
+
+## PROD-L8.24 Source Artifact Index Runtime Placeholder Guard
+Generated `Source Artifact Index` rows must not include empty first cells, empty source-path cells, generic placeholder text, or template instruction rows such as `delivery / session / archive / generated synthesis`. Replace inactive classes with explicit `none`, `not separately created`, `not evaluated`, or concrete artifact paths.
+
+## PROD-L8.26 Accepted-State Navigation Simplification and Evidence Posture
+
+`CURRENT_SYSTEM_STATE.md` is pointer-complete, not evidence-complete. At delivery close, record compact accepted-state navigation and evidence posture without duplicating full delivery, phase, session, IU, or evidence content.
+
+Required delivery close navigation row semantics:
+
+- Result may be `CLOSED_ACCEPTED`, `CLOSED_PARTIAL`, `BLOCKED`, `FAILED`, `DEFERRED`, or `SUPERSEDED`.
+- Implementation acceptance, local runtime verification, and production verification must remain separate.
+- If critical-flow, provider, browser, image-generation, database, or production evidence is `NOT_RUN`, `BLOCKED`, or absent, this file must not claim broad `LOCAL_RUNTIME_VERIFIED`, `USER_ENVIRONMENT_VERIFIED`, or `PRODUCTION_READINESS_VERIFIED` for the whole delivery.
+- Use the limitations / not verified field to preserve honest posture and point to the owning evidence/archive source.
+
+This file may say implementation was accepted while runtime or production verification remains not run, partial, blocked, or carried forward. That is not a failure when disclosed accurately.
