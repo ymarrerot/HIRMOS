@@ -94,7 +94,8 @@ Pointer update rules:
 Follow-up command guidance:
 
 - When no active session exists, `hirmos continue` is not applicable.
-- Optional follow-up work such as local E2E smokes, delivery close review, evidence-posture update, or production-readiness review should be started with `hirmos start "<bounded follow-up objective>"` and grounded in the current-state, delivery, carry-forward, unresolved-register, and archive pointers recorded here.
+- Optional follow-up work such as local E2E smokes, delivery close review, evidence-posture update, or production-readiness review should be started with `hirmos start "<bounded follow-up objective>"` only when it is approved carry-forward or separately scoped new work grounded in the current-state, delivery, carry-forward, unresolved-register, and archive pointers recorded here.
+- HIRMOS should not push safe in-scope close-time checks to a new `hirmos start` merely to reduce close work. Close-time carry-forward triage must first auto-resolve safe candidates or surface user-needed candidates before final close.
 - Do not create a special run category or follow-up intent taxonomy by default; artifact-grounded `hirmos start` routing is the default.
 
 ## 3. Accepted-State Navigation and Latest Close

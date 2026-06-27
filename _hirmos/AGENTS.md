@@ -28,7 +28,7 @@ Do not perform work first and reconstruct HIRMOS artifacts afterward. If the act
 
 For every new LLM, agent, chat, compressed chat state, or context window, complete HIRMOS bootstrap before performing HIRMOS-governed work.
 
-Do not assume a previous agent, chat, compressed summary, or context completed bootstrap for the current context. Bootstrap discipline must be recovered from durable active artifacts, archived bootstrap reports, or core authority/protocol files, not from chat memory.
+Do not assume a previous agent, chat, compressed summary, or context completed bootstrap for the current context. Bootstrap discipline must be answered again from durable current artifacts, archived project-history artifacts, or core authority/protocol files, not from chat memory or prior bootstrap answers.
 
 
 ## General run preflight rule

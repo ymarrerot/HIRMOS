@@ -93,7 +93,7 @@ DELIVERY_PHASE_SESSION / phase_session_baseline
 
 For durable delivery work, Design must first produce a delivery baseline under `_hirmos/system/delivery/<delivery-id>/` and stop at `Delivery Baseline — Review or Change`. It must not create `SESSION_SCOPE.md`, `PHASE-xx.md`, or implementation units before delivery-baseline acceptance by default. After acceptance or amendment, Design may instantiate the next needed phase file and create the bounded phase/session `SESSION_SCOPE.md`.
 
-Design must explain why the selected shape is necessary for the real software work, why a technically possible simpler shape is acceptable or insufficient, and why larger alternatives would add unnecessary governance/token overhead. For a single-session shape, the Session Scope must record affirmative bounded-scope safety evidence.
+Design must explain why the selected shape is necessary for the real software work, why a technically possible simpler shape is acceptable or insufficient, and why larger alternatives would add unnecessary governance/token overhead. When multi-session delivery is selected, Design must also explain why the selected phase count is the smallest honest count, how 2-phase and 3-phase alternatives were considered, and why any phase after phase 2 cannot be merged. For a single-session shape, the Session Scope must record affirmative bounded-scope safety evidence.
 
 ### Design authority rules
 

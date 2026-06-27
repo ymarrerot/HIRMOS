@@ -117,6 +117,13 @@ Answer: SINGLE_SESSION_VERTICAL_SLICE | SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS
 - Larger-shape overhead analysis:
 - User interaction / token-cost impact:
 - Risk if compressed into a smaller shape:
+- If multi-session is selected, smallest honest phase count:
+- Phase-count options considered:
+- Why fewer phases are insufficient or acceptable:
+- Why this phase count is the smallest honest count:
+- Phase merge pressure result:
+- Phase-count user interaction / token-cost impact:
+- Risk if compressed into fewer phases:
 - Triggers considered:
 - Triggers ruled out:
 - Selected shape justification:
@@ -140,6 +147,7 @@ Fail-closed rule:
 - `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` requires a durable Delivery Plan, Delivery Scope, and adopted phase file before implementation authorization.
 - The selected shape must be the smallest shape that preserves engineering quality, implementation truth, validation, continuity, accepted-state integrity, and practical user interaction cost.
 - Delivery shape must be justified by the real software work, not by framework testing, inspection, or dogfood context.
+- When this session belongs to a multi-session delivery, the parent delivery must justify the selected phase count as the smallest honest count; this session must not preserve a thin phase merely because it was previously proposed if merge pressure shows it can be combined without weakening validation, reviewability, continuity, or accepted-state integrity.
 
 ## 7. Production-Shaped Engineering Gate
 
@@ -353,9 +361,9 @@ This section must be completed before any `hirmos close` success claim.
 
 ### Promised vs verified coverage matrix
 
-| Promise ID | Fully verified? | Evidence | Gap / caveat | Required carry-forward |
-|---|---|---|---|---|
-| P-01 | YES | | | |
+| Promise ID | Fully verified? | Evidence | Gap / caveat | Carry-forward candidate? | Close-time triage disposition |
+|---|---|---|---|---|---|
+| P-01 | YES | | | YES / NO | AUTO_RESOLVED_NOW / USER_RESOLVED_NOW / APPROVED_CARRY_FORWARD / BLOCKING_UNRESOLVED / NO_LONGER_APPLIES / NOT_APPLICABLE |
 
 Does the actual completed work satisfy 100% of `SESSION_SCOPE.md`?
 
@@ -364,7 +372,8 @@ Does the actual completed work satisfy 100% of `SESSION_SCOPE.md`?
 - Gaps:
 - User-visible caveats:
 - Accepted-state impact:
-- Carry-forward required:
+- Carry-forward candidate review completed: YES / NO
+- Approved carry-forward required after triage: YES / NO
 - Fail-closed result: PASS | FAIL
 
 ### Close verdict

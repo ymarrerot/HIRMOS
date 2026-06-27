@@ -39,6 +39,9 @@ Summarize the bounded work scope in plain language. Use domain language first. A
 - Technically possible simpler shape:
 - Why simpler shape is acceptable or insufficient:
 - User interaction / token-cost impact:
+- If this session adopts a phase from a multi-session delivery, parent phase-count justification source:
+- Phase merge pressure check for this phase:
+- Why this phase remains separate instead of merged:
 - Why implementation-unit files are not instantiated yet:
 
 ### Decisions needing your action
@@ -132,11 +135,14 @@ If you run `hirmos continue`, HIRMOS will treat this session baseline as accepte
 Offer these options exactly, adapting item numbers to the actual output:
 
 ```text
-Accept session baseline
-Change 1: ...
-Mark item 2 uncertain
-Ask for technical review summary
-Stop / do not continue
+To continue from this pause:
+hirmos continue "Accept session baseline"
+hirmos continue "Change item 1: <your change>"
+hirmos continue "Mark item 2 uncertain"
+hirmos continue "Ask for technical review summary"
+
+To stop without continuing:
+Do not run `hirmos continue`. Reply exactly: Stop / do not continue
 ```
 
 ## Canonical interaction posture density

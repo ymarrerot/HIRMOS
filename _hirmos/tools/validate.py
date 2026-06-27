@@ -3,10 +3,12 @@ from pathlib import Path
 import json, sys, re
 
 root = Path(__file__).resolve().parents[1]
+VALIDATION_ERRORS = []
 
 def fail(message: str):
+    VALIDATION_ERRORS.append(message)
     print('FAIL: ' + message)
-    sys.exit(1)
+
 
 
 def _delivery_plan_has_pre_acceptance_active_delivery_wording(plan_body: str) -> bool:
@@ -222,7 +224,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.1.7'
+expected_version = '1.1.8'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -2290,6 +2292,25 @@ for rel in ['system/accepted-state/CARRY_FORWARD.md', 'core/protocol/CURRENT_SYS
             sys.exit(1)
 print('PASS: HIRMOS accepted-state simplification static check')
 
+# PROD-L8.30B close-time carry-forward triage checks
+for rel, phrases in {
+    'core/commands/close.md': ['Close-Time Carry-Forward Candidate Review', 'Carry-forward is a last-resort close disposition', 'AUTO_RESOLVED_NOW', 'USER_RESOLVED_NOW', 'APPROVED_CARRY_FORWARD', 'BLOCKING_UNRESOLVED', 'NO_LONGER_APPLIES'],
+    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['Close-time carry-forward triage doctrine', 'Carry-forward is a last-resort close disposition', 'APPROVED_CARRY_FORWARD', 'A post-close `hirmos start` recommendation is valid only'],
+    'core/templates/session/SESSION_EXECUTION.md': ['Close-Time Carry-Forward Candidate Review', 'Safe to resolve now?', 'User approval for deferral'],
+    'core/templates/session/SESSION_SCOPE.md': ['Carry-forward candidate review completed', 'Approved carry-forward required after triage'],
+    'system/accepted-state/CARRY_FORWARD.md': ['Only items with close-time disposition `APPROVED_CARRY_FORWARD` may appear here', 'Approval / deferral source'],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Close-time carry-forward triage must first auto-resolve safe candidates'],
+    'core/protocol/COMMANDS.md': ['Close-Time Carry-Forward Candidate Review'],
+    'core/templates/checkpoints/SESSION_BASELINE_CHECKPOINT_OUTPUT.md': ['To continue from this pause:', 'Reply exactly: Stop / do not continue'],
+    'core/templates/checkpoints/DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md': ['To continue from this pause:', 'Reply exactly: Stop / do not continue'],
+    'core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md': ['To continue from this pause:', 'Reply exactly: Stop / do not continue'],
+}.items():
+    body = (root/rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.30B {rel} missing carry-forward triage phrase: {phrase}')
+print('PASS: HIRMOS PROD-L8.30B close-time carry-forward triage static check')
+
 
 
 
@@ -2838,7 +2859,7 @@ print('PASS: HIRMOS PROD-L8.15 current-state source reading and runtime freshnes
 # PROD-L8.5 session execution ledger slimming and responsibility realignment checks
 execution_template = (root / 'core/templates/session/SESSION_EXECUTION.md').read_text()
 execution_lines = execution_template.splitlines()
-if len(execution_lines) > 575:
+if len(execution_lines) > 600:
     fail(f'PROD-L8.5 SESSION_EXECUTION.md is too large for the slim ledger model: {len(execution_lines)} lines')
 for phrase in [
     'active-session execution ledger',
@@ -3631,37 +3652,125 @@ print('PASS: HIRMOS PROD-L8.28 generated IU instantiation and active close conco
 
 
 
-# PROD-L8.29E context-resilient bootstrap discipline checks
-for rel, phrases in {
+# PROD-L8.30A full bootstrap answer reinstatement and IU action-gate correction
+l830a_required = {
     'core/bootstrap.md': [
-        'complete compact answer set',
-        'REVALIDATED_FROM_ARCHIVED_BOOTSTRAP',
-        'chat memory, compressed chat summaries, prior model memory, or unstated recollection are not valid recovery sources',
+        'Do not answer from memory. Do not recover the answers from prior sessions.',
+        'Answer the complete bootstrap quiz again in every session from durable sources.',
+        'Archived sessions may be read only as durable source artifacts',
+        'archived bootstrap answers do not satisfy the quiz by reference',
+        'ANSWERED_FROM_CURRENT_ARTIFACTS',
+        'ANSWERED_FROM_ARCHIVED_PROJECT_HISTORY',
+        'ANSWERED_FROM_CORE_PROTOCOLS',
     ],
     'core/templates/session/bootstrap/BOOTSTRAP_REPORT.md': [
-        'Bootstrap Discipline Answer Recovery',
-        'Bootstrap Discipline Answers',
-        'Recovery method:',
-        'REANSWERED_FROM_CORE_BECAUSE_PRIOR_BOOTSTRAP_NOT_FOUND',
+        'Bootstrap Discipline Answer Sources',
+        'Every session must answer the complete bootstrap quiz again',
+        'Do not answer from memory',
+        'Do not recover the answers from prior sessions',
+        'Do not satisfy bootstrap by citing a prior bootstrap report',
+        'Answer basis:',
     ],
     'core/protocol/SESSION_ARTIFACTS.md': [
         'complete compact discipline answer set',
-        'chat memory, compressed chat summaries, and prior model recollection are not valid bootstrap recovery sources',
+        'prior bootstrap answers are not substitutes',
     ],
     'core/commands/start.md': [
         'complete discipline answers',
-        'durable answer source/recovery method missing',
+        'durable answer source/answer basis missing',
     ],
     'core/protocol/COMMANDS.md': [
-        'durable source and allowed recovery method',
+        'durable source and allowed answer basis',
         'compressed chat summaries',
     ],
-}.items():
+    'core/templates/session/SESSION_EXECUTION.md': [
+        'PROD-L8.30A Bootstrap / IU Action-Gate Control',
+        'Active generated-artifact validation result',
+        'false clean-seal claim',
+    ],
+    'core/templates/session/implementation-units/IU.md': [
+        'PROD-L8.30A IU Action-Gate Correction',
+        'Contract sealed before material edits',
+        'false clean-seal claim',
+    ],
+}
+for rel, phrases in l830a_required.items():
     body = (root / rel).read_text(errors='ignore')
     for phrase in phrases:
         if phrase not in body:
-            fail(f'PROD-L8.29E {rel} missing context-resilient bootstrap phrase: {phrase}')
-print('PASS: HIRMOS PROD-L8.29E context-resilient bootstrap discipline static check')
+            fail(f'PROD-L8.30A {rel} missing bootstrap/IU action-gate phrase: {phrase}')
+
+for rel in ['core/bootstrap.md', 'core/protocol/SESSION_ARTIFACTS.md', 'core/commands/start.md', 'core/protocol/COMMANDS.md']:
+    body = (root / rel).read_text(errors='ignore')
+    if ('REVALIDATED_FROM_' + 'ARCHIVED_BOOTSTRAP') in body or ('REANSWERED_FROM_CORE_' + 'BECAUSE_PRIOR_BOOTSTRAP_NOT_FOUND') in body or ('NEWLY_' + 'ANSWERED_FROM_CORE') in body:
+        fail(f'PROD-L8.30A {rel} still exposes retired bootstrap recovery-chain labels')
+
+_ALLOWED_BOOTSTRAP_BASIS = {
+    'ANSWERED_FROM_CURRENT_ARTIFACTS',
+    'ANSWERED_FROM_ARCHIVED_PROJECT_HISTORY',
+    'ANSWERED_FROM_CORE_PROTOCOLS',
+    'ANSWERED_FROM_CURRENT_AND_ARCHIVED_SOURCES',
+    'ANSWERED_FROM_CURRENT_AND_CORE_SOURCES',
+}
+_FORBIDDEN_BOOTSTRAP_SHORTCUTS = [
+    r'REVALIDATED_FROM_' + r'ARCHIVED_BOOTSTRAP',
+    r'same as previous session',
+    r'see prior session',
+    r'satisfied from chat context',
+    r'chat memory',
+    r'compressed chat summar',
+    r'prior model memory',
+    r'unstated recollection',
+    r'recovered from archived bootstrap',
+    r'revalidated from archived bootstrap',
+]
+for session_dir in _generated_session_dirs():
+    bp = session_dir / 'bootstrap' / 'BOOTSTRAP_REPORT.md'
+    if not bp.exists():
+        continue
+    txt = bp.read_text(errors='ignore')
+    for i in range(1, 17):
+        if not re.search(rf'(?m)^\s*Q{i}\b|^\s*{i}\.', txt):
+            fail(f'PROD-L8.30A bootstrap report missing Q{i} full answer in {bp.relative_to(root)}')
+    q_count = len(set(re.findall(r'(?m)^\s*Q(\d{1,2})\b', txt)))
+    numbered_count = len(set(re.findall(r'(?m)^\s*(\d{1,2})\.\s+', txt)))
+    if max(q_count, numbered_count) < 16:
+        fail(f'PROD-L8.30A bootstrap report has fewer than 16 identifiable answers in {bp.relative_to(root)}')
+    if txt.count('Answer:') < 16 or txt.count('Source:') < 16 or txt.count('Answer basis:') < 16:
+        fail(f'PROD-L8.30A bootstrap report does not include Answer/Source/Answer basis for all 16 answers in {bp.relative_to(root)}')
+    for pattern in _FORBIDDEN_BOOTSTRAP_SHORTCUTS:
+        if re.search(pattern, txt, re.I):
+            fail(f'PROD-L8.30A bootstrap report uses forbidden memory/prior-bootstrap shortcut in {bp.relative_to(root)}: {pattern}')
+    if re.search(r'_hirmos/system/history/sessions/.*/bootstrap/BOOTSTRAP_REPORT\.md', txt, re.I):
+        fail(f'PROD-L8.30A bootstrap report cites archived bootstrap as answer source in {bp.relative_to(root)}')
+    basis_values = set(re.findall(r'Answer basis:\s*([A-Z_]+)', txt))
+    invalid_basis = sorted(v for v in basis_values if v not in _ALLOWED_BOOTSTRAP_BASIS)
+    if invalid_basis:
+        fail(f'PROD-L8.30A bootstrap report has invalid answer basis labels in {bp.relative_to(root)}: {invalid_basis}')
+
+for session_dir in _generated_session_dirs():
+    iu_paths = _iu_files(session_dir)
+    if not iu_paths:
+        continue
+    execution_path = session_dir / 'SESSION_EXECUTION.md'
+    execution_body = execution_path.read_text(errors='ignore') if execution_path.exists() else ''
+    claims_complete = _session_claims_implementation_complete(session_dir, execution_body)
+    ledger_admits_code_first = bool(re.search(r'code\s+(?:preceded|before)\s+IU|IU\s+(?:seal|contract|authority).*after\s+(?:code|material edits)|recorded deviation.*code preceded IU|Retrospective checkpoint or IU expansion:\s*YES|IU files created before material edits:\s*NO|Contract-before-code.*deviation', execution_body, re.I | re.S))
+    if claims_complete:
+        if not re.search(r'Active generated-artifact validation result:\s*PASS', execution_body, re.I):
+            fail(f'PROD-L8.30A implementation_complete claim without active generated-artifact validation PASS in {session_dir.relative_to(root)}')
+        if re.search(r'Active generated-artifact validation result:\s*(FAIL|BLOCKED|NOT_RUN|PENDING)', execution_body, re.I):
+            fail(f'PROD-L8.30A implementation_complete claim while active generated-artifact validation is not PASS in {session_dir.relative_to(root)}')
+    if ledger_admits_code_first and claims_complete and not re.search(r'GOVERNANCE_DEVIATION|CLOSED_PARTIAL|ROUTE_BACK_REQUIRED|BLOCKED|FAIL', execution_body, re.I):
+        fail(f'PROD-L8.30A code-before-IU deviation cannot support clean implementation_complete in {session_dir.relative_to(root)}')
+    for iu_path in iu_paths:
+        iu_txt = iu_path.read_text(errors='ignore')
+        if ledger_admits_code_first and re.search(r'Contract sealed before material edits:\s*YES', iu_txt, re.I):
+            fail(f'PROD-L8.30A IU falsely claims clean pre-edit seal while session ledger admits code-before-IU deviation: {iu_path.relative_to(root)}')
+        if re.search(r'Contract sealed before material edits:\s*YES', iu_txt, re.I) and re.search(r'(retrospective|backfill|after material edits|code preceded|governance deviation)', iu_txt, re.I):
+            fail(f'PROD-L8.30A IU contains internal contradiction around pre-edit seal timing: {iu_path.relative_to(root)}')
+
+print('PASS: HIRMOS PROD-L8.30A full bootstrap answer reinstatement and IU action-gate correction static/runtime check')
 
 # PROD-L8.29F run preflight and follow-up command clarity checks
 l829f_required = {
@@ -3715,3 +3824,57 @@ for rel, phrases in l829g_required.items():
             fail(f'PROD-L8.29G {rel} missing delivery-shape honesty phrase: {phrase}')
 print('PASS: HIRMOS PROD-L8.29G delivery shape honesty and cost-aware routing static check')
 
+# PROD-L8.30C phase-count honesty and governed pause response clarity checks
+l830c_required = {
+    'core/protocol/DELIVERY_GOVERNANCE.md': [
+        'Phase-count honesty and merge pressure',
+        'fewest phases that preserve honest execution',
+        'Every phase after phase 2 must pass explicit merge pressure',
+        'Phase count considered:',
+        'Why this count is the smallest honest count:',
+    ],
+    'core/commands/start.md': [
+        'If multi-session is selected, smallest honest phase count:',
+        'Phase-count options considered:',
+        'Phase merge pressure applied:',
+        'Risk if compressed into fewer phases:',
+    ],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': [
+        'If multi-session, selected phase count:',
+        'Phase-count options considered:',
+        'Why selected phase count is the smallest honest count:',
+        'Risk if compressed into fewer phases:',
+    ],
+    'core/templates/session/SESSION_SCOPE.md': [
+        'If multi-session is selected, smallest honest phase count:',
+        'Phase merge pressure result:',
+        'the parent delivery must justify the selected phase count as the smallest honest count',
+    ],
+    'core/templates/checkpoints/DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md': [
+        'Phase-count honesty',
+        'Why this count is the smallest honest count:',
+        'If any proposed phase after phase 2 can be merged',
+        'Do not run `hirmos continue`. Reply exactly: Stop / do not continue',
+    ],
+    'core/templates/checkpoints/SESSION_BASELINE_CHECKPOINT_OUTPUT.md': [
+        'Phase merge pressure check for this phase:',
+        'Why this phase remains separate instead of merged:',
+        'Do not run `hirmos continue`. Reply exactly: Stop / do not continue',
+    ],
+    'extensions/design-agent/entrypoints/default.md': [
+        'selected phase count is the smallest honest count',
+        'why any phase after phase 2 cannot be merged',
+    ],
+}
+for rel, phrases in l830c_required.items():
+    text = (root / rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase not in text:
+            fail(f'PROD-L8.30C {rel} missing phase-count/pause-clarity phrase: {phrase}')
+print('PASS: HIRMOS PROD-L8.30C phase-count honesty and governed pause response clarity static check')
+
+
+
+if VALIDATION_ERRORS:
+    print(f'FAIL: HIRMOS validation reported {len(VALIDATION_ERRORS)} failure(s)')
+    sys.exit(1)

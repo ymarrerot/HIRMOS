@@ -51,6 +51,13 @@ Why selected shape is necessary for this real software work:
 Larger-shape overhead analysis:
 User interaction / token-cost impact:
 Required durable delivery artifacts, if any:
+If multi-session is selected, smallest honest phase count:
+Phase-count options considered:
+Why fewer phases are insufficient or acceptable:
+Why the selected phase count is the smallest honest count:
+Phase merge pressure applied:
+Phase-count user interaction / token-cost impact:
+Risk if compressed into fewer phases:
 If UNCERTAIN, what must be inspected before deciding?
 ```
 
@@ -62,6 +69,7 @@ Fail-closed rules:
 - `MULTI_SESSION_DELIVERY` requires a delivery baseline route that creates/updates `_hirmos/system/delivery/DELIVERY_PLAN.md` and `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` before any session scope is created.
 - `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` requires a delivery baseline route with a complete phase coverage plan in `DELIVERY_SCOPE.md`; concrete `PHASE-xx.md` files are instantiated just in time after delivery-baseline acceptance, starting with the next active phase/session.
 - Missing delivery-shape decision is a fail-closed condition for implementation readiness.
+- When a multi-session delivery shape is selected, missing phase-count justification is a fail-closed condition for delivery baseline readiness.
 
 Compatibility note: older artifacts may call this the `Delivery Shape Decision Gate`. New artifacts should use `Delivery Shape Decision Gate`. When both appear, the Delivery Shape Decision controls the result.
 
@@ -83,7 +91,7 @@ Use when the work needs more than one accepted session, but separate phase files
 
 ### MULTI_SESSION_DELIVERY_WITH_PHASE_FILES
 
-Use when separate phase scopes materially improve safety, reviewability, or continuity. Phase files have a high threshold. They are justified when each phase needs its own durable contract, acceptance criteria, blockers, and close/update-state boundary.
+Use when separate phase scopes materially improve safety, reviewability, or continuity. Phase files have a high threshold. They are justified when each phase needs its own durable contract, acceptance criteria, blockers, and close/update-state boundary. Phase files must not be used to create thin governance checkpoints that could be merged without losing honest validation, reviewability, continuity, or accepted-state integrity.
 
 ## Escalation criteria
 
@@ -113,6 +121,53 @@ Artifact paths created only if selected shape requires them:
 ```
 
 Token and interaction cost are secondary to honest delivery shape, but they are real user costs. HIRMOS must not spend them on avoidable governance surfaces when a simpler governed shape preserves implementation truth, reviewability, validation, continuity, and accepted-state integrity.
+
+## Phase-count honesty and merge pressure
+
+When multi-session delivery is selected, HIRMOS must choose the fewest phases that preserve honest execution, review, validation, continuity, and accepted-state update. Multi-session is a capability, not a default cost center.
+
+A separate phase is justified only when it provides at least one material benefit:
+
+- independent user-visible value;
+- independent runtime validation boundary;
+- meaningful architectural or provider-risk isolation;
+- dependency sequencing that cannot be safely combined;
+- human approval point that materially affects downstream work;
+- separate close/evidence posture that would be dishonest if merged.
+
+A proposed phase is weak and should be merged when it is mainly:
+
+- a thin wrapper around one small feature;
+- setup, smoke, or evidence cleanup that can be resolved during the current session or close;
+- provider setup that can be included in the implementation phase it enables;
+- UI polish that can be bundled with the user-facing workflow phase;
+- carry-forward cleanup that close-time triage can resolve or classify before close.
+
+Every phase after phase 2 must pass explicit merge pressure:
+
+```text
+Can this phase be merged into an earlier or later phase without losing honest validation, reviewability, continuity, or accepted-state integrity?
+Answer: YES / NO.
+If YES, merge it.
+If NO, explain the material boundary that requires keeping it separate.
+```
+
+When recommending phases, HIRMOS must surface a compact phase-count summary:
+
+```text
+Phase count considered:
+2 phases: accepted/rejected because...
+3 phases: accepted/rejected because...
+4+ phases: accepted/rejected because...
+Selected phase count:
+Why this count is the smallest honest count:
+Phase merge pressure result:
+Cost / interaction impact:
+Risk if compressed further:
+```
+
+HIRMOS must not casually choose 4, 5, or 6 phases when 2 or 3 phases would preserve honest delivery. Larger phase counts require explicit evidence that the additional pauses and artifacts materially improve implementation truth, validation, continuity, or user decision safety.
+
 
 ## Delivery activation and update rules
 

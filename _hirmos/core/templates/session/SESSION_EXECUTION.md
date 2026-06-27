@@ -57,15 +57,10 @@ Fail-closed rule: if this snapshot is missing, placeholder-only, or contradicts 
 | recommended_next_command | | | NOT_CHECKED | |
 | continuation_pass | | | NOT_CHECKED | |
 | pending_correction | | | NOT_CHECKED | |
-
 Allowed concordance values: `MATCH`, `MISMATCH`, `NOT_CHECKED`. A `MISMATCH` blocks readiness, implementation-completion, and close claims.
-
 ## Append-Only Ledger Covenant
-
 `SESSION_EXECUTION.md` is append-only for command history, continuation passes, route-backs, control-state changes, and boundary records. Earlier pass records must not be replaced when a later command corrects, extends, validates, or routes back the session.
-
 Permitted edits to earlier sections are limited to:
-
 - updating the Current Continuation Snapshot;
 - filling previously blank command/control fields;
 - correcting clerical errors with a dated correction note;
@@ -87,7 +82,7 @@ This checklist records whether owning artifacts were reviewed at each lifecycle 
 
 | Control | Owning artifact | Required before | Status | Evidence / pointer |
 |---|---|---|---|---|
-| Bootstrap control | `bootstrap/BOOTSTRAP_REPORT.md` | command resolution | PENDING | Must include complete discipline answers, durable sources, and allowed recovery methods; chat-memory recovery is invalid. |
+| Bootstrap control | `bootstrap/BOOTSTRAP_REPORT.md` | command resolution | PENDING | Must include complete discipline answers, durable sources, and allowed answer basis labels; memory-based answer is invalid. |
 | General Run Preflight Control | `_hirmos/AGENTS.md` / `_hirmos/hirmos.config.json` / command spec / integration registry when required | before command execution | PENDING | Record `PRECHECK_PASS`, `PRECHECK_WARNING`, or `PRECHECK_BLOCKER`; warnings must name fallback authority, blockers stop lifecycle work. |
 | Command control | command spec / `COMMAND_STATE_MACHINE.md` | every command | PENDING | |
 | Working-copy control | project root / `_hirmos/` | meaningful mutation | PENDING | |
@@ -503,6 +498,16 @@ Use this only when a separate `REQUIREMENTS.md` authority exists. Otherwise reco
 | requirements-intake-classification-preserved | NOT_APPLICABLE | |
 | requirements-flow-detail-sufficient | NOT_APPLICABLE | |
 
+## Close-Time Carry-Forward Candidate Review
+
+Carry-forward candidates must be reviewed before final close. Do not create active carry-forward by default. Auto-resolve safe in-scope candidates when possible, ask the user only when user input/action/approval is required, and record real carry-forward only after approved deferral.
+
+| Candidate ID | Reason it exists | Source artifact(s) | Within approved scope? | Safe to resolve now? | User input/action required? | Evidence required before close | Disposition | Disposition evidence | User approval for deferral |
+|---|---|---|---|---|---|---|---|---|---|
+| CF-CAND-01 | | | YES / NO / UNCERTAIN | YES / NO / NEEDS_USER | YES / NO | | AUTO_RESOLVED_NOW / USER_RESOLVED_NOW / APPROVED_CARRY_FORWARD / BLOCKING_UNRESOLVED / NO_LONGER_APPLIES | | |
+
+Close may update `_hirmos/system/accepted-state/CARRY_FORWARD.md` only for rows with `APPROVED_CARRY_FORWARD`. Rows resolved now belong in this session evidence/archive and must not remain as active carry-forward.
+
 ## Close-Time Compliance Controls
 
 | Close-time control | Status | Evidence pointer |
@@ -573,3 +578,6 @@ For delivery-governed close, record pointer-only controls: delivery close postur
 Record before archive: pre-archive validation gate run on active artifacts; active validation result; active fixes applied before archive only; archive snapshot created after validation decision; Historical archive mutation after snapshot; failure class (`ACTIVE_FIXABLE` / `ARCHIVE_TRANSACTION_REPAIRABLE` / `ARCHIVE_HISTORICAL_IMMUTABLE`). Rule: IU authority, pre-execution checkpoints, review gates, execution status, and evidence content must be corrected before archive while active, or recorded as partial/blocked/governance deviation. After archive, historical governance/evidence artifacts are immutable; do not patch historical archives so the framework validator passes.
 ## PROD-L8.28 Generated IU Instantiation / Active Close Concordance Control
 Record before archive when IU mode is active: full generated IU sealed contract sections and `LLM Write Permission:` lines before execution; append-only Execution Record with actions/files/validation/claim evidence/result; append-only Unit Review with request-to-result review, validation review, claim reconciliation, review status, and Unit Result; no applicable IU remains `Execution status: NOT_STARTED` or `Review status: PENDING` while implementation completion is claimed; Test / Fixture / Validator Change Rationale completed when needed; delivery/phase/session close posture reconciled with IU execution/review statuses. Fail closed if any required check is unresolved, failed, or contradictory.
+
+## PROD-L8.30A Bootstrap / IU Action-Gate Control
+Every session must write the full 16-answer bootstrap quiz in `bootstrap/BOOTSTRAP_REPORT.md`; prior bootstrap answers, chat memory, compressed summaries, and `see previous session` references are invalid substitutes. Record `Active generated-artifact validation result: PASS | FAIL | BLOCKED | NOT_RUN` before any `implementation_complete`, `Ready to close`, phase acceptance, or delivery acceptance claim. If IU mode is active, full IU sealed contracts and the `PROD-L8.21 IU Set Authority Checkpoint` must exist before material edits. If project files changed before IU contracts were sealed, record a governance deviation and do not make a false clean-seal claim such as `Contract sealed before material edits: YES` when the ledger admits code preceded IU seal, retrospective IU creation, retrospective checkpoint expansion, or after-the-fact authority reconstruction. Implementation completion is blocked unless active generated-artifact validation is PASS and IU timing evidence is consistent.

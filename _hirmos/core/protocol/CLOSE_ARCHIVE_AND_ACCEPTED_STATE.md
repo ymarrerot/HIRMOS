@@ -23,8 +23,9 @@ Close is an integrity-sensitive operation. HIRMOS must not claim close success, 
 A normal close is a transaction with seven ordered parts:
 
 1. **Readiness verification** — verify `SESSION_SCOPE.md` including close verification, `unresolved-items.md`, `SESSION_EXECUTION.md`, implementation-unit reviews, `EVIDENCE.md` when present, and active execution controls.
-2. **Accepted-state decision** — classify every material session outcome as accepted, superseded, rejected / not applied, evidence-only, carry-forward, or blocked.
-3. **Accepted-state application** — update `_hirmos/system/accepted-state/` only for accepted outcomes, durable decisions, and active carry-forward items.
+2. **Close-time carry-forward triage** — classify every unresolved/evidence/follow-up candidate before final close as `AUTO_RESOLVED_NOW`, `USER_RESOLVED_NOW`, `APPROVED_CARRY_FORWARD`, `BLOCKING_UNRESOLVED`, or `NO_LONGER_APPLIES`.
+3. **Accepted-state decision** — classify every material session outcome as accepted, superseded, rejected / not applied, evidence-only, approved carry-forward, or blocked.
+4. **Accepted-state application** — update `_hirmos/system/accepted-state/` only for accepted outcomes, durable decisions, and user-approved active carry-forward items.
 4. **Archive preservation** — copy the complete active session artifact set to `_hirmos/system/history/sessions/<session-id>/` and create `SESSION_EXECUTION.md` archive controls there.
 5. **Archive-state normalization** — preserve pre-close state as history, and ensure the archived `SESSION_STATE.json` is terminal (`closed`, `archived`, or `history_only`), not active.
 6. **Active-session reset** — reset `_hirmos/session/` to minimal idle scaffolding after archive preservation succeeds.
@@ -48,6 +49,22 @@ Implementation sessions also require:
 Evidence beyond implementation-unit records is required only when the claim family is active and cannot be captured clearly in the relevant implementation-unit artifact. In that case, use root `EVIDENCE.md` as the consolidated evidence surface. Do not create separate runtime-readiness, local-runtime-evidence, role-workflow-smoke, claim-reconciliation, close-checklist, archive-manifest, or session-scope-review support files for new sessions.
 
 `SESSION_EXECUTION.md` close/update control pointers, implementation-unit reviews, `EVIDENCE.md`, and `SESSION_SCOPE.md` close verification are the close evidence surfaces in the strict-necessity model. Close authority comes from `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, `unresolved-items.md`, implementation-unit artifacts, `EVIDENCE.md` when present, and accepted-state files.
+
+## Close-time carry-forward triage doctrine
+
+Carry-forward is a last-resort close disposition. HIRMOS must not use `_hirmos/system/accepted-state/CARRY_FORWARD.md` as a default bucket for checks, evidence gaps, minor cleanup, or safe local verification that can be completed within the approved session/delivery baseline.
+
+Before normal close, HIRMOS must run a **Close-Time Carry-Forward Candidate Review** using these dispositions:
+
+| Disposition | Meaning | Close impact |
+|---|---|---|
+| `AUTO_RESOLVED_NOW` | HIRMOS safely resolved the candidate within approved scope during close-time reconciliation. | Do not create active carry-forward; record evidence in active session and archive. |
+| `USER_RESOLVED_NOW` | User supplied the missing evidence/input or approved an in-session check before close finalized. | Do not create active carry-forward unless a residual obligation remains. |
+| `APPROVED_CARRY_FORWARD` | User explicitly approved deferral or the accepted scope already authorized deferred/partial close. | Record an active item in `CARRY_FORWARD.md` with source archive and future-session instruction. |
+| `BLOCKING_UNRESOLVED` | The item is required for the claimed close/acceptance level and is not resolved or approved for deferral. | Close is blocked or downgraded. |
+| `NO_LONGER_APPLIES` | Later evidence or scope reconciliation made the candidate obsolete. | Do not create active carry-forward; record why it no longer applies. |
+
+User approval for deferral must be explicit when the item materially affects acceptance, evidence posture, runtime/production claims, or future implementation. A post-close `hirmos start` recommendation is valid only for `APPROVED_CARRY_FORWARD` items or separately scoped new work.
 
 ## Accepted-state records
 
@@ -100,7 +117,8 @@ Normal close requires all checks below to pass:
 | Session identity consistency | `SESSION_SCOPE.md`, `SESSION_SCOPE.md` close verification, `SESSION_EXECUTION.md`, archive path, and `SESSION_STATE.json` reference the same session id or explain why not applicable. |
 | Scope review | `SESSION_SCOPE.md` close verification directly reviews `SESSION_SCOPE.md`, `unresolved-items.md`, implementation units, validation/evidence appendices, and current system state as applicable. |
 | Execution controls | no required control remains `PENDING`, `UNSATISFIED`, or `BLOCKED`. |
-| Unresolved items | gated items are resolved, rejected, deferred with approval, or close is blocked; non-gating items are accepted as assumptions or carried forward. |
+| Close-time carry-forward triage | every unresolved/evidence/follow-up candidate is auto-resolved, user-resolved, approved for carry-forward, blocked, or marked no-longer-applicable with evidence. |
+| Unresolved items | gated items are resolved, rejected, deferred with approval, or close is blocked; non-gating items are accepted as assumptions or approved carry-forward after triage. |
 | Evidence claims | every accepted outcome has evidence or is explicitly accepted as documentation/design-only. |
 | Runtime integration | accepted state and close output do not claim more integration or production readiness than evidence supports. |
 | Delivery status | active Delivery / Phase status is reconciled with accepted outcomes and next recommendation when applicable. |

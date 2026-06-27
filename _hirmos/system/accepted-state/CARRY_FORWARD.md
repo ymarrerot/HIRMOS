@@ -14,8 +14,10 @@ Purpose: preserve active unresolved items, assumptions, risks, production-readin
 
 ## Active Carry-Forward Items
 
-| ID | Type | Owner | Future-session instruction | Source archive |
-|---|---|---|---|---|
+Only items with close-time disposition `APPROVED_CARRY_FORWARD` may appear here. Carry-forward candidates that were auto-resolved, user-resolved, blocked, or no longer applicable belong in the closing session archive, not this active register.
+
+| ID | Type | Owner | Future-session instruction | Source archive | Approval / deferral source |
+|---|---|---|---|---|---|
 
 
 ## Active-Only Rule
@@ -24,4 +26,4 @@ This file contains active carry-forward items only. When an item is resolved, re
 
 ## PROD-L8.21 Carry-Forward Template Concordance
 
-`CARRY_FORWARD.md` must preserve the exact `Active-Only Rule` invariant while keeping closed/resolved/deferred items out of the active register. If no active carry-forward exists, state that explicitly instead of leaving placeholders.
+`CARRY_FORWARD.md` must preserve the exact `Active-Only Rule` invariant while keeping closed/resolved/deferred items out of the active register. If no active carry-forward exists, state that explicitly instead of leaving placeholders. New active items must point to the close-time carry-forward candidate review row that approved deferral.

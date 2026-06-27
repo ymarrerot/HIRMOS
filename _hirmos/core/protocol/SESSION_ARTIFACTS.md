@@ -74,7 +74,7 @@ _hirmos/session/
 | `DESIGN.md` | substantial design/current-state/technical-review/readiness work is needed | current-state basis, source matrix, design, technical review, implementation readiness basis |
 | `EVIDENCE.md` | nontrivial implementation or material claims/evidence exist | command evidence, runtime evidence, production-shaped evidence, claim reconciliation, close evidence handoff |
 | `implementation-units/IU-xx.md` | nontrivial implementation unit exists | sealed unit contract authority plus append-only execution, review, retry, handoff records |
-| `bootstrap/BOOTSTRAP_REPORT.md` | governed session startup / new chat/context bootstrap | bootstrap findings, complete compact discipline answers, durable recovery sources, and initialization evidence |
+| `bootstrap/BOOTSTRAP_REPORT.md` | governed session startup / new chat/context bootstrap | bootstrap findings, complete compact discipline answers, durable answer sources, and initialization evidence |
 | `stack-resolution.json` | stack selection materially affects routing/evidence | machine-readable stack resolution only |
 
 ## Consolidated responsibilities
@@ -131,7 +131,7 @@ A governed session is active only when `_hirmos/session/SESSION_EXECUTION.md` ex
 
 ## Mandatory governed-session artifacts
 
-A governed software session must create or update `_hirmos/session/bootstrap/BOOTSTRAP_REPORT.md` during bootstrap/startup and must keep `SESSION_EXECUTION.md` Current Continuation Snapshot current for continuation state. The bootstrap report must include every bootstrap quiz answer with a durable source and recovery method; chat memory, compressed chat summaries, and prior model recollection are not valid bootstrap recovery sources.
+A governed software session must create or update `_hirmos/session/bootstrap/BOOTSTRAP_REPORT.md` during bootstrap/startup and must keep `SESSION_EXECUTION.md` Current Continuation Snapshot current for continuation state. The bootstrap report must include every bootstrap quiz answer with a durable source and answer basis; chat memory, compressed chat summaries, and prior model recollection are not valid bootstrap answer sources.
 
 A governed software session must instantiate these before claiming Implementation Readiness:
 
@@ -158,7 +158,7 @@ Every artifact instantiation must be recorded in `_hirmos/session/SESSION_EXECUT
 
 ### Bootstrap
 
-Must create or update `_hirmos/session/bootstrap/BOOTSTRAP_REPORT.md` for governed session startup and new-chat/context continuation. Bootstrap report creation does not by itself create an active governed session. Every bootstrap report must include the complete compact discipline answer set recovered from active artifacts, archived bootstrap reports, or core authority/protocol files.
+Must create or update `_hirmos/session/bootstrap/BOOTSTRAP_REPORT.md` for governed session startup and new-chat/context continuation. Bootstrap report creation does not by itself create an active governed session. Every bootstrap report must include the complete compact discipline answer set answered again from current artifacts, archived project-history artifacts, or core authority/protocol files; prior bootstrap answers are not substitutes.
 
 ### User Request / source intake
 
@@ -214,7 +214,7 @@ _hirmos/system/delivery/DELIVERY_PLAN.md and _hirmos/system/delivery/<delivery-i
 _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
 ```
 
-A durable Delivery Plan is required for `MULTI_SESSION_DELIVERY` and `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`. Separate phase files are required only for `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`.
+A durable Delivery Plan is required for `MULTI_SESSION_DELIVERY` and `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`. Separate phase files are required only for `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`. Phase count must also be minimized: use the fewest phases that preserve honest execution, review, validation, continuity, and accepted-state update. Thin phases should be merged unless they provide independent value, validation boundary, risk isolation, dependency sequencing, material human approval, or separate evidence posture.
 
 Every implementation-capable session must record the Delivery Shape Decision in `DESIGN.md` when substantial design is active and in `SESSION_SCOPE.md` / `SESSION_EXECUTION.md` before implementation readiness.
 

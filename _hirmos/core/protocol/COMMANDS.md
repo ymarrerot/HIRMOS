@@ -40,7 +40,7 @@ hirmos close
 
 No command may execute until bootstrap has passed for the current agent/context.
 
-Bootstrap completion means the bootstrap report exists, records a passed quiz, includes every bootstrap discipline answer with durable source and allowed recovery method, and does not rely on chat memory or compressed chat summaries. Acknowledging files were read is not enough.
+Bootstrap completion means the bootstrap report exists, records a passed quiz, includes every bootstrap discipline answer with durable source and allowed answer basis, and does not rely on chat memory or compressed chat summaries. Acknowledging files were read is not enough.
 
 
 ## General run preflight
@@ -335,3 +335,8 @@ This matrix is the first authority for resolving protocol-document overlap. It d
 | Project-type classification metadata | `core/protocol/PROJECT_TYPES.md` | routing evidence, templates | primary routing justification |
 
 Ownership rule: one canonical owner per concern. When two documents appear to govern the same concern, update the canonical owner and make the secondary surface point to it. Do not copy full rules into multiple protocol files unless the duplicate text is a short pointer needed for command execution.
+
+
+## Close-Time Carry-Forward Candidate Review
+
+`hirmos close` must treat carry-forward as a last-resort disposition. Before recommending post-close `hirmos start` for follow-up work, close must auto-resolve safe in-scope candidates, surface user-needed candidates, and record only user-approved deferrals as active carry-forward.

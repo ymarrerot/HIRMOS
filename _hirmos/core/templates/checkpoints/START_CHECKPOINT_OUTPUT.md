@@ -51,11 +51,14 @@ If you run `hirmos continue`, HIRMOS will treat this recommended baseline as acc
 ## Compatibility response options for recommended/session baseline
 
 ```text
-Accept baseline
-Change 1: ...
-Mark item 2 uncertain
-Ask for technical review summary
-Stop / do not continue
+To continue from this pause:
+hirmos continue "Accept baseline"
+hirmos continue "Change item 1: <your change>"
+hirmos continue "Mark item 2 uncertain"
+hirmos continue "Ask for technical review summary"
+
+To stop without continuing:
+Reply exactly: Stop / do not continue
 ```
 
 - Do not create or reference full implementation-unit artifacts before the session scope baseline has been accepted or amended.

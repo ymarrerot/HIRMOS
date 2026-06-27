@@ -89,6 +89,13 @@ Why selected shape is necessary for this real software work:
 Larger-shape overhead analysis:
 User interaction / token-cost impact:
 Required durable delivery artifacts, if any:
+If multi-session is selected, smallest honest phase count:
+Phase-count options considered:
+Why fewer phases are insufficient or acceptable:
+Why the selected phase count is the smallest honest count:
+Phase merge pressure applied:
+Phase-count user interaction / token-cost impact:
+Risk if compressed into fewer phases:
 If UNCERTAIN, what must be inspected before deciding?
 ```
 
@@ -128,7 +135,7 @@ At every user-facing checkpoint, `allowed_next_commands` must include only safe 
 
 ### Start sequence
 
-1. Verify bootstrap passed for the current agent/context, including complete bootstrap discipline answers with durable sources and allowed recovery methods.
+1. Verify bootstrap passed for the current agent/context, including complete bootstrap discipline answers with durable sources and allowed answer basis labels.
 2. Capture the User Request from the command argument, current conversation, or declared input files.
 3. If the User Request is missing or too unclear to govern, stop at `Request Not Governable` and ask for the missing request.
 4. Verify the active working copy and `_hirmos/` installation.
@@ -163,6 +170,7 @@ Before returning control to the user, `hirmos start` must explain:
 - what HIRMOS is going to do;
 - what HIRMOS is not going to do;
 - recommended delivery shape, technically possible simpler shape, why the selected shape is necessary for the real software work, and the user interaction/token-cost impact;
+- if multi-session is selected, smallest honest phase count, phase-count options considered, merge pressure applied, and the cost/risk of fewer or more phases;
 - gated unresolved items from the focus-appropriate unresolved register (`_hirmos/system/delivery/<delivery-id>/unresolved-items.md#Current Checkpoint Feed` during `delivery_baseline`, `_hirmos/session/unresolved-items.md#Current Checkpoint Feed` during session/phase-session baselines when created);
 - non-gating assumptions from the focus-appropriate unresolved register;
 - material technical-review items and where to inspect them;
@@ -180,7 +188,7 @@ Record these controls in `SESSION_EXECUTION.md` at minimum:
 
 | Control | Required when | Blocking condition |
 |---|---|---|
-| Bootstrap control | always | bootstrap report missing, complete discipline answers missing, durable answer source/recovery method missing, chat-memory recovery used, or quiz not passed |
+| Bootstrap control | always | bootstrap report missing, complete discipline answers missing, durable answer source/answer basis missing, memory-based answer used, or quiz not passed |
 | Command control | always | command spec not read or terminal states unknown |
 | Working-copy control | always | project root or `_hirmos/` cannot be verified |
 | User Request control | always | no governable request |

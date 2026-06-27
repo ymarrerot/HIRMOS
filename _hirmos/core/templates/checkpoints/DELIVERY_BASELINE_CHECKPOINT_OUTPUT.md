@@ -37,6 +37,22 @@ Use status-aware wording. Before acceptance, describe this as a Candidate Delive
 - Why added delivery governance is worth the user interaction / token-cost overhead:
 - Why phase files are not instantiated yet:
 
+### Phase-count honesty
+
+If multi-session delivery is selected, summarize the phase-count decision compactly:
+
+- Phase count considered:
+  - 2 phases: accepted/rejected because...
+  - 3 phases: accepted/rejected because...
+  - 4+ phases: accepted/rejected because...
+- Selected phase count:
+- Why this count is the smallest honest count:
+- Phase merge pressure result:
+- Cost / interaction impact:
+- Risk if compressed further:
+
+If any proposed phase after phase 2 can be merged without losing honest validation, reviewability, continuity, or accepted-state integrity, merge it before surfacing the baseline.
+
 ### Delivery phase coverage
 
 Summarize the phase coverage plan from `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md#Phase Plan / Phase Coverage Plan`.
@@ -127,11 +143,14 @@ If there are no gated delivery decisions requiring user input, `hirmos continue`
 Offer these options exactly, adapting item numbers to the actual output:
 
 ```text
-Accept delivery baseline
-Change 1: ...
-Mark item 2 uncertain
-Ask for technical review summary
-Stop / do not continue
+To continue from this pause:
+hirmos continue "Accept delivery baseline"
+hirmos continue "Change item 1: <your change>"
+hirmos continue "Mark item 2 uncertain"
+hirmos continue "Ask for technical review summary"
+
+To stop without continuing:
+Do not run `hirmos continue`. Reply exactly: Stop / do not continue
 ```
 
 ## Canonical interaction posture density

@@ -49,7 +49,7 @@ Rules:
 - Use installed `_hirmos/` files and current project files as the source of truth for this run.
 - Do not rely on prior HIRMOS memory, prior chat context, old packages, or expected file contents.
 - Verify every claim about created, updated, missing, validated, ready, complete, or archived files against the active working copy.
-- Recover bootstrap discipline from active durable artifacts, archived bootstrap reports, or core authority/protocol files. Do not recover it from chat memory or compressed chat summaries.
+- Answer bootstrap discipline again from durable current artifacts, archived project-history artifacts, or core authority/protocol files. Do not answer from memory, compressed chat summaries, or prior bootstrap answers.
 - If state is unclear, stop and re-check the governing file or artifact.
 
 Before leaving this step, verify that you can identify the project root and installed `_hirmos/` folder.
@@ -396,19 +396,19 @@ During bootstrap, remember these firm evidence and readiness rules:
 
 ## Step 12 — Bootstrap quiz
 
-Answer every question in the bootstrap report. This is an open-book quiz. When a question names a file, read that file and answer from it unless the same answer is revalidated from a durable active artifact or archived bootstrap report.
+Answer every question in the bootstrap report. This is an open-book quiz. Do not answer from memory. Do not recover the answers from prior sessions. Answer the complete bootstrap quiz again in every session from durable sources.
 
-Every session bootstrap report must include the complete compact answer set. A later session may reuse prior bootstrap knowledge only when it is recovered from a durable source and cited. The allowed recovery sources are active artifacts, archived bootstrap reports under `_hirmos/system/history/sessions/**/bootstrap/BOOTSTRAP_REPORT.md` or equivalent archived session bootstrap paths, and the core authority/protocol files named by the quiz. chat memory, compressed chat summaries, prior model memory, or unstated recollection are not valid recovery sources.
+Every session bootstrap report must include the complete compact answer set. Archived sessions may be read only as durable source artifacts for project facts, prior accepted outcomes, limitations, evidence posture, or carry-forward obligations; archived bootstrap answers do not satisfy the quiz by reference. Chat memory, compressed chat summaries, prior model memory, unstated recollection, "same as previous session", "see prior session", and "revalidated from archived bootstrap" are invalid.
 
 For each answer, record:
 
 ```text
 Answer:
 Source:
-Recovery method:
+Answer basis:
 ```
 
-Allowed recovery methods are `NEWLY_ANSWERED_FROM_CORE`, `REVALIDATED_FROM_ACTIVE_ARTIFACT`, `REVALIDATED_FROM_ARCHIVED_BOOTSTRAP`, and `REANSWERED_FROM_CORE_BECAUSE_PRIOR_BOOTSTRAP_NOT_FOUND`. If a durable prior answer is missing or uncertain, reread the corresponding authority/protocol file and answer again.
+Allowed answer basis labels are `ANSWERED_FROM_CURRENT_ARTIFACTS`, `ANSWERED_FROM_ARCHIVED_PROJECT_HISTORY`, `ANSWERED_FROM_CORE_PROTOCOLS`, `ANSWERED_FROM_CURRENT_AND_ARCHIVED_SOURCES`, and `ANSWERED_FROM_CURRENT_AND_CORE_SOURCES`. If the answer cannot be supported by current artifacts or archived project history, read the corresponding core authority/protocol file and answer from it.
 
 1. Working-copy authority: What must you do before claiming that a file, artifact, validation, readiness state, or close result exists?
 2. From `LIFECYCLE.md`: What are the responsibilities of Understand System State, Design, Implementation, and Update System State?
@@ -454,11 +454,12 @@ PASS or BLOCKED
 
 ## Bootstrap Discipline Answer Recovery
 - allowed recovery methods used for the answer set
-- durable sources used, including active artifacts, archived bootstrap reports, or core authority/protocol files
+- durable sources used, including current artifacts, archived project history, or core authority/protocol files
+-- prior bootstrap answers are not allowed substitutes
 
 ## Bootstrap Discipline Answers
 - answer all Step 12 questions
-- each answer includes Answer, Source, and Recovery method
+- each answer includes Answer, Source, and Answer basis
 - no answer relies on chat memory or compressed chat summaries
 
 ## Uncertainty / Missing Files
@@ -468,7 +469,7 @@ PASS or BLOCKED
 - state whether bootstrap-only completion is the only allowed action, or name the user-requested HIRMOS command that may be resolved next
 ```
 
-Bootstrap passes only when the report exists, every Step 12 quiz answer is present with a durable source and allowed recovery method, no answer relies on chat memory or compressed chat summaries, and no blocking uncertainty remains.
+Bootstrap passes only when the report exists, every Step 12 quiz answer is freshly written in the current session with a durable source and allowed answer basis, no answer relies on memory or prior bootstrap answer recovery, and no blocking uncertainty remains.
 
 ---
 

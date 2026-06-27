@@ -42,6 +42,13 @@ Compatibility label: Delivery-Need Classification Source.
 - Why smaller shape was acceptable or insufficient when delivery governance is active:
 - Why added governance is worth / not worth the user interaction and token-cost overhead:
 - Why phase files are / are not needed:
+- If multi-session, selected phase count:
+- Phase-count options considered:
+- Why fewer phases are insufficient or acceptable:
+- Why selected phase count is the smallest honest count:
+- Phase merge pressure result:
+- Phase-count user interaction / token-cost impact:
+- Risk if compressed into fewer phases:
 
 ## Delivery Shape Decision Source
 

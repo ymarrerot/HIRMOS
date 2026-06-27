@@ -299,3 +299,7 @@ Before active close can be claimed, each generated IU that contributed to implem
 LLM Write Permission: Append-only guidance section; do not use this section to change sealed IU contract authority.
 
 Use `_hirmos/core/authority/INTERACTION_POSTURE.md` when surfacing IU status to the user: keep the user-facing summary concise, include artifact paths for IU authority/evidence/review claims, and disclose additional details when validation failure, blocker state, retry, route-back, or user request requires it.
+
+
+## PROD-L8.30A IU Action-Gate Correction
+Generated IU artifacts must not use `Contract sealed before material edits: YES` unless the session ledger proves full IU contract authority existed before the first material edit. If the session ledger records code-before-IU, retrospective IU creation, retrospective sealed-contract mutation, or after-the-fact authority reconstruction, the IU must record `Contract sealed before material edits: NO` and identify the governance deviation, route-back, or partial/blocking disposition. A false clean-seal claim is invalid even when the IU later contains a complete contract template.

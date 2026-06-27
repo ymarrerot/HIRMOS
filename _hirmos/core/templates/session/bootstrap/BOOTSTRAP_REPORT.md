@@ -7,7 +7,7 @@ Purpose: prove that the current agent/context completed HIRMOS bootstrap before 
 
 - Source: `_hirmos/core/authority/INTERACTION_POSTURE.md`
 - Posture: simple by default, transparent by design, rigorous underneath, progressive in disclosure.
-- Context-resilience rule: posture and bootstrap discipline must be recovered from durable artifacts or core authority/protocol files, not from chat memory, compressed chat summaries, or assumed prior context.
+- Context-resilience rule: posture and bootstrap discipline must be answered again from durable current artifacts, archived project-history artifacts, or core authority/protocol files, not from chat memory, compressed chat summaries, assumed prior context, or prior bootstrap answers.
 
 ## Bootstrap Status
 
@@ -39,16 +39,19 @@ List every mandatory bootstrap file read in full.
 | File | Read in full? | Notes |
 |---|---|---|
 
-## Bootstrap Discipline Answer Recovery
+## Bootstrap Discipline Answer Sources
 
-For each bootstrap quiz answer, record how the answer was recovered. Allowed recovery methods:
+Every session must answer the complete bootstrap quiz again. Do not answer from memory. Do not recover the answers from prior sessions. Do not satisfy bootstrap by citing a prior bootstrap report.
 
-- `NEWLY_ANSWERED_FROM_CORE` — answer was created by reading the named core authority/protocol file during this bootstrap.
-- `REVALIDATED_FROM_ACTIVE_ARTIFACT` — answer was revalidated from an active durable artifact that exists in the current working copy.
-- `REVALIDATED_FROM_ARCHIVED_BOOTSTRAP` — answer was revalidated from an archived bootstrap report under `_hirmos/system/history/sessions/**/bootstrap/BOOTSTRAP_REPORT.md` or equivalent archived session bootstrap path.
-- `REANSWERED_FROM_CORE_BECAUSE_PRIOR_BOOTSTRAP_NOT_FOUND` — no reliable active or archived bootstrap answer was found, so the answer was regenerated from the named core authority/protocol file.
+Allowed answer basis labels:
 
-Forbidden recovery method: chat memory, compressed chat summary, prior model memory, or unstated recollection.
+- `ANSWERED_FROM_CURRENT_ARTIFACTS` — answer was written for this session using active durable artifacts in the current working copy.
+- `ANSWERED_FROM_ARCHIVED_PROJECT_HISTORY` — answer was written for this session using archived project history artifacts such as prior `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, `EVIDENCE.md`, delivery/phase files, or close records. Do not use archived bootstrap answers as shortcuts.
+- `ANSWERED_FROM_CORE_PROTOCOLS` — answer was written for this session by reading the named core authority/protocol file.
+- `ANSWERED_FROM_CURRENT_AND_ARCHIVED_SOURCES` — answer was written for this session using both current artifacts and archived project history.
+- `ANSWERED_FROM_CURRENT_AND_CORE_SOURCES` — answer was written for this session using both current artifacts and core authority/protocol files.
+
+Forbidden basis: chat memory, compressed chat summary, prior model memory, unstated recollection, the retired archived-bootstrap recovery-chain label, `same as previous session`, `see prior session`, or any prior bootstrap answer used as a substitute for a fresh answer.
 
 ## Bootstrap Discipline Answers
 
@@ -58,12 +61,12 @@ Each answer must use this format:
 
 ```text
 Q<number>. <question summary>
-Answer: <compact complete answer>
-Source: <active artifact, archived bootstrap path, or core authority/protocol file>
-Recovery method: NEWLY_ANSWERED_FROM_CORE | REVALIDATED_FROM_ACTIVE_ARTIFACT | REVALIDATED_FROM_ARCHIVED_BOOTSTRAP | REANSWERED_FROM_CORE_BECAUSE_PRIOR_BOOTSTRAP_NOT_FOUND
+Answer: <compact complete answer written for this session>
+Source: <current artifact, archived project-history artifact, or core authority/protocol file>
+Answer basis: ANSWERED_FROM_CURRENT_ARTIFACTS | ANSWERED_FROM_ARCHIVED_PROJECT_HISTORY | ANSWERED_FROM_CORE_PROTOCOLS | ANSWERED_FROM_CURRENT_AND_ARCHIVED_SOURCES | ANSWERED_FROM_CURRENT_AND_CORE_SOURCES
 ```
 
-If an archived bootstrap report is used, cite its archive path. If no durable prior bootstrap answer is found or there is uncertainty, reread the corresponding core authority/protocol file and answer again from that file.
+If current artifacts or archived project history do not support the answer, reread the corresponding core authority/protocol file and answer from that file.
 
 ## Uncertainty / Missing Files
 

@@ -85,12 +85,15 @@ A normal close must:
 2. Verify active session exists.
 3. Verify Update System State controls.
 4. Verify no required controls are `PENDING` or `BLOCKED` unless using an explicit abort close path.
-5. Verify accepted outcomes, rejected outcomes, evidence-only artifacts, and carry-forward unresolved items are distinguished.
-6. Create or update the system-state update artifact required by the active path.
-7. Preserve accepted outcomes, carry-forward unresolved items, evidence, and `SESSION_EXECUTION.md` in history.
-8. Archive the active session under `_hirmos/system/history/sessions/<session-id>/`.
-9. Reset active session area to clean idle state after successful close.
-10. Do not perform Design or Implementation during close.
+5. Run Close-Time Carry-Forward Candidate Review before final close classification.
+6. Auto-resolve safe carry-forward candidates when they are inside approved scope, require no new design authority, require no destructive action, and can be evidenced in the active session.
+7. Surface only candidates that need user input/action, safety approval, scope approval, or deferral approval before close can proceed.
+8. Verify accepted outcomes, rejected outcomes, evidence-only artifacts, blocked items, and user-approved carry-forward items are distinguished.
+9. Create or update the system-state update artifact required by the active path.
+10. Preserve accepted outcomes, approved carry-forward items, evidence, and `SESSION_EXECUTION.md` in history.
+11. Archive the active session under `_hirmos/system/history/sessions/<session-id>/`.
+12. Reset active session area to clean idle state after successful close.
+13. Do not perform new Design or new out-of-scope Implementation during close; close-time auto-resolution is allowed only for safe, directly scoped verification, evidence refresh, or cleanup work governed by the accepted session/delivery baseline.
 
 
 ## Archive and reset artifact rules
@@ -110,15 +113,20 @@ Abort close preserves available artifacts and blocked reasons in history but mus
 
 ## Post-close follow-up guidance
 
-After a successful normal close resets the active session to idle, `hirmos close` must recommend exactly one primary governed next command from the legal idle command set. If optional follow-up work remains, the command guidance must explain that `hirmos continue` is not applicable because there is no active session, and that follow-up work begins with `hirmos start` grounded in current-state/delivery/archive artifacts.
+After a successful normal close resets the active session to idle, `hirmos close` must recommend exactly one primary governed next command from the legal idle command set. If approved carry-forward work remains, the command guidance must explain that `hirmos continue` is not applicable because there is no active session, and that follow-up work begins with `hirmos start` grounded in current-state/delivery/archive artifacts.
+
+Post-close follow-up guidance is allowed only after Close-Time Carry-Forward Candidate Review has already attempted safe in-scope resolution and surfaced unresolved candidates to the user when needed. Do not use post-close `hirmos start` as the first/default way to handle work that HIRMOS could have resolved safely during the active session close.
 
 Use concise examples when applicable:
 
 ```text
 There is no active session, so `hirmos continue` is not applicable.
 
-To run local E2E smokes for the delivery:
-  hirmos start "Run local E2E smokes for <delivery-id> and update evidence posture"
+Approved carry-forward remains:
+- CF-01: <short item> — source: `_hirmos/system/accepted-state/CARRY_FORWARD.md`
+
+To resolve approved carry-forward:
+  hirmos start "Resolve carry-forward CF-01 for <delivery-id>"
 
 To run delivery close review:
   hirmos start "Run delivery close review for <delivery-id>"
@@ -129,6 +137,36 @@ To start unrelated work:
 
 The guidance must include paths to the governed sources that justify the follow-up when known, such as `CURRENT_SYSTEM_STATE.md`, `DELIVERY_SCOPE.md`, `DELIVERY_PLAN.md`, `CARRY_FORWARD.md`, delivery unresolved register, or archive manifest. Do not create a separate follow-up intent taxonomy unless later evidence proves artifact-grounded `hirmos start` routing is insufficient.
 
+## Close-Time Carry-Forward Candidate Review
+
+Carry-forward is a last-resort close disposition, not a default cleanup bucket. Before normal close creates or updates `_hirmos/system/accepted-state/CARRY_FORWARD.md`, HIRMOS must review every unresolved/evidence/follow-up candidate and classify it as a carry-forward candidate first.
+
+Priority order:
+
+1. **AUTO_RESOLVED_NOW** — resolve automatically when the item is safe, inside the accepted session/delivery baseline, non-destructive, technically available, and can be evidenced before close.
+2. **USER_RESOLVED_NOW** — pause before final close when the item requires user-supplied evidence, credentials/environment confirmation, business choice, or approval to run a local check. If the user provides the needed result, update evidence and remove/downgrade the candidate before close.
+3. **BLOCKING_UNRESOLVED** — block close when the item is required for the claimed acceptance level and is not resolved or approved for deferral.
+4. **APPROVED_CARRY_FORWARD** — record as real carry-forward only after the user explicitly accepts deferral or the active scope already authorized deferred/partial close for that item.
+5. **NO_LONGER_APPLIES** — remove the candidate when later active evidence makes it obsolete.
+
+Required triage fields for each candidate:
+
+```text
+Candidate ID:
+Candidate summary:
+Reason it exists:
+Source artifact(s):
+Within approved scope? YES / NO / UNCERTAIN
+Safe for HIRMOS to resolve now? YES / NO / NEEDS_USER
+User input/action required? YES / NO
+Evidence required before close:
+Disposition: AUTO_RESOLVED_NOW / USER_RESOLVED_NOW / APPROVED_CARRY_FORWARD / BLOCKING_UNRESOLVED / NO_LONGER_APPLIES
+Disposition evidence:
+User approval for deferral, if applicable:
+```
+
+HIRMOS must not create an approved carry-forward item only because a check was inconvenient, because the model is about to close, or because a separate `hirmos start` would be cleaner for the model. If a candidate is a direct or indirect part of the approved baseline and can be resolved safely in the active session, resolve it before close or explain why it cannot be resolved.
+
 ## Required close controls
 
 Record or verify these controls before normal close:
@@ -138,7 +176,8 @@ Record or verify these controls before normal close:
 | Active session control | no active session or contradictory session state |
 | Update System State control | no update-state decision or readiness record |
 | Evidence control | claimed outcomes lack evidence |
-| Unresolved carry-forward control | unresolved items not resolved or carried forward |
+| Close-time carry-forward triage control | carry-forward candidates not auto-resolved, surfaced to user, blocked, or explicitly approved for deferral |
+| Unresolved carry-forward control | unresolved items not resolved, blocked, rejected, or user-approved as carry-forward |
 | Archive control | archive path unavailable or incomplete |
 | Active-session reset control | session reset plan missing |
 
