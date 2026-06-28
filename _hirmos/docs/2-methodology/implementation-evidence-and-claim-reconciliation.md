@@ -93,3 +93,7 @@ A generated run must be evaluated against its produced artifacts, not only again
 
 ## PROD-L8.24 Retrospective Compliance Boundary
 A generated run is not clean merely because the archive was edited until validation passed. HIRMOS must be able to show that IU authority and generated review gates existed at the right lifecycle boundary. The active ledger must prove pre-execution authorization before material edits, and phase/delivery close must prove acceptance without overclaiming runtime/provider/production evidence.
+
+## PROD-L8.31 Generated-Run Mechanical Gates
+
+Generated-run artifacts must be mechanically checked before lifecycle claims. The validator should report all generated-run gate failures it can safely detect in one run, including missing bootstrap answers, missing or thin IUs, missing active generated-artifact validation, missing carry-forward approval sources, and stale current-state/delivery pointers.

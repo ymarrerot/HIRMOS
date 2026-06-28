@@ -441,3 +441,15 @@ Required delivery close navigation row semantics:
 - Use the limitations / not verified field to preserve honest posture and point to the owning evidence/archive source.
 
 This file may say implementation was accepted while runtime or production verification remains not run, partial, blocked, or carried forward. That is not a failure when disclosed accurately.
+
+## PROD-L8.31 Generated-Run Pointer Concordance Gate
+
+When a generated delivery/session reaches close or partial close, current system state must be refreshed before final output:
+
+- Active development context refreshed: YES / NO / NOT_APPLICABLE
+- Delivery pointer concordant with delivery plan/scope: YES / NO / NOT_APPLICABLE
+- Active/next phase pointer concordant with durable phase files: YES / NO / NOT_APPLICABLE
+- Evidence/carry-forward posture reflected without overclaim: YES / NO / NOT_APPLICABLE
+- Generated-run mechanical gate result reflected: YES / NO / NOT_APPLICABLE
+
+Stale or missing delivery/current-state pointers must be reported with other generated-run mechanical failures rather than masking them.

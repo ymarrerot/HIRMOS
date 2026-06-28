@@ -138,3 +138,17 @@ Required generated IU contract areas before execution:
 - Failure / route-back condition.
 
 If any generated IU lacks these areas or contains placeholder-only content, return `BLOCKED` or `ROUTE_BACK_REQUIRED`; do not authorize implementation and do not rely on later close/archive cleanup to expand the IU.
+
+## PROD-L8.31 Planned-IU Materialization Gate
+
+When the accepted session scope says IUs are required or planned, this capability must materialize the full planned IU set before implementation execution.
+
+Required output before implementation:
+
+- planned IU count from `SESSION_SCOPE.md`;
+- actual full IU files created under `_hirmos/session/implementation-units/`;
+- count match result;
+- non-placeholder full-template check for every IU;
+- `SESSION_EXECUTION.md` `PROD-L8.31 Generated-Run Mechanical Gate Record` updated to show that planned IU count matches actual full IU files.
+
+If planned IU count and actual full IU files do not match, authorization decision is `BLOCKED`, not `IMPLEMENTATION_AUTHORIZED`.

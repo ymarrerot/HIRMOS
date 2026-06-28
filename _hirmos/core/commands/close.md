@@ -571,3 +571,11 @@ If close encounters validator failures in an archived session, classify them as 
 Before archive preservation, `hirmos close` must verify active generated IU concordance. If IU mode was active, every applicable IU must have a fully instantiated sealed contract, append-only Execution Record, append-only Unit Review, non-pending execution/review statuses, evidence-backed Unit Result, and any required Test / Fixture / Validator Change Rationale.
 
 If this gate fails while artifacts are active, fix active artifacts only when the correction reflects actual pre-existing active evidence; otherwise route back, close partial/blocked, or record a governance deviation. Do not archive first and then expand historical IU files to make validation pass.
+
+## PROD-L8.31 Generated-Run Close Gate
+
+Before close, HIRMOS must run generated-run mechanical validation against active artifacts and record the result in `SESSION_EXECUTION.md`. Close is blocked or downgraded if validation is `FAIL`, `BLOCKED`, `NOT_RUN`, or absent.
+
+Close must also verify that every `APPROVED_CARRY_FORWARD` item has an explicit approval/deferral source: user response, accepted partial-close decision, or accepted baseline clause that authorized deferral. Without that source, the item remains a candidate or blocker, not real carry-forward.
+
+Delivery/current-state pointer reconciliation is part of the close gate. Delivery-governed close must refresh `CURRENT_SYSTEM_STATE.md`, delivery plan/scope pointers, phase status, next recommended delivery, next recommended phase, and claim posture before archive preservation or final output.

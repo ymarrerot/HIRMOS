@@ -27,3 +27,15 @@ This file contains active carry-forward items only. When an item is resolved, re
 ## PROD-L8.21 Carry-Forward Template Concordance
 
 `CARRY_FORWARD.md` must preserve the exact `Active-Only Rule` invariant while keeping closed/resolved/deferred items out of the active register. If no active carry-forward exists, state that explicitly instead of leaving placeholders. New active items must point to the close-time carry-forward candidate review row that approved deferral.
+
+## PROD-L8.31 Carry-Forward Approval Source Gate
+
+Every item recorded here as active carry-forward must have disposition `APPROVED_CARRY_FORWARD` and an explicit approval/deferral source.
+
+Accepted approval/deferral sources:
+
+- direct user response approving deferral;
+- accepted partial-close decision that names the item;
+- accepted baseline clause that explicitly authorizes deferral.
+
+If approval/deferral source is missing, the item is not valid carry-forward and must remain a close-time candidate or blocker.

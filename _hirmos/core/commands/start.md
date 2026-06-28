@@ -480,3 +480,9 @@ To start unrelated work, use:
 ```
 
 Do not introduce a new user-facing interaction mode or intent enum to satisfy this behavior unless later framework evidence proves artifact-grounded routing is insufficient.
+
+## PROD-L8.31 Generated-Run Start Gate
+
+`hirmos start` must treat a generated session as not started until the complete bootstrap quiz has been written with fresh answers, durable sources, and allowed answer-basis labels. A summary bootstrap, a prior-bootstrap citation, or chat-memory shortcut blocks the session start.
+
+If the accepted baseline selects IU mode or says implementation units are required/planned, `hirmos start` / baseline acceptance must prepare the session for full IU artifact materialization. A later transcript claim that IUs were planned is not enough; implementation may not begin until the expected full `IU-xx.md` files exist or the session explicitly records `LIGHTWEIGHT_NO_IU` before edits.

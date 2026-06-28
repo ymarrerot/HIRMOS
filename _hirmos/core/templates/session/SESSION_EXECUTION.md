@@ -581,3 +581,19 @@ Record before archive when IU mode is active: full generated IU sealed contract 
 
 ## PROD-L8.30A Bootstrap / IU Action-Gate Control
 Every session must write the full 16-answer bootstrap quiz in `bootstrap/BOOTSTRAP_REPORT.md`; prior bootstrap answers, chat memory, compressed summaries, and `see previous session` references are invalid substitutes. Record `Active generated-artifact validation result: PASS | FAIL | BLOCKED | NOT_RUN` before any `implementation_complete`, `Ready to close`, phase acceptance, or delivery acceptance claim. If IU mode is active, full IU sealed contracts and the `PROD-L8.21 IU Set Authority Checkpoint` must exist before material edits. If project files changed before IU contracts were sealed, record a governance deviation and do not make a false clean-seal claim such as `Contract sealed before material edits: YES` when the ledger admits code preceded IU seal, retrospective IU creation, retrospective checkpoint expansion, or after-the-fact authority reconstruction. Implementation completion is blocked unless active generated-artifact validation is PASS and IU timing evidence is consistent.
+
+## PROD-L8.31 Generated-Run Mechanical Gate Record
+Complete before implementation-complete, ready-to-close, phase/delivery acceptance, archive, or final close output.
+- Full bootstrap answers present / freshly written from durable sources: YES / NO
+- IU mode / IU planned: YES / NO / LIGHTWEIGHT_NO_IU
+- Planned IU count / actual full IU files:  /
+- Planned IU count matches actual full IU files: YES / NO / NOT_APPLICABLE
+- Thin or placeholder IU files detected: YES / NO / NOT_APPLICABLE
+- Pre-material-edit IU authority exists: YES / NO / NOT_APPLICABLE
+- Active generated-artifact validation result: PASS / FAIL / BLOCKED / NOT_RUN
+- Carry-forward approvals verified for every `APPROVED_CARRY_FORWARD`: YES / NO / NOT_APPLICABLE
+- Current-state and delivery pointers refreshed: YES / NO / NOT_APPLICABLE
+- Mechanical gate decision: PASS / FAIL / BLOCKED
+- If not PASS, lifecycle claim allowed: NO
+- Failure summary / route-back:
+Rule: no lifecycle completion, acceptance, archive, or clean close claim is allowed unless this record is PASS and supporting artifacts agree with it.

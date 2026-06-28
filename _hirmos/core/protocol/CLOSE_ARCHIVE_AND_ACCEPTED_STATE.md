@@ -507,3 +507,15 @@ Normal close success requires a recorded pre-archive validation result of `PASS`
 Generated implementation-unit artifacts must be validated while the session is active and before archive. A generated IU is close-eligible only when its sealed contract sections were fully instantiated before execution and its append-only Execution Record and Unit Review contain concrete evidence-backed completion/review results.
 
 Active close must fail closed, downgrade to partial, or route back when IU status contradicts session/phase/delivery close claims. In particular, implementation-complete, phase-accepted, delivery-accepted, or delivery-closed claims are invalid when any applicable IU remains `Execution status: NOT_STARTED`, `Review status: PENDING`, lacks Unit Result, lacks validation/evidence comparison, or lacks a required Test / Fixture / Validator Change Rationale. Historical archives must not be expanded to repair these defects after snapshot; apply PROD-L8.27 archive immutability instead.
+
+## PROD-L8.31 Mechanical Close Acceptance Gate
+
+Generated close cannot rely on narrative compliance. Before archive preservation, active artifacts must pass generated-run mechanical validation:
+
+- bootstrap answers complete;
+- planned IU count matches full IU artifacts or `LIGHTWEIGHT_NO_IU` was declared before edits;
+- active generated-artifact validation result is `PASS` before completion/acceptance claims;
+- carry-forward entries marked `APPROVED_CARRY_FORWARD` include explicit approval/deferral source;
+- current-state and delivery pointers are refreshed and concordant.
+
+Any failure must be fixed while active, downgraded honestly, or recorded as blocked/partial. Do not archive a clean close when generated-run mechanical gates failed.

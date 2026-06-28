@@ -303,3 +303,16 @@ Use `_hirmos/core/authority/INTERACTION_POSTURE.md` when surfacing IU status to 
 
 ## PROD-L8.30A IU Action-Gate Correction
 Generated IU artifacts must not use `Contract sealed before material edits: YES` unless the session ledger proves full IU contract authority existed before the first material edit. If the session ledger records code-before-IU, retrospective IU creation, retrospective sealed-contract mutation, or after-the-fact authority reconstruction, the IU must record `Contract sealed before material edits: NO` and identify the governance deviation, route-back, or partial/blocking disposition. A false clean-seal claim is invalid even when the IU later contains a complete contract template.
+
+## PROD-L8.31 Mechanical IU Completeness Gate
+
+This IU is valid execution authority only when it is a full artifact, not a thin shell.
+
+- Full IU contract sections populated before material edits: YES / NO
+- Placeholder-only fields remaining in sealed authority: YES / NO
+- `LLM Write Permission:` lines present for all major sections: YES / NO
+- Execution Record present when execution started: YES / NO / NOT_STARTED
+- Unit Review present when completion is claimed: YES / NO / NOT_APPLICABLE
+- Unit Result present before implementation-complete claim: YES / NO / NOT_APPLICABLE
+
+If this IU is thin, placeholder-only, or created retrospectively, it must not be used to support clean implementation-complete or close claims.

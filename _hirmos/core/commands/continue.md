@@ -415,3 +415,15 @@ Before any material code/configuration/project-file change in IU mode, `hirmos c
 If IU mode is active and IU artifacts do not exist, the next action is implementation-unit planning, not implementation execution. Code changes before IU creation are a governance deviation. HIRMOS must not silently reconstruct IU artifacts after implementation and claim normal governance.
 
 Allowed exception: an explicit lightweight/no-IU mode must be declared before implementation begins and recorded in `SESSION_SCOPE.md` and `SESSION_EXECUTION.md` with the reason IU artifacts are not required. If lightweight/no-IU mode was not declared before edits, retrospective IU reconstruction is non-compliant and must be marked as a correction/deviation before completion claims.
+
+## PROD-L8.31 Generated-Run Mechanical Continuation Gate
+
+Before implementation execution, `hirmos continue` must mechanically verify the active generated artifacts, not just the transcript narrative:
+
+- complete bootstrap quiz exists for the current session;
+- if IU mode is active or planned, the planned IU count and actual full `IU-xx.md` files match;
+- every targeted IU file satisfies the full IU contract structure before material edits;
+- `SESSION_EXECUTION.md` contains the pre-material-edit authority record and current `PROD-L8.21 IU Set Authority Checkpoint`;
+- no implementation-complete, ready-to-close, phase-acceptance, or delivery-acceptance claim is made until `Active generated-artifact validation result: PASS` is recorded.
+
+If any check fails, continuation routes to artifact correction, route-back, or blocked state. It must not proceed by writing a narrative compliance statement.

@@ -13,6 +13,7 @@ import contextlib
 import io
 import json
 import runpy
+import subprocess
 import shutil
 import sys
 import tempfile
@@ -38,27 +39,27 @@ class ValidationResult:
 
 
 def run_validator(root: Path) -> ValidationResult:
-    """Run the validator in-process against a temporary _hirmos copy.
+    """Run the validator against a temporary _hirmos copy.
 
-    Subprocess execution can become slow or hang in constrained environments when
-    repeated across many mutated fixture copies. `validate.py` derives its root
-    from `__file__`, so runpy execution against the fixture copy preserves the
-    same semantics while avoiding repeated process startup overhead.
+    Output is written to a temporary file instead of a pipe so many sequential
+    fixture subprocesses cannot block on captured stdout/stderr buffers.
     """
-    stdout = io.StringIO()
-    stderr = io.StringIO()
-    old_argv = sys.argv[:]
-    sys.argv = [str(root / "tools" / "validate.py")]
-    try:
-        with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
-            try:
-                runpy.run_path(str(root / "tools" / "validate.py"), run_name="__hirmos_validate_fixture__")
-                return ValidationResult(0, stdout.getvalue() + stderr.getvalue())
-            except SystemExit as exc:
-                code = exc.code if isinstance(exc.code, int) else 1
-                return ValidationResult(code, stdout.getvalue() + stderr.getvalue())
-    finally:
-        sys.argv = old_argv
+    output_path = root.parent / "validator-output.txt"
+    with output_path.open("w+", encoding="utf-8") as output_file:
+        try:
+            completed = subprocess.run(
+                [sys.executable, str(root / "tools" / "validate.py")],
+                cwd=str(root.parent),
+                text=True,
+                stdout=output_file,
+                stderr=subprocess.STDOUT,
+                timeout=30,
+            )
+            output_file.seek(0)
+            return ValidationResult(completed.returncode, output_file.read())
+        except subprocess.TimeoutExpired:
+            output_file.seek(0)
+            return ValidationResult(124, output_file.read() + "\nFAIL: validator fixture subprocess timed out\n")
 
 
 def cleanup_stale_tempdirs() -> None:
@@ -110,6 +111,8 @@ def activate_session(root: Path, stage: str = "implementation_readiness", recomm
 
 def write_basic_active_artifacts(root: Path) -> None:
     session = root / "session"
+    (session / "bootstrap").mkdir(exist_ok=True)
+    (session / "bootstrap" / "BOOTSTRAP_REPORT.md").write_text(_l831a_full_bootstrap())
     (session / "SESSION_SCOPE.md").write_text("# SESSION_SCOPE.md\n")
     (session / "SESSION_EXECUTION.md").write_text("# SESSION_EXECUTION.md\n")
     (session / "unresolved-items.md").write_text("# unresolved-items.md\n")
@@ -142,6 +145,8 @@ def write_delivery_artifacts(
 ) -> None:
     activate_session(root, stage="close_ready" if close_transaction else "implementation_readiness", recommended="hirmos close" if close_transaction else "hirmos continue")
     session = root / "session"
+    (session / "bootstrap").mkdir(exist_ok=True)
+    (session / "bootstrap" / "BOOTSTRAP_REPORT.md").write_text(_l831a_full_bootstrap())
     delivery_id = "fixture-delivery"
     plan_path = f"_hirmos/system/delivery/{delivery_id}/DELIVERY_PLAN.md" if use_legacy_per_delivery_plan else "_hirmos/system/delivery/DELIVERY_PLAN.md"
     scope_path = f"_hirmos/system/delivery/{delivery_id}/DELIVERY_SCOPE.md"
@@ -314,6 +319,12 @@ Implementation readiness authorized: YES
 ## Phase Progress / Carry-Forward Record
 Adopted phase progress reviewed: PASS
 Carry-forward obligations recorded: PASS
+
+## PROD-L8.31 Generated-Run Mechanical Gate Record
+Active generated-artifact validation result: PASS
+Planned IU count matches actual full IU files: YES
+Mechanical gate decision: PASS
+
 {status_report}
 {acceptance_execution}
 """)
@@ -485,6 +496,8 @@ def mutate_delivery_governed_active_readiness(root: Path) -> None:
 def mutate_single_session_not_applicable_readiness(root: Path) -> None:
     activate_session(root, stage="implementation_readiness", recommended="hirmos continue")
     session = root / "session"
+    (session / "bootstrap").mkdir(exist_ok=True)
+    (session / "bootstrap" / "BOOTSTRAP_REPORT.md").write_text(_l831a_full_bootstrap())
     (session / "SESSION_SCOPE.md").write_text("""# SESSION_SCOPE.md
 
 ## Delivery Shape Decision
@@ -623,6 +636,8 @@ def mutate_delivery_baseline_without_session_scope_passes(root: Path) -> None:
     })
     write_state(root, state)
     session = root / "session"
+    (session / "bootstrap").mkdir(exist_ok=True)
+    (session / "bootstrap" / "BOOTSTRAP_REPORT.md").write_text(_l831a_full_bootstrap())
     for rel in ["SESSION_SCOPE.md", "unresolved-items.md"]:
         p = session / rel
         if p.exists():
@@ -857,6 +872,149 @@ def mutate_generated_current_state_placeholder_row_fails(root: Path) -> None:
 | | delivery / session / archive / generated synthesis | active / accepted / archived / superseded / not source authority | |
 """)
 
+
+
+# PROD-L8.31A generated-run mechanical gate fixture helpers
+
+def _l831a_full_bootstrap() -> str:
+    lines = ["# BOOTSTRAP_REPORT.md", "", "## Bootstrap Discipline Answers", ""]
+    for i in range(1, 17):
+        lines += [
+            f"Q{i} — Fixture bootstrap question {i}",
+            "Answer: Fixture answer written again for this session from durable sources.",
+            "Source: _hirmos/core/bootstrap.md; _hirmos/session/SESSION_STATE.json",
+            "Answer basis: ANSWERED_FROM_CURRENT_AND_CORE_SOURCES",
+            "",
+        ]
+    return "\n".join(lines) + "\n"
+
+
+def _l831a_write_generated_session(root: Path, name: str = "2026-01-02-l831a-fixture", *, bootstrap: str | None = None, scope: str = "", execution: str = "", iu_bodies: list[str] | None = None) -> Path:
+    sess = root / "system" / "history" / "sessions" / name
+    (sess / "bootstrap").mkdir(parents=True, exist_ok=True)
+    (sess / "implementation-units").mkdir(parents=True, exist_ok=True)
+    (sess / "SESSION_STATE.json").write_text(json.dumps({
+        "schema_version": "session-state-v1",
+        "status": "archived",
+        "session_id": name,
+        "lifecycle_stage": "implementation_complete" if "implementation_complete" in execution.lower() else "implementation_readiness",
+        "created_at": "2026-01-02T00:00:00Z",
+        "updated_at": "2026-01-02T00:10:00Z",
+        "run_context": {"run_started_at_utc": "2026-01-02T00:00:00Z", "source": "fixture"},
+    }, indent=2) + "\n")
+    (sess / "bootstrap" / "BOOTSTRAP_REPORT.md").write_text(bootstrap if bootstrap is not None else _l831a_full_bootstrap())
+    (sess / "SESSION_SCOPE.md").write_text(scope or "# SESSION_SCOPE.md\n")
+    (sess / "SESSION_EXECUTION.md").write_text(execution or "# SESSION_EXECUTION.md\n")
+    if iu_bodies:
+        for idx, body in enumerate(iu_bodies, 1):
+            (sess / "implementation-units" / f"IU-{idx:02d}.md").write_text(body)
+    return sess
+
+
+def _l831a_incomplete_bootstrap() -> str:
+    return """# BOOTSTRAP_REPORT.md
+
+## Bootstrap Discipline Answers
+
+Q1 — Only one answer
+Answer: incomplete fixture answer.
+Source: _hirmos/core/bootstrap.md
+Answer basis: ANSWERED_FROM_CORE_PROTOCOLS
+"""
+
+
+def _l831a_thin_iu() -> str:
+    return """# IU-01
+Status: complete
+Objective: thin fixture
+Contract sealed before material edits: YES
+"""
+
+
+def mutate_l831_generated_session_incomplete_bootstrap_fails(root: Path) -> None:
+    _l831a_write_generated_session(
+        root,
+        name="2026-01-02-l831a-incomplete-bootstrap",
+        bootstrap=_l831a_incomplete_bootstrap(),
+        execution="# SESSION_EXECUTION.md\n\nStarted generated session.\n",
+    )
+
+
+def mutate_l831_planned_ius_no_files_fails(root: Path) -> None:
+    _l831a_write_generated_session(
+        root,
+        name="2026-01-02-l831a-planned-no-iu",
+        scope="# SESSION_SCOPE.md\n\n## PROD-L8.31 Planned IU Count Gate\nImplementation units required: YES\nPlanned IU count: 3\nImplementation may begin before full IU artifacts exist: NO\n",
+        execution="# SESSION_EXECUTION.md\n\nIU mode / IU planned: YES\nPlanned IU count: 3\n",
+    )
+
+
+def mutate_l831_thin_ius_fail(root: Path) -> None:
+    _l831a_write_generated_session(
+        root,
+        name="2026-01-02-l831a-thin-ius",
+        scope="# SESSION_SCOPE.md\n\nImplementation units required: YES\nPlanned IU count: 1\n",
+        execution="""# SESSION_EXECUTION.md
+
+## PROD-L8.21 IU Set Authority Checkpoint
+Authorization decision: IMPLEMENTATION_AUTHORIZED
+IU files created before material edits: YES
+Non-placeholder IU review: PASS
+
+Execution Result: PASS
+Unit Review: PASS
+Request-to-Result Review: PASS
+Validation Review: PASS
+Claim Reconciliation: PASS
+Unit Result: PASS
+""",
+        iu_bodies=[_l831a_thin_iu()],
+    )
+
+
+def mutate_l831_lifecycle_claim_without_active_validation_fails(root: Path) -> None:
+    _l831a_write_generated_session(
+        root,
+        name="2026-01-02-l831a-no-active-validation",
+        execution="# SESSION_EXECUTION.md\n\nimplementation_complete\n\n## PROD-L8.31 Generated-Run Mechanical Gate Record\nMechanical gate decision: PASS\n",
+    )
+
+
+def mutate_l831_lifecycle_claim_without_mechanical_gate_fails(root: Path) -> None:
+    _l831a_write_generated_session(
+        root,
+        name="2026-01-02-l831a-no-mechanical-record",
+        execution="# SESSION_EXECUTION.md\n\nimplementation_complete\nActive generated-artifact validation result: PASS\n",
+    )
+
+
+def mutate_l831_approved_carry_forward_without_source_fails(root: Path) -> None:
+    cf = root / "system" / "accepted-state" / "CARRY_FORWARD.md"
+    cf.write_text(cf.read_text() + """
+
+## Fixture Bad Active Carry-Forward
+
+- CF-01
+  - Disposition: APPROVED_CARRY_FORWARD
+  - Approval / deferral source: TBD
+""")
+
+
+def mutate_l831_current_state_pointer_concordance_fails(root: Path) -> None:
+    delivery = root / "system" / "delivery" / "fixture-delivery"
+    delivery.mkdir(parents=True, exist_ok=True)
+    (delivery / "DELIVERY_SCOPE.md").write_text("""# DELIVERY_SCOPE.md
+
+Delivery result: CLOSED_PARTIAL
+Delivery accepted: yes
+""")
+    css = root / "system" / "accepted-state" / "CURRENT_SYSTEM_STATE.md"
+    css.write_text(css.read_text() + """
+
+## Fixture Bad Generated Pointer
+Next recommended phase: TBD
+""")
+
 # retained marker: accepted-state index reappears
 CASES = [
     Case("valid baseline", mutate_none, True, "PASS:"),
@@ -909,6 +1067,13 @@ CASES = [
     Case("generated IU retrospective cleanup fails", mutate_generated_iu_session_retrospective_cleanup_fails, False, "retrospective IU governance"),
     Case("generated accepted phase missing review gate fails", mutate_generated_phase_missing_review_gate_fails, False, "missing concrete review gate"),
     Case("generated current state placeholder row fails", mutate_generated_current_state_placeholder_row_fails, False, "placeholder row"),
+    Case("L8.31 incomplete bootstrap start gate fails", mutate_l831_generated_session_incomplete_bootstrap_fails, False, "generated session did not mechanically start"),
+    Case("L8.31 planned IUs with no files fails", mutate_l831_planned_ius_no_files_fails, False, "planned IUs but no IU files exist"),
+    Case("L8.31 thin IU files fail", mutate_l831_thin_ius_fail, False, "thin or placeholder IU files detected"),
+    Case("L8.31 lifecycle claim without active validation fails", mutate_l831_lifecycle_claim_without_active_validation_fails, False, "lifecycle claim without active generated-artifact validation PASS"),
+    Case("L8.31 lifecycle claim without mechanical gate record fails", mutate_l831_lifecycle_claim_without_mechanical_gate_fails, False, "lifecycle claim without mechanical gate record"),
+    Case("L8.31 approved carry-forward without source fails", mutate_l831_approved_carry_forward_without_source_fails, False, "APPROVED_CARRY_FORWARD without explicit approval/deferral source"),
+    Case("L8.31 current-state pointer placeholder fails", mutate_l831_current_state_pointer_concordance_fails, False, "placeholder next delivery/phase pointer"),
 ]
 
 

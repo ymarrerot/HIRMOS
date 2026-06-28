@@ -293,3 +293,16 @@ Validators should use messages that tell the model whether a failure is active-f
 Generated implementation-unit artifacts must be validated while the session is active and before archive. A generated IU is close-eligible only when its sealed contract sections were fully instantiated before execution and its append-only Execution Record and Unit Review contain concrete evidence-backed completion/review results.
 
 Active close must fail closed, downgrade to partial, or route back when IU status contradicts session/phase/delivery close claims. In particular, implementation-complete, phase-accepted, delivery-accepted, or delivery-closed claims are invalid when any applicable IU remains `Execution status: NOT_STARTED`, `Review status: PENDING`, lacks Unit Result, lacks validation/evidence comparison, or lacks a required Test / Fixture / Validator Change Rationale. Historical archives must not be expanded to repair these defects after snapshot; apply PROD-L8.27 archive immutability instead.
+
+## PROD-L8.31 Generated-Run Mechanical Gate Enforcement
+
+Generated-run validation must convert common narrative-compliance failures into mechanical gates. A generated session or archive must fail validation when any of these conditions are true:
+
+- full bootstrap answers are missing or summary-only;
+- a session scope or execution ledger says implementation units are planned/required but no full `IU-xx.md` files exist;
+- generated IU files are thin shells, placeholder-only authority, or lack sealed-contract plus append-only record sections;
+- implementation-complete, ready-to-close, phase-acceptance, or delivery-acceptance claims appear without `Active generated-artifact validation result: PASS` in the active ledger;
+- `APPROVED_CARRY_FORWARD` appears without an explicit approval/deferral source;
+- delivery or current-system-state pointers are stale, absent, or contradictory after delivery-governed close.
+
+Validator output for generated-run mechanical gates must aggregate generated-run failures. It must not stop after the first archived-session or current-state pointer defect when additional generated-session defects can be reported safely. Earlier framework static checks may still fail fast when the framework package itself is structurally unreadable.

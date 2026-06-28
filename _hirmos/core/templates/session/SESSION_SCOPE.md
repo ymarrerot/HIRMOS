@@ -414,3 +414,15 @@ A preview row must not remain `PENDING` after implementation-unit records exist 
 When the selected implementation shape uses implementation units, `SESSION_SCOPE.md` must identify adopted implementation scope items clearly enough for the IU Set Coverage Map in `SESSION_EXECUTION.md` to prove coverage before material edits.
 
 Implementation Shape Preview is not execution authority. Execution authority begins only after accepted session scope plus complete IU Set Authority Checkpoint.
+
+## PROD-L8.31 Planned IU Count Gate
+
+When implementation units are required or planned, record a concrete expected count before implementation:
+
+- IU mode / IU planned: YES / NO / LIGHTWEIGHT_NO_IU
+- Planned IU count:
+- Planned IU files:
+- Scope items covered by planned IUs:
+- Implementation may begin before full IU artifacts exist: NO, unless `LIGHTWEIGHT_NO_IU` was declared before edits.
+
+The planned IU count must match actual full `IU-xx.md` files before material implementation begins. If the count is unknown, implementation is not authorized.

@@ -96,3 +96,18 @@ The regression suite also verifies post-delivery-baseline continuation concordan
 - phase/session baseline with `DELIVERY_PLAN.md` current phase left as `none` fails.
 
 - delivery baseline active wording fails — protects status-aware delivery wording before baseline acceptance.
+
+
+## PROD-L8.31 Generated-Run Mechanical Gate Fixtures
+
+The regression suite now includes negative generated-run fixtures for the L8.31 mechanical gates:
+
+- incomplete bootstrap answers fail the generated-session start gate;
+- planned implementation units with no IU files fail closed;
+- thin or placeholder IU files fail closed even when the transcript claims compliance;
+- lifecycle completion claims fail without `Active generated-artifact validation result: PASS`;
+- lifecycle completion claims fail without a generated-run mechanical gate record;
+- `APPROVED_CARRY_FORWARD` fails without an explicit approval/deferral source;
+- delivery/current-state pointer divergence is reported as a generated-run gate failure.
+
+These fixtures protect the rule that generated-run compliance must be mechanically evidenced in artifacts, not merely narrated in the transcript.

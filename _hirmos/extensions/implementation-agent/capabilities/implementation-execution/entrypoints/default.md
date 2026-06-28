@@ -118,3 +118,14 @@ After `Contract status: SEALED` and before the first material project-file edit,
 Before material edits, implementation execution must reject thin generated IU stubs. `Contract status: SEALED` is not sufficient unless the IU also contains the full non-placeholder sealed contract areas, `LLM Write Permission:` lines, verification/evidence requirements, binary acceptance criteria, and failure/route-back condition.
 
 During execution, append concrete execution evidence to the Execution Record. Before claiming unit execution complete, the IU must show `Execution status: COMPLETED`, changed files/actions, validation/check outcomes, claim evidence, limitations, and execution result. If tests, fixtures, mocks, snapshots, validators, expected-output files, or regression fixtures changed, the Test / Fixture / Validator Change Rationale must be completed before review.
+
+## PROD-L8.31 Mechanical Execution Block
+
+Implementation execution must block when generated-run mechanical gates fail. Do not execute if:
+
+- the current session lacks complete fresh bootstrap answers;
+- IU mode is planned but planned IU count does not match actual full IU files;
+- any target IU is thin, placeholder-only, unsealed, or retrospectively created;
+- `SESSION_EXECUTION.md` lacks a current generated-artifact validation PASS when completion/close readiness is being claimed.
+
+Execution may resume only after artifact correction, route-back, or an explicit blocked/partial decision is recorded.

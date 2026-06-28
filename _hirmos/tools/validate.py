@@ -24,6 +24,7 @@ def _delivery_plan_has_pre_acceptance_active_delivery_wording(plan_body: str) ->
 required = [
     'AGENTS.md',
     'tools/test_validator_regressions.py',
+    'tools/test_l831_generated_run_gates.py',
     'tools/fixtures/README.md',
     'README.md',
     'LICENSE',
@@ -224,7 +225,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.1.8'
+expected_version = '1.1.9'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -1141,8 +1142,7 @@ for rel, phrases in {
     body = (root/rel).read_text()
     for phrase in phrases:
         if phrase.lower() not in body.lower():
-            print(f'FAIL: current-system-state delivery pointer integration {rel} missing {phrase}')
-            sys.exit(1)
+            fail(f'current-system-state delivery pointer integration {rel} missing {phrase}')
 
 print('PASS: HIRMOS current-system-state delivery pointer integration static check')
 
@@ -3874,6 +3874,174 @@ for rel, phrases in l830c_required.items():
 print('PASS: HIRMOS PROD-L8.30C phase-count honesty and governed pause response clarity static check')
 
 
+
+# PROD-L8.31 generated-run mechanical gate enforcement
+l831_required = {
+    'core/protocol/VALIDATION_AND_EVIDENCE.md': [
+        'PROD-L8.31 Generated-Run Mechanical Gate Enforcement',
+        'full bootstrap answers are missing or summary-only',
+        'implementation units are planned/required but no full `IU-xx.md` files exist',
+        'aggregate generated-run failures',
+    ],
+    'core/commands/start.md': ['PROD-L8.31 Generated-Run Start Gate', 'complete bootstrap quiz', 'expected full `IU-xx.md` files exist'],
+    'core/commands/continue.md': ['PROD-L8.31 Generated-Run Mechanical Continuation Gate', 'planned IU count and actual full `IU-xx.md` files match', 'narrative compliance statement'],
+    'core/commands/close.md': ['PROD-L8.31 Generated-Run Close Gate', 'explicit approval/deferral source', 'Delivery/current-state pointer reconciliation'],
+    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.31 Mechanical Close Acceptance Gate', 'planned IU count matches full IU artifacts', 'current-state and delivery pointers are refreshed'],
+    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.31 Generated-Run Mechanical Gate Record', 'Planned IU count matches actual full IU files', 'Mechanical gate decision: PASS / FAIL / BLOCKED'],
+    'core/templates/session/SESSION_SCOPE.md': ['PROD-L8.31 Planned IU Count Gate', 'Planned IU count:', 'Implementation may begin before full IU artifacts exist: NO'],
+    'core/templates/session/implementation-units/IU.md': ['PROD-L8.31 Mechanical IU Completeness Gate', 'Full IU contract sections populated before material edits', 'Unit Result present before implementation-complete claim'],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['PROD-L8.31 Generated-Run Pointer Concordance Gate', 'Generated-run mechanical gate result reflected'],
+    'system/accepted-state/CURRENT_SYSTEM_STATE.md': ['PROD-L8.31 Generated-Run Pointer Concordance Gate', 'Generated-run mechanical gate result reflected'],
+    'system/accepted-state/CARRY_FORWARD.md': ['PROD-L8.31 Carry-Forward Approval Source Gate', 'explicit approval/deferral source'],
+    'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': ['PROD-L8.31 Planned-IU Materialization Gate', 'planned IU count', 'actual full IU files'],
+    'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['PROD-L8.31 Mechanical Execution Block', 'planned IU count does not match actual full IU files'],
+    'docs/2-methodology/implementation-evidence-and-claim-reconciliation.md': ['PROD-L8.31 Generated-Run Mechanical Gates', 'report all generated-run gate failures'],
+}
+for rel, phrases in l831_required.items():
+    body = (root / rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase not in body:
+            fail(f'PROD-L8.31 {rel} missing generated-run mechanical gate phrase: {phrase}')
+
+_L831_IU_PLAN_PATTERNS = [
+    r'Implementation units required:\s*YES',
+    r'IU mode / IU planned:\s*YES',
+    r'implementation units?\s+(?:are\s+)?(?:required|planned)',
+    r'planned\s+\d+\s+IUs?',
+]
+_L831_LIFECYCLE_CLAIM = r'(implementation[_ -]complete|implementation complete|ready to close|phase acceptance|phase accepted|delivery acceptance|delivery accepted|CLOSED_ACCEPTED|CLOSED_PARTIAL|close claim|clean close)'
+
+def _l831_claims_lifecycle(session_dir, execution_body):
+    combined = execution_body
+    for name in ['SESSION_SCOPE.md', 'EVIDENCE.md']:
+        p = session_dir / name
+        if p.exists():
+            combined += '\n' + p.read_text(errors='ignore')[:120000]
+    return bool(re.search(_L831_LIFECYCLE_CLAIM, combined, re.I))
+
+def _l831_planned_iu_count(text):
+    patterns = [
+        r'Planned IU count:\s*(\d+)',
+        r'planned\s+(\d+)\s+IUs?',
+        r'IU-0?1\b.*IU-0?(\d+)\b',
+    ]
+    counts = []
+    for pat in patterns:
+        for m in re.finditer(pat, text, re.I | re.S):
+            try:
+                counts.append(int(m.group(1)))
+            except Exception:
+                pass
+    return max(counts) if counts else None
+
+def _l831_iu_required(text):
+    return any(re.search(p, text, re.I) for p in _L831_IU_PLAN_PATTERNS)
+
+def _l831_full_iu(path):
+    txt = path.read_text(errors='ignore')
+    low = txt.lower()
+    if len(_nonblank_lines(txt)) < 55:
+        return False
+    required = [
+        'unit identity / contract metadata', 'unit scope / authority', 'implementation requirements',
+        'binary acceptance criteria', 'pre-execution checks', 'execution record', 'unit review', 'unit result'
+    ]
+    if any(r not in low for r in required):
+        return False
+    if len(re.findall(r'LLM Write Permission\s*:', txt, re.I)) < 7:
+        return False
+    return True
+
+for session_dir in _generated_session_dirs():
+    scope_path = session_dir / 'SESSION_SCOPE.md'
+    execution_path = session_dir / 'SESSION_EXECUTION.md'
+    scope_body = scope_path.read_text(errors='ignore') if scope_path.exists() else ''
+    execution_body = execution_path.read_text(errors='ignore') if execution_path.exists() else ''
+    combined = scope_body + '\n' + execution_body
+    claims_lifecycle = _l831_claims_lifecycle(session_dir, execution_body)
+
+    # Full bootstrap is a start gate, not only an end gate.
+    bp = session_dir / 'bootstrap' / 'BOOTSTRAP_REPORT.md'
+    if (execution_path.exists() or scope_path.exists()) and bp.exists():
+        btxt = bp.read_text(errors='ignore')
+        identifiable = max(len(set(re.findall(r'(?m)^\s*Q(\d{1,2})\b', btxt))), len(set(re.findall(r'(?m)^\s*(\d{1,2})\.\s+', btxt))))
+        if identifiable < 16 or btxt.count('Answer:') < 16 or btxt.count('Source:') < 16 or btxt.count('Answer basis:') < 16:
+            fail(f'PROD-L8.31 generated session did not mechanically start: incomplete bootstrap answers in {bp.relative_to(root)}')
+    elif execution_path.exists() and not bp.exists():
+        fail(f'PROD-L8.31 generated session has execution ledger but no bootstrap report: {session_dir.relative_to(root)}')
+
+    iu_required = _l831_iu_required(combined)
+    planned_count = _l831_planned_iu_count(combined)
+    actual_iu_paths = _iu_files(session_dir)
+    full_iu_paths = [p for p in actual_iu_paths if _l831_full_iu(p)]
+    light_no_iu = bool(re.search(r'LIGHTWEIGHT_NO_IU', combined, re.I))
+    if iu_required and not light_no_iu:
+        if planned_count is None:
+            fail(f'PROD-L8.31 IU mode/planning without concrete planned IU count in {session_dir.relative_to(root)}')
+        elif len(full_iu_paths) != planned_count:
+            fail(f'PROD-L8.31 planned IU count mismatch in {session_dir.relative_to(root)}: planned {planned_count}, full IU files {len(full_iu_paths)}, total IU files {len(actual_iu_paths)}')
+        if planned_count and not actual_iu_paths:
+            fail(f'PROD-L8.31 planned IUs but no IU files exist in {session_dir.relative_to(root)}')
+    if actual_iu_paths and len(full_iu_paths) != len(actual_iu_paths):
+        thin = [str(p.relative_to(root)) for p in actual_iu_paths if p not in full_iu_paths]
+        fail(f'PROD-L8.31 thin or placeholder IU files detected: {thin}')
+
+    if claims_lifecycle:
+        if not re.search(r'Active generated-artifact validation result:\s*PASS', execution_body, re.I):
+            fail(f'PROD-L8.31 lifecycle claim without active generated-artifact validation PASS in {session_dir.relative_to(root)}')
+        if not re.search(r'PROD-L8.31 Generated-Run Mechanical Gate Record', execution_body, re.I):
+            fail(f'PROD-L8.31 lifecycle claim without mechanical gate record in {session_dir.relative_to(root)}')
+        elif not re.search(r'Mechanical gate decision:\s*PASS', execution_body, re.I):
+            fail(f'PROD-L8.31 lifecycle claim without mechanical gate PASS in {session_dir.relative_to(root)}')
+
+# Carry-forward approval-source gate.
+for cf_path in [root / 'system/accepted-state/CARRY_FORWARD.md'] + list((root / 'system/delivery').glob('*/CARRY_FORWARD.md')):
+    if not cf_path.exists():
+        continue
+    body = cf_path.read_text(errors='ignore')
+    if re.search(r'APPROVED_CARRY_FORWARD', body, re.I):
+        invalid_approval_source = re.search(
+            r'(?im)^\s*[-*]?\s*Approval\s*/?\s*deferral source\s*:\s*(?:$|TBD\b|TODO\b|UNKNOWN\b|NONE\b)',
+            body,
+        )
+        approval_patterns = [
+            r'(?im)^\s*[-*]?\s*Approval / deferral source\s*:\s*(?!\s*(?:$|TBD|TODO|UNKNOWN|NONE)\b).+',
+            r'(?im)^\s*[-*]?\s*approval/deferral source\s*:\s*(?!\s*(?:$|TBD|TODO|UNKNOWN|NONE)\b).+',
+            r'direct user response approving deferral',
+            r'accepted partial-close decision',
+            r'accepted baseline clause',
+        ]
+        if invalid_approval_source or not any(re.search(p, body, re.I | re.M) for p in approval_patterns):
+            fail(f'PROD-L8.31 APPROVED_CARRY_FORWARD without explicit approval/deferral source in {cf_path.relative_to(root)}')
+
+# Delivery/current-state pointer concordance as generated-run aggregate failure.
+css = root / 'system/accepted-state/CURRENT_SYSTEM_STATE.md'
+css_body = css.read_text(errors='ignore') if css.exists() else ''
+delivery_text = ''
+for p in (root / 'system/delivery').rglob('*.md') if (root / 'system/delivery').exists() else []:
+    delivery_text += '\n' + p.read_text(errors='ignore')[:120000]
+if re.search(r'(CLOSED|CLOSED_PARTIAL|CLOSED_ACCEPTED|phase accepted|delivery accepted|Delivery result\s*:)', delivery_text, re.I):
+    for phrase in ['Generated-Run Pointer Concordance Gate', 'Generated-run mechanical gate result reflected']:
+        if phrase.lower() not in css_body.lower():
+            fail(f'PROD-L8.31 current-system-state pointer concordance missing {phrase}')
+    if re.search(r'Next recommended (delivery|phase)\s*:\s*(TBD|UNKNOWN|PENDING|NOT_ASSESSED|)$', css_body, re.I | re.M):
+        fail('PROD-L8.31 current-system-state retains placeholder next delivery/phase pointer after generated delivery activity')
+
+print('PASS: HIRMOS PROD-L8.31 generated-run mechanical gate enforcement static/runtime check')
+
+# PROD-L8.31A focused generated-run gate fixture coverage
+l831a_fixture_runner = root / 'tools/test_l831_generated_run_gates.py'
+l831a_fixture_readme = root / 'tools/fixtures/README.md'
+if not l831a_fixture_runner.exists():
+    fail('PROD-L8.31A missing focused generated-run gate fixture runner: tools/test_l831_generated_run_gates.py')
+else:
+    runner_body = l831a_fixture_runner.read_text(errors='ignore')
+    for phrase in ['Focused fixtures for PROD-L8.31 generated-run mechanical gates', 'expected at least 7 L8.31 focused cases']:
+        if phrase not in runner_body:
+            fail(f'PROD-L8.31A focused fixture runner missing phrase: {phrase}')
+if 'PROD-L8.31 Generated-Run Mechanical Gate Fixtures' not in l831a_fixture_readme.read_text(errors='ignore'):
+    fail('PROD-L8.31A fixtures README missing generated-run mechanical gate fixture section')
+print('PASS: HIRMOS PROD-L8.31A generated-run mechanical gate fixture coverage static check')
 
 if VALIDATION_ERRORS:
     print(f'FAIL: HIRMOS validation reported {len(VALIDATION_ERRORS)} failure(s)')
