@@ -1,12 +1,14 @@
 # Changelog
 
-## Unreleased — Residual status hygiene hardening
+## 1.2.0 — Post-dogfood simplification, command-surface unification, and onboarding alignment
 
-- Simplifies residual delivery roadmap status by removing writable top-level `Roadmap status:` authority from `DELIVERY_PLAN.md`; roadmap posture is derived from roadmap/register rows, delivery scope authority, phase files, archives, and accepted-state pointers.
-- Hardens installed-project fixture isolation so focused Q concordance fixtures reset live generated state before creating synthetic cases.
-- Adds L8.32R residual-status hygiene checks for recreated `Roadmap status:`, writable `Parent delivery status:`, narrative `Phase Progress Ledger`, forbidden macOS package artifacts, and completed-project README boilerplate.
-- Preserves governed pause richness, IU Planning → IU Execution boundary, active generated-artifact validation, and user-facing decision options.
-- No framework version bump in this patch; framework metadata remains 1.1.9 and CLI package remains 1.3.4.
+- Bumps framework metadata and validator expected version to 1.2.0.
+- Packages the post-1.1.9 hardening wave after real dogfood: shared capability control deduplication, installer integration-copy hotfix, delivery completion concordance simplification, installed-project fixture isolation, residual status hygiene, and command-surface unification.
+- Makes `_hirmos/core/commands/` the single compact runtime command authority and removes the separate `_hirmos/core/runtime/` packet layer.
+- Preserves the successful IU Planning → governed pause → IU Execution boundary, active generated-artifact validation, rich governed checkpoint outputs, JIT optional artifact creation, and derived pointer/concordance posture.
+- Simplifies duplicated mutable delivery/phase status by deriving completion and roadmap posture from source artifacts instead of asking the model to maintain multiple narrative status mirrors.
+- Aligns onboarding documentation around the four onboarding principles, refreshes the first-real-run tutorial with clear example-project credit, simplifies the root README for first-time visitors, and separates the GitHub `_hirmos/README.md` folder guide from the packaged installed-project onboarding README.
+- Keeps CLI package version at 1.3.4 because terminal CLI command behavior did not change.
 
 ## 1.1.9 — Token-efficient runtime boundary and derived-state stabilization
 
