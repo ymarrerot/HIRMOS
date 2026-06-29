@@ -5,10 +5,10 @@ This is the lowest-cognitive-load path for using HIRMOS for the first time.
 If you only remember one thing from this page, remember this:
 
 ```text
-Use `hirmos init` to install HIRMOS and generate the integration file for your AI tool. For the complete terminal CLI guide, see [CLI Reference](../../reference/cli-reference.md).
+Install HIRMOS, let the AI tool bootstrap from _hirmos/AGENTS.md, then use hirmos start inside the agent conversation.
 ```
 
-That generated integration file is the normal bootstrap path. Directly prompting the agent to read `_hirmos/AGENTS.md` is the fallback when you are not using the CLI yet, installed manually, or the AI tool did not load its generated integration file.
+The generated integration file is the normal bootstrap path. Directly prompting the agent to read `_hirmos/AGENTS.md` is the fallback when you are not using the CLI yet, installed manually, or the AI tool did not load its generated integration file.
 
 ## What HIRMOS is
 
@@ -29,13 +29,19 @@ Understand System State
 
 The lifecycle is ordered, but not waterfall. HIRMOS can route back when new facts, missing design authority, unresolved decisions, or failed evidence show that the current step is not ready.
 
-In this lifecycle:
+## HIRMOS chooses the smallest honest work shape
 
-- User Request starts and focuses the work, but is not authority by itself.
-- Understand System State grounds the session in current project truth.
-- Design defines governed requirements, scope, and implementation readiness.
-- Implementation realizes accepted Design with evidence.
-- Update System State preserves accepted outcomes as durable system state.
+You do not need to choose the artifact model yourself. HIRMOS should select the lightest safe route for the request:
+
+| Request shape | Typical route | First pause |
+|---|---|---|
+| Small bounded work | single governed session | Session Baseline or Recommended Baseline |
+| Requirements/design only | design session | Review or Change output |
+| Single-session implementation | accepted session scope | Session Baseline — Review or Change |
+| Larger MVP/release | Delivery Plan and Delivery Baseline | Delivery Baseline — Review or Change |
+| Implementation with units | IU Planning before IU Execution | IU Plan — Review or Change |
+
+When IU mode applies, accepting the session baseline creates the IU plan. It does not authorize material implementation. IU Execution begins only after the IU plan is accepted.
 
 ## What the install looks like
 
@@ -91,6 +97,12 @@ hirmos start
 
 A good start should not jump straight to coding. HIRMOS should first explain what it understands, what current state it inspected, what work appears in scope, what is unresolved, and what the next safe command is.
 
+Possible first pauses include:
+
+- `Recommended Baseline — Review or Change` for lighter bounded work;
+- `Session Baseline — Review or Change` for bounded session work;
+- `Delivery Baseline — Review or Change` for larger durable work.
+
 ## Step 5 — Continue only when continuation is allowed
 
 Use:
@@ -100,6 +112,13 @@ hirmos continue
 ```
 
 when the active checkpoint, unresolved items, and execution controls allow continuation.
+
+For implementation sessions with IUs, expect two separate continuation boundaries:
+
+```text
+hirmos continue "Accept session baseline and create IU plan"
+hirmos continue "Accept IU plan and begin IU execution"
+```
 
 ## Step 6 — Inspect status or close
 
@@ -114,18 +133,4 @@ hirmos close
 
 ## What you do not need to learn yet
 
-For the first run, you do not need to study:
-
-- every extension file;
-- every template;
-- every stack package;
-- every protocol;
-- the full validation tool internals.
-
-Bootstrap and the active command should tell the agent what to read when it becomes necessary.
-
-
-New governed sessions use `_hirmos/session/SESSION_SCOPE.md` as the active session authority. Durable multi-session work uses `_hirmos/system/delivery/DELIVERY_PLAN.md` plus `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` when needed.
-
-
-Example: [Scope authority surfaces](../examples/scope-authority-surfaces.md).
+For the first run, you do not need to study every extension, template, stack package, protocol, or validation-tool implementation. Bootstrap and the active command should tell the agent what to read when it becomes necessary.

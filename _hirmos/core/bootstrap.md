@@ -66,7 +66,8 @@ Required preflight checks:
 - `_hirmos/AGENTS.md` exists and has been followed for the current agent/context;
 - `_hirmos/hirmos.config.json` exists;
 - required core authority/protocol files from bootstrap Step 2 exist;
-- the requested command spec exists under `_hirmos/core/commands/<command>.md`;
+- the requested command spec exists under `_hirmos/core/commands/<command>.md
+_hirmos/core/commands/<command>.md`;
 - integration registry/templates exist when the current tool integration depends on `_hirmos/integrations/agent-tools/registry.json`;
 - fallback bootstrap through `_hirmos/AGENTS.md` is explicitly recorded when an optional integration surface is missing but the command can proceed safely.
 
@@ -76,7 +77,7 @@ Classify preflight result as:
 - `PRECHECK_WARNING` — a non-required integration/setup surface is missing, but fallback bootstrap is sufficient for the requested command;
 - `PRECHECK_BLOCKER` — a required command, core, session, or integration surface is missing or contradictory.
 
-Preflight results must be recorded in the bootstrap report or `SESSION_EXECUTION.md` before command execution. If preflight is a blocker, stop before lifecycle work and recommend exactly one governed recovery action.
+Preflight results must be recorded in the bootstrap report or `SESSION_LEDGER.md` before command execution. If preflight is a blocker, stop before lifecycle work and recommend exactly one governed recovery action.
 
 ---
 
@@ -106,6 +107,7 @@ Do not read only the summaries below. The quiz includes questions that require t
 Adaptive files are read later, when the active command or execution controls require them:
 
 ```text
+_hirmos/core/commands/<command>.md
 _hirmos/core/commands/<command>.md
 _hirmos/core/protocol/STACKS.md
 _hirmos/core/protocol/SESSION_ARTIFACTS.md
@@ -226,17 +228,17 @@ Protocol: `_hirmos/core/protocol/CURRENT_SYSTEM_STATE.md`.
 
 ---
 
-## Step 7 — Execution controls and `SESSION_EXECUTION.md`
+## Step 7 — Execution controls and `SESSION_LEDGER.md`
 
 Operational summary:
 
 A governed HIRMOS session is not active until this file exists:
 
 ```text
-_hirmos/session/SESSION_EXECUTION.md
+_hirmos/session/SESSION_LEDGER.md
 ```
 
-`SESSION_EXECUTION.md` is the active session execution spine. It must record:
+`SESSION_LEDGER.md` is the active session ledger spine. It must record:
 
 - active command;
 - active lifecycle boundary;
@@ -354,7 +356,7 @@ CAPABILITY_ROUTING.md
 → extension/entrypoints/default.md
 → capability.json
 → capability/entrypoints/default.md
-→ SESSION_EXECUTION.md capability decision/status ledger
+→ SESSION_LEDGER.md capability decision/status ledger
 ```
 
 Read extension and capability files only through that routing path unless a governing file explicitly requires a narrower read.
@@ -480,3 +482,8 @@ If the user requested only bootstrap, stop after reporting bootstrap completion.
 If the user requested a HIRMOS command in the same message, resolve that command only after bootstrap passes, then read the matching command file and establish execution controls.
 
 If no runtime command was requested, do not start a session. Recommended next command may be surfaced, but not executed.
+
+
+## PROD-L8.32H runtime command packet discipline
+
+After bootstrap, public commands read `_hirmos/core/commands/<command>.md` first. Command and protocol files remain reference authority and are read adaptively when command gates require deeper detail.

@@ -1,44 +1,38 @@
-# Scope Authority Surfaces Example
+# Example: Scope Authority Surfaces
 
-This example shows the smallest authority surface HIRMOS should create for common work shapes.
+HIRMOS uses the smallest authority surface that can safely govern the work.
 
-## Bounded single-session work
+## Single-session work
 
 ```text
 _hirmos/session/
   SESSION_STATE.json
+  SESSION_LEDGER.md
   SESSION_SCOPE.md
-  SESSION_EXECUTION.md
-  unresolved-items.md
-  bootstrap/
-
-  EVIDENCE.md                   # conditional
-  implementation-units/         # conditional
-  stack-resolution.json         # conditional
+  unresolved-items.md        # only when material unresolved items exist
+  implementation-units/      # only when IU mode applies
 ```
 
-No delivery artifacts are required when the work can be governed safely in one session.
+`SESSION_SCOPE.md` owns active session scope. `SESSION_LEDGER.md` records command/gate progress and pointers. IU files own IU authority when implementation units are required.
 
-## Durable multi-session delivery
+## Durable delivery work
 
 ```text
 _hirmos/system/delivery/
   DELIVERY_PLAN.md
-  mvp/
+  <delivery-id>/
     DELIVERY_SCOPE.md
+    unresolved-items.md
     phases/
-      PHASE-01.md
+      PHASE-xx.md            # created just in time
 ```
 
-`DELIVERY_PLAN.md` is the durable roadmap/register. It is updated, not overwritten, when later durable multi-session work adds a delivery. `DELIVERY_SCOPE.md` is the scoped authority for one delivery/release. `SESSION_SCOPE.md` adopts and narrows this authority during an active session.
+Delivery artifacts own durable delivery authority. Session artifacts consume that authority when a bounded phase/session begins.
 
-## Close/archive
-
-Closed sessions are archived under:
+## Accepted current state
 
 ```text
-_hirmos/system/history/sessions/<session-id>/
-  ARCHIVE_MANIFEST.md
+_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md
 ```
 
-The archive manifest records the close/archive transaction. It is not accepted current state by itself.
+Current System State is a navigation and accepted-state pointer surface. It should not duplicate detailed delivery scope, phase progress, evidence, or session logs. Derived pointer indexes can be regenerated from source artifacts when needed.

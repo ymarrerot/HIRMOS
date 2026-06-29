@@ -15,7 +15,7 @@
   },
   "requires_artifacts": [
     "_hirmos/session/SESSION_STATE.json with session_focus = delivery_baseline",
-    "_hirmos/session/SESSION_EXECUTION.md",
+    "_hirmos/session/SESSION_LEDGER.md",
     "_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md when present"
   ],
   "produces_artifacts": [
@@ -24,7 +24,7 @@
     "_hirmos/system/delivery/<delivery-id>/unresolved-items.md",
     "_hirmos/system/delivery/<delivery-id>/REQUIREMENTS.md when justified",
     "_hirmos/system/delivery/<delivery-id>/DESIGN.md when justified",
-    "_hirmos/session/SESSION_EXECUTION.md"
+    "_hirmos/session/SESSION_LEDGER.md"
   ],
   "execution_controls": [
     "delivery-baseline checkpoint control",

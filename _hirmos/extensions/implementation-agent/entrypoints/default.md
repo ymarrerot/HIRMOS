@@ -4,11 +4,11 @@
 
 ### Purpose
 
-Route the active Implementation lifecycle boundary to installed implementation-agent capabilities required by `_hirmos/session/SESSION_EXECUTION.md` controls.
+Route the active Implementation lifecycle boundary to installed implementation-agent capabilities required by `_hirmos/session/SESSION_LEDGER.md` controls.
 
 ### Produces
 
-- Capability activation decisions recorded in `_hirmos/session/SESSION_EXECUTION.md`.
+- Capability activation decisions recorded in `_hirmos/session/SESSION_LEDGER.md`.
 - Capability-owned artifacts produced by selected capability entrypoints.
 
 ## Production-shaped Implementation obligation
@@ -36,7 +36,7 @@ When a production-shaped implementation cannot be completed in scope, Implementa
 2. Read `_hirmos/core/protocol/CAPABILITY_ROUTING.md` when routing is material to the active command.
 3. Select only capabilities required by the active lifecycle boundary and execution controls.
 4. Read each selected capability entrypoint before running that capability.
-5. Record capability decisions in `_hirmos/session/SESSION_EXECUTION.md`.
+5. Record capability decisions in `_hirmos/session/SESSION_LEDGER.md`.
 6. Do not claim capability completion until expected artifacts/evidence exist or are explicitly not applicable with rationale.
 7. Do not allow implementation capabilities to silently rewrite Design authority, Session Scope, or accepted system state.
 
@@ -45,7 +45,7 @@ When a production-shaped implementation cannot be completed in scope, Implementa
 
 ### Governance posture
 
-Implementation-agent capabilities execute inside HIRMOS governance. They must not treat HIRMOS as an after-the-fact compliance layer. Implementation work may begin only after command state, active scope authority, unresolved-item status, and IU authority when applicable permit it.
+Implementation-agent capabilities execute inside HIRMOS governance. They must not treat HIRMOS as an after-the-fact compliance layer. Implementation work may begin only after command state, active scope authority, unresolved-item status, and IU authority when applicable permit it. In IU mode, session-baseline acceptance permits IU planning only; material implementation requires a separate IU-plan acceptance and `IU_EXECUTION_AUTHORIZED` ledger record.
 
 The model must not implement first and then create IU files, evidence, or execution ledger rows as a report of what happened. If that deviation is discovered, route to correction/deviation handling before any completion claim.
 
@@ -56,7 +56,7 @@ Implementation is governed realization of accepted Design, not merely code editi
 
 ### Required Inputs Before Implementation
 
-Implementation requires a ready `_hirmos/session/SESSION_SCOPE.md`, resolved gated items in `_hirmos/session/unresolved-items.md`, current project evidence, and active execution controls in `_hirmos/session/SESSION_EXECUTION.md`.
+Implementation requires a ready `_hirmos/session/SESSION_SCOPE.md`, resolved gated items in `_hirmos/session/unresolved-items.md`, current project evidence, and active execution controls in `_hirmos/session/SESSION_LEDGER.md`.
 
 ### Implementation Unit Discipline
 
@@ -84,11 +84,7 @@ Implementation routes back when it discovers missing authority, contradictory cu
 
 ### Canonical interaction posture visibility
 
-Use `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail.
-
-- By default, surface user-owned decisions, blockers, concise status, completion/readiness, or artifact pointers.
-- Include artifact paths when referencing scope, IU authority, evidence, validation, unresolved items, carry-forward, route-back, review, or accepted-state claims.
-- Surface changed files, validation/evidence, assumptions, limitations, review implications, routing, controls, unresolved-item contributions, route-backs, retries, and terminal-state basis when requested or when responsible review requires it.
+Apply the shared interaction-posture rules in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the canonical posture authority at `_hirmos/core/authority/INTERACTION_POSTURE.md`. Surface rich governed pause/checkpoint outputs when they support user decision-making; do not reduce checkpoint clarity to save tokens.
 
 ### Completion Rule
 
@@ -132,4 +128,4 @@ Apply accepted prior run lessons and carry-forward items only when they are pres
 
 ## Implementation-Unit Timing Rule
 
-When implementation-unit mode is active, implementation-unit artifacts are execution authorities. Create them after session baseline acceptance and before material code changes begin. Do not create them only as retrospective summaries after implementation unless a correction record explicitly reconciles the deviation.
+When implementation-unit mode is active, implementation-unit artifacts are execution authorities. Create them after session baseline acceptance and before material code changes begin. After creating or verifying them, pause for `IU Plan — Review or Change`; do not perform material code changes in the same continuation. Do not create them only as retrospective summaries after implementation unless a correction record explicitly reconciles the deviation.

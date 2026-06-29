@@ -72,7 +72,7 @@ Artifact pointers keep output simple while preserving technical inspection paths
 
 The canonical posture changes how checkpoint information is rendered, not what must be governed.
 
-Every governed checkpoint must remain backed by `SESSION_EXECUTION.md`, current execution controls, and relevant session artifacts.
+Every governed checkpoint must remain backed by `SESSION_LEDGER.md`, current execution controls, and relevant session artifacts.
 
 A checkpoint should normally show:
 

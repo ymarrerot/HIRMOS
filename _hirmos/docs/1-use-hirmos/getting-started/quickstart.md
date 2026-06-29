@@ -30,7 +30,7 @@ In your AI coding tool, start a fresh agent context and say:
 Read and follow _hirmos/AGENTS.md
 ```
 
-The agent must read the bootstrap instructions before it treats HIRMOS commands as executable.
+The generated integration file may do this automatically. The fallback prompt is useful when you want to be explicit.
 
 ## 3. Start the request
 
@@ -40,7 +40,7 @@ In the AI conversation, say something like:
 hirmos start "Add feature: login/sign up with Google"
 ```
 
-Use a normal product or engineering request. You do not need to classify the project as greenfield, brownfield, or mixed. HIRMOS should inspect the current state and decide what capabilities are needed for the session.
+Use a normal product or engineering request. You do not need to classify the project as greenfield, brownfield, or mixed. HIRMOS should inspect the current state and decide what capabilities are needed.
 
 ## 4. Expect current-state-first behavior
 
@@ -50,7 +50,7 @@ A good first response should make clear:
 
 - what HIRMOS inspected;
 - what it understands about the request;
-- what is in scope for the current session;
+- what is in scope;
 - what is unresolved;
 - whether continuation is safe;
 - exactly one recommended next command.
@@ -59,14 +59,14 @@ A good first response should make clear:
 
 If HIRMOS asks for input, it should distinguish:
 
-- gated items that need your answer before the affected work can proceed;
+- gated items that need your answer before affected work can proceed;
 - non-gating assumptions it can carry safely for the current session;
 - deferred or carry-forward items that should not be lost;
-- technical review items that another reviewer may inspect.
+- technical-review items that another reviewer may inspect.
 
 Do not feel obligated to answer every non-gating assumption before the first continuation.
 
-## 6. Continue or close
+## 6. Continue only through the next governed boundary
 
 Use:
 
@@ -76,25 +76,27 @@ hirmos continue
 
 when HIRMOS says continuation is allowed.
 
+If implementation units are required, HIRMOS should pause twice:
+
+```text
+Session Baseline accepted → IU Planning only
+IU Plan accepted → IU Execution
+```
+
+This is intentional. It prevents implementation before the unit plan is visible and accepted.
+
+## 7. Status or close
+
 Use:
 
 ```text
 hirmos status
-```
-
-when you want to inspect active state without advancing the work.
-
-Use:
-
-```text
 hirmos close
 ```
 
-when the session is ready to update current system state and archive.
+`hirmos status` is read-only. `hirmos close` should update current system state and archive only when evidence supports the close claim.
 
 ## What a good quickstart feels like
-
-A good run should feel simple by default:
 
 ```text
 Tell HIRMOS what you want.
@@ -104,6 +106,3 @@ HIRMOS asks only for decisions that matter.
 HIRMOS implements only authorized work.
 HIRMOS preserves accepted outcomes.
 ```
-
-
-New governed sessions use `_hirmos/session/SESSION_SCOPE.md` as the active session authority. Durable multi-session work uses `_hirmos/system/delivery/DELIVERY_PLAN.md` plus `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` when needed.

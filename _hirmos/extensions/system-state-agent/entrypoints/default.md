@@ -4,11 +4,11 @@
 
 ### Purpose
 
-Route the active lifecycle boundary to the installed `system-state-agent` capabilities required by `SESSION_EXECUTION.md` controls.
+Route the active lifecycle boundary to the installed `system-state-agent` capabilities required by `SESSION_LEDGER.md` controls.
 
 ### Produces
 
-- Capability activation decisions recorded in `_hirmos/session/SESSION_EXECUTION.md`.
+- Capability activation decisions recorded in `_hirmos/session/SESSION_LEDGER.md`.
 - Capability-owned artifacts produced by the selected capability entrypoints.
 - Unresolved-item contributions when selected capabilities discover material uncertainty.
 
@@ -32,12 +32,12 @@ System-state updates are governed synchronization, not after-the-fact cleanup fo
 2. Read `_hirmos/core/protocol/CAPABILITY_ROUTING.md` when routing is material to the active command.
 3. Select only capabilities required by the active lifecycle boundary and execution controls.
 4. Read each selected capability entrypoint before running that capability.
-5. Record capability decisions in `_hirmos/session/SESSION_EXECUTION.md`.
+5. Record capability decisions in `_hirmos/session/SESSION_LEDGER.md`.
 6. Do not claim capability completion until expected artifacts/evidence exist or are explicitly not applicable.
 
 ## Canonical interaction posture visibility
 
-Use `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail. Include artifact paths when referencing current-state, unresolved-item, carry-forward, delivery, evidence, archive, or accepted-state claims.
+Apply the shared interaction-posture rules in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the canonical posture authority at `_hirmos/core/authority/INTERACTION_POSTURE.md`. Surface rich governed pause/checkpoint outputs when they support user decision-making; do not reduce checkpoint clarity to save tokens.
 
 ## Shared Extension Method
 
@@ -49,7 +49,7 @@ Use `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output,
 4. Evidence must distinguish observed, inferred, assumed, unknown, blocked, and not applicable.
 5. Material uncertainty must enter `_hirmos/session/unresolved-items.md`.
 6. Update System State consumes reviewed outcomes; it does not create missing Design or Implementation results.
-7. Capability completion must be recorded in `_hirmos/session/SESSION_EXECUTION.md`.
+7. Capability completion must be recorded in `_hirmos/session/SESSION_LEDGER.md`.
 
 ### Project type and stack responsibilities
 
@@ -61,7 +61,7 @@ Typical sequence: `request-intake` → `source-material-ingestion` when source m
 
 ### Capability sequence for `hirmos close`
 
-Typical sequence: read `SESSION_EXECUTION.md` and close controls → confirm reviewed outcomes/evidence → run `update-system-state` → archive session and reset active session state when normal close succeeds.
+Typical sequence: read `SESSION_LEDGER.md` and close controls → confirm reviewed outcomes/evidence → run `update-system-state` → archive session and reset active session state when normal close succeeds.
 
 ### Non-authority rule
 
@@ -97,7 +97,7 @@ During Understand System State, read `_hirmos/system/accepted-state/CURRENT_SYST
 
 ### Current-system-state-first understanding
 
-Record the read status, contradictions, confidence, and Design handoff for `CURRENT_SYSTEM_STATE.md` in `_hirmos/session/DESIGN.md` and update current-system-state-first controls in `_hirmos/session/SESSION_EXECUTION.md`.
+Record the read status, contradictions, confidence, and Design handoff for `CURRENT_SYSTEM_STATE.md` in `_hirmos/session/DESIGN.md` and update current-system-state-first controls in `_hirmos/session/SESSION_LEDGER.md`.
 
 ### Accepted-state invariant and canonical-value responsibilities
 

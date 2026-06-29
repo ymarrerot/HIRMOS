@@ -16,7 +16,7 @@
   "requires_artifacts": [],
   "produces_artifacts": [
     "_hirmos/session/SESSION_SCOPE.md parent authority",
-    "_hirmos/session/SESSION_EXECUTION.md"
+    "_hirmos/session/SESSION_LEDGER.md"
   ],
   "execution_controls": [
     "request-intake control"

@@ -21,7 +21,7 @@ The archive preserves what happened.
 
 Accepted state records what future sessions may treat as current truth.
 
-A file in the archive is not automatically accepted truth. `SESSION_EXECUTION.md` close/update control pointers decides what was accepted, rejected, preserved as evidence only, or carried forward.
+A file in the archive is not automatically accepted truth. `SESSION_LEDGER.md` close/update control pointers decides what was accepted, rejected, preserved as evidence only, or carried forward.
 
 ## After close
 
@@ -35,11 +35,11 @@ New governed sessions close through the contract-centered artifact model. Close 
 - `_hirmos/session/SESSION_SCOPE.md`;
 - `_hirmos/session/SESSION_SCOPE.md` close verification;
 - `_hirmos/session/unresolved-items.md`;
-- `_hirmos/session/SESSION_EXECUTION.md`;
+- `_hirmos/session/SESSION_LEDGER.md`;
 - `_hirmos/session/implementation-units/` when Implementation was active;
 - `_hirmos/session/EVIDENCE.md` when evidence is nontrivial or cannot be captured clearly in implementation-unit artifacts.
 
-Do not create separate close checklist, claim reconciliation, local-runtime evidence, runtime-readiness, archive-manifest, or session-scope-review support files for new sessions. Their responsibilities belong in `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, `EVIDENCE.md`, implementation units, and accepted-state records. The source-of-truth close verdict remains `SESSION_SCOPE.md` close verification plus accepted-state merge evidence.
+Do not create separate close checklist, claim reconciliation, local-runtime evidence, runtime-readiness, archive-manifest, or session-scope-review support files for new sessions. Their responsibilities belong in `SESSION_SCOPE.md`, `SESSION_LEDGER.md`, `EVIDENCE.md`, implementation units, and accepted-state records. The source-of-truth close verdict remains `SESSION_SCOPE.md` close verification plus accepted-state merge evidence.
 
 A normal close must archive all active session artifacts, normalize the archived session state, update accepted state, and reset `_hirmos/session/` to idle scaffolding only. If stale active artifacts remain after reset, the correct result is `Close Blocked`, not close success.
 

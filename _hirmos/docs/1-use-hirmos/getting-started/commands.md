@@ -1,100 +1,91 @@
-# Command Guide
+# Commands
 
-HIRMOS keeps the everyday workflow command surface small.
+HIRMOS workflow commands are written inside the AI-agent conversation after the project has been initialized and bootstrapped.
+
+They are not terminal commands. The terminal CLI installs and updates the framework; the agent-facing commands guide the HIRMOS workflow.
+
+## Command authority
+
+The compact runtime command authority lives in:
 
 ```text
-hirmos start
-hirmos continue
-hirmos status
-hirmos close
+_hirmos/core/commands/
 ```
 
-These are framework workflow commands used inside the AI-agent conversation after bootstrap. They are not terminal CLI commands.
+Protocol files under `_hirmos/core/protocol/` are deeper reference authority. A normal run should follow the active command file first and read deeper protocol files only when the command or a gate requires it.
 
-The terminal CLI is focused on installation and integration setup. For complete CLI usage, see [CLI Reference](../../reference/cli-reference.md).
+## Core workflow commands
+
+| Command | Purpose |
+|---|---|
+| `hirmos start "<request>"` | Start a governed run from the current system state. |
+| `hirmos continue` | Continue through the next allowed governed boundary. |
+| `hirmos status` | Inspect active state without advancing work. |
+| `hirmos close` | Reconcile evidence, update current system state, and archive when ready. |
 
 ## `hirmos start`
 
-Starts a governed session from a user request.
+Use `hirmos start` to begin work. HIRMOS should inspect current state, select the smallest honest work shape, and stop at a reviewable checkpoint.
 
-Examples:
+Common first checkpoints:
 
-```text
-hirmos start "Add Google login"
-hirmos start
-```
-
-`hirmos start` should begin with current-state understanding. It should not authorize implementation by itself unless the governed workflow has reached implementation readiness.
-
-A strong `hirmos start` should establish or update the active session context, identify unresolved items, and recommend exactly one safe next command.
+| Work shape | First checkpoint |
+|---|---|
+| Small bounded work | Recommended Baseline or Session Baseline |
+| Single-session implementation | Session Baseline — Review or Change |
+| Larger delivery | Delivery Baseline — Review or Change |
+| Phase of accepted delivery | Session Baseline — Review or Change |
 
 ## `hirmos continue`
 
-Advances the active lifecycle boundary when continuation is allowed.
+Use `hirmos continue` only when HIRMOS has shown that continuation is allowed.
 
-Use it after HIRMOS has paused for a decision, reported implementation readiness, completed a unit, or otherwise indicated the next continuation point.
+Continuation does not always mean “start coding.” It can mean:
 
-`continue` should be cumulative. It should append to active execution history rather than rewriting the session as if earlier work did not happen.
+- accept a delivery baseline and prepare the next phase/session baseline;
+- accept a session baseline and create the IU plan;
+- accept an IU plan and begin IU execution;
+- continue a correction or review pass;
+- proceed toward close readiness.
+
+When IU mode applies, the expected sequence is:
+
+```text
+hirmos continue "Accept session baseline and create IU plan"
+hirmos continue "Accept IU plan and begin IU execution"
+```
+
+Material project-file edits require implementation authorization. IU Planning alone is not implementation authorization.
 
 ## `hirmos status`
 
-Inspects the active or last known session state without advancing work.
+Use `hirmos status` to inspect active state without changing artifacts except read-only status output when the framework explicitly allows it.
 
-It should summarize:
+Status should report:
 
-- active lifecycle boundary;
-- current session or delivery state;
-- unresolved gated items and non-gating assumptions;
-- implementation-unit or phase progress when applicable;
-- close readiness when relevant;
-- exactly one recommended next command.
+- current lifecycle position;
+- active scope/delivery pointers;
+- blocked or pending gates;
+- unresolved items;
+- evidence posture;
+- one recommended next command.
 
 ## `hirmos close`
 
-Runs Update System State when the session is ready to close.
+Use `hirmos close` when the work is ready to reconcile evidence and update durable state.
 
-It should not repair missing Design or Implementation work. If close readiness is not satisfied, HIRMOS should block close and explain which owning stage must be revisited.
+Close should not overclaim. For example, a local MVP close can be accepted as local-runtime evidence without claiming production readiness.
 
-A safe close should reconcile session-scope review, unresolved items, implementation evidence, accepted outcomes, archive/reset behavior, and durable current system state.
+## Work-shape focus values
 
-## What commands must not do
+The active focus determines which artifacts are required:
 
-Commands must not:
+| Focus | Typical use | Authority |
+|---|---|---|
+| `minimal_session` | Small bounded output or non-implementation work | generated only when needed |
+| `session_baseline` | Single-session scope | `SESSION_SCOPE.md` |
+| `delivery_baseline` | Durable delivery planning | `DELIVERY_PLAN.md`, `DELIVERY_SCOPE.md` |
+| `phase_session_baseline` | Next slice of accepted delivery | phase file + `SESSION_SCOPE.md` |
+| `implementation` | Authorized implementation | accepted scope and IU/evidence surfaces as needed |
 
-- claim readiness or completion while required execution controls are `PENDING` or `BLOCKED`;
-- reference an artifact as ready or inspectable unless it exists and contains non-placeholder content;
-- treat source inputs as accepted design authority;
-- silently skip unresolved gated decisions;
-- close a session while active artifacts contradict each other.
-
-## Command state machine
-
-HIRMOS command legality is governed by `_hirmos/core/protocol/COMMAND_STATE_MACHINE.md` and `_hirmos/session/SESSION_STATE.json`.
-
-The practical rule is simple:
-
-```text
-start establishes governed work
-continue advances only when safe
-status observes without mutation
-close updates current state only when evidence and artifacts agree
-```
-
-
-New governed sessions use `_hirmos/session/SESSION_SCOPE.md` as the active session authority. Durable multi-session work uses `_hirmos/system/delivery/DELIVERY_PLAN.md` plus `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` when needed.
-
-## Focus-aware command behavior
-
-HIRMOS always runs inside a governed runtime session envelope, but the active focus determines which authority artifacts are required.
-
-| Focus | When used | Required authority | Default next checkpoint |
-|---|---|---|---|
-| `minimal_session` | Small bounded output or non-implementation work | `SESSION_SCOPE.md` only when bounded authority is needed | Session Baseline / Recommended Baseline |
-| `session_baseline` | Single-session implementation or reviewable session scope | `SESSION_SCOPE.md` | Session Baseline — Review or Change |
-| `delivery_baseline` | Durable delivery/release planning before phase/session work | `DELIVERY_SCOPE.md` and delivery unresolved register | Delivery Baseline — Review or Change |
-| `phase_session_baseline` | First or next phase/session inside an accepted delivery | `PHASE-xx.md` and `SESSION_SCOPE.md` | Session Baseline — Review or Change |
-| `implementation` | Accepted session scope is ready to implement | `SESSION_SCOPE.md` and implementation controls | Implementation / evidence |
-
-During `delivery_baseline`, `hirmos start` must not create `SESSION_SCOPE.md`, session unresolved items, phase files, or implementation-unit files by default. It prepares delivery authority and pauses for delivery baseline review. After acceptance, `hirmos continue` transitions to the next phase/session baseline rather than implementing directly.
-
-During `session_baseline` or `phase_session_baseline`, `hirmos continue` accepts or amends the session baseline and only then creates implementation-unit artifacts when they are actually needed.
+HIRMOS should create optional artifacts just in time. Empty future artifacts create synchronization cost and should be avoided.

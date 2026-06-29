@@ -18,12 +18,12 @@
     "_hirmos/session/SESSION_STATE.json with session_focus = phase_session_baseline",
     "_hirmos/system/delivery/DELIVERY_PLAN.md",
     "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md with accepted/amended delivery baseline",
-    "_hirmos/session/SESSION_EXECUTION.md"
+    "_hirmos/session/SESSION_LEDGER.md"
   ],
   "produces_artifacts": [
     "_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md for the next active phase only",
     "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md phase-plan status update when needed",
-    "_hirmos/session/SESSION_EXECUTION.md",
+    "_hirmos/session/SESSION_LEDGER.md",
     "_hirmos/session/unresolved-items.md when phase/session blockers are found"
   ],
   "execution_controls": [

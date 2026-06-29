@@ -43,7 +43,7 @@ The system-state-agent method is:
 
 ## Rule
 
-Capabilities execute only when selected by Core command, lifecycle, capability-routing, and execution-control rules. Capability completion must be recorded in `_hirmos/session/SESSION_EXECUTION.md`.
+Capabilities execute only when selected by Core command, lifecycle, capability-routing, and execution-control rules. Capability completion must be recorded in `_hirmos/session/SESSION_LEDGER.md`.
 
 
 ## Canonical interaction posture

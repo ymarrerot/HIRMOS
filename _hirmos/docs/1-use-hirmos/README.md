@@ -1,53 +1,37 @@
-# 1 — Use HIRMOS for Software Work
+# Use HIRMOS
 
-This lane is for people who want to use HIRMOS on a real software project without learning every framework internal first.
+Use this lane when you want to install HIRMOS, start a real run, or understand the normal workflow inside an AI coding tool.
 
-HIRMOS works inside your AI coding tool. The terminal CLI installs the framework and tool-integration files. In normal use, the generated integration file bootstraps the AI tool into HIRMOS; direct prompting with `_hirmos/AGENTS.md` is the fallback when the CLI integration is unavailable or not loaded.
+## Recommended path
 
-## Start here
+1. [Getting Started](getting-started/README.md)
+2. [Quickstart](getting-started/quickstart.md)
+3. [Commands](getting-started/commands.md)
+4. [First Real Run](getting-started/first-real-run.md)
+5. [Multi-Session Work](getting-started/multi-session-work.md) when the work is larger than one bounded session
 
-1. [Quickstart](getting-started/quickstart.md) — the shortest safe path from installation to first use.
-2. [Installation](getting-started/installation.md) — install HIRMOS and choose supported AI-tool integrations.
-3. [Commands](getting-started/commands.md) — understand `hirmos start`, `hirmos status`, `hirmos continue`, and `hirmos close` as framework workflow commands, not terminal CLI commands.
-4. [First Real Run](getting-started/first-real-run.md) — what to expect when HIRMOS handles real work.
-5. [Working with Existing Projects](getting-started/working-with-existing-projects.md) — how HIRMOS should approach brownfield or mixed projects.
-6. [Multi-Session Work](getting-started/multi-session-work.md) — how larger deliveries are carried across more than one session.
-7. [Getting Started](getting-started/README.md) — the expanded first-use guide.
-
-## Normal workflow
+## The basic rhythm
 
 ```text
-Install HIRMOS
-→ open your AI coding tool
-→ let the generated tool integration bootstrap HIRMOS
-If the tool integration is not available or did not load, use the fallback bootstrap prompt:
-
-```text
-Read and follow _hirmos/AGENTS.md
-```
-→ use hirmos start "<your request>" inside the AI conversation
-→ review what HIRMOS understood, what is unresolved, and what it recommends next
-→ continue, check status, or close when HIRMOS says that action is safe
+hirmos start "<request>"
+→ review the governed checkpoint
+→ answer only decisions that matter
+→ hirmos continue through the next allowed boundary
+→ hirmos close when evidence supports close
 ```
 
-## What HIRMOS should do for you
+## Work shapes
 
-HIRMOS helps the AI agent:
+HIRMOS uses the smallest honest structure for the request:
 
-- start from the current state of the project, not from a guessed ideal state;
-- separate user requests, source inputs, accepted design, implementation evidence, and durable current state;
-- track unresolved decisions, assumptions, blockers, and carry-forward work;
-- break implementation into bounded, reviewable work;
-- preserve evidence before claiming completion;
-- update durable current system state when a session closes.
+- **single-session route** for bounded work;
+- **delivery route** for larger durable work;
+- **phase/session route** for the next slice of an accepted delivery;
+- **IU implementation route** when implementation units are needed.
 
-## What you do not need to learn first
+When IU mode applies, expect an IU Planning pause before IU Execution.
 
-For the first run, you do not need to study every protocol, template, extension, stack file, or validator. HIRMOS uses progressive disclosure: the active command should lead the agent to the files it needs for the current work.
+## Examples
 
-## What to read next
-
-- New installation: start with [Installation](getting-started/installation.md).
-- First task: start with [Quickstart](getting-started/quickstart.md).
-- Existing codebase: read [Working with Existing Projects](getting-started/working-with-existing-projects.md).
-- Larger effort: read [Multi-Session Work](getting-started/multi-session-work.md).
+- [Delivery Baseline and Phase/Session Flow](examples/delivery-baseline-and-phase-session.md)
+- [Scope Authority Surfaces](examples/scope-authority-surfaces.md)

@@ -20,7 +20,7 @@
     "_hirmos/session/DESIGN.md source matrix",
     "_hirmos/session/DESIGN.md current-state basis",
     "_hirmos/session/unresolved-items.md",
-    "_hirmos/session/SESSION_EXECUTION.md"
+    "_hirmos/session/SESSION_LEDGER.md"
   ],
   "execution_controls": [
     "prototype/POC input control",

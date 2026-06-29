@@ -56,9 +56,9 @@ Required fields:
 
 Rules:
 
-- `status`, `session_id`, `lifecycle_stage`, `continuation_pass`, `pending_correction`, `allowed_next_commands`, `recommended_next_command`, `blocking_reason`, and timestamps are the full machine-state surface. Narrative continuation belongs in `SESSION_EXECUTION.md` Current Continuation Snapshot.
-- `SESSION_EXECUTION.md` may explain state but must not override `SESSION_STATE.json`.
-- If `SESSION_STATE.json` and `SESSION_EXECUTION.md` disagree, HIRMOS must fail closed.
+- `status`, `session_id`, `lifecycle_stage`, `continuation_pass`, `pending_correction`, `allowed_next_commands`, `recommended_next_command`, `blocking_reason`, and timestamps are the full machine-state surface. Narrative continuation belongs in `SESSION_LEDGER.md` Current Continuation Snapshot.
+- `SESSION_LEDGER.md` may explain state but must not override `SESSION_STATE.json`.
+- If `SESSION_STATE.json` and `SESSION_LEDGER.md` disagree, HIRMOS must fail closed.
 - `allowed_next_commands` must contain only supported governed commands.
 - `recommended_next_command` must be exactly one command and must be legal for the current state.
 
@@ -93,7 +93,7 @@ Illegal transitions fail closed. In particular:
 
 - `hirmos start` is illegal when an active session exists.
 - `hirmos continue` is illegal when session status is `idle`.
-- bare `hirmos continue` is illegal after `implementation_complete` unless `pending_correction` is true or `SESSION_EXECUTION.md` Current Continuation Snapshot explicitly recommended `hirmos continue`.
+- bare `hirmos continue` is illegal after `implementation_complete` unless `pending_correction` is true or `SESSION_LEDGER.md` Current Continuation Snapshot explicitly recommended `hirmos continue`.
 - `hirmos close` is illegal before a design-only, implementation-complete, or close-ready terminal boundary is reached.
 
 ## Mandatory start pause rule
@@ -104,7 +104,7 @@ For implementation-capable sessions, `hirmos start` must stop at `implementation
 
 - `_hirmos/session/SESSION_STATE.json`
 - `_hirmos/session/SESSION_SCOPE.md`
-- `_hirmos/session/SESSION_EXECUTION.md`
+- `_hirmos/session/SESSION_LEDGER.md`
 - `_hirmos/session/unresolved-items.md`
 - `_hirmos/session/SESSION_SCOPE.md` close verification initialized for later review
 - implementation unit plan in `SESSION_SCOPE.md` when implementation is expected
@@ -127,7 +127,7 @@ Design-only or analysis-only sessions may complete the requested design/analysis
 
 `hirmos continue` is append-only.
 
-Every `hirmos continue` must create a new continuation pass record in `SESSION_EXECUTION.md`. It must not overwrite previous pass history, evidence, unresolved-item dispositions, or unit reviews.
+Every `hirmos continue` must create a new continuation pass record in `SESSION_LEDGER.md`. It must not overwrite previous pass history, evidence, unresolved-item dispositions, or unit reviews.
 
 Continuation pass types:
 
@@ -147,9 +147,9 @@ Scope rules:
 - `SESSION_SCOPE.md` close verification must add review passes, not replace prior reviews.
 - `implementation-units/IU-xx.md` must append attempts/retries/reviews.
 
-## SESSION_EXECUTION append-only ledger requirements
+## SESSION_LEDGER append-only ledger requirements
 
-`SESSION_EXECUTION.md` is the command ledger. It must be append-only for command history and continuation passes. The machine state in `SESSION_STATE.json` controls legality; the ledger records what happened and why.
+`SESSION_LEDGER.md` is the command ledger. It must be append-only for command history and continuation passes. The machine state in `SESSION_STATE.json` controls legality; the ledger records what happened and why.
 
 Required ledger invariants:
 
@@ -159,7 +159,7 @@ Required ledger invariants:
 - route-backs are recorded instead of silently rewriting earlier authority;
 - corrections and scope amendments preserve earlier implementation/evidence records;
 - prior pass records may be corrected only with an explicit correction note;
-- `SESSION_STATE.json.continuation_pass` must match the latest continuation pass recorded in `SESSION_EXECUTION.md`;
+- `SESSION_STATE.json.continuation_pass` must match the latest continuation pass recorded in `SESSION_LEDGER.md`;
 - implementation-complete and close claims require ledger integrity self-validation.
 
 If ledger integrity cannot be established, the command must fail closed.
@@ -170,7 +170,7 @@ If ledger integrity cannot be established, the command must fail closed.
 Command execution applies the execution-control subset of `_hirmos/core/authority/BEYOND_CLEAR_SPECS.md`. For command-state discipline, this means:
 
 - command protocols provide clear executable specs;
-- `SESSION_EXECUTION.md` provides strict local self-validation for lifecycle-boundary claims;
+- `SESSION_LEDGER.md` provides strict local self-validation for lifecycle-boundary claims;
 - command responses fail closed when machine state, ledger state, scope state, unresolved-item state, or evidence cannot support the requested transition;
 - append-only continuation and control-mutation records protect against stale or overwritten session history.
 
@@ -216,7 +216,7 @@ Validators must eventually enforce:
 - recommended command legality;
 - mandatory start pause;
 - cumulative continue pass append-only markers;
-- append-only ledger integrity phrases in `SESSION_EXECUTION.md`;
+- append-only ledger integrity phrases in `SESSION_LEDGER.md`;
 - concordance between `SESSION_STATE.json.continuation_pass` and latest ledger pass when active;
 - active/idle session folder consistency;
 - canonical artifact names;
@@ -240,13 +240,13 @@ The exactly-one-next-command rule must not recommend `hirmos continue` for imple
 
 ## Production-Shaped Engineering state gate
 
-Before an implementation-capable session may enter `implementation_readiness`, HIRMOS must record the Production-Shaped Engineering Gate in `DESIGN.md`, `SESSION_SCOPE.md`, and `SESSION_EXECUTION.md`.
+Before an implementation-capable session may enter `implementation_readiness`, HIRMOS must record the Production-Shaped Engineering Gate in `DESIGN.md`, `SESSION_SCOPE.md`, and `SESSION_LEDGER.md`.
 
 Before a session may enter `close_ready` or `closed`, HIRMOS must verify that implementation evidence supports the exact production-shaped claims being accepted. If evidence contradicts a claim, the claim must be downgraded, routed back, or preserved as a limitation/carry-forward item.
 
 ## Append-only continuation ledger integrity
 
-`hirmos continue` is append-only. Before adding a continuation pass, the runner must preserve all earlier continuation register rows and all earlier pass detail blocks in `_hirmos/session/SESSION_EXECUTION.md`.
+`hirmos continue` is append-only. Before adding a continuation pass, the runner must preserve all earlier continuation register rows and all earlier pass detail blocks in `_hirmos/session/SESSION_LEDGER.md`.
 
 A continuation pass must not replace, summarize away, reorder, or delete earlier pass records. If a correction must amend an earlier claim, the correction is recorded in a new pass and may reference the earlier pass; the earlier pass remains visible.
 

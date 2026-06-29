@@ -1,38 +1,15 @@
 # Reference
 
-Use this lane when you need definitions, artifact maps, command-surface explanations, integration-tool details, or terminology lookup.
+Use this lane when you need details after you understand the basic HIRMOS workflow.
 
-Reference pages are practical orientation material. Core authority/protocol files remain the governing runtime rules when bootstrap, command specs, or execution controls require them.
+Start with:
 
-## Start here
+- [Artifact Model](artifact-model.md)
+- [Runtime Surfaces](runtime-surfaces.md)
+- [Framework Command Reference](framework-command-reference.md)
+- [CLI Reference](cli-reference.md)
+- [Glossary](glossary.md)
+- [Integration Tools](integration-tools.md)
+- [Stacks](stacks.md)
 
-- [Artifact Model](artifact-model.md) — current HIRMOS artifact surfaces and their responsibilities.
-- [CLI Reference](cli-reference.md) — complete terminal CLI usage guide.
-- [Framework Command Reference](framework-command-reference.md) — AI-tool workflow commands used after HIRMOS bootstrap.
-- [Integration Tools](integration-tools.md) — supported AI-tool integrations and integration-template ownership.
-- [Runtime Surfaces](runtime-surfaces.md) — how install, framework, session, system, docs, and extension surfaces relate.
-- [Glossary](glossary.md) — common HIRMOS terms.
-- [Stacks](stacks.md) — stack-package orientation.
-- [Interaction Posture](interaction-posture.md) — single HIRMOS user-facing posture and progressive-disclosure rules.
-
-## Common lookups
-
-| Looking for... | Start with |
-|---|---|
-| What session files mean | [Artifact Model](artifact-model.md) |
-| How to install, update, or run the terminal CLI | [CLI Reference](cli-reference.md) |
-| Which workflow commands to use inside an AI tool | [Framework Command Reference](framework-command-reference.md) |
-| Which AI tools HIRMOS supports | [Integration Tools](integration-tools.md) |
-| What `_hirmos/` areas are for | [Runtime Surfaces](runtime-surfaces.md) |
-| What a HIRMOS term means | [Glossary](glossary.md) |
-| How stack packages fit | [Stacks](stacks.md) |
-| How HIRMOS interaction posture works | [Interaction Posture](interaction-posture.md) |
-
-## Reference posture
-
-Reference pages should clarify names, surfaces, and responsibilities. They should not become a second copy of core protocols.
-
-## Release notes and upgrades
-
-- [`_hirmos/CHANGELOG.md`](../../CHANGELOG.md) records framework changes.
-- [`_hirmos/UPGRADE_GUIDE.md`](../../UPGRADE_GUIDE.md) explains upgrade posture for installed projects.
+For first-time use, start with [Getting Started](../1-use-hirmos/getting-started/README.md) instead.

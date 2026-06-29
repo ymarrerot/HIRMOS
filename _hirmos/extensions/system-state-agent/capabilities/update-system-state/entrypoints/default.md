@@ -8,12 +8,12 @@ Synchronize reviewed accepted outcomes into durable system state, preserve sessi
 
 ### Produces
 
-- `_hirmos/session/SESSION_EXECUTION.md`
-- `_hirmos/session/SESSION_EXECUTION.md`
+- `_hirmos/session/SESSION_LEDGER.md`
+- `_hirmos/session/SESSION_LEDGER.md`
 - `_hirmos/system/accepted-state/*` updates when outcomes are accepted
 - `_hirmos/system/history/sessions/<session-id>/` archive
 - `_hirmos/session/SESSION_STATE.json` reset or updated terminal state
-- `_hirmos/session/SESSION_EXECUTION.md` final state updates before archive
+- `_hirmos/session/SESSION_LEDGER.md` final state updates before archive
 
 ### Terminal States
 
@@ -32,9 +32,9 @@ Synchronize reviewed accepted outcomes into durable system state, preserve sessi
 
 ## Required inputs
 
-- `_hirmos/session/SESSION_EXECUTION.md`
-- `_hirmos/session/SESSION_EXECUTION.md` when close is requested
-- `_hirmos/session/SESSION_EXECUTION.md` when accepted-state changes are proposed
+- `_hirmos/session/SESSION_LEDGER.md`
+- `_hirmos/session/SESSION_LEDGER.md` when close is requested
+- `_hirmos/session/SESSION_LEDGER.md` when accepted-state changes are proposed
 - applicable Design/Implementation/review/evidence artifacts for the completed session
 - `_hirmos/session/unresolved-items.md` when unresolved items exist
 
@@ -48,12 +48,12 @@ Synchronize reviewed accepted outcomes into durable system state, preserve sessi
 
 ## Method
 
-1. Read `SESSION_EXECUTION.md` and confirm the session has a valid current state and no required controls in `PENDING` or `BLOCKED` unless the close is an abort close.
+1. Read `SESSION_LEDGER.md` and confirm the session has a valid current state and no required controls in `PENDING` or `BLOCKED` unless the close is an abort close.
 2. Confirm whether the session has reviewed outcomes eligible for accepted-state update.
-3. Confirm applicable evidence: Design readiness, implementation-unit reviews, `EVIDENCE.md` when present, unresolved-item dispositions, `SESSION_SCOPE.md` close verification, and `SESSION_EXECUTION.md` close/update control pointers.
+3. Confirm applicable evidence: Design readiness, implementation-unit reviews, `EVIDENCE.md` when present, unresolved-item dispositions, `SESSION_SCOPE.md` close verification, and `SESSION_LEDGER.md` close/update control pointers.
 4. Separate outcomes into accepted outcomes, rejected/not-applied outcomes, evidence-only artifacts, and carry-forward items.
-5. Create or update `_hirmos/session/SESSION_EXECUTION.md` with the update decision and evidence basis.
-6. Create or update `_hirmos/session/SESSION_EXECUTION.md` with archive readiness and active-session reset requirements.
+5. Create or update `_hirmos/session/SESSION_LEDGER.md` with the update decision and evidence basis.
+6. Create or update `_hirmos/session/SESSION_LEDGER.md` with archive readiness and active-session reset requirements.
 7. Apply accepted-state changes only when controls and evidence allow it.
 8. Archive the full active session under `_hirmos/system/history/sessions/<session-id>/`.
 9. Reset `_hirmos/session/` to clean session state after normal close, preserving only required scaffolding.
@@ -61,35 +61,19 @@ Synchronize reviewed accepted outcomes into durable system state, preserve sessi
 
 ## Required behavior
 
-1. Confirm and record this capability decision under `_hirmos/core/protocol/CAPABILITY_ROUTING.md` in `_hirmos/session/SESSION_EXECUTION.md`.
-2. Instantiate or update only the canonical artifacts required by the active request path.
-3. Produce non-placeholder content before claiming completion.
-4. Preserve lifecycle ownership boundaries; route back in `SESSION_EXECUTION.md` when evidence invalidates an earlier stage.
-5. Apply the extension method and this capability-specific execution surface; do not execute from chat summaries or raw inputs alone.
+Apply the shared Required behavior baseline in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md`. This entrypoint retains only capability-specific obligations below; do not duplicate the shared checklist here.
 
 ## Canonical interaction posture visibility
 
-Use the canonical HIRMOS interaction posture from `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail.
-
-- By default, surface only user-owned decisions, blockers, readiness/completion status, and concise artifact pointers.
-- Surface capability result, assumptions, artifacts/evidence, and review implications when requested or needed for responsible review.
-- Surface activation reason, entrypoint path, controls, artifacts, unresolved-item contribution, route-back decisions, and terminal-state basis when validation failure, blocker state, route-back, or inspection need requires it.
+Apply the shared interaction-posture rules in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the canonical posture authority at `_hirmos/core/authority/INTERACTION_POSTURE.md`. Surface rich governed pause/checkpoint outputs when they support user decision-making; do not reduce checkpoint clarity to save tokens.
 
 ## Unresolved-item producer obligation
 
-This capability is an unresolved-item producer and MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`.
-
-Before marking the capability complete, record exactly one producer outcome in `_hirmos/session/unresolved-items.md`: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`.
-
-Record full item fields in `unresolved-items.md`, including current status, downstream impact, and revalidation point; do not duplicate the full field schema in this entrypoint.
+Apply the shared unresolved-item producer obligation in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the owning protocol: this capability MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`. It must record exactly one producer outcome in the focus-appropriate unresolved register: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`. When items exist, preserve current status, downstream impact, and revalidation point.
 
 ## Runtime integration responsibilities
 
-When material runtime services are involved, follow `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`.
-
-Record or consume `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` as required by execution controls.
-
-Do not claim fixture/mock/boundary/local/production integration levels beyond what the active artifacts and evidence support.
+Apply the shared runtime-integration responsibilities in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`. Keep detailed evidence in the owning IU, `EVIDENCE.md`, or accepted-state/archive source; this entrypoint should point rather than duplicate.
 
 ## Close integrity requirements
 

@@ -1,49 +1,32 @@
 # Vertical Slice and Status UX
 
-HIRMOS should keep real software work moving without hiding governance.
-
-The normal user experience should make the active slice clear:
-
-```text
-What are we working on now?
-What is complete?
-What is blocked?
-What should happen next?
-```
+HIRMOS should make progress visible without turning status text into authority.
 
 ## Delivery Units
 
 A Delivery Unit is a governed slice of delivery. A Phase is a specialized Delivery Unit when ordered staged delivery is natural.
 
-Delivery Units give HIRMOS a simple user-facing rhythm while preserving Design authority:
+A typical delivery rhythm is:
 
 ```text
 Delivery Plan
-→ Phase / Phase Scope
-→ Session Scope
-→ Implementation Units
-→ Evidence Review
-→ Update System State
+→ Delivery Baseline
+→ Phase/session baseline
+→ IU Planning when needed
+→ IU Execution
+→ Close / Update System State
 → Next Delivery Unit recommendation
 ```
 
-## Simple by default
+## Status is not authority
 
-In Domain Expert mode, HIRMOS should show a concise status and one primary next action.
+A status summary is a user-facing navigation aid. HIRMOS must still use execution controls, unresolved-item governance, Session Scopes, implementation reviews, evidence records, and Update System State.
 
-Example:
+Prefer derived pointer indexes over duplicated mutable status fields. The source artifacts and evidence remain authority.
 
-```text
-Phase 1 foundation is ready for implementation.
-Recommended next command: hirmos continue
-```
 
-If something blocks progress, HIRMOS should show the blocker instead of hiding it to preserve momentum.
+## Onboarding posture
 
-## Rigorous underneath
-
-A status summary is not authority. HIRMOS must still use execution controls, unresolved-item governance, Session Scopes, implementation reviews, evidence records, and Update System State.
-
-## Progressive disclosure
-
-Technical Supervisor and Framework Diagnostics modes can show deeper artifact, evidence, route-back, and control details when needed.
+- Simple by default: show the next slice and next command clearly.
+- Rigorous underneath: keep scope, evidence, and close gates authoritative.
+- Progressive disclosure: link deeper details only when the user needs them.

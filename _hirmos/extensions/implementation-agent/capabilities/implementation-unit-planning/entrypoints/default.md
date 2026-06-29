@@ -10,7 +10,7 @@ Decompose the implementation scope authorized by `_hirmos/session/SESSION_SCOPE.
 
 - `_hirmos/session/SESSION_SCOPE.md` Implementation Unit Plan section updates
 - `_hirmos/session/implementation-units/IU-xx.md` artifacts
-- `_hirmos/session/SESSION_EXECUTION.md` implementation-unit planning control
+- `_hirmos/session/SESSION_LEDGER.md` implementation-unit planning control
 
 ### Terminal States
 
@@ -20,6 +20,8 @@ Decompose the implementation scope authorized by `_hirmos/session/SESSION_SCOPE.
 - NOT_APPLICABLE — implementation is not active for this session.
 
 ## Activation triggers
+
+- accepted session baseline requires or plans implementation units, but IU execution has not been authorized
 
 - the Session Scope authorizes implementation
 - implementation is non-trivial, multi-file, risky, or delegated to an implementation agent
@@ -39,6 +41,8 @@ Decompose the implementation scope authorized by `_hirmos/session/SESSION_SCOPE.
 
 ## Method
 
+PROD-L8.32I boundary: this capability is the governed step between session-baseline acceptance and IU execution. It creates/verifies full IU files, updates `SESSION_LEDGER.md` with `IU_PLANNING_COMPLETE`, runs active generated-artifact validation, and then stops at `IU Plan — Review or Change`. It must not edit project files or start IU execution in the same continuation.
+
 This capability inherits shared extension rules from `_hirmos/extensions/implementation-agent/entrypoints/default.md`; confirm the parent extension entrypoint has been read before executing this capability.
 
 Planning must:
@@ -50,70 +54,56 @@ Planning must:
 5. Mark the contract sections with explicit `LLM Write Permission:` lines and seal the contract before material implementation begins.
 6. Update the Session Scope Implementation Unit Plan table with the unit list and coverage mapping.
 7. Literally answer in `SESSION_SCOPE.md`: `Do all planned implementation units collectively cover 100% of SESSION_SCOPE.md?`
-8. Record the capability decision and evidence in `SESSION_EXECUTION.md`.
+8. Record the capability decision and evidence in `SESSION_LEDGER.md`.
 
 Do not create standalone `SESSION_SCOPE.md Implementation Unit Plan`, duplicate IU request files, duplicate IU execution files, duplicate IU review files, or duplicate IU retry files. Unit contract, execution, review, retry, and handoff content live inside each `IU-xx.md` artifact, but the IU Contract sections are sealed authority and later execution/review/retry sections are append-only records.
 
 ## Required behavior
 
-
 ### Governance posture check
 
 Implementation-unit planning creates sealed execution authority before material work. It must not be used to reconstruct or improve IU contract authority after implementation unless the session explicitly records route-back, contract reopening/supersession, or a governance deviation/correction.
 
-
-1. Confirm and record this capability decision under `_hirmos/core/protocol/CAPABILITY_ROUTING.md` in `_hirmos/session/SESSION_EXECUTION.md`.
-2. Instantiate or update only the canonical artifacts required by the active request path.
-3. Produce non-placeholder content before claiming completion.
-4. Preserve lifecycle ownership boundaries; route back in `SESSION_EXECUTION.md` when evidence invalidates an earlier stage.
-5. Apply the extension method and this capability-specific execution surface; do not execute from chat summaries or raw inputs alone.
+Apply the shared Required behavior baseline in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md`. This entrypoint retains only capability-specific obligations below; do not duplicate the shared checklist here.
 
 ## Canonical interaction posture visibility
 
-Use the canonical HIRMOS interaction posture from `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail.
-
-- By default, surface only user-owned decisions, blockers, readiness/completion status, and concise artifact pointers.
-- Surface capability result, assumptions, artifacts/evidence, and review implications when requested or needed for responsible review.
-- Surface activation reason, entrypoint path, controls, artifacts, unresolved-item contribution, route-back decisions, and terminal-state basis when validation failure, blocker state, route-back, or inspection need requires it.
+Apply the shared interaction-posture rules in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the canonical posture authority at `_hirmos/core/authority/INTERACTION_POSTURE.md`. Surface rich governed pause/checkpoint outputs when they support user decision-making; do not reduce checkpoint clarity to save tokens.
 
 ## Unresolved-item producer obligation
 
-This capability is an unresolved-item producer and MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`.
-
-Before marking the capability complete, record exactly one producer outcome in `_hirmos/session/unresolved-items.md`: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`.
-
-Record full item fields in `unresolved-items.md`, including current status, downstream impact, and revalidation point; do not duplicate the full field schema in this entrypoint.
+Apply the shared unresolved-item producer obligation in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the owning protocol: this capability MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`. It must record exactly one producer outcome in the focus-appropriate unresolved register: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`. When items exist, preserve current status, downstream impact, and revalidation point.
 
 ## PROD-L8.19 pre-execution authority requirement
 
-This capability is the last allowed step before IU-governed material implementation begins. If the session requires IU mode, this capability must create the IU artifacts before any implementation-execution capability or project-file edit is performed.
+This capability is the last planning step before IU-governed material implementation may be authorized. If the session requires IU mode, this capability must create the IU artifacts before any implementation-execution capability or project-file edit is performed, then pause for IU plan review. IU execution starts only after explicit IU-plan acceptance.
 
 Required control:
 
-- record in `SESSION_EXECUTION.md` that IU artifacts were created before material edits;
+- record in `SESSION_LEDGER.md` that IU artifacts were created before material edits;
 - mark each IU with the `PROD-L8.19 Pre-Execution Authority Declaration`;
 - fail closed if implementation has already occurred and IU files are being reconstructed after the fact;
 - if reconstruction is necessary for audit, record it as a governance deviation/correction, not as normal IU planning.
 
 ## PROD-L8.21 IU set authority planning
 
-Before implementation execution, this capability must generate or verify the complete IU set and then record the `PROD-L8.21 IU Set Authority Checkpoint` in `SESSION_EXECUTION.md`.
+Before implementation execution, this capability must generate or verify the complete IU set and then record the `PROD-L8.21 IU Set Authority Checkpoint` and `IU_PLANNING_COMPLETE` in `SESSION_LEDGER.md`.
 
-The IU set must map adopted phase/session scope to IU files, prove minimum IU contract completeness, identify sequencing/dependencies, and return `IMPLEMENTATION_AUTHORIZED` only when the set is non-placeholder and complete.
+The IU set must map adopted phase/session scope to IU files, prove minimum IU contract completeness, identify sequencing/dependencies, and return `IU_PLANNING_COMPLETE` only when the set is non-placeholder and complete. It must not return `IU_EXECUTION_AUTHORIZED`; that requires the later IU-plan acceptance continuation.
 
 
 ## PROD-L8.23 Generated-Run Enforcement Duty
-This capability must produce generated IU artifacts that can pass runtime validation, not only framework-template validation. Before implementation execution, it must update `SESSION_EXECUTION.md` with the IU authority checkpoint, authorization decision, non-placeholder IU review, and IU Set Coverage Map. Thin generated IU stubs are invalid when IU mode is active.
+This capability must produce generated IU artifacts that can pass runtime validation, not only framework-template validation. Before implementation execution, it must update `SESSION_LEDGER.md` with the IU authority checkpoint, authorization decision, non-placeholder IU review, and IU Set Coverage Map. Thin generated IU stubs are invalid when IU mode is active.
 
 
 ## PROD-L8.24 Pre-Execution Ledger Duty
-After creating the IU set and before implementation execution, write the `Pre-Material-Edit Ledger Row` into `_hirmos/session/SESSION_EXECUTION.md`. This row must state that material implementation has not started, identify the IU files verified, record `Retrospective checkpoint or IU expansion: NO`, and authorize or block execution. Do not wait until close/archive to add or expand IU authority.
+After creating the IU set and before implementation execution, write the `Pre-Material-Edit Ledger Row` into `_hirmos/session/SESSION_LEDGER.md`. This row must state that material implementation has not started, identify the IU files verified, record `Retrospective checkpoint or IU expansion: NO`, and authorize or block execution. Do not wait until close/archive to add or expand IU authority.
 
 Compatibility note: implementation-unit planning creates execution authority before material work and must not reconstruct task files after implementation as if they were pre-existing authority.
 
 ## PROD-L8.21 IU set authority planning
 
-Before implementation, planning must support the `PROD-L8.21 IU Set Authority Checkpoint` in `SESSION_EXECUTION.md`, including coverage map evidence and authorization decision `IMPLEMENTATION_AUTHORIZED` / `BLOCKED` / `LIGHTWEIGHT_NO_IU`.
+Before implementation, planning must support the `PROD-L8.21 IU Set Authority Checkpoint` in `SESSION_LEDGER.md`, including coverage map evidence and authorization decision `IMPLEMENTATION_AUTHORIZED` / `BLOCKED` / `LIGHTWEIGHT_NO_IU`.
 
 ## PROD-L8.23 Generated-Run Enforcement Duty
 
@@ -141,14 +131,24 @@ If any generated IU lacks these areas or contains placeholder-only content, retu
 
 ## PROD-L8.31 Planned-IU Materialization Gate
 
-When the accepted session scope says IUs are required or planned, this capability must materialize the full planned IU set before implementation execution.
+When the accepted session scope says IUs are required or planned, this capability must materialize the full planned IU set before implementation execution. `SESSION_SCOPE.md` is not IU execution authority; it may provide only planned IU IDs, one-line objectives, covered scope item IDs, and expected file paths.
 
 Required output before implementation:
 
-- planned IU count from `SESSION_SCOPE.md`;
+- planned IU count from compact `SESSION_SCOPE.md` IU planning pointers;
 - actual full IU files created under `_hirmos/session/implementation-units/`;
 - count match result;
 - non-placeholder full-template check for every IU;
-- `SESSION_EXECUTION.md` `PROD-L8.31 Generated-Run Mechanical Gate Record` updated to show that planned IU count matches actual full IU files.
+- `SESSION_LEDGER.md` `PROD-L8.31 Generated-Run Mechanical Gate Record` updated to show that planned IU count matches actual full IU files.
 
 If planned IU count and actual full IU files do not match, authorization decision is `BLOCKED`, not `IMPLEMENTATION_AUTHORIZED`.
+
+
+## PROD-L8.32D Session Scope / IU Authority Boundary
+
+## PROD-L8.32I IU Planning / Execution Boundary
+
+Baseline acceptance authorizes IU planning/materialization only. After full IU files are created, this capability must surface `IU Plan — Review or Change` and exactly one next command for execution authorization: `hirmos continue "Accept IU plan and begin IU execution"`. It must not make project-file edits, execute units, or claim implementation completion during IU planning.
+
+
+Implementation-unit planning must not treat a detailed table or narrative in `SESSION_SCOPE.md` as IU authority. If scope contains more than compact IU pointers, rewrite or compact the scope boundary before creating IUs. Full IU contract authority exists only in `_hirmos/session/implementation-units/IU-xx.md`; the ledger records coverage and gate status, not contract detail.

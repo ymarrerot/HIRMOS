@@ -1,53 +1,76 @@
 # Artifact Authority
 
-HIRMOS separates raw inputs, active session artifacts, accepted system state, and history.
+HIRMOS artifacts are useful only when each artifact has a clear ownership role.
 
-## Simple rule
+The rule is:
 
-A useful artifact is not automatically an authority artifact.
+```text
+One fact should have one canonical owner.
+Other artifacts should point to it or derive from it.
+```
 
-## Key distinctions
+## Core authority surfaces
 
-- **Source inputs** are raw materials: notes, tickets, prototypes, screenshots, files, and user requests.
-- **Active session artifacts** are runtime evidence and governed work products for the current session.
-- **Accepted system state** is durable truth for future sessions.
-- **History** preserves what happened and why.
+| Concern | Canonical authority |
+|---|---|
+| Active session scope | `_hirmos/session/SESSION_SCOPE.md` |
+| Session command/gate progress | `_hirmos/session/SESSION_LEDGER.md` |
+| Session unresolved items | `_hirmos/session/unresolved-items.md` |
+| IU authority and review | `_hirmos/session/implementation-units/IU-xx.md` |
+| Evidence detail | `_hirmos/session/EVIDENCE.md` when evidence volume requires it |
+| Accepted current-state navigation | `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` |
+| Delivery roadmap/register | `_hirmos/system/delivery/DELIVERY_PLAN.md` |
+| Delivery authority | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` |
+| Phase authority | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` |
 
-## Why this matters
+## Delivery authority
 
-This prevents mistakes such as:
+For durable multi-session delivery, a Delivery Plan is needed. Separate phase files are required only when the selected delivery shape needs ordered staged delivery.
 
-- treating uploaded requirements as final governed requirements;
-- treating a prototype as accepted architecture;
-- treating a design draft as implementation authorization;
-- treating an implementation checkpoint as proof without evidence;
-- treating archived artifacts as active runtime authority.
+Durable delivery authority lives under `_hirmos/system/delivery/<delivery-id>/`, not under `_hirmos/session/`. Active sessions consume accepted delivery/phase authority through `SESSION_SCOPE.md` and implementation units.
 
-Design owns governed requirements, design, scope, delivery structure, technical review, and implementation readiness. Implementation consumes accepted Design. Update System State persists accepted outcomes.
+## Optional authority
 
-## Durable delivery authority
+Separate `REQUIREMENTS.md` or `DESIGN.md` files are optional. Create them only when separate authority materially improves clarity, reviewability, or safety.
 
-For durable multi-session delivery, a Delivery Plan is needed. Separate phase files are required only when the selected delivery shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`.
+| Level | Default authority | Optional authority when justified |
+|---|---|---|
+| Delivery | `system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | delivery `REQUIREMENTS.md` / `DESIGN.md` |
+| Session | `session/SESSION_SCOPE.md` | session `REQUIREMENTS.md` / `DESIGN.md` |
 
-Durable delivery authority lives under `_hirmos/system/delivery/<delivery-id>/`, not under `_hirmos/session/`. Active sessions consume the durable Delivery Plan and `PHASE-xx.md` through `SESSION_SCOPE.md` and implementation units.
+## Avoid duplicated mutable status
+
+Do not ask the model to maintain the same status in several artifacts.
+
+Examples of values that should be derived or pointed to instead of duplicated:
+
+- delivery completion posture;
+- phase progress posture;
+- next command recommendation;
+- accepted close history;
+- evidence summaries already owned by IU/evidence records.
+
+A stale status row is worse than an absent row when it can mislead the next action.
+
+## Just-in-time artifacts
+
+Optional artifacts should be created when they are needed, not pre-created as empty placeholders. This keeps the runtime surface smaller and reduces synchronization failures.
 
 
-## Accepted-state navigation authority
+## Source authority minimality
 
-CURRENT_SYSTEM_STATE.md is the accepted-state navigation authority. It maintains current governance pointers, latest-close metadata, Work History Ledger, Source Artifact Index, and concise accepted-state summaries. It is not the source authority for full requirements, design, scope, implementation, evidence, unresolved-item, or archive content. Those remain in delivery/session/archive artifacts.
+Use the narrowest source authority that can safely own the concern. Do not promote a detail to delivery, current-state, or reference authority when session or IU authority is sufficient.
 
 
 ## Source authority location matrix
 
-HIRMOS keeps requirements, design, and scope source authority at the delivery/session/archive level by default. CURRENT_SYSTEM_STATE.md is the accepted-state navigation authority and source index; it is not a cumulative requirements, design, or system-scope authority.
+| Concern | Preferred authority level |
+|---|---|
+| accepted-state navigation | `CURRENT_SYSTEM_STATE.md` |
+| delivery scope | `DELIVERY_SCOPE.md` |
+| phase scope | `PHASE-xx.md` |
+| session scope | `SESSION_SCOPE.md` |
+| unit execution | `IU-xx.md` |
+| detailed evidence | `EVIDENCE.md` or IU evidence rows |
 
-Default locations:
-
-| Concern | Default source authority | Conditional authority |
-|---|---|---|
-| Delivery scope | `system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | delivery `REQUIREMENTS.md` / `DESIGN.md` when justified |
-| Session scope | `session/SESSION_SCOPE.md` | session `REQUIREMENTS.md` / `DESIGN.md` when justified |
-| Accepted-state navigation | `system/accepted-state/CURRENT_SYSTEM_STATE.md` | no extra root artifact by default |
-| Requirements synthesis | source delivery/session/archive artifacts | generated on demand; not authority unless adopted |
-
-Use the narrowest source authority that can safely own the concern. Avoid duplicating the same requirement/design truth across root accepted-state, delivery, and session artifacts.
+CURRENT_SYSTEM_STATE.md is the accepted-state navigation authority. It should point to source artifacts instead of duplicating their detailed content.

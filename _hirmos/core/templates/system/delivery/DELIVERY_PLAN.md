@@ -1,40 +1,36 @@
 # Delivery Plan
 
-Status: DRAFT | PROPOSED | READY_FOR_BASELINE_REVIEW | ACTIVE | ACCEPTED | COMPLETE | PARTIAL | SUPERSEDED | BLOCKED | DEFERRED | CANCELLED
-Last updated from session:
+Roadmap posture: derived from Delivery Index, delivery scopes, phase files, session archives, and accepted-state pointers. Do not maintain a writable roadmap lifecycle status here.
+Last pointer refresh source:
 
 ## Purpose
 
-This file is the durable project delivery roadmap/register. It indexes one or more durable deliveries and preserves completed, active, planned, deferred, cancelled, superseded, and blocked delivery history.
+Durable project delivery roadmap/register. It indexes deliveries and preserves delivery history. It is not implementation authority.
 
-Canonical location:
-
-```text
-_hirmos/system/delivery/DELIVERY_PLAN.md
-```
-
-`DELIVERY_PLAN.md` is append/update-oriented. It must not be overwritten when new durable multi-session work appears later. New durable multi-session work adds a new delivery entry and creates a corresponding `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` while preserving prior delivery entries.
+Canonical location: `_hirmos/system/delivery/DELIVERY_PLAN.md`
 
 ## Authority Boundary
 
-`DELIVERY_PLAN.md` is the roadmap/register. It does not contain the full scoped authority for a delivery and does not authorize implementation by itself.
+`DELIVERY_PLAN.md` owns roadmap/navigation only. Delivery authority lives in `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`; phase authority lives in instantiated `phases/PHASE-xx.md`; session implementation authority lives in `_hirmos/session/SESSION_SCOPE.md` and IU files.
 
-Authority flows through:
+Authority chain:
 
 ```text
 CURRENT_SYSTEM_STATE.md
-→ _hirmos/system/delivery/DELIVERY_PLAN.md
-→ _hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md
-→ _hirmos/system/delivery/<delivery-id>/unresolved-items.md for delivery-level unresolved items
-→ phase coverage plan in DELIVERY_SCOPE.md before phase files exist
-→ _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md when instantiated after delivery-baseline acceptance
-→ _hirmos/session/SESSION_SCOPE.md when a bounded phase/session scope exists
-→ implementation-units / EVIDENCE / SESSION_EXECUTION.md
+→ DELIVERY_PLAN.md
+→ <delivery-id>/DELIVERY_SCOPE.md
+→ <delivery-id>/unresolved-items.md
+→ DELIVERY_SCOPE.md Phase Plan before phase files exist
+→ <delivery-id>/phases/PHASE-xx.md when instantiated
+→ SESSION_SCOPE.md
+→ implementation-units / EVIDENCE / SESSION_LEDGER.md
 ```
 
 ## Delivery Shape Source
 
 Compatibility label: Delivery-Need Classification Source.
+
+Compact delivery-shape and phase-count decision. Do not duplicate delivery scope or phase contents here.
 
 - Delivery shape: SINGLE_SESSION_VERTICAL_SLICE | SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS | MULTI_SESSION_DELIVERY | MULTI_SESSION_DELIVERY_WITH_PHASE_FILES
 - Why durable delivery governance is / is not necessary for the real software work:
@@ -59,19 +55,9 @@ Compatibility label: Delivery-Need Classification Source.
 - Universal governance triggers present:
 - If adopted from prior work, source artifact/session:
 
-
 ## Delivery Baseline Rule
 
-A delivery entry may be `PROPOSED` or `READY_FOR_BASELINE_REVIEW` before the user accepts or amends the delivery baseline. In those states, the roadmap/register and delivery scope may exist, but they do not authorize phase/session implementation.
-
-Before baseline acceptance:
-
-- the delivery may have `DELIVERY_SCOPE.md`, delivery `unresolved-items.md`, and optional delivery-level `REQUIREMENTS.md` / `DESIGN.md`;
-- future phases are represented by a phase coverage plan inside `DELIVERY_SCOPE.md`;
-- concrete future `PHASE-xx.md` paths must not be referenced unless those files exist;
-- `_hirmos/session/SESSION_SCOPE.md` is not required for `session_focus = delivery_baseline`.
-
-After baseline acceptance, HIRMOS marks the delivery `ACTIVE` or accepted/amended as appropriate and instantiates the next phase/session authority just in time.
+Before baseline acceptance, delivery entries are candidate/proposed only. Future phases are represented by the phase coverage plan in `DELIVERY_SCOPE.md`; concrete future `PHASE-xx.md` paths must not be referenced unless those files exist. After acceptance, instantiate the next phase/session authority just in time.
 
 ## Delivery Index
 
@@ -94,7 +80,7 @@ After baseline acceptance, HIRMOS marks the delivery `ACTIVE` or accepted/amende
 
 ## Delivery Review / Active Context
 
-Use status-aware wording in generated artifacts. Before baseline acceptance (`PROPOSED` or `READY_FOR_BASELINE_REVIEW`), describe the delivery as `Candidate Delivery`, `Proposed Delivery`, or `Delivery Under Baseline Review`. Use `Accepted Delivery` or `Active Delivery` only after the delivery baseline has been accepted/amended and the delivery status is `ACTIVE`, `ACCEPTED`, `PARTIAL`, or another post-acceptance status.
+Use status-aware wording. Before baseline acceptance use `Candidate Delivery`, `Proposed Delivery`, or `Delivery Under Baseline Review`; use `Active Delivery` only after accepted/amended post-acceptance status.
 
 - Delivery under review or active delivery ID: none / `<delivery-id>`
 - Delivery under review or active delivery scope: none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
@@ -105,7 +91,7 @@ Use status-aware wording in generated artifacts. Before baseline acceptance (`PR
 
 ## Delivery Navigation
 
-This section makes delivery-to-delivery continuation explicit for future `hirmos start` runs. It is navigation metadata, not implementation authority.
+Navigation metadata only; not implementation authority.
 
 - Last accepted delivery: none / `<delivery-id>`
 - Delivery under review or active delivery: none / `<delivery-id>`
@@ -113,37 +99,39 @@ This section makes delivery-to-delivery continuation explicit for future `hirmos
 - Next recommended delivery: none / `<delivery-id>`
 - Next recommended delivery scope: none / `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
 - Selection rationale:
-- User override / unrelated-task rule: if the user provides an unrelated task, `hirmos start` must run current-state understanding before adopting this recommendation.
+- User override / unrelated-task rule: if unrelated, run current-state understanding before adopting this recommendation.
 
 ## Delivery Coverage Matrix
+
+Compact coverage index only. Detailed scope and acceptance live in `DELIVERY_SCOPE.md` and phase/session/IU artifacts.
 
 | Delivery / accepted-state need | Delivery scope | Covered by phase(s) | Deferred? | Evidence / rationale |
 |---|---|---|---:|---|
 | | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | none / `PHASE-xx` | NO | |
 
-## Delivery Status Update Log
+## Delivery Status Pointer Index
 
-| Date/session | Delivery | Change | Previous status | New status | Evidence |
-|---|---|---|---|---|---|
-| | | | | | |
+Derived navigation index only. Do not maintain a narrative delivery status update log here. Delivery status transitions are owned by `DELIVERY_SCOPE.md` close posture, phase close records, session archives, and `CURRENT_SYSTEM_STATE.md` latest-close pointers.
+
+| Delivery | Current status label | Owning status source | Latest evidence pointer | Notes |
+|---|---|---|---|---|
+| `<delivery-id>` | proposed / active / accepted / partial / blocked / deferred / complete | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | archive/evidence pointer | |
 
 ## Completion / Close Rules
 
 - A delivery is complete only when its `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` close verification passes.
 - Accepted-state files must point to completed and active deliveries when durable delivery governance exists.
 - New durable multi-session work must add or update a delivery entry rather than overwrite prior delivery history.
-- When a delivery completes and a planned follow-up delivery is related by `follows`, `depends-on`, or an explicit sequence constraint, close must refresh Delivery Navigation and `CURRENT_SYSTEM_STATE.md` next-delivery pointers.
+- When a delivery completes and a related follow-up delivery exists, close must refresh Delivery Navigation and `CURRENT_SYSTEM_STATE.md` next-delivery pointers.
 - The roadmap may recommend an active delivery or next phase, but implementation authority must be narrowed into `SESSION_SCOPE.md` before implementation.
 
-## Close-Time Delivery Status Update
+## Close-Time Delivery Pointer Refresh
 
-This section must be updated during `hirmos close` whenever a session accepts, partially accepts, blocks, supersedes, defers, cancels, or advances a delivery in this roadmap/register.
-
+During `hirmos close`, refresh only derived pointer/index rows whose source artifact changed or explicitly mark them derived/stale. Do not maintain a narrative Delivery Delivery Status Pointer Index and do not duplicate close evidence.
 
 ## Delivery Decomposition
 
 Compatibility section. Delivery decomposition is represented by Delivery Index entries, each delivery's DELIVERY_SCOPE.md Phase Plan, and conditional PHASE-xx.md files.
-
 
 ## Active Development Context
 
@@ -155,17 +143,15 @@ Compatibility section. Delivery decomposition is represented by Delivery Index e
 - Next recommended phase:
 - Current blockers:
 
-Freshness rule: after a delivery-baseline acceptance/amendment instantiates a phase, `Current phase` must point to that concrete `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` path. It must not remain `none` while `SESSION_STATE.json.active_phase`, `CURRENT_SYSTEM_STATE.md`, or `SESSION_SCOPE.md` identifies an active phase.
+Freshness rule: after delivery-baseline acceptance/amendment instantiates a phase, `Current phase` must point to the concrete `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` path. It must not remain `none` while `SESSION_STATE.json.active_phase`, `CURRENT_SYSTEM_STATE.md`, or `SESSION_SCOPE.md` identifies an active phase.
 
 ## PROD-L8.13 Status-Aware Delivery Wording
 
-Generated delivery-roadmap text must not imply that a delivery is accepted or active before the delivery baseline is accepted. When a delivery status is `PROPOSED` or `READY_FOR_BASELINE_REVIEW`, headings, summaries, and checkpoint-facing labels must use status-aware terms such as `Candidate Delivery`, `Proposed Delivery`, or `Delivery Under Baseline Review`. Reserve `Active Delivery` for post-acceptance statuses such as `ACTIVE`, `ACCEPTED`, `PARTIAL`, `BLOCKED`, or accepted carry-forward work.
-
-Generated artifacts should use current-state-first evidence to explain delivery shape: current system state, scope size, governance need, validation risk, continuity need, artifact authority, and practical user interaction/token cost. Project-type labels may appear as evidence metadata only when useful; they must not be the primary reason for delivery/session/phase selection. Framework testing, inspection, or dogfood context must not be used as a reason to select a heavier delivery shape.
+Generated artifacts must not imply acceptance before baseline acceptance. Framework testing, inspection, or dogfood context must not justify a heavier delivery shape. Delivery shape must be justified by real software work and user interaction / token-cost impact.
 
 ## PROD-L8.19 Close-Time Freshness Sweep
 
-At every close affecting this delivery, reconcile all active/pointer sections, not only the newest appended note.
+Compact sweep; every current pointer must be refreshed, explicitly verified unchanged, or marked not stale or explicitly historical.
 
 | Section / pointer | Required current value | Actual value | Status | Notes |
 |---|---|---|---|---|
@@ -173,70 +159,47 @@ At every close affecting this delivery, reconcile all active/pointer sections, n
 | Active phase | current phase or none after completion | | PENDING | |
 | Current carry-forward | active item count and pointer | | PENDING | |
 | Current accepted-state version / latest close | current `CURRENT_SYSTEM_STATE.md` state/version/close pointer | | PENDING | |
-| Delivery Review / Active Context | not stale or explicitly historical | | PENDING | |
-| Status Update Log | material phase/session transitions recorded | | PENDING | |
-
-If an older section is retained for history, label it historical. Do not let stale active-context prose remain indistinguishable from current truth.
+| Delivery Review / Active Context | not stale | | PENDING | |
 
 ## PROD-L8.21 Delivery Close Concordance Sweep
 
-At delivery close or phase close affecting this roadmap, all current pointer sections must be reconciled together. It is not enough to append a new close note while earlier active-context or accepted-state pointer sections remain stale.
-
-| Pointer / section | Required close-time truth | Current value | Status | Notes |
-|---|---|---|---|---|
-| Current system state version / latest close | matches `CURRENT_SYSTEM_STATE.md` | | PENDING | |
-| Active / final delivery status | matches delivery close result | | PENDING | |
-| Active / final phase pointer | current phase or none after delivery completion | | PENDING | |
-| Carry-forward pointer and active item count | matches `CARRY_FORWARD.md` | | PENDING | |
-| Delivery Review / Active Context | current or explicitly historical | | PENDING | |
-| Active Development Context | current or explicitly historical | | PENDING | |
-| Delivery Status Update Log | material phase/session transitions recorded | | PENDING | |
-
-Fail-closed rule: stale active/pointer sections block delivery-close success claims unless they are updated or explicitly labeled historical.
+At delivery close, `DELIVERY_PLAN.md`, `DELIVERY_SCOPE.md`, phase files, `CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, `EVIDENCE.md`, archive manifest, and `SESSION_LEDGER.md` must agree on the delivery/phase result.
 
 ## PROD-L8.22 Delivery Review Gate
 
-Delivery close requires an evidence-backed delivery review gate before claiming delivery acceptance. The delivery review gate aggregates accepted phase review gates, active/carry-forward records, runtime evidence, production posture, and final current-state pointers.
-
-Required fields:
-
-- Delivery reviewed:
-- Phases reviewed:
-- Accepted source artifacts reviewed:
-- Cross-phase integration reviewed: PASS / PARTIAL / BLOCKED / FAILED / NOT_APPLICABLE
-- End-to-end workflow evidence: PASS / PARTIAL / BLOCKED / FAILED / NOT_RUN / NOT_APPLICABLE
-- Requirements/scope coverage posture: PASS / PARTIAL / BLOCKED / FAILED
-- Runtime evidence level: NOT_CLAIMED / NOT_RUN / LOCAL_RUNTIME_VERIFIED / USER_ENVIRONMENT_VERIFIED / BLOCKED / NOT_APPLICABLE
-- Production evidence level: NOT_CLAIMED / NOT_RUN / PRODUCTION_READINESS_VERIFIED / BLOCKED / NOT_APPLICABLE
-- Carry-forward items affecting acceptance:
-- Final delivery result: PASS / PARTIAL / BLOCKED / FAILED
-- What is not claimed:
-- Why this result is honest:
-
-A delivery review must not claim full MVP/runtime/production acceptance when only implementation acceptance or static validation evidence exists. Stale delivery-plan sections must be reconciled or labeled historical before delivery close success is claimed.
-
+Review gate pointer only. The detailed review result lives in `DELIVERY_SCOPE.md` and evidence/session artifacts. Required delivery review summary includes End-to-end workflow evidence and What is not claimed.
 
 ## PROD-L8.23 Delivery Status Log Completeness
-Generated delivery plans should make phase close chronology inspectable. When phase files exist with accepted/closed status, the Delivery Status Update Log or equivalent close chronology must include material phase close rows or explicitly state why a phase close row is not applicable. Stale active/pointer sections must be reconciled or explicitly labeled historical before final delivery close claims.
 
+Every delivery status transition must be traceable through owning close/session/archive artifacts and the Delivery Status Pointer Index. Do not duplicate phase close chronology or evidence detail in DELIVERY_PLAN.md.
 
 ## PROD-L8.24 Generated Delivery Review Gate Validation
-A generated delivery close must instantiate the delivery review gate with concrete values, not preserve it as unused template text. Required generated values include phases reviewed, accepted source artifacts reviewed, cross-phase integration reviewed, end-to-end workflow evidence, requirements/scope coverage posture, runtime evidence level, production evidence level, carry-forward impact, final delivery result, what is not claimed, and why the result is honest. The delivery close chronology must include each material phase close or explicitly classify an omitted phase close row as not applicable.
+
+Generated review values must include why the result is honest.
+
+Generated roadmap files must instantiate current status/pointer rows with concrete values when a delivery is accepted, partial, blocked, deferred, superseded, cancelled, or complete.
 
 ## PROD-L8.26 Delivery Close Concordance Simplification
 
-The roadmap/register records delivery navigation and status history only. It must not duplicate full delivery evidence or full phase close records.
-
-At delivery close, update only the compact delivery status and pointer fields needed for future navigation:
-
-- Delivery status and final/next phase pointer;
-- Delivery Status Update Log row;
-- Delivery Navigation next-delivery / next-phase recommendation;
-- source pointer to `DELIVERY_SCOPE.md` Compact Delivery Close Posture;
-- source pointer to archive/evidence/carry-forward records.
-
-If older active-context rows are retained, label them `historical baseline snapshot` or update them. Do not leave stale active context as current truth.
+`DELIVERY_PLAN.md` remains roadmap/register only; roadmap/register records delivery navigation and status pointers only. It must point to source artifacts instead of duplicating implementation, runtime, production, evidence, unresolved, or session detail.
 
 ## PROD-L8.28 Active Close Concordance
 
-Delivery/phase close posture must be reconciled with active IU execution and review state before archive. Do not mark a phase or delivery accepted/closed when applicable generated IUs remain thin, unexecuted, unreviewed, status-contradictory, or missing evidence-backed results. Use partial/blocked/route-back posture when evidence does not support clean acceptance.
+Stale active/pointer sections block delivery-close success claims. Close is invalid if active delivery/phase pointers are stale, missing, or inconsistent with `SESSION_STATE.json`, `CURRENT_SYSTEM_STATE.md`, `DELIVERY_SCOPE.md`, or active phase files.
+
+## PROD-L8.32L Derived Delivery Index Contract
+
+`DELIVERY_PLAN.md` owns the roadmap/register, but its status and pointer rows are derived navigation caches over delivery scope files, phase files, current-state pointers, and archive manifests. Do not maintain a narrative delivery status log as independent truth.
+
+When possible, derive the Delivery Index and Delivery Status Pointer Index from filesystem paths under `_hirmos/system/delivery/`, active phase/session pointers, and close/archive manifests. If the derived index conflicts with a delivery or phase source artifact, the source artifact wins and the roadmap row must be reconciled before status, continue, or close claims.
+
+
+## PROD-L8.32Q Delivery Status Log Removal
+
+`DELIVERY_PLAN.md` is roadmap/register plus derived navigation pointers. It must not contain a narrative `Delivery Status Update Log`. Delivery chronology and completion evidence are traceable through source artifacts: delivery scope close posture, phase files, session archives, archive manifests, evidence records, and accepted-state pointers.
+
+Generated roadmap/register files that recreate a narrative `## Delivery Status Update Log` are stale-surface regressions. Use the Delivery Status Pointer Index and derived concordance output instead.
+
+## PROD-L8.32R Roadmap Status Derivation
+
+`DELIVERY_PLAN.md` must not maintain a writable top-level `Roadmap status:` field. Roadmap posture is derived from Delivery Index rows, delivery scope authority, phase lifecycle status, session archives, archive manifests, and accepted-state pointers. If generated artifacts recreate `Roadmap status: ACTIVE` / `COMPLETE` / similar top-level status while delivery completion is also derived elsewhere, status/close must fail closed and remove the duplicated mutable field.

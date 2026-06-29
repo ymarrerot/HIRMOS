@@ -4,11 +4,11 @@
 
 ### Purpose
 
-Route the active Design lifecycle boundary to the installed `design-agent` capabilities required by `_hirmos/session/SESSION_EXECUTION.md` controls.
+Route the active Design lifecycle boundary to the installed `design-agent` capabilities required by `_hirmos/session/SESSION_LEDGER.md` controls.
 
 ### Produces
 
-- Design capability activation decisions in `_hirmos/session/SESSION_EXECUTION.md`.
+- Design capability activation decisions in `_hirmos/session/SESSION_LEDGER.md`.
 - Design-stage artifacts produced by selected capability entrypoints.
 
 ## Production-shaped Design obligation
@@ -36,7 +36,7 @@ If Design authorizes a weaker prototype, fixture, local-only, or demo-only resul
 2. Read `_hirmos/core/protocol/CAPABILITY_ROUTING.md` when routing is material to the active command.
 3. Select only capabilities required by the active Design boundary and execution controls.
 4. Read each selected capability entrypoint before running that capability.
-5. Record each capability decision in `_hirmos/session/SESSION_EXECUTION.md`.
+5. Record each capability decision in `_hirmos/session/SESSION_LEDGER.md`.
 6. Do not claim Design completion or Implementation readiness until expected artifacts/evidence exist and required controls are satisfied or explicitly not applicable.
 7. Do not start Implementation from raw inputs, prototype findings, Delivery Plan alone, or incomplete Session Scope.
 
@@ -57,7 +57,7 @@ Design may inspect `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, `_hi
 
 ### Operating sequence
 
-1. Confirm Design is active in `_hirmos/session/SESSION_EXECUTION.md`.
+1. Confirm Design is active in `_hirmos/session/SESSION_LEDGER.md`.
 2. Use `_hirmos/core/protocol/CAPABILITY_ROUTING.md` to decide which design capabilities are `REQUIRED`, `OPTIONAL`, `SKIPPED`, `NOT_APPLICABLE`, or `BLOCKED`.
 3. Produce governed requirements before system/application design relies on requirement authority.
 4. Produce system/application design from governed requirements plus system-state evidence.
@@ -66,7 +66,7 @@ Design may inspect `_hirmos/inputs/`, especially `_hirmos/inputs/uploads/`, `_hi
 7. If `session_focus = delivery_baseline`, produce delivery-baseline authority and stop at Delivery Baseline — Review or Change; do not create `SESSION_SCOPE.md`, phase files, or implementation units by default.
 8. If `session_focus = phase_session_baseline`, instantiate only the next needed phase file, create/narrow `SESSION_SCOPE.md`, and stop at Session Baseline — Review or Change before implementation.
 9. Produce Implementation Readiness only after the focus-specific baseline has been accepted or amended.
-10. Record Design capability results, route-backs, unresolved-item producer outcomes, and readiness gates in `SESSION_EXECUTION.md`.
+10. Record Design capability results, route-backs, unresolved-item producer outcomes, and readiness gates in `SESSION_LEDGER.md`.
 
 ### PROD-L8.9 focus-aware delivery routing
 
@@ -104,9 +104,7 @@ Design must explain why the selected shape is necessary for the real software wo
 
 ### Canonical interaction posture visibility
 
-- By default, surface user-owned decisions, recommended baseline, blockers, implementation-readiness summary, and concise artifact/reviewer pointers.
-- Surface artifact status, technical assumptions, readiness rationale, delivery/phase/session-scope mapping, and evidence implications when requested or needed for responsible review.
-- Surface routing, controls, artifact instantiation, unresolved-item contributions, route-backs, and validation/evidence details when validation failure, blocker state, route-back, or inspection need requires it.
+Apply the shared interaction-posture rules in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the canonical posture authority at `_hirmos/core/authority/INTERACTION_POSTURE.md`. Surface rich governed pause/checkpoint outputs when they support user decision-making; do not reduce checkpoint clarity to save tokens.
 
 ### Terminal outcomes
 
@@ -145,7 +143,7 @@ A Durable Delivery Plan remains the durable roadmap/register for multi-session d
 
 ## PROD-L8.9 command-selected focus route
 
-The design-agent default method must select capability routing from `SESSION_STATE.json.session_focus`, the Delivery Shape Decision, and the active authority, then record the result in `SESSION_EXECUTION.md`.
+The design-agent default method must select capability routing from `SESSION_STATE.json.session_focus`, the Delivery Shape Decision, and the active authority, then record the result in `SESSION_LEDGER.md`.
 
 Canonical focus routes:
 

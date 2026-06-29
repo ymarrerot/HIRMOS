@@ -4,24 +4,36 @@
 
 **HIRMOS is an orchestration framework for AI-assisted software development.**
 
-HIRMOS helps AI coding agents work from the current state of a project, organize work into governed sessions, preserve decisions and evidence, and scale from small changes to larger deliveries without losing context.
+HIRMOS helps AI coding tools work from the current state of a project, propose clear scope before implementation, pause when user decisions are needed, and preserve evidence so work can continue safely across sessions.
 
 **Simple by default. Transparent by design. Rigorous underneath. Progressive in disclosure.**
 
+## What using HIRMOS looks like
+
+You install HIRMOS into a project, open that project in your AI coding tool, and ask the agent to start HIRMOS work:
+
+```text
+hirmos start "Add Google login"
+```
+
+The agent inspects the current project, proposes a scoped plan, pauses for your review, implements only after the right scope is accepted, and closes by recording what changed and what still needs attention.
+
+Small work can stay as one governed session. Larger work can become a delivery with phases and multiple sessions. The process gets more structured only when the work needs it.
+
 ## Why HIRMOS exists
 
-AI coding tools can move fast, but serious software work needs more than fast code generation. It needs grounded context, explicit scope, visible assumptions, reviewable artifacts, validation evidence, and continuity across sessions.
+AI coding tools can move fast, but serious software work needs more than fast code generation. It needs grounded context, explicit scope, visible assumptions, reviewable decisions, validation evidence, and continuity across sessions.
 
-HIRMOS is designed for the failure modes that appear when AI-assisted work:
+HIRMOS is designed for common AI-assisted development failures:
 
-- starts from stale or incomplete project context;
-- treats notes, prototypes, tickets, or chat history as final authority;
-- hides unresolved decisions inside prose;
-- implements outside the agreed scope;
-- claims completion without evidence;
-- loses what changed between one session and the next.
+- starting from stale or incomplete project context;
+- treating notes, prototypes, tickets, or chat history as final authority;
+- hiding unresolved decisions inside prose;
+- implementing outside the agreed scope;
+- claiming completion without evidence;
+- losing what changed between one session and the next.
 
-HIRMOS keeps the interaction simple, but adds a governed framework around the agent so the work remains inspectable.
+HIRMOS keeps the interaction simple, but adds enough structure around the agent to make the work inspectable.
 
 ## How HIRMOS works
 
@@ -36,35 +48,38 @@ Understand System State
 → Update System State
 ```
 
-The user request is the starting point, not the whole source of truth. HIRMOS starts by understanding the relevant current system state, then activates the capabilities needed for the session.
+Current-state-first means the agent inspects the project before treating the new request as complete authority. The user request starts the work, but HIRMOS first checks relevant project state, then activates only the capabilities and artifacts needed for that request.
 
-That means HIRMOS can support:
+## How work is shaped
 
-- small single-session changes;
-- requirements-only or design-only work;
-- implementation sessions;
-- greenfield projects;
-- brownfield projects;
-- mixed projects with existing code, prototypes, notes, and unresolved decisions;
-- larger deliveries that need durable planning across multiple sessions.
+HIRMOS keeps small work light and adds durable structure only when the work needs it.
 
-HIRMOS keeps the rigor of spec-driven development, but does not require perfect upfront specs.
+| Work shape | Typical route | What you see first |
+|---|---|---|
+| Small bounded work | one governed session | Session Baseline or Recommended Baseline |
+| Requirements or design work | design-only governed session | reviewable requirements or design output |
+| Single-session implementation | session scope, then implementation readiness | Session Baseline — Review or Change |
+| Larger delivery | delivery plan, then phase/session work | Delivery Baseline — Review or Change |
+| Implementation with units | implementation-unit planning, pause, then execution | Implementation Plan — Review or Change |
+
+A governed session is one bounded unit of AI-assisted work with agreed scope, visible decisions, and close evidence. A delivery is a larger body of work that may need multiple governed sessions.
+
+The lifecycle stays the same. The work shape only decides how much structure is needed.
 
 ## What HIRMOS gives the agent
 
-A HIRMOS-installed project includes a governed framework payload under `_hirmos/`. That payload gives supported AI coding tools a shared operating model for:
+A HIRMOS-installed project includes a framework folder at `_hirmos/`. That framework gives supported AI coding tools a shared way to:
 
-- giving supported AI-tool integrations a thin bootstrap path into `_hirmos/AGENTS.md`;
-- understanding the current project state before acting;
-- separating raw input from accepted design authority;
-- creating a `SESSION_SCOPE.md` for the work;
-- tracking gated decisions, assumptions, blockers, and carry-forward items in `unresolved-items.md`;
-- recording execution progress and evidence in `SESSION_EXECUTION.md`;
-- using bounded implementation units when implementation is in scope;
-- reviewing completion before close;
-- updating durable system state for the next session.
+- read the current project state before acting;
+- separate rough input from decisions the user has accepted;
+- propose scope before implementation;
+- track unresolved decisions, assumptions, and blockers;
+- pause when user input is needed;
+- separate implementation planning from implementation execution when the work is complex;
+- validate and record evidence before claiming completion;
+- preserve accepted outcomes for the next session.
 
-For larger work, HIRMOS can also organize delivery plans and phases so the project can continue safely across multiple sessions.
+If you want to inspect the details, HIRMOS records them in files such as `SESSION_SCOPE.md`, `SESSION_LEDGER.md`, unresolved-item registers, implementation-unit files, and accepted-state indexes under `_hirmos/`.
 
 ## Install HIRMOS
 
@@ -95,7 +110,7 @@ For the complete CLI guide, including version checks, updates, `--integration`, 
 
 ## Use HIRMOS inside your AI coding tool
 
-After initialization, open the project in your AI coding tool. The integration file generated by `hirmos init` is the normal bootstrap path for that tool.
+After initialization, open the project in your AI coding tool. The generated integration file is the normal bootstrap path for that tool.
 
 Then use HIRMOS workflow commands inside the agent conversation:
 
@@ -123,6 +138,13 @@ Start here:
 1. [_hirmos/docs/1-use-hirmos/getting-started/README.md](./_hirmos/docs/1-use-hirmos/getting-started/README.md)
 2. [_hirmos/docs/1-use-hirmos/getting-started/quickstart.md](./_hirmos/docs/1-use-hirmos/getting-started/quickstart.md)
 3. [_hirmos/docs/1-use-hirmos/getting-started/first-real-run.md](./_hirmos/docs/1-use-hirmos/getting-started/first-real-run.md)
+
+### I want to understand larger delivery work
+
+Read:
+
+- [_hirmos/docs/1-use-hirmos/getting-started/multi-session-work.md](./_hirmos/docs/1-use-hirmos/getting-started/multi-session-work.md)
+- [_hirmos/docs/1-use-hirmos/examples/delivery-baseline-and-phase-session.md](./_hirmos/docs/1-use-hirmos/examples/delivery-baseline-and-phase-session.md)
 
 ### I want to understand the methodology
 
@@ -169,7 +191,7 @@ The generic `agents` integration creates `AGENTS.md`. Some tools also use tool-s
 
 HIRMOS is not an autonomous coding agent, a hidden prompt pack, or a CLI runtime engine. It is a framework that gives AI coding agents a governed way to work inside a project.
 
-HIRMOS is probably not the right fit if you want one-shot code generation with no traceability, no reviewable artifacts, and no durable project memory.
+HIRMOS is probably not the right fit if you want one-shot code generation with no traceability, no reviewable decisions, and no durable project memory.
 
 ## Documentation map
 
@@ -179,16 +201,16 @@ HIRMOS is probably not the right fit if you want one-shot code generation with n
 - [_hirmos/docs/3-extend-contribute/](./_hirmos/docs/3-extend-contribute/) — how to extend or contribute
 - [_hirmos/docs/reference/](./_hirmos/docs/reference/) — artifact, runtime, and glossary reference
 
-## Current status
+## Design principles
 
-HIRMOS 1.0 is organized around four onboarding principles:
+HIRMOS is organized around four onboarding principles:
 
-- **Simple by default** — a small command surface and clear onboarding path.
+- **Simple by default** — start with a small command surface and clear next steps.
 - **Transparent by design** — decisions, assumptions, artifacts, and evidence remain inspectable.
-- **Rigorous underneath** — framework protocols, validators, regression fixtures, and session artifacts protect serious work.
+- **Rigorous underneath** — protocols, validators, regression fixtures, and session artifacts protect serious work.
 - **Progressive in disclosure** — users start simple and inspect deeper only when needed.
 
-The framework is designed for current-state-first development. A project may be greenfield, brownfield, or somewhere in between; HIRMOS starts by understanding the current system state, then activates the capabilities needed for the session.
+A project may be greenfield, brownfield, or somewhere in between. HIRMOS starts by understanding the current system state, then activates the capabilities needed for the work.
 
 ## Contributing
 
@@ -199,7 +221,3 @@ For framework structure, validation, and extension guidance, read:
 ## License
 
 See the project license for distribution terms.
-
-## Delivery baseline and session focus
-
-HIRMOS can keep small work light while still supporting durable multi-session delivery. Commands always run inside a governed runtime session envelope, but the active focus determines which artifacts are created. Durable delivery work first prepares a delivery baseline under `_hirmos/system/delivery/<delivery-id>/`; bounded implementation sessions create `SESSION_SCOPE.md` only after the delivery or session baseline is ready for review.

@@ -71,7 +71,7 @@ required = [
     'core/commands/continue.md',
     'core/commands/status.md',
     'core/commands/close.md',
-    'core/templates/session/SESSION_EXECUTION.md',
+    'core/templates/session/SESSION_LEDGER.md',
     'core/templates/session/SESSION_SCOPE.md',
     'core/templates/session/unresolved-items.md',
     'core/templates/session/implementation-units/IU.md',
@@ -179,10 +179,11 @@ for phrase in ['Use HIRMOS', 'Learn the methodology', 'Extend or contribute', 'R
 
 installed_readme = root / 'README.md'
 installed_readme_body = installed_readme.read_text()
-for phrase in ['Why HIRMOS exists', 'Simple by default', 'hirmos start', 'Understand System State']:
-    if phrase not in installed_readme_body:
-        print(f'FAIL: installed _hirmos/README.md missing onboarding phrase: {phrase}')
-        sys.exit(1)
+onboarding_readme_ok = all(phrase in installed_readme_body for phrase in ['Why HIRMOS exists', 'Simple by default', 'hirmos start', 'Understand System State'])
+folder_guide_readme_ok = all(phrase in installed_readme_body for phrase in ['This folder is the HIRMOS framework payload', 'Quick map', 'How this README differs from the root README'])
+if not onboarding_readme_ok and not folder_guide_readme_ok:
+    print('FAIL: _hirmos/README.md must be either the installed-project onboarding README or the repository _hirmos folder guide')
+    sys.exit(1)
 
 for rel, phrases in {
     'docs/1-use-hirmos/getting-started/quickstart.md': ['Bootstrap', 'hirmos start', 'hirmos continue', 'hirmos close'],
@@ -250,7 +251,7 @@ for term in ['_' + 'internal/', '_' + 'workspace/']:
 
 
 # Command execution and control integrity checks.
-session_execution = (root/'core/templates/session/SESSION_EXECUTION.md').read_text()
+session_execution = (root/'core/templates/session/SESSION_LEDGER.md').read_text()
 for phrase in [
     'Command Resolution',
     'Active Execution Controls',
@@ -266,7 +267,7 @@ for phrase in [
     'BLOCKED',
 ]:
     if phrase not in session_execution:
-        print(f'FAIL: SESSION_EXECUTION.md missing required command/control integrity phrase: {phrase}')
+        print(f'FAIL: SESSION_LEDGER.md missing required command/control integrity phrase: {phrase}')
         sys.exit(1)
 
 for cmd in ['start','continue','status','close']:
@@ -342,7 +343,7 @@ IDLE_ALLOWED_FILES = {
 ACTIVE_REQUIRED_ROOT_FILES = {
     'SESSION_STATE.json',
     'SESSION_SCOPE.md',
-    'SESSION_EXECUTION.md',
+    'SESSION_LEDGER.md',
     'unresolved-items.md',
 }
 PROHIBITED_SUPPORT_ARTIFACT_NAMES = {
@@ -540,7 +541,7 @@ def _validate_session_state_semantics(state_path: Path, active_session_dir: Path
                     sys.exit(1)
         elif status == 'active':
             session_focus = state_obj.get('session_focus')
-            required_roots = {'SESSION_STATE.json', 'SESSION_EXECUTION.md'}
+            required_roots = {'SESSION_STATE.json', 'SESSION_LEDGER.md'}
             if session_focus != 'delivery_baseline':
                 required_roots.update({'SESSION_SCOPE.md', 'unresolved-items.md'})
             missing_active = sorted(name for name in required_roots if not (active_session_dir/name).exists())
@@ -646,11 +647,11 @@ def _validate_phase_progress_carry_forward(phase_rel: Path, stage: str | None, c
     if stage not in {'implementation_complete', 'close_ready'}:
         return
     phase_body = _read_optional_text(root / phase_rel)
-    if 'Phase Progress Ledger' not in phase_body:
-        print('FAIL: phase progress missing Phase Progress Ledger in durable phase')
+    if 'Phase Progress Pointer Index' not in phase_body:
+        print('FAIL: phase progress missing Phase Progress Pointer Index in durable phase')
         sys.exit(1)
     if ' Phase Progress / Carry-Forward Record' not in session_execution:
-        print('FAIL: phase progress missing carry-forward record in SESSION_EXECUTION.md')
+        print('FAIL: phase progress missing carry-forward record in SESSION_LEDGER.md')
         sys.exit(1)
     if ' Phase Progress / Carry-Forward Review' not in session_review:
         print('FAIL: phase progress missing carry-forward review in SESSION_SCOPE.md close verification')
@@ -685,7 +686,7 @@ def _validate_phase_acceptance_enforcement(phase_rel: Path, stage: str | None, c
 
     required_pairs = [
         ('phase body', phase_body, ' Phase Acceptance Evidence Gate'),
-        ('session execution', session_execution, ' Phase Acceptance Enforcement Record'),
+        ('session ledger', session_execution, ' Phase Acceptance Enforcement Record'),
         ('session scope review', session_review, ' Phase Acceptance Review'),
         ('close controls', close_controls, ' Phase Acceptance Transaction'),
     ]
@@ -735,7 +736,7 @@ def _validate_phase_lifecycle_status_report(session_execution: str) -> None:
         'Phase lifecycle status',
         'Phase type',
         'Phase Entry Gate status',
-        'Phase Progress Ledger status',
+        'Phase Progress Pointer Index status',
         'Carry-forward status',
         'Phase Acceptance Evidence Gate status',
         'Greenfield status group',
@@ -804,13 +805,13 @@ def _validate_phase_session_post_continue_freshness(state_obj: dict, session_exe
     for capability in ['phase-baseline', 'session-scope']:
         status = _routing_log_row_status(session_execution, capability)
         if status and status == 'PENDING':
-            print(f'FAIL: phase_session_baseline SESSION_EXECUTION.md routing log leaves {capability} PENDING after required artifact creation')
+            print(f'FAIL: phase_session_baseline SESSION_LEDGER.md routing log leaves {capability} PENDING after required artifact creation')
             sys.exit(1)
 
     for label in ['Active Phase pointer exists when required', 'Session Scope adopts the same delivery/phase authority']:
         result = _concordance_row_result(session_execution, label)
         if result and result == 'NOT_APPLICABLE':
-            print(f'FAIL: phase_session_baseline SESSION_EXECUTION.md concordance row is stale: {label} is NOT_APPLICABLE')
+            print(f'FAIL: phase_session_baseline SESSION_LEDGER.md concordance row is stale: {label} is NOT_APPLICABLE')
             sys.exit(1)
 
     if _active_context_current_phase_is_none(plan_body):
@@ -881,7 +882,7 @@ def _validate_delivery_governance_active_session(active_session_dir: Path) -> No
     stage = state_obj.get('lifecycle_stage')
     session_scope = _read_optional_text(active_session_dir / 'SESSION_SCOPE.md')
     current_state = _read_optional_text(root / 'system/accepted-state/CURRENT_SYSTEM_STATE.md')
-    session_execution = _read_optional_text(active_session_dir / 'SESSION_EXECUTION.md')
+    session_execution = _read_optional_text(active_session_dir / 'SESSION_LEDGER.md')
     evidence_text = _read_optional_text(active_session_dir / 'EVIDENCE.md')
     session_review = session_scope
     close_controls = '\n'.join([session_execution, evidence_text, session_scope])
@@ -937,7 +938,7 @@ def _validate_delivery_governance_active_session(active_session_dir: Path) -> No
 
     if stage in {'implementation_complete', 'close_ready'}:
         if 'Close-Time Delivery / Phase Status Transaction' not in close_controls:
-            print('FAIL: delivery close missing status transaction in SESSION_EXECUTION.md or EVIDENCE.md')
+            print('FAIL: delivery close missing status transaction in SESSION_LEDGER.md or EVIDENCE.md')
             sys.exit(1)
         if not re.search(r'DELIVERY_STATUS_UPDATE_APPLIED|DELIVERY_STATUS_UNCHANGED_VERIFIED', close_controls):
             print('FAIL: delivery close status transaction must record applied or unchanged verification')
@@ -948,7 +949,7 @@ _validate_delivery_governance_active_session(root/'session')
 
 for rel, phrases in {
     'core/protocol/COMMAND_STATE_MACHINE.md': ['Validator obligations', 'legal command transition matrix', 'active/idle session folder consistency', 'recommended command legality'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Machine Command State Concordance', 'Ledger Integrity Self-Validation', 'Continuation Pass Register', 'Control Mutation Ledger'],
+    'core/templates/session/SESSION_LEDGER.md': ['Active / Pre-Close Machine Command State Concordance', 'Archived Session State Concordance', 'Ledger Integrity Self-Validation', 'Continuation Pass Register', 'Control Mutation Ledger'],
     'core/commands/start.md': ['Command-state gate', 'Fail-Closed', 'Mandatory implementation-readiness pause'],
     'core/commands/continue.md': ['Command-state gate', 'append a new continuation pass record', 'Fail-Closed'],
     'core/commands/close.md': ['Command-state gate', 'stale active-session artifacts', 'Close Blocked'],
@@ -994,7 +995,7 @@ for rel, phrases in {
     'core/commands/continue.md': ['Cumulative continuation pass model', 'append a new continuation pass record'],
     'core/commands/status.md': ['Command-state reporting'],
     'core/commands/close.md': ['Command-state close transition'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Machine Command State Concordance', 'Continuation Pass Register', 'Exactly-one-next-command rule'],
+    'core/templates/session/SESSION_LEDGER.md': ['Active / Pre-Close Machine Command State Concordance', 'Archived Session State Concordance', 'Continuation Pass Register', 'Exactly-one-next-command rule'],
     'core/templates/session/SESSION_SCOPE.md': ['Scope Amendments'],
 }.items():
     body = (root/rel).read_text()
@@ -1007,9 +1008,9 @@ for rel, phrases in {
 
 # Artifact template quality checks after governance-tax cleanup
 
-_session_execution_template = (root/'core/templates/session/SESSION_EXECUTION.md').read_text()
+_session_execution_template = (root/'core/templates/session/SESSION_LEDGER.md').read_text()
 if _session_execution_template.count('## Current Continuation Snapshot') != 1:
-    print('FAIL: SESSION_EXECUTION.md must contain exactly one Current Continuation Snapshot section')
+    print('FAIL: SESSION_LEDGER.md must contain exactly one Current Continuation Snapshot section')
     sys.exit(1)
 if _session_execution_template.find('## Current Continuation Snapshot') > _session_execution_template.find('## Command Resolution'):
     print('FAIL: Current Continuation Snapshot must appear before Command Resolution')
@@ -1064,11 +1065,11 @@ if 'allowed_next_commands' not in state or 'recommended_next_command' not in sta
 # durable delivery governance checks
 for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'DELIVERY_SCOPE.md', 'real software work', 'User interaction / token-cost impact'],
-    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Index', 'Delivery Coverage Matrix', 'Status Update Log'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Index', 'Delivery Coverage Matrix', 'Delivery Status Pointer Index'],
     'core/templates/system/delivery/DELIVERY_SCOPE.md': ['Authorized Outcome', 'Scoped Requirements', 'Production-Shaped Engineering Gate', 'Delivery Close Verification'],
     'core/templates/system/delivery/phases/PHASE.md': ['Phase Scope', 'Source Delivery Scope', 'Binary Exit Criteria', 'Session Handoff', 'Entry criteria status'],
     'core/templates/session/SESSION_SCOPE.md': ['Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Selected shape justification', 'User interaction / token-cost impact'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Delivery Shape Decision Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
+    'core/templates/session/SESSION_LEDGER.md': ['Delivery Shape Decision Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
     'core/protocol/PROJECT_TYPES.md': ['Delivery shape fields', 'Delivery governance required: YES / NO / UNCERTAIN'],
     'core/protocol/COMMAND_STATE_MACHINE.md': ['Delivery Shape Decision state gate', 'must not recommend `hirmos continue`'],
     'core/commands/start.md': ['Delivery Shape Decision Gate', 'smallest governed delivery shape'],
@@ -1096,7 +1097,7 @@ for rel, phrases in {
     'extensions/design-agent/capabilities/phase-baseline/capability.json': ['session_focus = phase_session_baseline', '_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md', '_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md', 'session-scope adoption control'],
     'extensions/design-agent/capabilities/session-scope/capability.json': ['durable phase', 'single-session safety evidence'],
     'extensions/design-agent/capabilities/implementation-readiness/capability.json': ['durable delivery coverage when required', 'Delivery Shape Decision gate'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Focus-Aware Capability Routing Log', 'delivery-baseline', 'phase-baseline', 'session-scope', 'implementation-readiness', 'Post-continue freshness rule'],
+    'core/templates/session/SESSION_LEDGER.md': ['Focus-Aware Capability Routing Log', 'delivery-baseline', 'phase-baseline', 'session-scope', 'implementation-readiness', 'Post-continue freshness rule'],
     'core/templates/session/SESSION_SCOPE.md': ['Focus-Aware Capability Routing Evidence', 'delivery-baseline', 'phase-baseline', 'implementation-readiness'],
 }.items():
     body = (root/rel).read_text()
@@ -1132,7 +1133,7 @@ for rel, phrases in {
     'core/protocol/CURRENT_SYSTEM_STATE.md': ['Active Development Context and Delivery Pointers', 'Required pointer fields', 'Next recommended delivery', 'Future sessions must read these pointers'],
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Current System State pointer rule', 'Required pointer fields', 'Next recommended delivery', 'Close-time pointer update is mandatory', 'hirmos start` and Understand System State must inspect these pointers', 'project-type neutral'],
     'core/templates/session/SESSION_SCOPE.md': ['Current System State delivery pointer basis', 'Next recommended delivery', 'Pointer consistency result'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Current System State Delivery Pointer Concordance', 'Next recommended delivery', 'delivery-governed implementation must not proceed'],
+    'core/templates/session/SESSION_LEDGER.md': ['Current System State Delivery Pointer Concordance', 'Next recommended delivery', 'delivery-governed implementation must not proceed'],
     'core/commands/start.md': ['Current System State Delivery Pointer Precheck', 'Next recommended delivery', 'must not default to a single-session path'],
     'core/commands/status.md': ['Durable Delivery Pointer Reporting', 'Next recommended delivery', 'Status Blocked By Delivery Pointer Conflict'],
     'core/commands/continue.md': ['Durable Delivery Pointer Concordance', 'Next recommended delivery', 'delivery governance reconciliation'],
@@ -1151,7 +1152,7 @@ print('PASS: HIRMOS current-system-state delivery pointer integration static che
 for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Durable Phase Adoption Rule', 'adopt exactly one durable phase file', 'Adoption status: ADOPTED / NOT_APPLICABLE / BLOCKED', 'multiple adopted active phase files'],
     'core/templates/session/SESSION_SCOPE.md': ['Active Durable Phase Adoption', 'Does `SESSION_SCOPE.md` adopt exactly one active durable `PHASE-xx.md`', 'Adopted phase scope', 'Phase exclusions / deferrals'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Durable Phase Adoption Gate', 'Exactly one durable phase adopted', 'Phase items mapped to Session Scope items'],
+    'core/templates/session/SESSION_LEDGER.md': ['Durable Phase Adoption Gate', 'Exactly one durable phase adopted', 'Phase items mapped to Session Scope items'],
     'core/commands/start.md': ['Durable Phase Adoption Pre-Implementation Gate', 'adopts exactly one durable phase file'],
     'core/commands/continue.md': ['Durable Phase Adoption Continuation Check', 'must not silently switch to a different phase'],
     'core/commands/status.md': ['Durable Phase Adoption Status Reporting', 'Status must not imply implementation authorization'],
@@ -1168,10 +1169,10 @@ print('PASS: HIRMOS session scope phase adoption enforcement static check')
 # Close-time Delivery Plan / Phase status update enforcement checks
 for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Close-Time Delivery Plan / Phase Status Update Enforcement', 'Required close-time status authority chain', 'Close is blocked if Delivery Plan status'],
-    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Close-Time Delivery Status Update', 'Delivery Status Update Log'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Close-Time Delivery Pointer Refresh', 'Delivery Status Pointer Index'],
     'core/templates/system/delivery/DELIVERY_SCOPE.md': ['Delivery Close Verification', 'Session Adoption Rules', 'Phase Plan'],
     'core/templates/system/delivery/phases/PHASE.md': ['Close-Time Phase Status Update', 'Phase Acceptance Review records the closed session', 'Binary Exit Criterion'],
-    'core/templates/session/SESSION_EXECUTION.md': [' Close-Time Delivery Status Execution Log', 'durable delivery status updates remain pending'],
+    'core/templates/session/SESSION_LEDGER.md': [' Close-Time Delivery Status Execution Log', 'durable delivery status updates remain pending'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': [' Close-Time Delivery Pointer Refresh Rule', 'explicitly verified unchanged'],
     'core/protocol/CURRENT_SYSTEM_STATE.md': [' Close-Time Delivery Pointer Refresh', 'not refreshed or explicitly verified unchanged'],
     'core/commands/close.md': [' Durable Delivery Status Close Requirement', 'update durable delivery status before normal close success', 'archive manifest may record the transaction'],
@@ -1220,7 +1221,7 @@ for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': [' Phase Entry Gate Routing', 'Delivery-Need Classification Gate', 'Phase Entry Gate', 'If the result is `BLOCKED` or `UNCERTAIN`'],
     'core/templates/system/delivery/phases/PHASE.md': [' Phase Entry Gate', 'Entry gate status: PENDING / PASS / BLOCKED / UNCERTAIN', 'Greenfield Entry Gate Controls', 'Brownfield Entry Gate Controls'],
     'core/templates/session/SESSION_SCOPE.md': [' Phase Entry Gate Evidence', 'Phase Entry Gate status: PASS / BLOCKED / UNCERTAIN / NOT_APPLICABLE'],
-    'core/templates/session/SESSION_EXECUTION.md': [' Phase Entry Gate Execution Log', 'Implementation readiness authorized: YES / NO'],
+    'core/templates/session/SESSION_LEDGER.md': [' Phase Entry Gate Execution Log', 'Implementation readiness authorized: YES / NO'],
     'core/commands/start.md': [' Phase Entry Gate Enforcement', 'Phase Entry Gate', 'lifecycle status', 'phase type'],
     'core/commands/continue.md': [' Phase Entry Gate Enforcement', 'Phase Entry Gate', 'lifecycle status', 'phase type'],
     'core/commands/status.md': [' Phase Entry Gate Enforcement', 'Phase Entry Gate', 'lifecycle status', 'phase type'],
@@ -1236,17 +1237,17 @@ print('PASS: HIRMOS phase entry gate enforcement static check')
 
 # Phase Progress / Carry-Forward enforcement checks
 for rel, phrases in {
-    'core/protocol/PHASE_LIFECYCLE.md': [' Phase Progress / Carry-Forward Enforcement', 'Phase Progress Ledger', 'Carry-Forward Enforcement', 'Greenfield Progress Rules', 'Brownfield Progress Rules', ' Fail-Closed Rules'],
-    'core/protocol/DELIVERY_GOVERNANCE.md': [' Phase Progress / Carry-Forward Routing', 'Phase Progress Ledger', 'Carry-Forward Items', 'CURRENT_SYSTEM_STATE.md active/next phase pointers'],
-    'core/templates/system/delivery/phases/PHASE.md': [' Phase Progress Ledger', ' Carry-Forward Enforcement', 'Carry-forward status: NONE / RECORDED / BLOCKED / NOT_APPLICABLE', 'Greenfield Progress Controls', 'Brownfield Progress Controls'],
-    'core/templates/session/SESSION_SCOPE.md': [' Phase Progress and Carry-Forward Control', 'Previous Phase Progress Ledger inspected', 'Carry-forward required if not accepted'],
-    'core/templates/session/SESSION_EXECUTION.md': [' Phase Progress / Carry-Forward Record', 'Adopted phase progress reviewed', 'Carry-forward obligations recorded'],
+    'core/protocol/PHASE_LIFECYCLE.md': [' Phase Progress / Carry-Forward Enforcement', 'Phase Progress Pointer Index', 'Carry-Forward Enforcement', 'Greenfield Progress Rules', 'Brownfield Progress Rules', ' Fail-Closed Rules'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': [' Phase Progress / Carry-Forward Routing', 'Phase Progress Pointer Index', 'Carry-Forward Items', 'CURRENT_SYSTEM_STATE.md active/next phase pointers'],
+    'core/templates/system/delivery/phases/PHASE.md': [' Phase Progress Pointer Index', ' Carry-Forward Enforcement', 'Carry-forward status: NONE / RECORDED / BLOCKED / NOT_APPLICABLE', 'Greenfield Progress Controls', 'Brownfield Progress Controls'],
+    'core/templates/session/SESSION_SCOPE.md': [' Phase Progress and Carry-Forward Control', 'Previous Phase Progress Pointer Index inspected', 'Carry-forward required if not accepted'],
+    'core/templates/session/SESSION_LEDGER.md': [' Phase Progress / Carry-Forward Record', 'Adopted phase progress reviewed', 'Carry-forward obligations recorded'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': [' Phase Progress Pointer Rule', 'still-active phase', 'explicit carry-forward target'],
     'system/accepted-state/CURRENT_SYSTEM_STATE.md': [' Phase Progress Pointer Rule', 'still-active phase', 'explicit carry-forward target'],
-    'core/commands/start.md': [' Phase Progress / Carry-Forward Enforcement', 'Phase Progress Ledger', 'Carry-Forward Items'],
-    'core/commands/continue.md': [' Phase Progress / Carry-Forward Enforcement', 'Phase Progress Ledger', 'Carry-Forward Items'],
-    'core/commands/status.md': [' Phase Progress / Carry-Forward Enforcement', 'Phase Progress Ledger', 'Carry-Forward Items'],
-    'core/commands/close.md': [' Phase Progress / Carry-Forward Enforcement', 'Phase Progress Ledger', 'Carry-Forward Items'],
+    'core/commands/start.md': [' Phase Progress / Carry-Forward Enforcement', 'Phase Progress Pointer Index', 'Carry-Forward Items'],
+    'core/commands/continue.md': [' Phase Progress / Carry-Forward Enforcement', 'Phase Progress Pointer Index', 'Carry-Forward Items'],
+    'core/commands/status.md': [' Phase Progress / Carry-Forward Enforcement', 'Phase Progress Pointer Index', 'Carry-Forward Items'],
+    'core/commands/close.md': [' Phase Progress / Carry-Forward Enforcement', 'Phase Progress Pointer Index', 'Carry-Forward Items'],
 }.items():
     body = (root/rel).read_text()
     for phrase in phrases:
@@ -1263,7 +1264,7 @@ for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': [' Phase Acceptance Routing', 'Phase Acceptance Evidence Gate', 'CURRENT_SYSTEM_STATE.md active/next phase pointers'],
     'core/templates/system/delivery/phases/PHASE.md': [' Phase Acceptance Evidence Gate', 'Greenfield Acceptance Evidence', 'Brownfield Acceptance Evidence', 'Mixed Acceptance Evidence'],
     'core/templates/session/SESSION_SCOPE.md': [' Phase Acceptance Control', 'Phase acceptance will be evaluated through Phase Acceptance Evidence Gate'],
-    'core/templates/session/SESSION_EXECUTION.md': [' Phase Acceptance Enforcement Record', 'Phase Acceptance Evidence Gate inspected'],
+    'core/templates/session/SESSION_LEDGER.md': [' Phase Acceptance Enforcement Record', 'Phase Acceptance Evidence Gate inspected'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': [' Phase Acceptance Pointer Rule', 'last accepted phase'],
     'system/accepted-state/CURRENT_SYSTEM_STATE.md': [' Phase Acceptance Pointer Rule', 'last accepted phase'],
     'core/commands/start.md': [' Phase Acceptance Enforcement', 'Phase Acceptance Evidence Gate'],
@@ -1283,9 +1284,9 @@ print('PASS: HIRMOS phase acceptance enforcement static check')
 # CLI / Status UX phase lifecycle reporting checks
 for rel, phrases in {
     'core/protocol/PHASE_LIFECYCLE.md': [' CLI / Status UX Phase Lifecycle Reporting', 'Phase Lifecycle Status Report', 'Phase Entry Gate status', 'Phase Acceptance Evidence Gate status', 'Status Blocked By Phase Lifecycle Conflict', 'Exactly-One-Next-Command'],
-    'core/protocol/DELIVERY_GOVERNANCE.md': [' Phase Lifecycle Status Reporting', 'CURRENT_SYSTEM_STATE.md` delivery pointers', 'Phase Progress Ledger status', 'Status Blocked By Phase Lifecycle Conflict'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': [' Phase Lifecycle Status Reporting', 'CURRENT_SYSTEM_STATE.md` delivery pointers', 'Phase Progress Pointer Index status', 'Status Blocked By Phase Lifecycle Conflict'],
     'core/commands/status.md': [' CLI / Status UX Phase Lifecycle Reporting', 'Phase Lifecycle Status Report', 'Greenfield status group', 'Brownfield status group', 'Exactly one recommended next command'],
-    'core/templates/session/SESSION_EXECUTION.md': [' Phase Lifecycle Status Report Record', 'Phase lifecycle status', 'Phase Acceptance Evidence Gate status', 'Exactly one recommended next command'],
+    'core/templates/session/SESSION_LEDGER.md': [' Phase Lifecycle Status Report Record', 'Phase lifecycle status', 'Phase Acceptance Evidence Gate status', 'Exactly one recommended next command'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': [' Phase Lifecycle Status Pointer Rule', 'Phase Lifecycle Status Report', 'pointer concordance'],
     'system/accepted-state/CURRENT_SYSTEM_STATE.md': [' Phase Lifecycle Status Pointer Rule', 'Phase Lifecycle Status Report', 'pointer concordance'],
 }.items():
@@ -1337,7 +1338,7 @@ template_expectations = {
     'implementation-units/IU.md': ['Unit Scope / Authority', 'LLM Write Permission:', 'Execution Record', 'Unit Review', 'Does the actual implementation satisfy 100%', 'Retry Decision', 'Evidence from Failed Attempt', 'Escalation Condition'],
     'DESIGN.md': ['Current-State Basis', 'Governed Requirements', 'Delivery Shape Decision', 'Technical Review and Implementation Readiness Basis'],
     'EVIDENCE.md': ['Command Evidence', 'Runtime and Critical-Flow Evidence', 'Production-Shaped Engineering Evidence', 'Claim Reconciliation Summary', 'Close / Archive Evidence'],
-    'SESSION_EXECUTION.md': ['Active Execution Controls', 'Artifact Instantiation Log', 'Close / Archive / Reset Invariant Controls'],
+    'SESSION_LEDGER.md': ['Active Execution Controls', 'Artifact Instantiation Log', 'Close / Archive / Reset Invariant Controls'],
 }
 
 for name, phrases in template_expectations.items():
@@ -1397,11 +1398,11 @@ if 'allowed_next_commands' not in state or 'recommended_next_command' not in sta
 # durable delivery governance checks
 for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['Delivery Shape Decision Gate', 'smallest sufficient governed delivery shape', 'SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS', 'DELIVERY_SCOPE.md', 'real software work', 'User interaction / token-cost impact'],
-    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Index', 'Delivery Coverage Matrix', 'Status Update Log'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['Delivery Shape Source', 'Delivery Index', 'Delivery Coverage Matrix', 'Delivery Status Pointer Index'],
     'core/templates/system/delivery/DELIVERY_SCOPE.md': ['Authorized Outcome', 'Scoped Requirements', 'Production-Shaped Engineering Gate', 'Delivery Close Verification'],
     'core/templates/system/delivery/phases/PHASE.md': ['Phase Scope', 'Source Delivery Scope', 'Binary Exit Criteria', 'Session Handoff', 'Entry criteria status'],
     'core/templates/session/SESSION_SCOPE.md': ['Delivery Shape Decision', 'smallest sufficient governed delivery shape', 'Selected shape justification', 'User interaction / token-cost impact'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Delivery Shape Decision Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
+    'core/templates/session/SESSION_LEDGER.md': ['Delivery Shape Decision Gate Execution', 'Gate status: PASS | BLOCKED | NOT_ASSESSED'],
     'core/protocol/PROJECT_TYPES.md': ['Delivery shape fields', 'Delivery governance required: YES / NO / UNCERTAIN'],
     'core/protocol/COMMAND_STATE_MACHINE.md': ['Delivery Shape Decision state gate', 'must not recommend `hirmos continue`'],
     'core/commands/start.md': ['Delivery Shape Decision Gate', 'smallest governed delivery shape'],
@@ -1429,7 +1430,7 @@ for rel, phrases in {
     'extensions/design-agent/capabilities/phase-baseline/capability.json': ['session_focus = phase_session_baseline', '_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md', '_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md', 'session-scope adoption control'],
     'extensions/design-agent/capabilities/session-scope/capability.json': ['durable phase', 'single-session safety evidence'],
     'extensions/design-agent/capabilities/implementation-readiness/capability.json': ['durable delivery coverage when required', 'Delivery Shape Decision gate'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Focus-Aware Capability Routing Log', 'delivery-baseline', 'phase-baseline', 'session-scope', 'implementation-readiness', 'Post-continue freshness rule'],
+    'core/templates/session/SESSION_LEDGER.md': ['Focus-Aware Capability Routing Log', 'delivery-baseline', 'phase-baseline', 'session-scope', 'implementation-readiness', 'Post-continue freshness rule'],
     'core/templates/session/SESSION_SCOPE.md': ['Focus-Aware Capability Routing Evidence', 'delivery-baseline', 'phase-baseline', 'implementation-readiness'],
 }.items():
     body = (root/rel).read_text()
@@ -1465,7 +1466,7 @@ print('PASS: HIRMOS durable delivery templates and classification gate static ch
 for rel, phrases in {
     'core/protocol/COMMAND_STATE_MACHINE.md': ['PROD-L8.19 Idle Continue Fail-Closed Rule', 'must not mutate project files', 'must not modify project files'],
     'core/commands/continue.md': ['PROD-L8.19 idle-state command legality', 'must fail closed before any project-file or artifact mutation', 'PROD-L8.19 IU pre-execution authority gate'],
-    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.19 Command Legality and Correction Ledger Concordance', 'Idle Continue Legality Record', 'IU Pre-Execution Authority Record', 'Material Correction Command Ledger'],
+    'core/templates/session/SESSION_LEDGER.md': ['PROD-L8.19 Command Legality and Correction Ledger Concordance', 'Idle Continue Legality Record', 'IU Pre-Execution Authority Record', 'Material Correction Command Ledger'],
     'core/templates/session/implementation-units/IU.md': ['PROD-L8.19 Pre-Execution Authority Declaration', 'must not be represented as normal pre-execution governance'],
     'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': ['PROD-L8.19 pre-execution authority requirement', 'governance deviation/correction'],
     'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['PROD-L8.19 execution authority gate', 'Do not execute from `SESSION_SCOPE.md` implementation-shape preview alone'],
@@ -1577,8 +1578,8 @@ for ext, caps in expected_extensions.items():
                 print(f'FAIL: capability entrypoint {cap_ep.relative_to(root)} missing {phrase}')
                 sys.exit(1)
 
-if 'Capability / Stage Activity Summary' not in (root/'core/templates/session/SESSION_EXECUTION.md').read_text():
-    print('FAIL: SESSION_EXECUTION.md missing capability activity summary')
+if 'Capability / Stage Activity Summary' not in (root/'core/templates/session/SESSION_LEDGER.md').read_text():
+    print('FAIL: SESSION_LEDGER.md missing capability activity summary')
     sys.exit(1)
 
 print('PASS: HIRMOS capability/entrypoint static check')
@@ -1625,8 +1626,8 @@ for name, phrases in system_state_templates.items():
             print(f'FAIL: system-state template {name} missing system-state-agent phrase: {phrase}')
             sys.exit(1)
 
-if 'System-State Capability Summary' not in (root/'core/templates/session/SESSION_EXECUTION.md').read_text():
-    print('FAIL: SESSION_EXECUTION.md missing system-state capability summary')
+if 'System-State Capability Summary' not in (root/'core/templates/session/SESSION_LEDGER.md').read_text():
+    print('FAIL: SESSION_LEDGER.md missing system-state capability summary')
     sys.exit(1)
 
 print('PASS: HIRMOS system-state-agent method/template static check')
@@ -1680,8 +1681,8 @@ for name, phrases in design_templates.items():
             print(f'FAIL: design template {name} missing design-agent phrase: {phrase}')
             sys.exit(1)
 
-if 'Design Capability Summary' not in (root/'core/templates/session/SESSION_EXECUTION.md').read_text():
-    print('FAIL: SESSION_EXECUTION.md missing Design Capability Summary')
+if 'Design Capability Summary' not in (root/'core/templates/session/SESSION_LEDGER.md').read_text():
+    print('FAIL: SESSION_LEDGER.md missing Design Capability Summary')
     sys.exit(1)
 
 print('PASS: HIRMOS design-agent method/template static check')
@@ -1733,8 +1734,8 @@ for name, phrases in implementation_templates.items():
             print(f'FAIL: implementation template {name} missing implementation-agent phrase: {phrase}')
             sys.exit(1)
 
-if 'Implementation Capability Summary' not in (root/'core/templates/session/SESSION_EXECUTION.md').read_text():
-    print('FAIL: SESSION_EXECUTION.md missing Implementation Capability Summary')
+if 'Implementation Capability Summary' not in (root/'core/templates/session/SESSION_LEDGER.md').read_text():
+    print('FAIL: SESSION_LEDGER.md missing Implementation Capability Summary')
     sys.exit(1)
 
 print('PASS: HIRMOS implementation-agent method/template static check')
@@ -1800,14 +1801,14 @@ for phrase in [
         print(f'FAIL: SESSION_SCOPE.md unresolved control missing governance phrase: {phrase}')
         sys.exit(1)
 
-session_execution_template = (root/'core/templates/session/SESSION_EXECUTION.md').read_text()
+session_execution_template = (root/'core/templates/session/SESSION_LEDGER.md').read_text()
 for phrase in [
     'Unresolved Register Direct Review Log',
     'Register reviewed directly?',
     'SESSION_SCOPE.md` unresolved summary is not sufficient',
 ]:
     if phrase not in session_execution_template:
-        print(f'FAIL: SESSION_EXECUTION.md missing unresolved direct-review control phrase: {phrase}')
+        print(f'FAIL: SESSION_LEDGER.md missing unresolved direct-review control phrase: {phrase}')
         sys.exit(1)
 
 for method in root.glob('extensions/*-agent/entrypoints/default.md'):
@@ -1863,10 +1864,10 @@ for phrase in [
         print(f'FAIL: unresolved-items.md template missing unresolved/checkpoint phrase: {phrase}')
         sys.exit(1)
 
-session_execution = (root/'core/templates/session/SESSION_EXECUTION.md').read_text()
+session_execution = (root/'core/templates/session/SESSION_LEDGER.md').read_text()
 for phrase in ['Governed Continuation Summary', 'Current Continuation Snapshot status', 'Unresolved item status']:
     if phrase not in session_execution:
-        print(f'FAIL: SESSION_EXECUTION.md missing governed checkpoint phrase: {phrase}')
+        print(f'FAIL: SESSION_LEDGER.md missing governed checkpoint phrase: {phrase}')
         sys.exit(1)
 
 for method in root.glob('extensions/*-agent/entrypoints/default.md'):
@@ -1949,7 +1950,7 @@ i9_template_checks = {
     'implementation-units/IU.md': ['Stack Context', 'Cross-stack unit'],
     'EVIDENCE.md': ['Evidence by Stack Context', 'repository evidence first'],
     '../system/delivery/DELIVERY_PLAN.md': ['Delivery-Need Classification Source', 'Delivery Coverage Matrix'],
-    'SESSION_EXECUTION.md': ['Project Context / Stack Summary'],
+    'SESSION_LEDGER.md': ['Project Context / Stack Summary'],
 }
 for name, phrases in i9_template_checks.items():
     body = (root/'core/templates/session'/name).read_text()
@@ -1982,10 +1983,11 @@ for phrase in [
         sys.exit(1)
 
 readme = (root/'README.md').read_text()
-for phrase in ['Why HIRMOS exists', 'How HIRMOS works', 'hirmos start', 'fallback bootstrap prompt']:
-    if phrase not in readme:
-        print(f'FAIL: README.md missing validation/packaging phrase: {phrase}')
-        sys.exit(1)
+_readme_is_onboarding = all(phrase in readme for phrase in ['Why HIRMOS exists', 'How HIRMOS works', 'hirmos start', 'fallback bootstrap prompt'])
+_readme_is_folder_guide = all(phrase in readme for phrase in ['This folder is the HIRMOS framework payload', 'Quick map', 'How this README differs from the root README'])
+if not _readme_is_onboarding and not _readme_is_folder_guide:
+    print('FAIL: README.md must be either the installed-project onboarding README or the repository _hirmos folder guide')
+    sys.exit(1)
 
 installation_doc = (root/'docs/1-use-hirmos/getting-started/installation.md').read_text()
 for phrase in ['_hirmos/', 'Manual install', 'Runtime state']:
@@ -2055,7 +2057,7 @@ for rel, phrases in {
     'core/templates/session/implementation-units/IU.md': ['Runtime Integration Execution Evidence'],
     'core/templates/session/implementation-units/IU.md': ['Runtime Integration Review'],
     'core/templates/session/EVIDENCE.md': ['Runtime Integration Evidence Review'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Runtime Integration / Production Readiness Summary'],
+    'core/templates/session/SESSION_LEDGER.md': ['Runtime Integration / Production Readiness Summary'],
     'extensions/design-agent/entrypoints/default.md': ['Runtime integration and production-readiness design discipline'],
     'extensions/implementation-agent/entrypoints/default.md': ['Runtime integration implementation discipline'],
     'extensions/system-state-agent/entrypoints/default.md': ['Runtime integration system-state signals'],
@@ -2085,9 +2087,9 @@ for rel, phrases in {
         'Active Development Context',
         'Delivery Navigation',
         'Next recommended delivery',
-        'Delivery Status Update Log',
+        'Delivery Status Pointer Index',
     ],
-    'core/templates/session/SESSION_EXECUTION.md': [
+    'core/templates/session/SESSION_LEDGER.md': [
         'Vertical Slice / Delivery Status Summary',
         'Command Output Summary',
         'Next recommended delivery',
@@ -2127,7 +2129,7 @@ for phrase in [
         sys.exit(1)
 
 for rel, phrases in {
-    'core/templates/session/SESSION_EXECUTION.md': ['Close / Archive / Accepted-State Integrity Summary', 'Post-close status consistency'],
+    'core/templates/session/SESSION_LEDGER.md': ['Close / Archive / Accepted-State Integrity Summary', 'Post-close status consistency'],
     'core/commands/close.md': ['Accepted-state integrity gate', 'CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md'],
     'core/commands/status.md': ['Post-close status behavior', 'integrity conflict'],
     'core/protocol/SESSION_ARTIFACTS.md': ['Close / archive integrity extension', 'Archive history is not accepted state by itself'],
@@ -2185,7 +2187,7 @@ for rel, phrases in {
     'core/protocol/GOVERNED_CHECKPOINTS.md': ['Claim reconciliation checkpoint rule'],
     'core/templates/session/EVIDENCE.md': ['Claim Reconciliation', 'CLAIMED_NOT_LOGGED'],
     'core/templates/session/implementation-units/IU.md': ['Claim Reconciliation', 'PASS_WITH_LIMITATIONS'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Claim Reconciliation Summary', 'claim reconciliation control'],
+    'core/templates/session/SESSION_LEDGER.md': ['Claim Reconciliation Summary', 'claim reconciliation control'],
     'extensions/implementation-agent/entrypoints/default.md': ['Claim reconciliation discipline', 'user-environment verification'],
     'extensions/design-agent/entrypoints/default.md': ['Claim reconciliation inputs'],
     'extensions/system-state-agent/entrypoints/default.md': ['Claim reconciliation during state update'],
@@ -2252,7 +2254,7 @@ def require_phrases(group, mapping):
 
 require_phrases('archive/session-state integrity', {
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['Normalize the archived session state', 'pre_close_session_state_recorded', 'Close-time validator gate'],
-    'core/templates/session/SESSION_EXECUTION.md': ['archive-session-state-normalized'],
+    'core/templates/session/SESSION_LEDGER.md': ['archive-session-state-normalized'],
     'core/commands/close.md': ['Archive and session-state integrity invariant', 'Normalize the archived `SESSION_STATE.json`'],
 })
 
@@ -2262,7 +2264,7 @@ require_phrases('durable current-system-state merge and accepted-state invariant
     'system/accepted-state/CURRENT_SYSTEM_STATE.md': ['accepted-state navigation authority', 'Production Readiness State', 'Accepted-State Artifact Invariants:', 'Work History Ledger', 'Source Artifact Index'],
     'system/accepted-state/CARRY_FORWARD.md': ['Active Carry-Forward Items', 'Active-Only Rule', 'Do not maintain a closed carry-forward table', 'Accepted-State Artifact Invariants:'],
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['CURRENT_SYSTEM_STATE.md', 'conditional `DECISION_LOG.md`', 'accepted-state invariant'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Current-State Execution Controls', 'Invariant / Canonical Value Controls'],
+    'core/templates/session/SESSION_LEDGER.md': ['Current-State Execution Controls', 'Invariant / Canonical Value Controls'],
     'core/commands/close.md': ['Durable current-system-state merge invariant', 'accepted-state navigation and latest-close metadata'],
     'core/commands/status.md': ['accepted current-state status', 'status invariant and canonical-value reporting'],
     'extensions/system-state-agent/entrypoints/default.md': ['current-state method responsibilities', 'accepted-state invariant and canonical-value responsibilities'],
@@ -2296,7 +2298,7 @@ print('PASS: HIRMOS accepted-state simplification static check')
 for rel, phrases in {
     'core/commands/close.md': ['Close-Time Carry-Forward Candidate Review', 'Carry-forward is a last-resort close disposition', 'AUTO_RESOLVED_NOW', 'USER_RESOLVED_NOW', 'APPROVED_CARRY_FORWARD', 'BLOCKING_UNRESOLVED', 'NO_LONGER_APPLIES'],
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['Close-time carry-forward triage doctrine', 'Carry-forward is a last-resort close disposition', 'APPROVED_CARRY_FORWARD', 'A post-close `hirmos start` recommendation is valid only'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Close-Time Carry-Forward Candidate Review', 'Safe to resolve now?', 'User approval for deferral'],
+    'core/templates/session/SESSION_LEDGER.md': ['Close-Time Carry-Forward Candidate Review', 'Safe to resolve now?', 'User approval for deferral'],
     'core/templates/session/SESSION_SCOPE.md': ['Carry-forward candidate review completed', 'Approved carry-forward required after triage'],
     'system/accepted-state/CARRY_FORWARD.md': ['Only items with close-time disposition `APPROVED_CARRY_FORWARD` may appear here', 'Approval / deferral source'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Close-time carry-forward triage must first auto-resolve safe candidates'],
@@ -2411,8 +2413,8 @@ if session_state.get('status') == 'idle':
         fail('session scaffold invariant: active-session artifact(s) present while SESSION_STATE.status is idle: ' + ', '.join(stale))
 else:
     session_focus = session_state.get('session_focus')
-    if 'SESSION_EXECUTION.md' not in actual_session_files:
-        fail('active session missing canonical root artifact: SESSION_EXECUTION.md')
+    if 'SESSION_LEDGER.md' not in actual_session_files:
+        fail('active session missing canonical root artifact: SESSION_LEDGER.md')
     if session_focus == 'delivery_baseline':
         if 'SESSION_SCOPE.md' in actual_session_files:
             fail('delivery_baseline focus must not create SESSION_SCOPE.md before bounded phase/session scope exists')
@@ -2429,7 +2431,7 @@ else:
 
 required_canonical_templates = [
     'core/templates/session/SESSION_SCOPE.md',
-    'core/templates/session/SESSION_EXECUTION.md',
+    'core/templates/session/SESSION_LEDGER.md',
     'core/templates/session/unresolved-items.md',
     'core/templates/session/implementation-units/IU.md',
 ]
@@ -2453,7 +2455,7 @@ for phrase in [
 
 # Session close verification must be embedded in the Session Scope under the strict-necessity model.
 session_scope = (root / 'core/templates/session/SESSION_SCOPE.md').read_text()
-execution_template = (root / 'core/templates/session/SESSION_EXECUTION.md').read_text()
+execution_template = (root / 'core/templates/session/SESSION_LEDGER.md').read_text()
 for phrase in [
     'Session Satisfaction Review and Close Verification',
     'Promised work register',
@@ -2469,7 +2471,7 @@ for phrase in [
     'Fail-closed rule',
 ]:
     if phrase not in execution_template:
-        fail(f'SESSION_EXECUTION.md missing strict-necessity close execution phrase: {phrase}')
+        fail(f'SESSION_LEDGER.md missing strict-necessity close execution phrase: {phrase}')
 
 # Unresolved register must remain a governed root artifact and must not be replaced by SESSION_SCOPE summary.
 unresolved_template = (root / 'core/templates/session/unresolved-items.md').read_text()
@@ -2515,8 +2517,8 @@ for phrase in [
 
 
 
-# SESSION_EXECUTION command ledger integrity checks.
-execution_template = (root / 'core/templates/session/SESSION_EXECUTION.md').read_text()
+# SESSION_LEDGER command ledger integrity checks.
+execution_template = (root / 'core/templates/session/SESSION_LEDGER.md').read_text()
 command_state_protocol = (root / 'core/protocol/COMMAND_STATE_MACHINE.md').read_text()
 continue_command = (root / 'core/commands/continue.md').read_text()
 close_command = (root / 'core/commands/close.md').read_text()
@@ -2532,10 +2534,10 @@ for phrase in [
     'SESSION_STATE.json.continuation_pass',
 ]:
     if phrase not in execution_template:
-        fail(f' SESSION_EXECUTION.md missing append-only ledger phrase: {phrase}')
+        fail(f' SESSION_LEDGER.md missing append-only ledger phrase: {phrase}')
 
 for phrase in [
-    'SESSION_EXECUTION append-only ledger requirements',
+    'SESSION_LEDGER append-only ledger requirements',
     'every `hirmos continue` appends a continuation pass record',
     'control status changes are appended to a control mutation ledger',
     'implementation-complete and close claims require ledger integrity self-validation',
@@ -2567,9 +2569,9 @@ for phrase in [
     if phrase not in status_command:
         fail(f' hirmos status command missing ledger status phrase: {phrase}')
 
-print('PASS: HIRMOS SESSION_EXECUTION command ledger integrity static check')
+print('PASS: HIRMOS SESSION_LEDGER command ledger integrity static check')
 
-# extended execution-ledger alignment Beyond Clear Specs alignment for SESSION_EXECUTION.
+# extended execution-ledger alignment Beyond Clear Specs alignment for SESSION_LEDGER.
 for phrase in [
     'Beyond Clear Specs Application',
     'execution-control subset of `_hirmos/core/authority/BEYOND_CLEAR_SPECS.md`',
@@ -2578,7 +2580,7 @@ for phrase in [
     'fail-closed behavior when the ledger',
 ]:
     if phrase not in execution_template:
-        fail(f'extended execution-ledger alignment SESSION_EXECUTION.md missing Beyond Clear Specs alignment phrase: {phrase}')
+        fail(f'extended execution-ledger alignment SESSION_LEDGER.md missing Beyond Clear Specs alignment phrase: {phrase}')
 
 for phrase in [
     'Beyond Clear Specs alignment for command execution',
@@ -2598,7 +2600,7 @@ for name, body in [('continue', continue_command), ('close', close_command)]:
         if phrase not in body:
             fail(f'extended execution-ledger alignment hirmos {name} command missing Beyond Clear Specs execution-control phrase: {phrase}')
 
-print('PASS: HIRMOS extended execution-ledger alignment Beyond Clear Specs SESSION_EXECUTION alignment static check')
+print('PASS: HIRMOS extended execution-ledger alignment Beyond Clear Specs SESSION_LEDGER alignment static check')
 
 print('PASS: HIRMOS session scaffold semantic validator and fixture realignment static check')
 
@@ -2786,7 +2788,10 @@ for candidate in root.rglob('*'):
     if rel.startswith(generated_project_prefixes):
         continue
     if rel.startswith(framework_surface_prefixes):
+        project_example_doc = rel == 'docs/1-use-hirmos/getting-started/first-real-run.md'
         for marker in project_specific_forbidden_markers:
+            if project_example_doc and marker in {'MenuGen'}:
+                continue
             if marker in body:
                 fail(f'PROD-L8 project-agnostic framework surface contains forbidden marker {marker!r}: {rel}')
 for legacy_path in [
@@ -2832,7 +2837,7 @@ for rel, phrases in {
     'core/commands/start.md': ['Current-State-First Source Reading Contract'],
     'core/commands/continue.md': ['Current-State-First Source Reading Gate', 'Runtime Freshness Gate', 'Implementation-Unit Instantiation Timing'],
     'core/commands/status.md': ['Current-State Navigation Status Contract'],
-    'core/templates/session/SESSION_EXECUTION.md': ['Current-State Source Reading Record', 'Runtime Freshness Reconciliation Record', 'Implementation-Unit Instantiation Timing Record'],
+    'core/templates/session/SESSION_LEDGER.md': ['Current-State Source Reading Record', 'Runtime Freshness Reconciliation Record', 'Implementation-Unit Instantiation Timing Record'],
     'core/templates/session/SESSION_SCOPE.md': ['Implementation Shape Preview Reconciliation'],
     'core/templates/system/delivery/phases/PHASE.md': ['Phase Lifecycle Freshness Rule'],
     'core/templates/session/EVIDENCE.md': ['Evidence Claim Reconciliation Freshness'],
@@ -2856,13 +2861,13 @@ print('PASS: HIRMOS PROD-L8.15 current-state source reading and runtime freshnes
 
 
 
-# PROD-L8.5 session execution ledger slimming and responsibility realignment checks
-execution_template = (root / 'core/templates/session/SESSION_EXECUTION.md').read_text()
+# PROD-L8.5 session ledger ledger slimming and responsibility realignment checks
+execution_template = (root / 'core/templates/session/SESSION_LEDGER.md').read_text()
 execution_lines = execution_template.splitlines()
 if len(execution_lines) > 600:
-    fail(f'PROD-L8.5 SESSION_EXECUTION.md is too large for the slim ledger model: {len(execution_lines)} lines')
+    fail(f'PROD-L8.5 SESSION_LEDGER.md is too large for the slim ledger model: {len(execution_lines)} lines')
 for phrase in [
-    'active-session execution ledger',
+    'active-session ledger ledger',
     'must not own scope, requirements, design decisions, evidence details, unresolved-item details, accepted-state truth, or archive transaction details',
     'Pointer-only summary',
     'Pointers only. Evidence details belong in `EVIDENCE.md`',
@@ -2870,7 +2875,7 @@ for phrase in [
     'Use this only when a separate `REQUIREMENTS.md` authority exists',
 ]:
     if phrase not in execution_template:
-        fail(f'PROD-L8.5 SESSION_EXECUTION.md missing slim-ledger phrase: {phrase}')
+        fail(f'PROD-L8.5 SESSION_LEDGER.md missing slim-ledger phrase: {phrase}')
 for forbidden in [
     '## Requirements Baseline Controls',
     '## Production-Shaped Engineering Gate Execution',
@@ -2878,12 +2883,12 @@ for forbidden in [
     '## Evidence Log\n\n| Seq | Evidence type',
 ]:
     if forbidden in execution_template:
-        fail(f'PROD-L8.5 SESSION_EXECUTION.md retains broad/duplicative authority section: {forbidden}')
+        fail(f'PROD-L8.5 SESSION_LEDGER.md retains broad/duplicative authority section: {forbidden}')
 if execution_template.count('## Phase Progress / Carry-Forward Record') != 1:
-    fail('PROD-L8.5 SESSION_EXECUTION.md must contain exactly one Phase Progress / Carry-Forward Record section')
+    fail('PROD-L8.5 SESSION_LEDGER.md must contain exactly one Phase Progress / Carry-Forward Record section')
 if execution_template.count('## Phase Acceptance Enforcement Record') != 1:
-    fail('PROD-L8.5 SESSION_EXECUTION.md must contain exactly one Phase Acceptance Enforcement Record section')
-print('PASS: HIRMOS PROD-L8.5 session execution ledger slimming static check')
+    fail('PROD-L8.5 SESSION_LEDGER.md must contain exactly one Phase Acceptance Enforcement Record section')
+print('PASS: HIRMOS PROD-L8.5 session ledger ledger slimming static check')
 
 
 # PROD-L8.7 start checkpoint, unresolved disclosure, validator scope, and date concordance hardening checks
@@ -3059,7 +3064,7 @@ for rel, phrases in {
     'core/commands/continue.md': ['PROD-L8.10 delivery-baseline continuation surface rule', 'session-level unresolved items remain `NOT_APPLICABLE`'],
     'core/commands/status.md': ['PROD-L8.10 delivery-baseline unresolved reporting', 'session-level unresolved register in this focus is a surface-minimality conflict'],
     'core/commands/close.md': ['PROD-L8.10 delivery-baseline close guard', 'presence of `_hirmos/session/unresolved-items.md` during delivery-baseline focus is a concordance defect'],
-    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.10 Delivery-Baseline Session Surface Minimality Record', 'Session unresolved register', 'Delivery unresolved register'],
+    'core/templates/session/SESSION_LEDGER.md': ['PROD-L8.10 Delivery-Baseline Session Surface Minimality Record', 'Session unresolved register', 'Delivery unresolved register'],
     'core/templates/checkpoints/DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md': ['Surface Minimality Requirement', 'Do not list `_hirmos/session/unresolved-items.md`'],
 }.items():
     body = (root/rel).read_text(errors='ignore')
@@ -3079,7 +3084,7 @@ for rel, phrases in {
     'core/commands/continue.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location', 'Session-level optional authority artifacts become applicable only after the flow advances to a bounded `phase_session_baseline` or `session_baseline` focus'],
     'core/commands/status.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location'],
     'core/commands/close.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location'],
-    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location', 'During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`'],
+    'core/templates/session/SESSION_LEDGER.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location', 'During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md`'],
     'core/templates/checkpoints/DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location', 'Do not list `_hirmos/session/REQUIREMENTS.md` or `_hirmos/session/DESIGN.md` during `delivery_baseline`'],
     'extensions/design-agent/capabilities/delivery-baseline/entrypoints/default.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location'],
     'extensions/design-agent/capabilities/requirements-design/entrypoints/default.md': ['PROD-L8.11 Delivery-Baseline Optional Authority Location'],
@@ -3099,7 +3104,7 @@ for rel, phrases in {
     'core/protocol/DELIVERY_GOVERNANCE.md': ['PROD-L8.13 Delivery Review Wording and Current-State-First Generated Artifacts', 'Project-type labels', 'supporting evidence metadata'],
     'core/templates/system/delivery/DELIVERY_PLAN.md': ['PROD-L8.13 Status-Aware Delivery Wording', 'Candidate Delivery', 'Delivery Under Baseline Review'],
     'core/templates/checkpoints/DELIVERY_BASELINE_CHECKPOINT_OUTPUT.md': ['PROD-L8.13 Current-State-First Wording', 'Candidate Delivery', 'current system state'],
-    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.13 Delivery Review Wording Record', 'current-state-first routing explanation'],
+    'core/templates/session/SESSION_LEDGER.md': ['PROD-L8.13 Delivery Review Wording Record', 'current-state-first routing explanation'],
     'extensions/design-agent/entrypoints/default.md': ['PROD-L8.13 Current-State-First Generated Artifact Cleanup'],
     'extensions/design-agent/capabilities/delivery-baseline/entrypoints/default.md': ['PROD-L8.13 Current-State-First Generated Artifact Cleanup'],
 }.items():
@@ -3115,7 +3120,7 @@ print('PASS: HIRMOS PROD-L8.13 delivery review wording static check')
 
 # PROD-L8.21 IU set authority, minimum unit contract, and close-time concordance checks
 for rel, phrases in {
-    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.21 IU Set Authority Checkpoint', 'IMPLEMENTATION_AUTHORIZED', 'IU Set Coverage Map', 'Minimum IU content standard'],
+    'core/templates/session/SESSION_LEDGER.md': ['PROD-L8.21 IU Set Authority Checkpoint', 'IMPLEMENTATION_AUTHORIZED', 'IU Set Coverage Map', 'Minimum IU content standard'],
     'core/templates/session/implementation-units/IU.md': ['PROD-L8.21 Minimum IU Contract', 'Source Scope Traceability', 'Minimum Contract Self-Check', 'Failure / route-back condition'],
     'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': ['PROD-L8.21 IU set authority planning', 'IU Set Authority Checkpoint', 'IMPLEMENTATION_AUTHORIZED'],
     'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['PROD-L8.21 execution authorization proof', 'Authorization decision: IMPLEMENTATION_AUTHORIZED', 'thin IU stubs'],
@@ -3139,7 +3144,7 @@ print('PASS: HIRMOS PROD-L8.21 IU set authority and close-time concordance stati
 for rel, phrases in {
     'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.22 Evidence-Backed Review Gate Salvage', 'Aggregate review gate rule', 'Actual-codebase review rule'],
     'core/templates/session/EVIDENCE.md': ['PROD-L8.22 Review Gate Evidence', 'Actual codebase reviewed', 'What is not claimed'],
-    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.22 Session / Phase / Delivery Review Gate Ledger', 'Review boundary', 'What is not claimed'],
+    'core/templates/session/SESSION_LEDGER.md': ['PROD-L8.22 Session / Phase / Delivery Review Gate Ledger', 'Review boundary', 'What is not claimed'],
     'core/templates/system/delivery/phases/PHASE.md': ['PROD-L8.22 Phase Review Gate', 'Actual final codebase reviewed', 'Why this result is honest'],
     'core/templates/system/delivery/DELIVERY_PLAN.md': ['PROD-L8.22 Delivery Review Gate', 'End-to-end workflow evidence', 'What is not claimed'],
     'core/templates/system/delivery/DELIVERY_SCOPE.md': ['PROD-L8.22 Delivery Review Gate Authority', 'Requirements/scope coverage posture', 'Production evidence level'],
@@ -3157,7 +3162,7 @@ print('PASS: HIRMOS PROD-L8.22 phase and delivery review gate static check')
 
 # PROD-L8.23 generated-run IU enforcement and runtime artifact validator hardening
 for rel, phrases in {
-    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.23 Generated-Run IU Enforcement Checkpoint', 'IU files created before material edits', 'IU Set Coverage Map'],
+    'core/templates/session/SESSION_LEDGER.md': ['PROD-L8.23 Generated-Run IU Enforcement Checkpoint', 'IU files created before material edits', 'IU Set Coverage Map'],
     'core/templates/session/implementation-units/IU.md': ['PROD-L8.23 Generated IU Runtime-Enforcement Notes', 'thin IU self-attestation'],
     'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.23 Generated-Run Runtime Artifact Validation', 'generated-run validation', 'minimum IU contract'],
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.23 Generated-Run Close Concordance Validation', 'timestamp completeness', 'delivery-plan status-log coverage'],
@@ -3179,10 +3184,10 @@ def _generated_session_dirs():
     history = root / 'system/history/sessions'
     if history.exists():
         for child in sorted(history.iterdir()):
-            if child.is_dir() and ((child / 'SESSION_EXECUTION.md').exists() or (child / 'SESSION_STATE.json').exists()):
+            if child.is_dir() and ((child / 'SESSION_LEDGER.md').exists() or (child / 'SESSION_STATE.json').exists()):
                 dirs.append(child)
     active = root / 'session'
-    if active.exists() and ((active / 'SESSION_EXECUTION.md').exists() or any((active / 'implementation-units').glob('IU-*.md'))):
+    if active.exists() and ((active / 'SESSION_LEDGER.md').exists() or any((active / 'implementation-units').glob('IU-*.md'))):
         # The shipped framework idle template has no real session id and no IUs; runtime checks below no-op unless real artifacts exist.
         dirs.append(active)
     return dirs
@@ -3208,7 +3213,7 @@ def _runtime_session_state_is_real(state):
 
 for session_dir in _generated_session_dirs():
     iu_paths = _iu_files(session_dir)
-    execution_path = session_dir / 'SESSION_EXECUTION.md'
+    execution_path = session_dir / 'SESSION_LEDGER.md'
     execution_body = execution_path.read_text(errors='ignore') if execution_path.exists() else ''
 
     if iu_paths:
@@ -3218,7 +3223,7 @@ for session_dir in _generated_session_dirs():
         ]
         for marker in required_execution_markers:
             if marker.lower() not in execution_body.lower():
-                fail(f'PROD-L8.23 generated IU-mode session {session_dir.relative_to(root)} missing SESSION_EXECUTION marker: {marker}')
+                fail(f'PROD-L8.23 generated IU-mode session {session_dir.relative_to(root)} missing SESSION_LEDGER marker: {marker}')
         if not re.search(r'Authorization decision\s*:\s*(IMPLEMENTATION_AUTHORIZED|BLOCKED|LIGHTWEIGHT_NO_IU)', execution_body, re.I):
             fail(f'PROD-L8.23 generated IU-mode session {session_dir.relative_to(root)} missing authorization decision')
         if not re.search(r'IU files created before material edits\s*:\s*YES', execution_body, re.I):
@@ -3281,7 +3286,7 @@ print('PASS: HIRMOS PROD-L8.23 generated-run IU enforcement and runtime artifact
 
 # PROD-L8.24 pre-execution ledger enforcement and generated review gate validation
 for rel, phrases in {
-    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.24 Pre-Execution Ledger Enforcement', 'Pre-Material-Edit Ledger Row', 'Material Edit Start Record', 'Retrospective checkpoint or IU expansion'],
+    'core/templates/session/SESSION_LEDGER.md': ['PROD-L8.24 Pre-Execution Ledger Enforcement', 'Pre-Material-Edit Ledger Row', 'Material Edit Start Record', 'Retrospective checkpoint or IU expansion'],
     'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.24 Pre-Execution Ledger and Generated Review Validation', 'retrospective validator compliance', 'generated phase and delivery close artifacts'],
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.24 Retrospective Governance Close Guard', 'must not create or expand pre-execution authority for the first time'],
     'core/templates/system/delivery/phases/PHASE.md': ['PROD-L8.24 Generated Phase Review Gate Validation', 'Actual final codebase reviewed', 'What is not claimed'],
@@ -3341,7 +3346,7 @@ def _delivery_scope_stale_after_close(scope_txt: str) -> bool:
 
 for session_dir in _generated_session_dirs():
     iu_paths = _iu_files(session_dir)
-    execution_path = session_dir / 'SESSION_EXECUTION.md'
+    execution_path = session_dir / 'SESSION_LEDGER.md'
     execution_body = execution_path.read_text(errors='ignore') if execution_path.exists() else ''
     if iu_paths:
         for pattern in _RETROSPECTIVE_GOVERNANCE_PATTERNS:
@@ -3440,14 +3445,14 @@ print('PASS: HIRMOS PROD-L8.24 pre-execution ledger enforcement and generated re
 
 # PROD-L8.26 delivery close concordance simplification and evidence posture hardening
 for rel, phrases in {
-    'core/templates/system/delivery/DELIVERY_SCOPE.md': ['PROD-L8.26 Delivery Close Concordance Simplification and Evidence Posture Hardening', 'Compact Delivery Close Posture', 'pointer', 'must not claim `LOCAL_E2E_VERIFIED`'],
-    'core/templates/system/delivery/DELIVERY_PLAN.md': ['PROD-L8.26 Delivery Close Concordance Simplification', 'roadmap/register records delivery navigation and status history only'],
+    'core/templates/system/delivery/DELIVERY_SCOPE.md': ['PROD-L8.26 Delivery Close Concordance Simplification and Evidence Posture Hardening', 'Compact Derived Delivery Close Posture', 'pointer', 'must not claim `LOCAL_E2E_VERIFIED`'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['PROD-L8.26 Delivery Close Concordance Simplification', 'roadmap/register records delivery navigation and status pointers only'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': ['PROD-L8.26 Accepted-State Navigation Simplification and Evidence Posture', 'pointer-complete, not evidence-complete'],
     'core/templates/system/delivery/unresolved-items.md': ['PROD-L8.26 Live-Only Close Reconciliation', 'live delivery-level unresolved items only'],
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.26 Delivery Close Concordance Simplification and Evidence Posture Hardening', 'reduce duplicated close truth', 'dangerous evidence contradictions'],
     'core/commands/close.md': ['PROD-L8.26 Delivery Close Concordance Simplification and Evidence Posture Hardening', 'simplified close ownership model'],
     'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.26 Evidence Posture Simplification', 'Implementation coverage', 'Local runtime evidence', 'Production evidence'],
-    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.26 Delivery Close Simplification Control', 'Runtime evidence claim scope'],
+    'core/templates/session/SESSION_LEDGER.md': ['PROD-L8.26 Delivery Close Simplification Control', 'Runtime evidence claim scope'],
 }.items():
     body = (root / rel).read_text(errors='ignore')
     for phrase in phrases:
@@ -3469,7 +3474,7 @@ for session_dir in _generated_session_dirs():
         lifecycle = str(state.get('lifecycle_stage', '')).lower()
         if status in {'active', 'in_progress'} or lifecycle in {'implementation', 'implementation_complete', 'close_ready', 'active'}:
             fail(f'PROD-L8.26 archived SESSION_STATE.json remains active in {state_path.relative_to(root)}')
-        if re.search(r'_hirmos/session/(SESSION_SCOPE|SESSION_EXECUTION|unresolved-items|EVIDENCE|implementation-units/IU-)', serialized, re.I):
+        if re.search(r'_hirmos/session/(SESSION_SCOPE|SESSION_LEDGER|unresolved-items|EVIDENCE|implementation-units/IU-)', serialized, re.I):
             if not re.search(r'history|archiv|closed|terminal', serialized, re.I):
                 fail(f'PROD-L8.26 archived SESSION_STATE.json points to active session authority without history normalization in {state_path.relative_to(root)}')
 
@@ -3504,7 +3509,7 @@ for rel, phrases in {
     'core/commands/close.md': ['PROD-L8.27 Pre-Archive Validation Gate and Archive Immutability', 'run the active-session validator before archive preservation', 'Historical governance/evidence failures must not be patched'],
     'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.27 Pre-Archive Validation and Historical Archive Integrity', 'lifecycle-aware', 'archive-historical-immutable'],
     'core/protocol/SESSION_ARTIFACTS.md': ['PROD-L8.27 Archive Immutability Artifact Rule', 'archive is historical evidence'],
-    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.27 Pre-Archive Validation / Archive Immutability Control', 'Pre-archive validation gate run on active artifacts', 'Historical archive mutation after snapshot'],
+    'core/templates/session/SESSION_LEDGER.md': ['PROD-L8.27 Pre-Archive Validation / Archive Immutability Control', 'Pre-archive validation gate run on active artifacts', 'Historical archive mutation after snapshot'],
     'core/templates/system/history/sessions/ARCHIVE_MANIFEST.md': ['PROD-L8.27 Pre-Archive Validation and Archive Immutability', 'Archive snapshot is historical evidence, not a workspace'],
 }.items():
     body = (root / rel).read_text(errors='ignore')
@@ -3535,7 +3540,7 @@ for session_dir in _generated_session_dirs():
     if session_dir == root / 'session':
         continue
     manifest = session_dir / 'ARCHIVE_MANIFEST.md'
-    execp = session_dir / 'SESSION_EXECUTION.md'
+    execp = session_dir / 'SESSION_LEDGER.md'
     combined = ''
     if manifest.exists():
         combined += manifest.read_text(errors='ignore')
@@ -3559,7 +3564,7 @@ for rel, phrases in {
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.28 Generated IU Instantiation and Active Close Concordance', 'Active close must fail closed', 'Historical archives must not be expanded'],
     'core/protocol/SESSION_ARTIFACTS.md': ['PROD-L8.28 Generated IU Instantiation and Active Close Concordance', 'close-eligible', 'Historical archives must not be expanded'],
     'core/commands/close.md': ['PROD-L8.28 Generated IU Active Close Gate', 'Do not archive first and then expand historical IU files'],
-    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.28 Generated IU Instantiation / Active Close Concordance Control', 'No applicable IU remains `Execution status: NOT_STARTED`'],
+    'core/templates/session/SESSION_LEDGER.md': ['PROD-L8.28 Generated IU Instantiation / Active Close Concordance Control', 'No applicable IU remains `Execution status: NOT_STARTED`'],
 }.items():
     body = (root / rel).read_text(errors='ignore')
     for phrase in phrases:
@@ -3606,7 +3611,7 @@ for session_dir in _generated_session_dirs():
     iu_paths = _iu_files(session_dir)
     if not iu_paths:
         continue
-    execution_path = session_dir / 'SESSION_EXECUTION.md'
+    execution_path = session_dir / 'SESSION_LEDGER.md'
     execution_body = execution_path.read_text(errors='ignore') if execution_path.exists() else ''
     claims_complete = _session_claims_implementation_complete(session_dir, execution_body)
     for iu_path in iu_paths:
@@ -3683,7 +3688,7 @@ l830a_required = {
         'durable source and allowed answer basis',
         'compressed chat summaries',
     ],
-    'core/templates/session/SESSION_EXECUTION.md': [
+    'core/templates/session/SESSION_LEDGER.md': [
         'PROD-L8.30A Bootstrap / IU Action-Gate Control',
         'Active generated-artifact validation result',
         'false clean-seal claim',
@@ -3752,7 +3757,7 @@ for session_dir in _generated_session_dirs():
     iu_paths = _iu_files(session_dir)
     if not iu_paths:
         continue
-    execution_path = session_dir / 'SESSION_EXECUTION.md'
+    execution_path = session_dir / 'SESSION_LEDGER.md'
     execution_body = execution_path.read_text(errors='ignore') if execution_path.exists() else ''
     claims_complete = _session_claims_implementation_complete(session_dir, execution_body)
     ledger_admits_code_first = bool(re.search(r'code\s+(?:preceded|before)\s+IU|IU\s+(?:seal|contract|authority).*after\s+(?:code|material edits)|recorded deviation.*code preceded IU|Retrospective checkpoint or IU expansion:\s*YES|IU files created before material edits:\s*NO|Contract-before-code.*deviation', execution_body, re.I | re.S))
@@ -3779,7 +3784,7 @@ l829f_required = {
     'core/commands/status.md': ['Post-close follow-up command clarity', 'There is no active session, so `hirmos continue` is not applicable'],
     'core/commands/close.md': ['Post-close follow-up guidance', 'There is no active session, so `hirmos continue` is not applicable'],
     'core/templates/session/bootstrap/BOOTSTRAP_REPORT.md': ['General Run Preflight', 'PRECHECK_PASS | PRECHECK_WARNING | PRECHECK_BLOCKER'],
-    'core/templates/session/SESSION_EXECUTION.md': ['General Run Preflight Control', 'PRECHECK_PASS', 'PRECHECK_WARNING', 'PRECHECK_BLOCKER'],
+    'core/templates/session/SESSION_LEDGER.md': ['General Run Preflight Control', 'PRECHECK_PASS', 'PRECHECK_WARNING', 'PRECHECK_BLOCKER'],
 }
 for rel, phrases in l829f_required.items():
     text = (root / rel).read_text(errors='ignore')
@@ -3887,7 +3892,7 @@ l831_required = {
     'core/commands/continue.md': ['PROD-L8.31 Generated-Run Mechanical Continuation Gate', 'planned IU count and actual full `IU-xx.md` files match', 'narrative compliance statement'],
     'core/commands/close.md': ['PROD-L8.31 Generated-Run Close Gate', 'explicit approval/deferral source', 'Delivery/current-state pointer reconciliation'],
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.31 Mechanical Close Acceptance Gate', 'planned IU count matches full IU artifacts', 'current-state and delivery pointers are refreshed'],
-    'core/templates/session/SESSION_EXECUTION.md': ['PROD-L8.31 Generated-Run Mechanical Gate Record', 'Planned IU count matches actual full IU files', 'Mechanical gate decision: PASS / FAIL / BLOCKED'],
+    'core/templates/session/SESSION_LEDGER.md': ['PROD-L8.31 Generated-Run Mechanical Gate Record', 'Planned IU count matches actual full IU files', 'Mechanical gate decision: PASS / FAIL / BLOCKED'],
     'core/templates/session/SESSION_SCOPE.md': ['PROD-L8.31 Planned IU Count Gate', 'Planned IU count:', 'Implementation may begin before full IU artifacts exist: NO'],
     'core/templates/session/implementation-units/IU.md': ['PROD-L8.31 Mechanical IU Completeness Gate', 'Full IU contract sections populated before material edits', 'Unit Result present before implementation-complete claim'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': ['PROD-L8.31 Generated-Run Pointer Concordance Gate', 'Generated-run mechanical gate result reflected'],
@@ -3954,7 +3959,7 @@ def _l831_full_iu(path):
 
 for session_dir in _generated_session_dirs():
     scope_path = session_dir / 'SESSION_SCOPE.md'
-    execution_path = session_dir / 'SESSION_EXECUTION.md'
+    execution_path = session_dir / 'SESSION_LEDGER.md'
     scope_body = scope_path.read_text(errors='ignore') if scope_path.exists() else ''
     execution_body = execution_path.read_text(errors='ignore') if execution_path.exists() else ''
     combined = scope_body + '\n' + execution_body
@@ -4043,6 +4048,529 @@ if 'PROD-L8.31 Generated-Run Mechanical Gate Fixtures' not in l831a_fixture_read
     fail('PROD-L8.31A fixtures README missing generated-run mechanical gate fixture section')
 print('PASS: HIRMOS PROD-L8.31A generated-run mechanical gate fixture coverage static check')
 
+# PROD-L8.32K runtime boundary and validator invocation fixture hardening
+l832k_required = {
+    'core/commands/README.md': ['PROD-L8.32K Command-First Runtime Boundary', 'command file first', 'active gate validator result'],
+    'core/commands/start.md': ['PROD-L8.32K start boundary clarity', 'next governed boundary', 'validation before any later transition claim'],
+    'core/commands/continue.md': ['PROD-L8.32K Runtime Boundary and Validator Invocation Fixture Hardening', 'IU_EXECUTION_AUTHORIZED', 'Material Edit Start Record'],
+    'core/commands/close.md': ['PROD-L8.32K close validator invocation', 'active gate validator result recorded before the claim'],
+    'core/commands/status.md': ['PROD-L8.32K status boundary report', 'latest active gate validator result', 'IU execution is authorized'],
+    'core/commands/continue.md': ['PROD-L8.32K Runtime Boundary and Validator Invocation Fixture Hardening', 'IU_EXECUTION_AUTHORIZED', 'implementation-complete claim'],
+    'core/templates/session/SESSION_LEDGER.md': ['PROD-L8.32K Runtime Boundary Validation Record', 'Command file used', 'Active gate validator result', 'Material project-file edits before authorization'],
+    'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.32K Runtime Boundary Validation', 'lifecycle transition claim', 'retrospective IU files are not substitutes'],
+    'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['PROD-L8.32K Runtime Boundary Execution Block', 'active gate validator result allows execution'],
+    'tools/test_l832k_runtime_boundary_gates.py': ['Focused fixtures for PROD-L8.32K runtime boundary gates', 'expected at least 3 L8.32K focused cases'],
+    'tools/fixtures/README.md': ['PROD-L8.32K Runtime Boundary Fixtures', 'IU planning and IU execution remain separate'],
+}
+for rel, phrases in l832k_required.items():
+    p = root / rel
+    if not p.exists():
+        fail(f'PROD-L8.32K missing runtime-boundary surface: {rel}')
+    body = p.read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.32K {rel} missing runtime-boundary phrase: {phrase}')
+
+def _l832k_has_iu_execution_authorized(text):
+    return bool(re.search(r'\bIU_EXECUTION_AUTHORIZED\b[\s\S]{0,300}\b(PASS|YES|AUTHORIZED)\b', text, re.I) or re.search(r'IU execution authorized\s*:\s*(YES|PASS|AUTHORIZED)', text, re.I))
+
+def _l832k_has_material_edit_signal(text):
+    return bool(re.search(r'Material Edit Start Record|material project-file edits?\s*:\s*(?:YES|STARTED)|project-file diff\s*:\s*(?:YES|PRESENT)|Files/areas about to be edited\s*:', text, re.I))
+
+for session_dir in _generated_session_dirs():
+    scope_body = (session_dir / 'SESSION_SCOPE.md').read_text(errors='ignore') if (session_dir / 'SESSION_SCOPE.md').exists() else ''
+    execution_body = (session_dir / 'SESSION_LEDGER.md').read_text(errors='ignore') if (session_dir / 'SESSION_LEDGER.md').exists() else ''
+    combined = scope_body + '\n' + execution_body
+    iu_required = _l831_iu_required(combined)
+    if not iu_required or re.search(r'LIGHTWEIGHT_NO_IU', combined, re.I):
+        continue
+    authorized = _l832k_has_iu_execution_authorized(execution_body)
+    material_signal = _l832k_has_material_edit_signal(execution_body)
+    lifecycle_claim = _l831_claims_lifecycle(session_dir, execution_body)
+    if material_signal and not authorized:
+        fail(f'PROD-L8.32K IU-mode material edit before IU_EXECUTION_AUTHORIZED in {session_dir.relative_to(root)}')
+    if lifecycle_claim and not authorized:
+        fail(f'PROD-L8.32K IU-mode lifecycle transition claim before IU_EXECUTION_AUTHORIZED in {session_dir.relative_to(root)}')
+    if (material_signal or lifecycle_claim) and not re.search(r'Active gate validator result\s*:\s*PASS|Active generated-artifact validation result\s*:\s*PASS', execution_body, re.I):
+        fail(f'PROD-L8.32K lifecycle/material transition claim without active gate validator PASS in {session_dir.relative_to(root)}')
+
+print('PASS: HIRMOS PROD-L8.32K runtime boundary and validator invocation fixture hardening static/runtime check')
+
+
+# PROD-L8.32L just-in-time artifact creation and derived pointer indexes
+_l832l_required = {
+    'core/commands/README.md': ['PROD-L8.32L Just-in-Time Artifact Creation', 'Pointer indexes', 'derived navigation caches'],
+    'core/commands/start.md': ['PROD-L8.32L Just-in-Time Artifact Creation', 'Optional artifacts are not created to satisfy a template checklist', 'Pointer indexes'],
+    'core/commands/continue.md': ['PROD-L8.32L Just-in-Time Artifact Creation', 'source artifacts win', 'fail closed'],
+    'core/commands/close.md': ['PROD-L8.32L Just-in-Time Artifact Creation', 'archive manifests', 'stale pointer row'],
+    'core/commands/status.md': ['PROD-L8.32L Just-in-Time Artifact Creation', 'derived navigation caches', 'source artifacts win'],
+    'core/templates/session/SESSION_STATE.json': ['_derived_command_state', '_jit_artifact_creation_notice'],
+    'core/templates/session/SESSION_LEDGER.md': ['PROD-L8.32L Artifact Instantiation Boundary', 'Created now?', 'absent-valid'],
+    'core/templates/session/SESSION_SCOPE.md': ['PROD-L8.32L Optional Artifact Applicability Rule', 'not created because not applicable', 'expected future path'],
+    'core/templates/session/EVIDENCE.md': ['PROD-L8.32L Evidence JIT Creation Rule', 'Do not create this artifact by default', 'claim reconciliation'],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': ['PROD-L8.32L Derived Pointer Index Contract', 'navigation caches', 'source artifacts win'],
+    'system/accepted-state/CURRENT_SYSTEM_STATE.md': ['PROD-L8.32L Derived Pointer Index Contract', 'navigation caches', 'stale pointer rows block continuation'],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': ['PROD-L8.32L Derived Delivery Index Contract', 'filesystem paths', 'source artifact wins'],
+    'core/templates/system/delivery/DELIVERY_SCOPE.md': ['PROD-L8.32L Just-in-Time Delivery Artifact Rule', 'do not instantiate future phase files', 'not authority until the files are created'],
+    'core/templates/system/delivery/phases/PHASE.md': ['PROD-L8.32L Derived Phase Progress Index Contract', 'derived navigation cache', 'STALE'],
+    'core/protocol/COMMANDS.md': ['PROD-L8.32L Artifact Creation / Derived Pointer Doctrine', 'created just in time', 'Stale pointer rows are defects'],
+    'core/protocol/CURRENT_SYSTEM_STATE.md': ['PROD-L8.32L Artifact Creation / Derived Pointer Doctrine', 'filesystem paths', 'derived pointer indexes'],
+    'core/protocol/DELIVERY_GOVERNANCE.md': ['PROD-L8.32L Artifact Creation / Derived Pointer Doctrine', 'delivery/phase directories', 'archive manifests'],
+    'core/protocol/SESSION_ARTIFACTS.md': ['PROD-L8.32L Artifact Creation / Derived Pointer Doctrine', 'Optional artifacts', 'created just in time'],
+    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.32L Artifact Creation / Derived Pointer Doctrine', 'archive manifests', 'Stale pointer rows'],
+    'tools/derive_pointer_indexes.py': ['hirmos-derived-pointer-index-v1', 'read-only', 'active_session_optional_artifacts'],
+    'tools/test_l832l_jit_derived_indexes.py': ['test_absent_optional_artifacts_are_reported_without_creation', 'test_delivery_and_archive_pointers_are_derived_from_filesystem'],
+}
+for _rel, _phrases in _l832l_required.items():
+    _p = root / _rel
+    if not _p.exists():
+        fail(f'PROD-L8.32L missing JIT/derived pointer surface: {_rel}')
+    _body = _p.read_text(errors='ignore')
+    for _phrase in _phrases:
+        if _phrase.lower() not in _body.lower():
+            fail(f'PROD-L8.32L {_rel} missing JIT/derived pointer phrase: {_phrase}')
+
+# Active scaffold must remain minimal in idle state: no empty future optional active artifacts.
+_session_root = root / 'session'
+_state_obj = json.loads((_session_root / 'SESSION_STATE.json').read_text()) if (_session_root / 'SESSION_STATE.json').exists() else {}
+if _state_obj.get('status') == 'idle':
+    for _rel in ['SESSION_SCOPE.md', 'SESSION_LEDGER.md', 'EVIDENCE.md', 'unresolved-items.md', 'REQUIREMENTS.md', 'DESIGN.md']:
+        if (_session_root / _rel).exists():
+            fail(f'PROD-L8.32L idle scaffold must not pre-create optional active artifact: session/{_rel}')
+    _iu_files = list((_session_root / 'implementation-units').glob('IU-*.md')) if (_session_root / 'implementation-units').exists() else []
+    if _iu_files:
+        fail('PROD-L8.32L idle scaffold must not pre-create implementation-unit files')
+
+print('PASS: HIRMOS PROD-L8.32L just-in-time artifact creation and derived pointer indexes static/runtime check')
+
+
+# PROD-L8.32D session-scope / IU authority boundary compression
+l832d_required = {
+    'core/templates/session/SESSION_SCOPE.md': [
+        'Implementation Boundary and IU Planning Pointers',
+        'SESSION_SCOPE may contain only compact IU planning pointers',
+        'must not contain full IU contracts',
+        'Full IU authority belongs in `_hirmos/session/implementation-units/IU-xx.md`',
+    ],
+    'core/templates/session/implementation-units/IU.md': [
+        'Canonical owner: implementation-unit contract',
+        'Full IU authority lives here, not in `SESSION_SCOPE.md`',
+    ],
+    'core/commands/start.md': ['PROD-L8.32D Session Scope / IU Boundary', 'planned IU IDs, one-line objectives, covered scope item IDs'],
+    'core/commands/continue.md': ['PROD-L8.32D IU Authority Boundary Continuation Rule', 'not an implementation plan, not a sealed contract'],
+    'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.32D Scope/IU Boundary Validation', 'use `SESSION_SCOPE.md` as IU authority'],
+    'core/protocol/SESSION_ARTIFACTS.md': ['PROD-L8.32D Session Scope / IU Ownership Boundary', '`implementation-units/IU-xx.md` owns IU contract'],
+    'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': ['PROD-L8.32D Session Scope / IU Authority Boundary', 'Full IU contract authority exists only'],
+    'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['PROD-L8.32D Execution Authority Boundary', 'must not start from a `SESSION_SCOPE.md` IU table'],
+}
+for rel, phrases in l832d_required.items():
+    body = (root / rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase not in body:
+            fail(f'PROD-L8.32D {rel} missing scope/IU boundary phrase: {phrase}')
+
+_SCOPE_IU_FORBIDDEN_PATTERNS = [
+    r'(?im)^\s*Contract status\s*:',
+    r'(?im)^\s*Execution status\s*:',
+    r'(?im)^\s*Review status\s*:',
+    r'(?im)^\s*Contract sealed before material edits\s*:',
+    r'(?im)^\s*LLM Write Permission\s*:',
+    r'(?im)^\s*##\s*Binary Acceptance Criteria\s*$',
+    r'(?im)^\s*##\s*Pre-Execution Checks\s*$',
+    r'(?im)^\s*##\s*Execution Record\s*$',
+    r'(?im)^\s*##\s*Unit Review\s*$',
+]
+for session_dir in _generated_session_dirs():
+    scope_path = session_dir / 'SESSION_SCOPE.md'
+    if not scope_path.exists():
+        continue
+    scope_body = scope_path.read_text(errors='ignore')
+    for pat in _SCOPE_IU_FORBIDDEN_PATTERNS:
+        if re.search(pat, scope_body):
+            fail(f'PROD-L8.32D SESSION_SCOPE contains IU-contract authority detail forbidden outside IU files: {scope_path.relative_to(root)}')
+    if re.search(r'(?is)\|\s*IU-\d+\s*\|.*?(Binary Acceptance|Pre-Execution|Contract status|Execution status|Review status|Files / Artifacts Changed)', scope_body):
+        fail(f'PROD-L8.32D SESSION_SCOPE contains detailed IU table instead of compact pointers: {scope_path.relative_to(root)}')
+print('PASS: HIRMOS PROD-L8.32D session-scope / IU authority boundary compression static/runtime check')
+
+
+# PROD-L8.32F evidence and current-state pointer compression
+l832f_required = {
+    'core/templates/session/EVIDENCE.md': [
+        'compact source authority for material command, runtime, provider, production-shaped engineering, claim reconciliation, review-gate, and close/archive evidence',
+        'Do not duplicate scope, IU contracts, session ledger events, delivery posture, or accepted-state summaries',
+        'Claim Reconciliation Summary',
+        'Evidence Claim Reconciliation Freshness',
+        'PROD-L8.21 Acceptance Evidence Semantics',
+        'PROD-L8.22 Review Gate Evidence',
+    ],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': [
+        'pointer-complete, not content-complete',
+        'must not duplicate delivery scope, phase scope, session scope, requirements, design, implementation, evidence detail',
+        'Work History Ledger',
+        'Source Artifact Index',
+        'Evidence State',
+        'pointer-complete, not evidence-complete',
+        'Generated-Run Pointer Concordance Gate',
+    ],
+    'system/accepted-state/CURRENT_SYSTEM_STATE.md': [
+        'pointer-complete, not content-complete',
+        'Work History Ledger',
+        'Source Artifact Index',
+        'Evidence State',
+        'pointer-complete, not evidence-complete',
+    ],
+}
+for rel, phrases in l832f_required.items():
+    body = (root / rel).read_text(errors='ignore')
+    for phrase in phrases:
+        if phrase.lower() not in body.lower():
+            fail(f'PROD-L8.32F {rel} missing evidence/current-state compression phrase: {phrase}')
+
+css_template = (root / 'core/templates/system/CURRENT_SYSTEM_STATE.md').read_text(errors='ignore')
+if len(css_template.splitlines()) > 380:
+    fail('PROD-L8.32F CURRENT_SYSTEM_STATE template remains too large for pointer-compression target (>380 lines)')
+print('PASS: HIRMOS PROD-L8.32F evidence and current-state pointer compression static check')
+
 if VALIDATION_ERRORS:
     print(f'FAIL: HIRMOS validation reported {len(VALIDATION_ERRORS)} failure(s)')
     sys.exit(1)
+
+
+# PROD-L8.32I IU planning / execution boundary restoration
+_l832i_required = {
+    'core/commands/start.md': ['IU Planning', 'not implementation or IU execution', 'Baseline acceptance authorizes IU planning/materialization only'],
+    'core/commands/continue.md': ['IU Planning / IU Execution boundary', 'IU_PLANNING_COMPLETE', 'IU_EXECUTION_AUTHORIZED', 'must not edit project files or execute IUs in the same continuation'],
+    'core/commands/continue.md': ['IU Planning / IU Execution boundary', 'IU_PLANNING_COMPLETE', 'IU_EXECUTION_AUTHORIZED'],
+    'core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md': ['next step is IU Planning only', 'will not edit project files or begin IU execution until you later accept the IU plan'],
+    'core/templates/checkpoints/SESSION_BASELINE_CHECKPOINT_OUTPUT.md': ['IU Planning only', 'IU Plan — Review or Change', 'will not edit project files or begin IU execution until you later accept the IU plan'],
+    'core/templates/checkpoints/IU_PLAN_CHECKPOINT_OUTPUT.md': ['IU Plan — Review or Change', 'IU execution has not started', 'Accept IU plan and begin IU execution'],
+    'core/templates/session/SESSION_LEDGER.md': ['IU Planning / IU Execution Boundary Record', 'IU_PLANNING_COMPLETE', 'IU_EXECUTION_AUTHORIZED'],
+    'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': ['IU Plan — Review or Change', 'must not edit project files or start IU execution in the same continuation'],
+    'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['IU_EXECUTION_AUTHORIZED', 'Implementation execution must not start after `hirmos continue "Accept session baseline"`'],
+}
+for _rel, _phrases in _l832i_required.items():
+    _body = (root / _rel).read_text()
+    for _phrase in _phrases:
+        if _phrase not in _body:
+            print(f'FAIL: PROD-L8.32I surface {_rel} missing phrase: {_phrase}')
+            sys.exit(1)
+print('PASS: HIRMOS PROD-L8.32I IU planning / execution boundary restoration static check')
+
+# PROD-L8.32O shared capability controls and gate marker map consolidation
+_l832o_shared = root / 'core/authority/SHARED_CAPABILITY_CONTROLS.md'
+if not _l832o_shared.exists():
+    print('FAIL: PROD-L8.32O missing shared capability controls authority file')
+    sys.exit(1)
+_l832o_shared_body = _l832o_shared.read_text(errors='ignore')
+for _phrase in ['Required behavior baseline', 'Canonical interaction posture visibility', 'Unresolved-item producer obligation', 'Runtime integration responsibilities']:
+    if _phrase not in _l832o_shared_body:
+        print(f'FAIL: PROD-L8.32O shared capability controls missing phrase: {_phrase}')
+        sys.exit(1)
+_l832o_entrypoint_refs = 0
+for _entrypoint in (root / 'extensions').glob('**/entrypoints/default.md'):
+    _body = _entrypoint.read_text(errors='ignore')
+    if 'SHARED_CAPABILITY_CONTROLS.md' in _body:
+        _l832o_entrypoint_refs += 1
+    if '## Required behavior' in _body and 'capabilities' in str(_entrypoint) and 'SHARED_CAPABILITY_CONTROLS.md' not in _body:
+        print(f'FAIL: PROD-L8.32O capability entrypoint missing shared controls reference: {_entrypoint.relative_to(root)}')
+        sys.exit(1)
+if _l832o_entrypoint_refs < 15:
+    print(f'FAIL: PROD-L8.32O expected broad shared-control adoption; found only {_l832o_entrypoint_refs} entrypoint refs')
+    sys.exit(1)
+_l832o_ledger = (root / 'core/templates/session/SESSION_LEDGER.md').read_text(errors='ignore')
+for _phrase in ['Gate Marker Map', 'PROD-L8.19', 'PROD-L8.21', 'PROD-L8.23', 'PROD-L8.24', 'PROD-L8.30A', 'PROD-L8.31', 'PROD-L8.32K', 'PROD-L8.32L']:
+    if _phrase not in _l832o_ledger:
+        print(f'FAIL: PROD-L8.32O SESSION_LEDGER.md gate marker map missing phrase: {_phrase}')
+        sys.exit(1)
+print('PASS: HIRMOS PROD-L8.32O shared capability controls and gate marker map static check')
+
+
+# PROD-L8.32Q delivery completion concordance simplification and archive-state semantics
+_l832q_required = {
+    'core/templates/system/delivery/DELIVERY_SCOPE.md': [
+        'PROD-L8.32Q Delivery Completion Concordance Simplification',
+        'Authority status:',
+        'Requirement rows must not maintain close-time',
+    ],
+    'core/templates/system/delivery/phases/PHASE.md': [
+        'PROD-L8.32Q Parent Delivery Status Simplification',
+        'Parent delivery status source: derived',
+    ],
+    'core/templates/system/delivery/DELIVERY_PLAN.md': [
+        'PROD-L8.32Q Delivery Status Log Removal',
+        'must not contain a narrative `Delivery Status Update Log`',
+    ],
+    'core/templates/system/CURRENT_SYSTEM_STATE.md': [
+        'PROD-L8.32Q Accepted-State Concordance Simplification',
+        'must not require duplicated delivery status logs',
+    ],
+    'system/accepted-state/CURRENT_SYSTEM_STATE.md': [
+        'PROD-L8.32Q Accepted-State Concordance Simplification',
+        'must not require duplicated delivery status logs',
+    ],
+    'core/templates/session/SESSION_LEDGER.md': [
+        'PROD-L8.32Q Archive-State Semantics',
+        'Archived Session State Concordance',
+        'PRE_CLOSE_SESSION_STATE.json',
+    ],
+    'core/templates/session/implementation-units/IU.md': [
+        'Close Evidence Contribution',
+        'before close-time external or user-environment verification',
+    ],
+    'tools/derive_pointer_indexes.py': [
+        'delivery_concordance',
+        'derived_completion_signals',
+        'conflicts',
+    ],
+    'tools/test_l832q_delivery_concordance.py': [
+        'test_delivery_scope_active_conflict_fails',
+        'test_delivery_status_update_log_fails',
+        'test_pre_close_archive_concordance_label_passes',
+    ],
+}
+for _rel, _phrases in _l832q_required.items():
+    _p = root / _rel
+    if not _p.exists():
+        print(f'FAIL: PROD-L8.32Q missing delivery concordance surface: {_rel}')
+        sys.exit(1)
+    _body = _p.read_text(errors='ignore')
+    for _phrase in _phrases:
+        if _phrase.lower() not in _body.lower():
+            print(f'FAIL: PROD-L8.32Q {_rel} missing phrase: {_phrase}')
+            sys.exit(1)
+
+# Static guard: framework templates should no longer require narrative Delivery Status Update Log.
+for _rel in ['core/templates/system/delivery/DELIVERY_PLAN.md', 'core/templates/system/CURRENT_SYSTEM_STATE.md', 'system/accepted-state/CURRENT_SYSTEM_STATE.md']:
+    _body = (root / _rel).read_text(errors='ignore')
+    if re.search(r'(?m)^##\s*Delivery Status Update Log\b', _body, re.I):
+        print(f'FAIL: PROD-L8.32Q {_rel} still contains narrative Delivery Status Update Log heading')
+        sys.exit(1)
+
+def _l832q_delivery_complete_signals(delivery_id: str, scope_txt: str, plan_txt: str, css_txt: str, phase_texts: list[str]) -> bool:
+    combined = '\n'.join([scope_txt, plan_txt, css_txt])
+    if re.search(rf'{re.escape(delivery_id)}[\s\S]{{0,600}}\b(completed|complete|accepted|closed)\b', combined, re.I):
+        return True
+    if phase_texts and all(re.search(r'Lifecycle status\s*:\s*(ACCEPTED|COMPLETE|CLOSED|PARTIAL)', txt, re.I) for txt in phase_texts):
+        return True
+    if re.search(r'Close result\s*:\s*(ACCEPTED|COMPLETE|PARTIAL|CLOSED)', scope_txt, re.I):
+        return True
+    return False
+
+_delivery_root = root / 'system/delivery'
+if _delivery_root.exists():
+    _plan_txt = (_delivery_root / 'DELIVERY_PLAN.md').read_text(errors='ignore') if (_delivery_root / 'DELIVERY_PLAN.md').exists() else ''
+    _css_txt = (root / 'system/accepted-state/CURRENT_SYSTEM_STATE.md').read_text(errors='ignore') if (root / 'system/accepted-state/CURRENT_SYSTEM_STATE.md').exists() else ''
+    if re.search(r'(?m)^##\s*Delivery Status Update Log\b', _plan_txt, re.I):
+        print('FAIL: PROD-L8.32Q generated DELIVERY_PLAN.md recreates narrative Delivery Status Update Log')
+        sys.exit(1)
+    for _scope in _delivery_root.glob('*/DELIVERY_SCOPE.md'):
+        _delivery_id = _scope.parent.name
+        _scope_txt = _scope.read_text(errors='ignore')
+        _phase_texts = [p.read_text(errors='ignore') for p in sorted((_scope.parent / 'phases').glob('PHASE-*.md'))]
+        _complete = _l832q_delivery_complete_signals(_delivery_id, _scope_txt, _plan_txt, _css_txt, _phase_texts)
+        if _complete and re.search(r'(?m)^Status\s*:\s*ACTIVE\b', _scope_txt, re.I):
+            print(f'FAIL: PROD-L8.32Q delivery completion conflict: {_scope.relative_to(root)} keeps Status: ACTIVE while completion is derived elsewhere')
+            sys.exit(1)
+        if _complete and re.search(r'\|[^\n]*\bPROPOSED\b[^\n]*\|', _scope_txt, re.I) and re.search(r'\b(FR-|NFR-|Requirement)\b', _scope_txt, re.I):
+            print(f'FAIL: PROD-L8.32Q completed delivery scope preserves PROPOSED requirement/status rows: {_scope.relative_to(root)}')
+            sys.exit(1)
+        if _complete:
+            for _phase in (_scope.parent / 'phases').glob('PHASE-*.md'):
+                if re.search(r'Parent delivery status\s*:\s*ACTIVE\b', _phase.read_text(errors='ignore'), re.I):
+                    print(f'FAIL: PROD-L8.32Q phase mirrors stale parent delivery ACTIVE after completion: {_phase.relative_to(root)}')
+                    sys.exit(1)
+
+_history = root / 'system/history/sessions'
+if _history.exists():
+    for _ledger in _history.glob('*/SESSION_LEDGER.md'):
+        _txt = _ledger.read_text(errors='ignore')
+        _state_txt = (_ledger.parent / 'SESSION_STATE.json').read_text(errors='ignore') if (_ledger.parent / 'SESSION_STATE.json').exists() else ''
+        _archived = re.search(r'"status"\s*:\s*"?(archived|closed)', _state_txt, re.I) or re.search(r'archived|closed', _txt[:1200], re.I)
+        if _archived and re.search(r'##\s*Machine Command State Concordance\b', _txt, re.I) and re.search(r'\b(active|implementation_complete|hirmos close)\b', _txt, re.I):
+            if not re.search(r'Pre-Close Machine Command State Concordance|PRE_CLOSE_SESSION_STATE\.json|pre-close', _txt, re.I):
+                print(f'FAIL: PROD-L8.32Q archived ledger has current-looking active machine concordance without pre-close label: {_ledger.relative_to(root)}')
+                sys.exit(1)
+
+print('PASS: HIRMOS PROD-L8.32Q delivery completion concordance simplification and archive-state semantics static/runtime check')
+
+
+# PROD-L8.32R installed-project fixture isolation and residual status hygiene
+_l832r_required = {
+    'core/templates/system/delivery/DELIVERY_PLAN.md': [
+        'PROD-L8.32R Roadmap Status Derivation',
+        'must not maintain a writable top-level `Roadmap status:` field',
+    ],
+    'core/templates/system/delivery/phases/PHASE.md': [
+        'PROD-L8.32R Parent Delivery Posture Derivation',
+        'must not contain writable `Parent delivery status:` fields',
+    ],
+    'tools/test_l832q_delivery_concordance.py': [
+        'Fixture isolation',
+        'Remove live generated project state',
+    ],
+    'tools/derive_pointer_indexes.py': [
+        'roadmap_status',
+        'Roadmap status',
+    ],
+    'tools/test_l832r_installed_fixture_hygiene.py': [
+        'test_q_fixture_isolation_inside_installed_project_passes',
+        'test_roadmap_status_field_fails',
+        'test_macos_artifact_hygiene_fails',
+    ],
+}
+for _rel, _phrases in _l832r_required.items():
+    _p = root / _rel
+    if not _p.exists():
+        print(f'FAIL: PROD-L8.32R missing residual-status hygiene surface: {_rel}')
+        sys.exit(1)
+    _body = _p.read_text(errors='ignore')
+    for _phrase in _phrases:
+        if _phrase.lower() not in _body.lower():
+            print(f'FAIL: PROD-L8.32R {_rel} missing phrase: {_phrase}')
+            sys.exit(1)
+
+# Runtime/status surfaces must use pointer-index language, not the old ledger label.
+for _rel in [
+    'core/commands/start.md',
+    'core/commands/continue.md',
+    'core/commands/status.md',
+    'core/commands/close.md',
+    'core/templates/system/CURRENT_SYSTEM_STATE.md',
+    'system/accepted-state/CURRENT_SYSTEM_STATE.md',
+]:
+    _body = (root / _rel).read_text(errors='ignore')
+    if 'Phase Progress Ledger' in _body:
+        print(f'FAIL: PROD-L8.32R {_rel} still uses Phase Progress Ledger wording instead of Phase Progress Pointer Index')
+        sys.exit(1)
+
+# Framework templates must not expose top-level writable roadmap lifecycle status fields.
+for _rel in ['core/templates/system/delivery/DELIVERY_PLAN.md']:
+    _body = (root / _rel).read_text(errors='ignore')
+    if re.search(r'(?m)^Roadmap status\s*:', _body):
+        print(f'FAIL: PROD-L8.32R {_rel} still contains writable Roadmap status field')
+        sys.exit(1)
+
+_project_root = root.parent if root.name == '_hirmos' else root
+_excluded_artifact_parts = {'.git', 'node_modules', '.next', 'dist', 'build'}
+for _path in _project_root.rglob('*'):
+    _parts = set(_path.parts)
+    if _parts & _excluded_artifact_parts:
+        continue
+    if _path.name == '.DS_Store' or _path.name == '__MACOSX':
+        print(f'FAIL: PROD-L8.32R forbidden macOS/package artifact present: {_path.relative_to(_project_root)}')
+        sys.exit(1)
+
+_delivery_complete_anywhere = False
+if _delivery_root.exists():
+    _plan_txt = (_delivery_root / 'DELIVERY_PLAN.md').read_text(errors='ignore') if (_delivery_root / 'DELIVERY_PLAN.md').exists() else ''
+    _css_txt = (root / 'system/accepted-state/CURRENT_SYSTEM_STATE.md').read_text(errors='ignore') if (root / 'system/accepted-state/CURRENT_SYSTEM_STATE.md').exists() else ''
+    if re.search(r'(?m)^Roadmap status\s*:', _plan_txt, re.I):
+        print('FAIL: PROD-L8.32R generated DELIVERY_PLAN.md recreates top-level Roadmap status field; roadmap posture must be derived')
+        sys.exit(1)
+    if re.search(r'(?m)^##\s*Phase Progress Ledger\b', _plan_txt, re.I):
+        print('FAIL: PROD-L8.32R generated DELIVERY_PLAN.md recreates Phase Progress Ledger heading')
+        sys.exit(1)
+    for _scope in _delivery_root.glob('*/DELIVERY_SCOPE.md'):
+        _delivery_id = _scope.parent.name
+        _scope_txt = _scope.read_text(errors='ignore')
+        _phase_texts = [p.read_text(errors='ignore') for p in sorted((_scope.parent / 'phases').glob('PHASE-*.md'))]
+        _complete = _l832q_delivery_complete_signals(_delivery_id, _scope_txt, _plan_txt, _css_txt, _phase_texts)
+        _delivery_complete_anywhere = _delivery_complete_anywhere or _complete
+        for _phase in (_scope.parent / 'phases').glob('PHASE-*.md'):
+            _phase_txt = _phase.read_text(errors='ignore')
+            if re.search(r'(?m)^Parent delivery status\s*:', _phase_txt, re.I):
+                print(f'FAIL: PROD-L8.32R phase contains writable Parent delivery status field; use derived source pointer instead: {_phase.relative_to(root)}')
+                sys.exit(1)
+            if re.search(r'(?m)^##\s*Phase Progress Ledger\b', _phase_txt, re.I):
+                print(f'FAIL: PROD-L8.32R phase recreates narrative Phase Progress Ledger; use Phase Progress Pointer Index: {_phase.relative_to(root)}')
+                sys.exit(1)
+
+_readme = _project_root / 'README.md'
+if _delivery_complete_anywhere and _readme.exists():
+    _readme_txt = _readme.read_text(errors='ignore')
+    if re.search(r'bootstrapped with\s+create-next-app|create-next-app', _readme_txt, re.I):
+        print('FAIL: PROD-L8.32R completed generated project still has create-next-app boilerplate README; close must produce a project handoff README or mark README cleanup unresolved')
+        sys.exit(1)
+
+print('PASS: HIRMOS PROD-L8.32R installed-project fixture isolation and residual status hygiene static/runtime check')
+
+
+# PROD-L8.32S runtime command surface unification
+_l832s_required = {
+    'core/commands/README.md': [
+        'PROD-L8.32S Runtime Command Surface Unification',
+        'single compact runtime command surface',
+        'former `_hirmos/core/runtime/*.packet.md` layer is removed',
+    ],
+    'core/commands/start.md': [
+        'Status: compact command authority.',
+        'PROD-L8.32S Runtime Command Surface Unification',
+        'read this command file first',
+    ],
+    'core/commands/continue.md': [
+        'Status: compact command authority.',
+        'PROD-L8.32S Runtime Command Surface Unification',
+        'read this command file first',
+        'IU_EXECUTION_AUTHORIZED',
+    ],
+    'core/commands/status.md': [
+        'Status: compact command authority.',
+        'PROD-L8.32S Runtime Command Surface Unification',
+        'read this command file first',
+    ],
+    'core/commands/close.md': [
+        'Status: compact command authority.',
+        'PROD-L8.32S Runtime Command Surface Unification',
+        'read this command file first',
+        'active gate validator result recorded before the claim',
+    ],
+    'tools/test_l832s_command_surface_unification.py': [
+        'Focused fixtures for PROD-L8.32S runtime command surface unification',
+        'test_runtime_directory_removed',
+        'test_no_active_packet_references',
+    ],
+    'tools/fixtures/README.md': [
+        'PROD-L8.32S Runtime Command Surface Unification Fixtures',
+        'canonical compact command runtime authority',
+    ],
+}
+for _rel, _phrases in _l832s_required.items():
+    _p = root / _rel
+    if not _p.exists():
+        print(f'FAIL: PROD-L8.32S missing command surface: {_rel}')
+        sys.exit(1)
+    _body = _p.read_text(errors='ignore')
+    for _phrase in _phrases:
+        if _phrase.lower() not in _body.lower():
+            print(f'FAIL: PROD-L8.32S {_rel} missing phrase: {_phrase}')
+            sys.exit(1)
+
+if (root / 'core/runtime').exists():
+    print('FAIL: PROD-L8.32S obsolete core/runtime directory still exists')
+    sys.exit(1)
+
+for _rel in ['core/commands/start.md', 'core/commands/continue.md', 'core/commands/status.md', 'core/commands/close.md']:
+    _body = (root / _rel).read_text(errors='ignore')
+    for _forbidden in ['Primary runtime surface:', 'Do not use this slim command file as a substitute for the packet', 'Runtime Packet:']:
+        if _forbidden in _body:
+            print(f'FAIL: PROD-L8.32S {_rel} retained obsolete packet-wrapper wording: {_forbidden}')
+            sys.exit(1)
+
+for _path in root.rglob('*'):
+    if not _path.is_file():
+        continue
+    try:
+        _body = _path.read_text(errors='ignore')
+    except UnicodeDecodeError:
+        continue
+    _rel = _path.relative_to(root).as_posix()
+    if _rel.startswith('core/commands/'):
+        continue
+    if _rel in {'CHANGELOG.md', 'UPGRADE_GUIDE.md', 'tools/validate.py', 'tools/test_l832s_command_surface_unification.py'}:
+        continue
+    for _token in ['_hirmos/core/runtime/', 'core/runtime/', '.packet.md']:
+        if _token in _body:
+            print(f'FAIL: PROD-L8.32S obsolete runtime packet reference in {_rel}: {_token}')
+            sys.exit(1)
+
+print('PASS: HIRMOS PROD-L8.32S runtime command surface unification static/runtime check')

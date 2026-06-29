@@ -16,7 +16,7 @@
   },
   "requires_artifacts": [
     "_hirmos/session/SESSION_SCOPE.md",
-    "_hirmos/session/SESSION_EXECUTION.md",
+    "_hirmos/session/SESSION_LEDGER.md",
     "focus-appropriate unresolved-items.md",
     "_hirmos/system/delivery/DELIVERY_PLAN.md when Delivery Shape Decision selects a durable delivery shape",
     "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md when Delivery Shape Decision selects a durable delivery shape",
@@ -24,7 +24,7 @@
   ],
   "produces_artifacts": [
     "_hirmos/session/DESIGN.md readiness basis",
-    "_hirmos/session/SESSION_EXECUTION.md"
+    "_hirmos/session/SESSION_LEDGER.md"
   ],
   "execution_controls": [
     "implementation-readiness control",

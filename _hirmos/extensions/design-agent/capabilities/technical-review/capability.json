@@ -20,7 +20,7 @@
   "produces_artifacts": [
     "technical-review items in focus-appropriate DESIGN.md or unresolved-items.md",
     "focus-appropriate unresolved-items.md",
-    "_hirmos/session/SESSION_EXECUTION.md"
+    "_hirmos/session/SESSION_LEDGER.md"
   ],
   "execution_controls": [
     "technical-review control",

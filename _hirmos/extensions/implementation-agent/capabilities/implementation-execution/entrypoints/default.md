@@ -11,7 +11,7 @@ Execute one sealed implementation unit contract using its `IU-xx.md` artifact as
 - append-only updates to `_hirmos/session/implementation-units/IU-xx.md` Execution Record section
 - project/file changes authorized by the unit
 - validation/evidence entries appended to the IU Execution Record and/or `_hirmos/session/EVIDENCE.md` when nontrivial evidence cannot fit cleanly in the IU artifact
-- `_hirmos/session/SESSION_EXECUTION.md` execution-control updates
+- `_hirmos/session/SESSION_LEDGER.md` execution-control updates
 
 ### Terminal States
 
@@ -23,6 +23,8 @@ Execute one sealed implementation unit contract using its `IU-xx.md` artifact as
 
 ## Activation triggers
 
+- the IU plan has been explicitly accepted for execution
+- `SESSION_LEDGER.md` records `IU_EXECUTION_AUTHORIZED`
 - an approved implementation unit is ready to execute
 - implementation stage is active
 
@@ -51,7 +53,7 @@ Execution must:
 5. Inspect current project files before editing.
 6. Modify only files/areas authorized by the sealed IU contract.
 7. Append actions, files changed, validation, runtime posture, evidence, limitations, test/fixture/validator change rationale when applicable, and execution result to the `Execution Record` section only.
-8. Record route-back or blocker conditions in `SESSION_EXECUTION.md` and `unresolved-items.md` when applicable.
+8. Record route-back or blocker conditions in `SESSION_LEDGER.md` and `unresolved-items.md` when applicable.
 
 Do not execute from prose, checkpoint summaries, or old split artifacts. The sealed IU Contract sections are the execution authority. The executor must not edit sealed contract sections after material implementation starts; if contract authority is wrong or incomplete, stop and route back instead of repairing the contract during execution.
 
@@ -60,33 +62,19 @@ Do not execute from prose, checkpoint summaries, or old split artifacts. The sea
 
 ## Required behavior
 
-
 ### Governance posture check
 
 Implementation execution is not autonomous code editing followed by HIRMOS reporting. Before editing, confirm that the active IU contract is sealed execution authority and that the current command state permits implementation. If not, stop before mutation. During and after execution, append only to execution/evidence sections; do not update contract status, scope, acceptance criteria, or authority fields to make the record look compliant.
 
-
-1. Confirm and record this capability decision under `_hirmos/core/protocol/CAPABILITY_ROUTING.md` in `_hirmos/session/SESSION_EXECUTION.md`.
-2. Instantiate or update only the canonical artifacts required by the active request path.
-3. Produce non-placeholder content before claiming completion.
-4. Preserve lifecycle ownership boundaries; route back in `SESSION_EXECUTION.md` when evidence invalidates an earlier stage.
-5. Apply the extension method and this capability-specific execution surface; do not execute from chat summaries or raw inputs alone.
+Apply the shared Required behavior baseline in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md`. This entrypoint retains only capability-specific obligations below; do not duplicate the shared checklist here.
 
 ## Canonical interaction posture visibility
 
-Use the canonical HIRMOS interaction posture from `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail.
-
-- By default, surface only user-owned decisions, blockers, readiness/completion status, and concise artifact pointers.
-- Surface capability result, assumptions, artifacts/evidence, and review implications when requested or needed for responsible review.
-- Surface activation reason, entrypoint path, controls, artifacts, unresolved-item contribution, route-back decisions, and terminal-state basis when validation failure, blocker state, route-back, or inspection need requires it.
+Apply the shared interaction-posture rules in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the canonical posture authority at `_hirmos/core/authority/INTERACTION_POSTURE.md`. Surface rich governed pause/checkpoint outputs when they support user decision-making; do not reduce checkpoint clarity to save tokens.
 
 ## Unresolved-item producer obligation
 
-This capability is an unresolved-item producer and MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`.
-
-Before marking the capability complete, record exactly one producer outcome in `_hirmos/session/unresolved-items.md`: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`.
-
-Record full item fields in `unresolved-items.md`, including current status, downstream impact, and revalidation point; do not duplicate the full field schema in this entrypoint.
+Apply the shared unresolved-item producer obligation in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the owning protocol: this capability MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`. It must record exactly one producer outcome in the focus-appropriate unresolved register: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`. When items exist, preserve current status, downstream impact, and revalidation point.
 
 ## PROD-L8.19 execution authority gate
 
@@ -96,17 +84,17 @@ If the IU is missing, placeholder-only, unsealed, or was created/expanded retros
 
 ## PROD-L8.21 execution authorization proof
 
-Before material edits, implementation execution must verify `SESSION_EXECUTION.md` contains a current `PROD-L8.21 IU Set Authority Checkpoint` with `Authorization decision: IMPLEMENTATION_AUTHORIZED`, unless the session explicitly declared `LIGHTWEIGHT_NO_IU` before implementation began.
+Before material edits, implementation execution must verify `SESSION_LEDGER.md` contains a current `PROD-L8.21 IU Set Authority Checkpoint`, `IU_PLANNING_COMPLETE`, and `IU_EXECUTION_AUTHORIZED`, unless the session explicitly declared `LIGHTWEIGHT_NO_IU` before implementation began. Legacy ledger rows may also include `Authorization decision: IMPLEMENTATION_AUTHORIZED`, but under L8.32I that phrase is not sufficient unless `IU_EXECUTION_AUTHORIZED` is also present.
 
 Do not treat thin IU stubs, unsealed IU contracts, retrospective IU files, or post-execution contract edits as execution authority.
 
 
 ## PROD-L8.23 Runtime Authority Enforcement
-Before material edits, implementation execution must inspect generated `SESSION_EXECUTION.md` and generated IU files. If the IU Set Authority Checkpoint, authorization decision, coverage map, sealed contract status, or minimum IU contract is missing, execution must fail closed or route back to IU planning. It must not proceed on transcript claims or IU self-attestation alone.
+Before material edits, implementation execution must inspect generated `SESSION_LEDGER.md` and generated IU files. If the IU Set Authority Checkpoint, authorization decision, coverage map, sealed contract status, or minimum IU contract is missing, execution must fail closed or route back to IU planning. It must not proceed on transcript claims or IU self-attestation alone.
 
 
 ## PROD-L8.24 Material Edit Start Gate
-Before the first material project-file edit, confirm that `_hirmos/session/SESSION_EXECUTION.md` already contains the `Pre-Material-Edit Ledger Row`, `Authorization decision: IMPLEMENTATION_AUTHORIZED`, and `Retrospective checkpoint, IU expansion, or sealed-contract mutation: NO`. Then append a `Material Edit Start Record` that points back to the authorization row. If the authorization row is absent, appears only in an archive/close cleanup context, or was created to satisfy the validator after edits, fail closed and route back to IU planning/correction.
+Before the first material project-file edit, confirm that `_hirmos/session/SESSION_LEDGER.md` already contains the `Pre-Material-Edit Ledger Row`, `IU_EXECUTION_AUTHORIZED`, and `Retrospective checkpoint, IU expansion, or sealed-contract mutation: NO`. Then append a `Material Edit Start Record` that points back to the authorization row. If the authorization row is absent, appears only in an archive/close cleanup context, or was created to satisfy the validator after edits, fail closed and route back to IU planning/correction.
 
 
 ## PROD-L8.25 Sealed IU Contract Mutation Guard
@@ -126,6 +114,21 @@ Implementation execution must block when generated-run mechanical gates fail. Do
 - the current session lacks complete fresh bootstrap answers;
 - IU mode is planned but planned IU count does not match actual full IU files;
 - any target IU is thin, placeholder-only, unsealed, or retrospectively created;
-- `SESSION_EXECUTION.md` lacks a current generated-artifact validation PASS when completion/close readiness is being claimed.
+- `SESSION_LEDGER.md` lacks a current generated-artifact validation PASS when completion/close readiness is being claimed.
 
 Execution may resume only after artifact correction, route-back, or an explicit blocked/partial decision is recorded.
+
+
+## PROD-L8.32D Execution Authority Boundary
+
+## PROD-L8.32I Execution Authorization Boundary
+
+Implementation execution must not start after `hirmos continue "Accept session baseline"` when IU mode applies. That continuation authorizes IU planning only. Execution may start only after the separate IU-plan review pause is accepted and `SESSION_LEDGER.md` records `IU_EXECUTION_AUTHORIZED`. If the ledger has `IU_PLANNING_COMPLETE` but not `IU_EXECUTION_AUTHORIZED`, block execution and surface `IU Plan — Review or Change`.
+
+
+Implementation execution must not start from a `SESSION_SCOPE.md` IU table, preview, or planned-IU pointer list. Execution authority for IU mode requires full non-placeholder IU files under `_hirmos/session/implementation-units/` plus a `SESSION_LEDGER.md` gate PASS. If only `SESSION_SCOPE.md` contains IU-like detail, block execution and route to implementation-unit planning.
+
+
+## PROD-L8.32K Runtime Boundary Execution Block
+
+Implementation execution must not start from session baseline acceptance or IU planning completion. It may start only after `SESSION_LEDGER.md` records `IU_EXECUTION_AUTHORIZED` after IU plan review and the active gate validator result allows execution. If the validator is not run or fails, do not edit project files.

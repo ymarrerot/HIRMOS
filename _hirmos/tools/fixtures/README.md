@@ -111,3 +111,18 @@ The regression suite now includes negative generated-run fixtures for the L8.31 
 - delivery/current-state pointer divergence is reported as a generated-run gate failure.
 
 These fixtures protect the rule that generated-run compliance must be mechanically evidenced in artifacts, not merely narrated in the transcript.
+
+
+## PROD-L8.32K Runtime Boundary Fixtures
+
+Focused fixtures prove that IU planning and IU execution remain separate. A generated IU-mode session that creates IU files but records material project-file edits or lifecycle transition claims before `IU_EXECUTION_AUTHORIZED` must fail validation. Packet-first runtime and active gate validator invocation are protected as static/runtime surfaces.
+
+
+## PROD-L8.32L JIT / Derived Pointer Fixtures
+
+Focused fixtures verify that optional active artifacts are absent-valid until applicable, delivery/phase/archive pointers can be derived from filesystem source artifacts, and implementation-unit file lists are derived only after IU materialization.
+
+
+## PROD-L8.32S Runtime Command Surface Unification Fixtures
+
+Focused fixtures verify that the obsolete packet wrapper layer has been removed, `_hirmos/core/commands/*.md` is the canonical compact command runtime authority, and active framework files do not route through the obsolete packet wrapper layer.

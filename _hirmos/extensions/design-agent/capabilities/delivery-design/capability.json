@@ -16,7 +16,7 @@
   },
   "requires_artifacts": [
     "_hirmos/session/SESSION_STATE.json with session_focus = delivery_baseline or delivery reconciliation focus",
-    "_hirmos/session/SESSION_EXECUTION.md",
+    "_hirmos/session/SESSION_LEDGER.md",
     "_hirmos/system/delivery/DELIVERY_PLAN.md when it exists",
     "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md when it exists"
   ],
@@ -24,7 +24,7 @@
     "_hirmos/system/delivery/DELIVERY_PLAN.md",
     "_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md",
     "_hirmos/system/delivery/<delivery-id>/unresolved-items.md when delivery-baseline blockers are found",
-    "_hirmos/session/SESSION_EXECUTION.md"
+    "_hirmos/session/SESSION_LEDGER.md"
   ],
   "execution_controls": [
     "Delivery Shape Decision Gate",

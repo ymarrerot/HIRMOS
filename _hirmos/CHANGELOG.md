@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased — Residual status hygiene hardening
+
+- Simplifies residual delivery roadmap status by removing writable top-level `Roadmap status:` authority from `DELIVERY_PLAN.md`; roadmap posture is derived from roadmap/register rows, delivery scope authority, phase files, archives, and accepted-state pointers.
+- Hardens installed-project fixture isolation so focused Q concordance fixtures reset live generated state before creating synthetic cases.
+- Adds L8.32R residual-status hygiene checks for recreated `Roadmap status:`, writable `Parent delivery status:`, narrative `Phase Progress Ledger`, forbidden macOS package artifacts, and completed-project README boilerplate.
+- Preserves governed pause richness, IU Planning → IU Execution boundary, active generated-artifact validation, and user-facing decision options.
+- No framework version bump in this patch; framework metadata remains 1.1.9 and CLI package remains 1.3.4.
+
+## 1.1.9 — Token-efficient runtime boundary and derived-state stabilization
+
+- Bumped framework metadata and validator expected version to 1.1.9.
+- Consolidates the L8.32C–L simplification wave: `SESSION_EXECUTION.md` was replaced by compact `SESSION_LEDGER.md`, `SESSION_SCOPE.md` now carries compact IU planning pointers only, bootstrap/session ledger/evidence/current-state/delivery/phase artifacts were compressed, and normal command execution now starts from compact command files.
+- Restores the explicit IU Planning → governed pause → IU Execution boundary: accepting a session baseline in IU mode authorizes IU planning/materialization only; material project-file edits require separate `IU_EXECUTION_AUTHORIZED` after IU plan review.
+- Adds focused runtime-boundary fixtures proving material edits and lifecycle transition claims fail before `IU_EXECUTION_AUTHORIZED`.
+- Adds just-in-time artifact creation and derived pointer-index support so optional artifacts are not pre-created as empty future synchronization obligations and pointer indexes are treated as derived navigation caches, not independent truth.
+- Adds derived command-state cache metadata to `SESSION_STATE.json`; `allowed_next_commands` and `recommended_next_command` remain compatibility fields but are not independent authority.
+- Preserves CLI package version 1.3.4 because terminal CLI behavior did not change.
+
 ## 1.1.7 — Single interaction posture and context-resilient routing stabilization
 
 - Bumped framework metadata and validator expected version to 1.1.7.
@@ -75,7 +93,7 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 ### Changed
 
 - Hardened Understand System State guidance so HIRMOS reads `CURRENT_SYSTEM_STATE.md` first, follows active governance pointers, and reads materially relevant source artifacts before design or implementation.
-- Added runtime freshness guidance so `SESSION_STATE.json`, `SESSION_EXECUTION.md`, `PHASE-xx.md`, `SESSION_SCOPE.md`, `EVIDENCE.md`, and active accepted-state pointers must be reconciled after governed transitions and implementation passes.
+- Added runtime freshness guidance so `SESSION_STATE.json`, `SESSION_LEDGER.md`, `PHASE-xx.md`, `SESSION_SCOPE.md`, `EVIDENCE.md`, and active accepted-state pointers must be reconciled after governed transitions and implementation passes.
 - Clarified implementation-unit timing: when implementation-unit mode is active, `IU-xx.md` files are instantiated after session-baseline acceptance and before material code changes begin.
 - Hardened gated continue semantics so unresolved gated items cannot be silently accepted by bare `hirmos continue` unless the surfaced recommendation is explicitly adopted, the item is resolved, or it is reclassified/deferred under governed rules.
 - Added evidence claim reconciliation guidance so historical failures and current pass/fail claims cannot remain contradictory.
@@ -101,7 +119,7 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 ### Changed
 
 - Aligned phase entry-gate templates and validator expectations by requiring scalar `Entry criteria status` evidence, with tables treated as supplementary evidence instead of the only authority signal.
-- Hardened post-continue ledger freshness so `SESSION_EXECUTION.md` reflects completed phase-baseline and session-scope routing after `PHASE-xx.md` and `SESSION_SCOPE.md` exist.
+- Hardened post-continue ledger freshness so `SESSION_LEDGER.md` reflects completed phase-baseline and session-scope routing after `PHASE-xx.md` and `SESSION_SCOPE.md` exist.
 - Clarified delivery plan freshness after phase instantiation so active phase pointers must not remain `none` once a phase is active.
 - Added status-aware delivery-baseline wording so pre-acceptance deliveries are described as Candidate Delivery, Proposed Delivery, or Delivery Under Baseline Review instead of Active Delivery.
 - Clarified that generated artifacts should explain delivery/session/phase routing from current-state evidence, scope, governance need, validation risk, continuity need, and artifact authority.
@@ -161,7 +179,7 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 - Delayed full implementation-unit artifact creation until after the session scope baseline is accepted or amended.
 - Hardened `unresolved-items.md` as the canonical register for gated items, non-gating assumptions, technical-review items, blockers, and material uncertainties.
 - Clarified that `SESSION_SCOPE.md` remains the complete active session authority and close-verification root, while optional `REQUIREMENTS.md` and `DESIGN.md` are subordinate detail authorities only when explicitly adopted.
-- Tightened responsibility boundaries for `REQUIREMENTS.md`, `DESIGN.md`, `SESSION_EXECUTION.md`, implementation-unit records, delivery scopes, and phase scopes.
+- Tightened responsibility boundaries for `REQUIREMENTS.md`, `DESIGN.md`, `SESSION_LEDGER.md`, implementation-unit records, delivery scopes, and phase scopes.
 - Consolidated runtime timestamp context into `SESSION_STATE.json` and kept timestamp capture evidence in `BOOTSTRAP_REPORT.md`.
 - Restricted project-agnostic marker checks to shipped framework surfaces so generated project artifacts may mention project-specific names and features.
 - Removed residual scope-authority wording that used legacy contract/baseline terminology in shipped framework surfaces.
@@ -180,7 +198,7 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 ### Changed
 
-- Made `SESSION_SCOPE.md` the active session authority and constrained `SESSION_EXECUTION.md` to a compact continuation handoff and append-only command/control ledger.
+- Made `SESSION_SCOPE.md` the active session authority and constrained `SESSION_LEDGER.md` to a compact continuation handoff and append-only command/control ledger.
 - Changed `DELIVERY_PLAN.md` into a durable roadmap/register that is updated or appended when future deliveries are planned, rather than overwritten.
 - Made `DELIVERY_SCOPE.md` the default combined authority for a durable delivery or release.
 - Renamed canonical independent requirements authority to `REQUIREMENTS.md` and kept `REQUIREMENTS.md` / `DESIGN.md` conditional rather than default implementation-session artifacts.
@@ -204,18 +222,18 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 - Added concrete Next.js TypeScript engineering standards for local PostgreSQL preference, long-running job architecture, usage/quota safety, provider boundaries, upload/storage hygiene, environment hygiene, and evidence expectations.
 - Added explicit smallest-sufficient delivery-shape decision logic for greenfield, brownfield, and mixed work.
 - Added the strict-necessity session artifact rule: separate artifacts are justified only for authority, machine state, evidence, gating, continuity, or audit/history.
-- Added a required near-top `Current Continuation Snapshot` section in `SESSION_EXECUTION.md` for cross-chat continuation.
+- Added a required near-top `Current Continuation Snapshot` section in `SESSION_LEDGER.md` for cross-chat continuation.
 
 ### Changed
 
 - Strengthened core lifecycle, command, runtime-integration, and stack protocols so production-shaped implementation is a core HIRMOS posture, not only stack-level advice.
 - Updated Design and Implementation entrypoints to reject unapproved demo/local shortcuts as neutral implementation choices.
 - Changed delivery-shape selection so HIRMOS prefers the smallest sufficient governed delivery shape instead of treating broad work as automatically multi-session.
-- Consolidated former session support-artifact responsibilities into major artifacts: `SESSION_SCOPE.md`, `DESIGN.md`, `EVIDENCE.md`, `SESSION_EXECUTION.md`, and implementation units.
-- Consolidated checkpoint continuation into `SESSION_EXECUTION.md` and removed the separate checkpoint artifact/folder model.
+- Consolidated former session support-artifact responsibilities into major artifacts: `SESSION_SCOPE.md`, `DESIGN.md`, `EVIDENCE.md`, `SESSION_LEDGER.md`, and implementation units.
+- Consolidated checkpoint continuation into `SESSION_LEDGER.md` and removed the separate checkpoint artifact/folder model.
 - Removed the session `support/` directory model and moved conditional machine-readable stack routing to root `stack-resolution.json`.
-- Minimized `SESSION_STATE.json` so it owns only machine-readable command and lifecycle state, while `SESSION_EXECUTION.md` owns human-readable continuation.
-- Improved artifact quality rules around `SESSION_SCOPE.md`, `DESIGN.md`, `SESSION_EXECUTION.md`, unresolved-item detail, and stale support-artifact regressions.
+- Minimized `SESSION_STATE.json` so it owns only machine-readable command and lifecycle state, while `SESSION_LEDGER.md` owns human-readable continuation.
+- Improved artifact quality rules around `SESSION_SCOPE.md`, `DESIGN.md`, `SESSION_LEDGER.md`, unresolved-item detail, and stale support-artifact regressions.
 
 ### Removed
 
@@ -278,7 +296,7 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 - Introduced HIRMOS as an orchestration framework for AI-assisted software development.
 - Added the current-state-first lifecycle: User Request → Understand System State → Design → Implementation → Update System State.
 - Added the workflow command set used inside AI coding tools: `hirmos start`, `hirmos status`, `hirmos continue`, and `hirmos close`.
-- Added the contract-centered session artifact spine: `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, `REQUIREMENTS.md`, `DESIGN.md`, `unresolved-items.md`, `SESSION_SCOPE.md` close verification, and `implementation-units/IU-xx.md`.
+- Added the contract-centered session artifact spine: `SESSION_SCOPE.md`, `SESSION_LEDGER.md`, `REQUIREMENTS.md`, `DESIGN.md`, `unresolved-items.md`, `SESSION_SCOPE.md` close verification, and `implementation-units/IU-xx.md`.
 - Added durable accepted-state artifacts under `_hirmos/system/accepted-state/`.
 - Added delivery and phase lifecycle support for large or multi-session work.
 - Added canonical extension/capability routing through extension manifests, extension default entrypoints, capability manifests, and capability default entrypoints.
@@ -294,7 +312,7 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 ## Unreleased — PROD-L8.15
 
 - Hardened current-state-first source reading discipline: `CURRENT_SYSTEM_STATE.md` is mandatory first read, followed by scoped reads of active and materially relevant source artifacts.
-- Added runtime freshness expectations for session execution, phase lifecycle, session scope previews, evidence reconciliation, and active current-state pointers.
+- Added runtime freshness expectations for session ledger, phase lifecycle, session scope previews, evidence reconciliation, and active current-state pointers.
 - Hardened gated unresolved item continue semantics so pending user input cannot be silently accepted by bare `hirmos continue`.
 - Made `DECISION_LOG.md` conditional rather than a default accepted-state root artifact; `CARRY_FORWARD.md` remains active-only support.
 - Added reuse-first complexity-control doctrine before adding new governance surfaces.
@@ -303,12 +321,12 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 - Hardened idle-state `hirmos continue` semantics: no direct project-file mutation while no active governed session exists.
 - Hardened IU pre-execution authority: when IU mode is active, IU artifacts must exist before material code changes; retrospective IU creation is a governance deviation unless lightweight/no-IU mode was declared before edits.
-- Hardened correction-ledger expectations so material correction commands are recorded individually in `SESSION_EXECUTION.md`.
+- Hardened correction-ledger expectations so material correction commands are recorded individually in `SESSION_LEDGER.md`.
 - Hardened close-time chronology, delivery-plan freshness, and later carry-forward resolution concordance.
 
 ## PROD-L8.21 IU set authority and close-time concordance hardening
 
-- Added an IU Set Authority Checkpoint in `SESSION_EXECUTION.md` to prove IU authority before material edits.
+- Added an IU Set Authority Checkpoint in `SESSION_LEDGER.md` to prove IU authority before material edits.
 - Added minimum IU content requirements so thin stubs cannot authorize implementation in IU mode.
 - Added close-time concordance sweeps for phase files, delivery plan pointers, current-state source indexes, carry-forward invariants, and evidence semantics.
 - Clarified evidence levels: implementation accepted, runtime verified, and production verified.

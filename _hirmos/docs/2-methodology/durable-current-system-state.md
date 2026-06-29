@@ -1,68 +1,77 @@
 # Durable Current System State
 
-HIRMOS maintains accepted current system truth in:
+`CURRENT_SYSTEM_STATE.md` is the accepted-state navigation surface for the next HIRMOS run.
+
+It should answer:
 
 ```text
-_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md
+What is the accepted current state of this project, and where is the source evidence?
 ```
 
-This artifact answers: **what is true about the software system right now?**
+It should not become a duplicate narrative of every delivery, phase, session, evidence record, or archive file.
+
+## Ownership
+
+`CURRENT_SYSTEM_STATE.md` owns:
+
+- compact accepted-state posture;
+- active/next delivery pointers when delivery mode applies;
+- latest accepted close pointer;
+- Work History Ledger pointers;
+- Source Artifact Index pointers;
+- known limitations and carry-forward pointers when accepted at close.
+
+It does not own:
+
+- detailed delivery scope;
+- phase progress detail;
+- session scope detail;
+- IU evidence detail;
+- archive content;
+- mutable next-command truth.
+
+## Derived pointer discipline
+
+Pointer indexes are navigation caches. They should be derived from source artifacts whenever possible:
+
+- delivery directories;
+- phase files;
+- session archives;
+- `SESSION_LEDGER.md` close rows;
+- archive manifests;
+- accepted close evidence.
+
+If a derived pointer conflicts with a source artifact, the source artifact wins and the stale pointer should be corrected or validation should fail closed.
+
+## Delivery mode
+
+For multi-session work, Current System State may point to:
+
+```text
+_hirmos/system/delivery/DELIVERY_PLAN.md
+_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md
+_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
+```
+
+Those delivery and phase artifacts remain authority for their own scope. Current System State is a map, not a second copy of their contents.
+
+## Close-time update
+
+At close, HIRMOS should update Current System State only with accepted outcomes and source pointers. Evidence-only artifacts remain in archive unless explicitly accepted into current state.
+
+Do not use Current System State to hide unresolved items, overclaim production readiness, or rewrite history.
+
 
 ## Supporting artifacts
 
-These are the supporting artifacts for durable current-state management.
+Current System State points to supporting artifacts such as delivery scope, session archives, evidence records, carry-forward records, and source artifact indexes. Those supporting artifacts retain their own authority; Current System State should not duplicate them.
 
-| Artifact | Use it for | Do not use it for |
-|---|---|---|
-| `CURRENT_SYSTEM_STATE.md` | accepted-state navigation authority | session log or backlog |
-| `CARRY_FORWARD.md` | unresolved/future-session obligations | accepted feature list |
-| `DECISION_LOG.md` | conditional durable accepted/rejected/superseded decisions when explicit governance is active | full design doc |
-| session archives | historical evidence | current truth substitute |
-
-## Close rule
-
-`hirmos close` is not complete until accepted session outcomes are registered in `CURRENT_SYSTEM_STATE.md` navigation, Work History Ledger, Source Artifact Index, and concise summary as needed or explicitly rejected / not applied.
-
-## Why this exists
-
-Without a durable current-state artifact, future sessions must reconstruct truth from archives, chat history, and summaries. That is exactly what HIRMOS is designed to avoid.
-
-
-## Current-system-state-first understanding
-
-HIRMOS must read `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` before meaningful Design or Implementation when the file exists. This keeps future sessions grounded in accepted current truth instead of reconstructing truth from chat memory, old session archives, or repository guesses.
-
-Supporting files have narrower roles:
-
-- `CARRY_FORWARD.md` preserves active unresolved and future-session obligations.
-- `DECISION_LOG.md` is conditional and preserves accepted, rejected, and superseded decisions only when explicit decision-log governance is active.
-- session archives preserve history/evidence only.
-
-Accepted-state navigation and latest-close metadata now live inside `CURRENT_SYSTEM_STATE.md`, not a separate index file.
-
-If `CURRENT_SYSTEM_STATE.md` is missing, HIRMOS must record whether the workspace is a new installation or whether accepted state is incomplete.
 
 ## Accepted-state invariants and canonical values
 
-Accepted-state artifacts are durable records. HIRMOS updates them during close, but must preserve their artifact identity and invariant blocks.
+Accepted-state artifacts should use canonical runtime posture values, evidence states, and production-readiness language so future sessions can read them consistently.
 
-Use canonical runtime posture values only. Use canonical evidence states only. Put nuance in notes/rationale fields instead of inventing new status values.
-
-`CURRENT_SYSTEM_STATE.md` includes accepted-state navigation and latest-close metadata. There is no separate hand-maintained current-state latest-close metadata.
 
 ## Active delivery pointers
 
-For multi-session work in any project type, `CURRENT_SYSTEM_STATE.md` must carry the active delivery pointer set: active delivery ID, Delivery Plan path, active Phase path, active phase status, last accepted phase/session, next recommended phase, and next governed command.
-
-These are pointers only. The durable Delivery Plan roadmap, Delivery Scope, and Phase files remain the delivery authority under `_hirmos/system/delivery/<delivery-id>/`.
-
-Future sessions must inspect these pointers before selecting a new delivery shape. If `Next recommended delivery` and `Next recommended delivery scope` are present, `hirmos start` should continue that planned delivery unless the user clearly asks for unrelated work.
- before deciding a new request can safely run as a single-session effort.
-
-## Delivery phase adoption pointer discipline
-
-When delivery governance is active, Current System State pointers identify the durable Delivery Plan and active Phase. A session may implement only after `SESSION_SCOPE.md` adopts exactly one durable `PHASE-xx.md` and maps that phase scope into authorized session work. Future sessions must treat the Current System State pointer as a discovery aid, not as a replacement for directly reading the Delivery Plan and Phase file.
-
-## Source-Complete, Not Content-Complete
-
-`CURRENT_SYSTEM_STATE.md` should remain source-complete, not content-complete. It must preserve the navigation spine and source pointers needed to find authoritative requirements/design/scope/evidence/history, but it should not duplicate all of that content into accepted state.
+When delivery mode is active, Current System State may contain Active delivery pointers to the delivery plan, delivery scope, active phase/session, latest accepted close, and next recommended delivery work. Future sessions must inspect these pointers, then read the source artifacts before acting.

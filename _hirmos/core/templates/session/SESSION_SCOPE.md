@@ -1,248 +1,205 @@
 # Session Scope
 
 Status: active-session Main Artifact.
-Purpose: define the authorized outcome, scoped requirements, governing design decisions, implementation boundaries, production-shaped gate, acceptance criteria, and close verification basis for the current HIRMOS session.
+Purpose: Own the accepted session boundary, scope, exclusions, evidence requirements, and compact IU planning pointers.
 
-This artifact is the complete active session authority and acceptance root. Implementation may not begin until this scope exists, is non-placeholder, and the relevant execution controls in `SESSION_EXECUTION.md` are satisfied. Close verification must answer whether the implementation satisfied `SESSION_SCOPE.md` first. Optional `REQUIREMENTS.md` and `DESIGN.md` may provide detailed requirement/design authority only when this file explicitly adopts them; they must not create independent session obligations absent from `SESSION_SCOPE.md`.
+Canonical owner: active session scope authority.
+
+This artifact owns what the current session is allowed to accomplish, what is excluded, what evidence is required, and which downstream authority artifacts must be created before implementation. It does not own bootstrap answers, implementation-unit contracts, execution evidence detail, carry-forward detail, delivery close posture, or accepted-state truth.
+
+## Governance Compatibility Markers / Ownership Summary
+
+This file remains the complete active session authority for accepted session scope, exclusions, evidence obligations, optional authority adoption, and close verification.
+
+Optional `REQUIREMENTS.md` and `DESIGN.md` may provide detailed requirement/design authority only when this file explicitly adopts them.
+
+- Adopted requirements / sections:
+- Adopted design decisions / sections:
+
+Delivery shape must be justified by the real software work.
+
+- Technically possible simpler shape:
+- If multi-session is selected, smallest honest phase count:
+- the parent delivery must justify the selected phase count as the smallest honest count
+
+Governance posture: this preview is not implementation authority.
+
+Full IU authority belongs in `_hirmos/session/implementation-units/IU-xx.md`.
+
 
 ## 1. Session Identity
 
 - Session ID:
-- Session title:
-- User request / command:
-- Canonical interaction posture:
-- Session type: design-only | implementation | review | close/update-state | other
-- Current lifecycle boundary:
-- Current System State basis: `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`
-- Delivery shape:
-- Status:
+- Command / user request:
+- Session type:
+- Delivery ID, if applicable:
+- Phase ID, if applicable:
+- Created:
+- Last updated:
+- Scope status: DRAFT | UNDER_BASELINE_REVIEW | ACCEPTED | AMENDED | BLOCKED | CLOSED
 
 ## 2. Source Inputs and Authority Basis
 
-Identify every source this session scope must cover. Source inputs are evidence and focus signals until reconciled here.
+List only durable inputs used to define this scope. Do not rely on chat memory alone.
 
-| Source type | Artifact/path/source | Required? | Coverage obligation |
+| Source | Path / reference | Adopted? | Notes |
 |---|---|---:|---|
-| Current System State | `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` | yes | Must be read before meaningful work and delivery pointers must be inspected. |
-| User request | | yes | Must be reflected in authorized outcome, requirements, exclusions, and acceptance criteria. |
-| Existing accepted-state artifacts | | conditional | Must be adopted when existing state constrains the session. |
-| Delivery Scope | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` when applicable | conditional | Must be adopted and narrowed when this session belongs to a durable delivery. |
-| Durable Phase | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` when applicable | conditional | Must be adopted and narrowed when this session implements a durable phase. |
-| Independent Requirements | `_hirmos/session/REQUIREMENTS.md` or delivery-level `REQUIREMENTS.md` when justified | conditional | Use only when separate requirements authority is justified. |
-| Independent Design | `_hirmos/session/DESIGN.md` or delivery-level `DESIGN.md` when justified | conditional | Use only when separate design authority is justified. |
-| Other | | | |
+| User request | | YES / NO | |
+| Current system state | `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` | YES / NO | |
+| Delivery scope | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | YES / NO / N/A | |
+| Phase file | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` | YES / NO / N/A | |
+| Requirements detail | `_hirmos/session/REQUIREMENTS.md` | YES / NO / N/A | |
+| Design detail | `_hirmos/session/DESIGN.md` | YES / NO / N/A | |
 
 ### Optional authority artifact justification and adoption
 
-Use this section only when this single session creates separate `REQUIREMENTS.md` or `DESIGN.md`. Leave as `NOT_APPLICABLE` when `SESSION_SCOPE.md` is the only active session authority.
+Optional session `REQUIREMENTS.md` or `DESIGN.md` files are subordinate detail authorities only when explicitly adopted here.
 
-`SESSION_SCOPE.md` remains the complete active session authority. Optional `REQUIREMENTS.md` and `DESIGN.md` are subordinate detail authorities only for the IDs or sections explicitly adopted here. They must not create independent session obligations that are absent from this scope.
+| Optional artifact | Created? | Adopted into scope? | Why needed | Scope sections covered |
+|---|---:|---:|---|---|
+| REQUIREMENTS.md | YES / NO | YES / NO | | |
+| DESIGN.md | YES / NO | YES / NO | | |
 
-- Separate `REQUIREMENTS.md` created? YES | NO
-- Justification if yes:
-- Adopted requirements / sections: `REQ-*` / sections / NOT_APPLICABLE
-- Requirement obligations excluded from this session, if any:
-- Separate `DESIGN.md` created? YES | NO
-- Justification if yes:
-- Adopted design decisions / sections: `SD-*` / sections / NOT_APPLICABLE
-- Design decisions excluded from this session, if any:
-- Why this does not recreate duplicate authority:
-- Review pointer for user / technical reviewer:
+## 3. Authorized Scope / Outcome
 
-Close rule: if this section adopts `REQUIREMENTS.md` or `DESIGN.md`, those adopted items are evaluated as part of `SESSION_SCOPE.md` satisfaction. Non-adopted details remain reference material only.
+State the bounded result this session is authorized to produce.
 
-## 3. Authorized Outcome
-
-Describe the outcome this session is authorized to produce. Keep this session-scoped; do not restate a whole product or delivery unless required for adoption.
-
-- Intended user-visible outcome:
-- Intended system-visible outcome:
-- Accepted state / artifact outcome:
-- Non-goals:
+- Authorized outcome:
+- Success posture: ACCEPTED | PARTIAL | BLOCKED | FAILED
+- User-visible output expected:
+- Project-file mutation authorized before baseline acceptance: NO
 
 ## 4. Scoped Requirements
 
-List the functional, non-functional, and constraint requirements needed to govern this session. Requirement IDs are optional for small/simple work and required when traceability is material.
-
-| ID | Scoped requirement | Source authority | Acceptance evidence required | Status |
-|---|---|---|---|---|
-| SR-01 | | | | PENDING |
+| Requirement ID | Requirement / obligation | Source | In scope? | Evidence required |
+|---|---|---|---:|---|
+| REQ-01 | | | YES / NO | |
 
 ### Explicit exclusions
 
-| ID | Excluded item | Reason | Future path, if any |
+| Exclusion ID | Out-of-scope item | Reason | Carry-forward / delivery pointer |
 |---|---|---|---|
 | EX-01 | | | |
 
 ### Existing-system preservation rules
 
-Record what existing behavior, files, APIs, data, UX, tests, runtime behavior, artifacts, or framework contracts must not regress.
-
-| ID | Preservation requirement | Affected area | Evidence required |
-|---|---|---|---|
-| PR-01 | | | |
+| Rule ID | Existing behavior / file / invariant to preserve | Evidence / check |
+|---|---|---|
+| PRES-01 | | |
 
 ## 5. Design and Implementation Decisions
 
-Record only design decisions required to authorize this session. Create separate `DESIGN.md` only when design authority needs independent durable review.
+Record only decisions that define scope boundaries or implementation permission. Detailed design belongs in `DESIGN.md` when adopted.
 
-| Decision ID | Decision area | Governing decision | Rationale / current-state basis | Evidence required | Status |
-|---|---|---|---|---|---|
-| SD-01 | Architecture | | | | PENDING |
-| SD-02 | Stack / framework | | | | PENDING |
-| SD-03 | Data / persistence | | | | PENDING |
-| SD-04 | Runtime / integration | | | | PENDING |
-| SD-05 | Provider / external service | | | | PENDING |
-| SD-06 | Security / privacy | | | | PENDING |
-
-Decisions deferred to unresolved-items.md:
-
-- Gated:
-- Non-gating:
-- Technical-review:
+| Decision ID | Decision | Reason | Source / approval | Reversible? |
+|---|---|---|---|---|
+| DEC-01 | | | | YES / NO |
 
 ## 6. Delivery Shape Decision
 
-This section is required for every implementation-capable session before implementation readiness.
+### Current System State delivery pointer basis
 
-What is the smallest sufficient governed delivery shape for this request?
-Answer: SINGLE_SESSION_VERTICAL_SLICE | SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS | MULTI_SESSION_DELIVERY | MULTI_SESSION_DELIVERY_WITH_PHASE_FILES | UNCERTAIN
+- Next recommended delivery:
+- Pointer consistency result: PASS | FAIL | BLOCKED | NOT_APPLICABLE
 
-- Project type: GREENFIELD | BROWNFIELD_TARGETED | BROWNFIELD_MULTISESSION | MIXED | UNKNOWN
-- Evidence:
-- Decision factors:
-- Technically possible simpler shape:
+
+Recommended delivery shape:
+
+- smallest sufficient governed delivery shape:
+- Shape: SINGLE_SESSION | SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS | MULTI_SESSION_DELIVERY | MULTI_SESSION_DELIVERY_WITH_PHASE_FILES
+- Session focus:
+- Simpler shape considered:
 - Why simpler shape is acceptable or insufficient:
+- Selected shape justification:
 - Why selected shape is necessary for this real software work:
-- Larger-shape overhead analysis:
 - User interaction / token-cost impact:
 - Risk if compressed into a smaller shape:
-- If multi-session is selected, smallest honest phase count:
-- Phase-count options considered:
-- Why fewer phases are insufficient or acceptable:
-- Why this phase count is the smallest honest count:
+
+When multi-session delivery is selected, include phase-count honesty:
+
+- Phase count considered:
+  - 2 phases: accepted/rejected because...
+  - 3 phases: accepted/rejected because...
+  - 4+ phases: accepted/rejected because...
+- Selected phase count:
+- Why this count is the smallest honest count:
 - Phase merge pressure result:
-- Phase-count user interaction / token-cost impact:
-- Risk if compressed into fewer phases:
-- Triggers considered:
-- Triggers ruled out:
-- Selected shape justification:
-- If `SINGLE_SESSION_VERTICAL_SLICE`, why is one bounded session safe without separate implementation units?
-- If `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS`, implementation-shape preview before baseline acceptance, or implementation-unit coverage after acceptance:
-- If `MULTI_SESSION_DELIVERY`, required Delivery roadmap: `_hirmos/system/delivery/DELIVERY_PLAN.md` and delivery scope: `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
-- If `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`, required Delivery Plan, delivery scope, and active phase path: `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`
-- Current System State delivery pointer basis: `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` Active Development Context and Delivery Pointers
-- Last accepted delivery:
-- Next recommended delivery:
-- Next recommended delivery scope:
-- Pointer consistency result: CONSISTENT | BLOCKED | NOT_APPLICABLE
-- If UNCERTAIN, what must be inspected before deciding?
+- Cost / interaction impact:
+- Risk if compressed further:
 
-Fail-closed rule:
-
-- `UNCERTAIN` blocks implementation readiness.
-- `SINGLE_SESSION_VERTICAL_SLICE` requires affirmative bounded-scope safety evidence.
-- `SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS` requires implementation units that collectively cover authorized scope after the session scope baseline is accepted or amended. Before acceptance, do not create full implementation-unit artifacts; record only a compact implementation-shape preview when needed for review.
-- `MULTI_SESSION_DELIVERY` requires a durable Delivery Plan and Delivery Scope before implementation authorization.
-- `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` requires a durable Delivery Plan, Delivery Scope, and adopted phase file before implementation authorization.
-- The selected shape must be the smallest shape that preserves engineering quality, implementation truth, validation, continuity, accepted-state integrity, and practical user interaction cost.
-- Delivery shape must be justified by the real software work, not by framework testing, inspection, or dogfood context.
-- When this session belongs to a multi-session delivery, the parent delivery must justify the selected phase count as the smallest honest count; this session must not preserve a thin phase merely because it was previously proposed if merge pressure shows it can be combined without weakening validation, reviewability, continuity, or accepted-state integrity.
+Phase merge pressure check: every proposed phase after phase 2 must answer whether it can be merged into an earlier or later phase without losing honest validation, reviewability, continuity, or accepted-state integrity. If YES, merge it. If NO, explain the material boundary that requires keeping it separate.
 
 ## 7. Production-Shaped Engineering Gate
 
-Required for implementation-capable software sessions before implementation authorization and reviewed again at close.
-
-| Gate area | Required production-shaped posture | Session decision / evidence required | Status |
-|---|---|---|---|
-| Production-shaped default | The session aims for production-shaped implementation unless explicitly scoped otherwise. | Design decision and scope evidence | PENDING |
-| Persistence / database | Durable business data uses durable persistence; local mirrors intended production where practical. | Design + implementation evidence | PENDING |
-| Auth / authorization | Protected resources have server-side user/resource isolation. | Code/evidence | PENDING |
-| Background jobs / long-running work | Long-running AI/provider/file work is outside synchronous request paths. | Architecture + runtime evidence | PENDING |
-| Usage / quotas / billing / quotas | Mutations are transactional, concurrency-safe, idempotent, or explicitly limited. | Code/evidence | PENDING |
-| Provider APIs / external services | Provider boundary, env validation, and failure posture are explicit. | Code/config/evidence | PENDING |
-| File or object storage | Uploads/generated assets use validation, safe paths, and handoff hygiene. | Code/package evidence | PENDING |
-| Secrets and environment configuration | `.env.example` exists when needed; secrets/runtime data are excluded from handoff/release outputs. | Packaging/handoff evidence | PENDING |
-| Critical-flow evidence | Critical product flow has test/smoke/runtime evidence appropriate to scope. | Validation evidence | PENDING |
-| Weaker local/demo choices | Any prototype, fixture, demo-only, or local-only shortcut is explicitly authorized. | Authorized limitation/rationale | PENDING |
-
-Implementation is not authorized to claim production-shaped completion beyond this gate. Close must preserve any unresolved or intentionally scoped-down posture as accepted-state limitation or carry-forward work.
+- Runtime / provider / DB / deployment boundary involved: YES / NO
+- Production-shaped risk level: LOW | MEDIUM | HIGH
+- Local-only evidence sufficient for this session? YES / NO / PARTIAL
+- Runtime/provider evidence required before close:
+- Production evidence explicitly not claimed:
 
 ## 8. Focus-Aware Capability Routing Evidence and Adoption
 
-Required when the selected delivery shape is `MULTI_SESSION_DELIVERY` or `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`.
-
-| Capability | Required output | Path / evidence | Status |
-|---|---|---|---|
-| delivery-baseline | Durable Delivery Plan / register | `_hirmos/system/delivery/DELIVERY_PLAN.md` | |
-| delivery-scope | Durable Delivery Scope | `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` | |
-| phase-baseline | Next active phase authority after delivery-baseline acceptance | `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md` | |
-| session-scope | Active Session Scope adoption | `_hirmos/session/SESSION_SCOPE.md` | |
-| implementation-readiness | Readiness gate | `_hirmos/session/SESSION_SCOPE.md` and optional `DESIGN.md` only when justified | |
+- Active command:
+- Selected focus: delivery-baseline | phase-baseline | session-scope | implementation-readiness | other
+- Capability routing used:
+- Why this capability is sufficient:
+- Why heavier routing is not needed:
+- Artifact paths read:
+- Artifact paths created / updated:
 
 ### Active Durable Phase Adoption
 
-Required when the selected delivery shape is `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES` and the session is implementation-capable.
+Does `SESSION_SCOPE.md` adopt exactly one active durable `PHASE-xx.md`? YES | NO | NOT_APPLICABLE
 
-- Adoption status: ADOPTED | NOT_APPLICABLE | BLOCKED
+
+Required only when this session narrows an active durable phase.
+
 - Delivery ID:
-- Delivery Plan path: `_hirmos/system/delivery/DELIVERY_PLAN.md`
-- Delivery Scope path: `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`
-- Active Phase ID:
-- Active Phase path: `_hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md`
-- Current System State active phase pointer:
-- Phase source status: NOT_STARTED | ACTIVE | BLOCKED | ACCEPTED | SUPERSEDED | UNKNOWN
-- Adoption mode: FULL_PHASE | EXPLICIT_PARTIAL_WITH_DEFERRED_ITEMS | DESIGN_ONLY_NO_IMPLEMENTATION
-- Implementation authorized from adopted phase? YES | NO
+- Phase ID:
+- Phase status before session:
+- Phase status update required: YES / NO / NOT_APPLICABLE
 
 #### Adopted phase scope
 
-| Phase item ID | Phase scope text / summary | Adopted into Session Scope item(s) | Implementation unit(s) | Status |
-|---|---|---|---|---|
-| PH-ITEM-01 | | SR-01 | IU-01 | PENDING |
+| Phase item | Adopted into session? | Session requirement / criterion | Deferred? |
+|---|---:|---|---:|
+| | YES / NO | | YES / NO |
 
 #### Phase exclusions / deferrals
 
-| Phase item ID | Excluded / deferred / blocked reason | Future phase/session path | User approval / evidence |
-|---|---|---|---|
-| | | | |
+| Phase item | Reason not in this session | Destination |
+|---|---|---|
+| | | |
 
 #### Durable phase adoption coverage question
 
-Does `SESSION_SCOPE.md` adopt exactly one active durable `PHASE-xx.md` and cover the intended phase scope without silent omissions?
+Does this session cover the intended phase slice honestly?
 
 - Answer: YES | NO | PARTIAL | NOT_APPLICABLE
 - Evidence:
 - Gaps:
-- Deferred / blocked items:
-- Fail-closed result: PASS | FAIL | NOT_ASSESSED
-
-Fail-closed rule: delivery-governed implementation is not authorized when this adoption section is missing, `BLOCKED`, `NOT_ASSESSED`, references more than one active phase, contradicts Current System State delivery pointers, or fails to map adopted phase items to authorized Session Scope items.
-
 
 ### Phase Entry Gate Evidence
 
-Required when a durable phase is adopted.
-
+- Entry criteria status:
+- Blocking unresolved items:
+- Required prior evidence:
 - Phase Entry Gate status: PASS / BLOCKED / UNCERTAIN / NOT_APPLICABLE
-- Evidence:
-- Implementation readiness impact:
+- Entry decision: PASS | FAIL | BLOCKED | NOT_APPLICABLE
 
 ### Phase Progress and Carry-Forward Control
 
-Required when a durable phase is adopted or closed.
-
-- Previous Phase Progress Ledger inspected: YES / NO / NOT_APPLICABLE
+- Previous Phase Progress Pointer Index inspected: YES / NO / NOT_APPLICABLE
+- Phase progress expected from this session:
+- Carry-forward candidates allowed only after close-time triage: YES
 - Carry-forward required if not accepted: YES / NO / NOT_APPLICABLE
-- Carry-forward evidence:
 
 ### Phase Acceptance Control
 
-Required when this session claims phase completion or updates phase status.
-
-- Phase acceptance will be evaluated through Phase Acceptance Evidence Gate.
-- Evidence:
-- Phase status update required: YES / NO / NOT_APPLICABLE
+- Phase acceptance will be evaluated through Phase Acceptance Evidence Gate: YES / NO / NOT_APPLICABLE
+- Phase acceptance may be claimed by this session: YES / NO
+- Required evidence before phase acceptance:
+- Phase status update target:
 
 ## 9. Autonomous Technical Progress Authorization
 
@@ -251,39 +208,45 @@ Required when this session claims phase completion or updates phase status.
 - Decision recording requirement:
 - User approval required before:
 
-## 10. Implementation Shape Preview
+## 10. Implementation Boundary and IU Planning Pointers
 
+Legacy marker: Implementation Shape Preview.
 
-Governance posture: this preview is not implementation authority by itself when IU mode is active. HIRMOS must not implement from this preview and later reconstruct IU artifacts as compliance evidence.
+Governance posture: Implementation Shape Preview is not execution authority. HIRMOS must not implement from this section and later reconstruct IU artifacts as compliance evidence.
 
-This section exists to help the user review the recommended baseline before implementation begins. It is not implementation-unit authority.
+This section exists only to decide whether implementation units are required and to provide compact planning pointers for the user. It must not contain detailed IU contracts, full acceptance criteria per IU, execution steps, sealed-contract language, or implementation-ready task tables. Detailed implementation-unit planning belongs only in `_hirmos/session/implementation-units/IU-xx.md` after scope acceptance/amendment.
 
-Implementation units required: YES | NO | TO_BE_DETERMINED_AFTER_SCOPE_ACCEPTANCE
+- Implementation units required: YES | NO | TO_BE_DETERMINED_AFTER_SCOPE_ACCEPTANCE
+- Reason:
+- Expected implementation areas, one line each:
+  - AREA-01:
+- Planned IU pointers, if known before acceptance:
 
-Reason:
-- 
+| Planned IU ID | One-line objective | Scope item IDs covered | Full IU file path after acceptance | Status |
+|---|---|---|---|---|
+| IU-01 | | REQ-01 / AC-01 | `_hirmos/session/implementation-units/IU-01.md` | PLANNED_ONLY |
 
-Expected implementation areas:
-- 
+Boundary rule:
 
-Instantiation rule:
+- `SESSION_SCOPE.md` may identify planned IU IDs, one-line objectives, scope item IDs, and future file paths.
+- `SESSION_SCOPE.md` must not define IU contract detail or execution authority.
 - Full implementation-unit artifacts must not be created until the session scope baseline is accepted or amended.
-- Detailed implementation-unit planning belongs only in `_hirmos/session/implementation-units/` after acceptance/amendment.
-- A preview here must be updated or replaced by actual implementation-unit artifacts when `hirmos continue` accepts the baseline and enters Implementation.
+- Material implementation may not begin until full IU artifacts exist, are non-placeholder, and the `SESSION_LEDGER.md` IU gate records PASS.
 
 ### Required implementation-unit coverage question
 
 Before acceptance:
 
-- Is a detailed implementation-unit plan required for the user to accept/change this baseline? YES | NO
-- If YES, why is a compact preview insufficient?
+- Are implementation units required for safe execution? YES | NO
+- Is a compact planned-IU pointer list sufficient for baseline review? YES | NO
+- If NO, why must the user review more detail before acceptance?
 
 After acceptance/amendment:
 
-Do instantiated implementation units collectively cover 100% of `SESSION_SCOPE.md`?
+Do instantiated implementation units collectively cover 100% of accepted `SESSION_SCOPE.md` implementation scope?
 
 - Answer: YES | NO | PARTIAL | NOT_APPLICABLE
-- Evidence:
+- Evidence pointer: `_hirmos/session/SESSION_LEDGER.md` IU Set Coverage Map and `_hirmos/session/implementation-units/IU-*.md`
 - Gaps:
 - Deferred items:
 
@@ -322,7 +285,7 @@ Evidence destination:
 
 - `_hirmos/session/EVIDENCE.md` when command/runtime/claim/close evidence is material.
 - `_hirmos/session/implementation-units/IU-xx.md` when evidence belongs to a specific implementation unit.
-- `SESSION_EXECUTION.md` for execution ledger entries and continuation-state summaries, not as a substitute for material evidence.
+- `SESSION_LEDGER.md` for execution ledger entries and continuation-state summaries, not as a substitute for material evidence.
 
 ## 13. Acceptance Criteria
 
@@ -343,7 +306,6 @@ Record every scope change after initial session scope approval.
 ## 15. Session Satisfaction Review and Close Verification
 
 Close must evaluate satisfaction against `SESSION_SCOPE.md` first. If `SESSION_SCOPE.md` adopts `REQUIREMENTS.md` or `DESIGN.md`, those adopted items are evaluated as part of `SESSION_SCOPE.md` satisfaction.
-
 
 This section must be completed before any `hirmos close` success claim.
 
@@ -401,19 +363,23 @@ Fail-closed rule: a delivery-governed session must not proceed to implementation
 
 ## Implementation Shape Preview Reconciliation
 
-When implementation-unit artifacts are later created, this preview must be reconciled:
+This section is retained only as a boundary/reconciliation marker. It must not contain preview-to-IU detail rows that duplicate IU authority.
 
-| Preview item | Implementation unit / evidence | Result | Notes |
-|---|---|---|---|
-| | `implementation-units/IU-xx.md` / `EVIDENCE.md` | PENDING / SATISFIED / PARTIAL / BLOCKED | |
+- Reconciliation owner: `_hirmos/session/SESSION_LEDGER.md` IU Set Coverage Map.
+- Contract owner: `_hirmos/session/implementation-units/IU-*.md`.
+- Scope owner: this `SESSION_SCOPE.md`.
+- Result: PENDING | SATISFIED | PARTIAL | BLOCKED | NOT_APPLICABLE
+- Notes:
 
-A preview row must not remain `PENDING` after implementation-unit records exist unless the row is explicitly not adopted, deferred, or blocked.
+A planned-IU pointer in `SESSION_SCOPE.md` must not be treated as implementation authority. After IU records exist, reconciliation is satisfied only through the ledger coverage map and the actual IU files.
 
 ## PROD-L8.21 Session-to-IU Coverage Requirement
 
-When the selected implementation shape uses implementation units, `SESSION_SCOPE.md` must identify adopted implementation scope items clearly enough for the IU Set Coverage Map in `SESSION_EXECUTION.md` to prove coverage before material edits.
+When the selected implementation shape uses implementation units, `SESSION_SCOPE.md` must identify adopted implementation scope items clearly enough for the IU Set Coverage Map in `SESSION_LEDGER.md` to prove coverage before material edits.
 
 Implementation Shape Preview is not execution authority. Execution authority begins only after accepted session scope plus complete IU Set Authority Checkpoint.
+
+SESSION_SCOPE may contain only compact IU planning pointers: planned IU ID, one-line objective, covered scope item IDs, and expected IU file path. It must not contain full IU contracts, binary acceptance detail per IU, execution steps, or sealed-contract authority.
 
 ## PROD-L8.31 Planned IU Count Gate
 
@@ -422,7 +388,13 @@ When implementation units are required or planned, record a concrete expected co
 - IU mode / IU planned: YES / NO / LIGHTWEIGHT_NO_IU
 - Planned IU count:
 - Planned IU files:
-- Scope items covered by planned IUs:
+- Scope items covered by planned IUs: scope item IDs only; no IU contract details here.
 - Implementation may begin before full IU artifacts exist: NO, unless `LIGHTWEIGHT_NO_IU` was declared before edits.
 
 The planned IU count must match actual full `IU-xx.md` files before material implementation begins. If the count is unknown, implementation is not authorized.
+
+## PROD-L8.32L Optional Artifact Applicability Rule
+
+Session scope may name optional artifacts only as applicability decisions or expected future paths. It must not require empty placeholder artifacts. Session-level `REQUIREMENTS.md`, `DESIGN.md`, `EVIDENCE.md`, `unresolved-items.md`, and IU files are created just in time when their owning concern becomes active and applicable.
+
+For each optional artifact named here, record one of: `created now`, `expected future path`, `not created because not applicable`, or `blocked pending decision`. Do not leave blank placeholder paths that future runs may mistake for active authority.

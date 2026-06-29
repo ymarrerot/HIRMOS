@@ -1,5 +1,9 @@
 # Upgrade Guide
 
+## 1.1.9 stabilization note
+
+HIRMOS 1.1.9 is the token-efficient runtime boundary and derived-state stabilization baseline. It includes the L8.32C–L simplification wave: compact session ledger replacement, scope/IU authority separation, compressed bootstrap and ledger surfaces, pointer-oriented evidence/current-state/delivery/phase artifacts, command-first runtime guidance, restored IU planning versus IU execution pause, runtime-boundary fixtures, just-in-time optional artifact creation, and derived pointer-index support. No terminal CLI version bump is required because terminal command behavior did not change.
+
 ## HIRMOS 1.1.6 baseline
 
 HIRMOS 1.1.6 is the sealed IU contract and delivery close evidence-posture stabilization baseline. It builds on 1.1.5 by separating immutable IU contract authority from append-only execution/review records, adding LLM Write Permission lines to implementation-unit sections, requiring rationale when tests/fixtures/validators are modified, simplifying delivery close concordance into compact posture/source-pointer summaries, and hardening evidence claims so implementation acceptance, local runtime verification, and production verification remain distinct. No terminal CLI version bump is required because terminal install behavior did not change.
@@ -73,9 +77,9 @@ At close, HIRMOS updates accepted state using an index-first model: current gove
 
 During `delivery_baseline` focus, HIRMOS uses the delivery scope and delivery unresolved register as the active authority surfaces and must not create session-level `SESSION_SCOPE.md`, session-level `unresolved-items.md`, session-level `REQUIREMENTS.md`, or session-level `DESIGN.md` by default. Those session-level artifacts are created only when the flow advances to a bounded phase/session baseline and the selected focus justifies them.
 
-During `phase_session_baseline` focus, HIRMOS must keep phase/session authority and ledgers fresh: the active `PHASE-xx.md` must include scalar `Entry criteria status`, `SESSION_SCOPE.md` must exist before session-baseline review, `SESSION_EXECUTION.md` must mark completed routing work as completed, and `DELIVERY_PLAN.md` must point to the active phase after phase instantiation.
+During `phase_session_baseline` focus, HIRMOS must keep phase/session authority and ledgers fresh: the active `PHASE-xx.md` must include scalar `Entry criteria status`, `SESSION_SCOPE.md` must exist before session-baseline review, `SESSION_LEDGER.md` must mark completed routing work as completed, and `DELIVERY_PLAN.md` must point to the active phase after phase instantiation.
 
-When implementation-unit mode is active, implementation-unit files must be instantiated after session-baseline acceptance and before material code changes begin. Retrospective implementation-unit creation requires explicit correction/reconciliation. Runtime mirrors such as `SESSION_EXECUTION.md`, `PHASE-xx.md`, `SESSION_SCOPE.md`, and `EVIDENCE.md` must be reconciled after implementation starts or completes so stale lower sections do not contradict current machine state.
+When implementation-unit mode is active, implementation-unit files must be instantiated after session-baseline acceptance and before material code changes begin. Retrospective implementation-unit creation requires explicit correction/reconciliation. Runtime mirrors such as `SESSION_LEDGER.md`, `PHASE-xx.md`, `SESSION_SCOPE.md`, and `EVIDENCE.md` must be reconciled after implementation starts or completes so stale lower sections do not contradict current machine state.
 
 Generated artifacts should explain routing from current system state, scope size, governance need, validation risk, continuity need, and artifact-authority boundaries. Project-type labels such as greenfield, brownfield, or mixed may remain useful evidence metadata, but they must not become the primary routing justification.
 
@@ -132,7 +136,7 @@ Framework users should treat `CURRENT_SYSTEM_STATE.md` as the first read and nav
 
 - Hardened idle-state `hirmos continue` semantics: no direct project-file mutation while no active governed session exists.
 - Hardened IU pre-execution authority: when IU mode is active, IU artifacts must exist before material code changes; retrospective IU creation is a governance deviation unless lightweight/no-IU mode was declared before edits.
-- Hardened correction-ledger expectations so material correction commands are recorded individually in `SESSION_EXECUTION.md`.
+- Hardened correction-ledger expectations so material correction commands are recorded individually in `SESSION_LEDGER.md`.
 - Hardened close-time chronology, delivery-plan freshness, and later carry-forward resolution concordance.
 
 ## PROD-L8.21 IU set authority and close-time concordance hardening

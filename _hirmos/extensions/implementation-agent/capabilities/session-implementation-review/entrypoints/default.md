@@ -10,7 +10,7 @@ Review all implementation units together against the Session Scope, delivery/pha
 
 - `_hirmos/session/SESSION_SCOPE.md` close verification updates
 - `_hirmos/session/SESSION_SCOPE.md` final-verdict mirror updates
-- `_hirmos/session/SESSION_EXECUTION.md` implementation-completion gate
+- `_hirmos/session/SESSION_LEDGER.md` implementation-completion gate
 
 ### Terminal States
 
@@ -61,28 +61,15 @@ Implementation completion cannot be claimed merely because all individual units 
 
 ## Required behavior
 
-1. Confirm and record this capability decision under `_hirmos/core/protocol/CAPABILITY_ROUTING.md` in `_hirmos/session/SESSION_EXECUTION.md`.
-2. Instantiate or update only the canonical artifacts required by the active request path.
-3. Produce non-placeholder content before claiming completion.
-4. Preserve lifecycle ownership boundaries; route back in `SESSION_EXECUTION.md` when evidence invalidates an earlier stage.
-5. Apply the extension method and this capability-specific execution surface; do not execute from chat summaries or raw inputs alone.
+Apply the shared Required behavior baseline in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md`. This entrypoint retains only capability-specific obligations below; do not duplicate the shared checklist here.
 
 ## Canonical interaction posture visibility
 
-Use the canonical HIRMOS interaction posture from `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail.
-
-- By default, surface only user-owned decisions, blockers, readiness/completion status, and concise artifact pointers.
-- Surface capability result, assumptions, artifacts/evidence, and review implications when requested or needed for responsible review.
-- Surface activation reason, entrypoint path, controls, artifacts, unresolved-item contribution, route-back decisions, and terminal-state basis when validation failure, blocker state, route-back, or inspection need requires it.
+Apply the shared interaction-posture rules in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the canonical posture authority at `_hirmos/core/authority/INTERACTION_POSTURE.md`. Surface rich governed pause/checkpoint outputs when they support user decision-making; do not reduce checkpoint clarity to save tokens.
 
 ## Unresolved-item producer obligation
 
-This capability is an unresolved-item producer and MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`.
-
-Before marking the capability complete, record exactly one producer outcome in `_hirmos/session/unresolved-items.md`: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`.
-
-Record full item fields in `unresolved-items.md`, including current status, downstream impact, and revalidation point; do not duplicate the full field schema in this entrypoint.
-
+Apply the shared unresolved-item producer obligation in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the owning protocol: this capability MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`. It must record exactly one producer outcome in the focus-appropriate unresolved register: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`. When items exist, preserve current status, downstream impact, and revalidation point.
 
 # PROD-L8.22 Session Implementation Review Gate
 

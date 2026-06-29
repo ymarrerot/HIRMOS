@@ -43,6 +43,7 @@ Summarize the bounded work scope in plain language. Use domain language first. A
 - Phase merge pressure check for this phase:
 - Why this phase remains separate instead of merged:
 - Why implementation-unit files are not instantiated yet:
+- If implementation units are required, next boundary: IU Planning only / no project-file edits.
 
 ### Decisions needing your action
 
@@ -127,7 +128,7 @@ Include only artifacts that exist and contain non-placeholder content.
 Say this explicitly:
 
 ```text
-If you run `hirmos continue`, HIRMOS will treat this session baseline as accepted unless you request changes first. It will then instantiate implementation-unit artifacts if needed and begin governed implementation.
+If you run `hirmos continue`, HIRMOS will treat this session baseline as accepted unless you request changes first. If implementation units are required, the next step is IU Planning only: HIRMOS will create or verify full `implementation-units/IU-xx.md` files, update `SESSION_LEDGER.md`, run active generated-artifact validation, and pause for `IU Plan — Review or Change`. It will not edit project files or begin IU execution until you later accept the IU plan. If no IU mode is required, HIRMOS will follow the lightweight implementation path allowed by the accepted baseline.
 ```
 
 ### How to respond
@@ -136,7 +137,8 @@ Offer these options exactly, adapting item numbers to the actual output:
 
 ```text
 To continue from this pause:
-hirmos continue "Accept session baseline"
+hirmos continue "Accept session baseline and create IU plan"
+hirmos continue "Accept session baseline"  # equivalent only when IU mode is not required
 hirmos continue "Change item 1: <your change>"
 hirmos continue "Mark item 2 uncertain"
 hirmos continue "Ask for technical review summary"
@@ -149,6 +151,10 @@ Do not run `hirmos continue`. Reply exactly: Stop / do not continue
 
 Use `_hirmos/core/authority/INTERACTION_POSTURE.md`: simple by default, transparent by design, rigorous underneath, and progressively disclosed. Keep the session-baseline checkpoint concise while including artifact paths for governed claims, unresolved items, carry-forward items, parent delivery/phase authority, and implementation-readiness claims. Increase visible detail when risk, blocker state, validation failure, route-back, or user request requires it.
 
+## Legacy phrase compatibility
+
+Legacy validator phrase: `instantiate implementation-unit artifacts if needed and begin governed implementation` is superseded by the L8.32I rule above when IU mode applies. In IU mode this means instantiate IU artifacts and pause for IU Plan review; it does not authorize project-file edits.
+
 ## Hard rules
 
 - Do not hide gated session unresolved items in prose.
@@ -157,3 +163,8 @@ Use `_hirmos/core/authority/INTERACTION_POSTURE.md`: simple by default, transpar
 - If a session item invalidates delivery authority, identify the delivery artifact that must be amended before claiming implementation readiness or close.
 - Do not create or reference full implementation-unit artifacts before the session baseline has been accepted or amended.
 - Recommend exactly one next governed command when the session baseline is acceptable: `hirmos continue`.
+- If IU mode is required, the next command label must say IU Planning, and the output must state that IU execution/project-file edits are not authorized yet.
+
+## Optional artifact creation note
+
+Do not create empty optional artifacts for future work. Name expected future artifact paths only as expected paths until the governed boundary creates them. If an optional artifact is not applicable, say so explicitly.

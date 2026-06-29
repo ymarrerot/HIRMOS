@@ -11,7 +11,7 @@ The central active-session artifact is:
 _hirmos/session/unresolved-items.md
 ```
 
-This register is the authoritative active-session source for unresolved-item details. Summaries in `SESSION_SCOPE.md`, checkpoints, `SESSION_EXECUTION.md`, or user-facing responses are control summaries only and are never sufficient substitutes for reading and applying `_hirmos/session/unresolved-items.md` directly.
+This register is the authoritative active-session source for unresolved-item details. Summaries in `SESSION_SCOPE.md`, checkpoints, `SESSION_LEDGER.md`, or user-facing responses are control summaries only and are never sufficient substitutes for reading and applying `_hirmos/session/unresolved-items.md` directly.
 
 ## Required lifecycle
 
@@ -29,7 +29,7 @@ Producer discovery
 
 A lifecycle boundary or capability must not claim completion while required unresolved-item work for that boundary is incomplete.
 
-Before claiming any of these boundaries, HIRMOS must directly review `_hirmos/session/unresolved-items.md` and record the review result in `SESSION_EXECUTION.md` controls:
+Before claiming any of these boundaries, HIRMOS must directly review `_hirmos/session/unresolved-items.md` and record the review result in `SESSION_LEDGER.md` controls:
 
 ```text
 bootstrap completion when a command will follow

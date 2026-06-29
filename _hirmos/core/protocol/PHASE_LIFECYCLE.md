@@ -202,9 +202,9 @@ A durable phase may span multiple sessions. HIRMOS must preserve phase progress 
 
 This enforcement is current-state-first and applies to `GREENFIELD`, `BROWNFIELD`, and `MIXED` phases. Before any continuation or close claim, HIRMOS must compare the adopted phase, the session scope, implementation-unit reviews, unresolved items, and Current System State delivery pointers.
 
-### Phase Progress Ledger
+### Phase Progress Pointer Index
 
-Every adopted `PHASE-xx.md` must maintain a Phase Progress Ledger that records session-by-session progress:
+Every adopted `PHASE-xx.md` must maintain a Phase Progress Pointer Index that records session-by-session progress:
 
 ```text
 Session/archive
@@ -245,10 +245,10 @@ explicit cancellation/supersession rationale
 
 ### Universal Progress Rules
 
-- `PARTIAL` close is valid only when incomplete work is recorded in the Phase Progress Ledger and Carry-Forward Items.
+- `PARTIAL` close is valid only when incomplete work is recorded in the Phase Progress Pointer Index and Carry-Forward Items.
 - `BLOCKED` close is valid only when blockers and required next actions are recorded.
 - `DEFERRED` close is valid only when the target phase/session or accepted risk is recorded.
-- A later session must inspect the previous Phase Progress Ledger before planning or continuing phase work.
+- A later session must inspect the previous Phase Progress Pointer Index before planning or continuing phase work.
 - `CURRENT_SYSTEM_STATE.md` must point to the still-active phase or next phase after close.
 
 ### Greenfield Progress Rules
@@ -281,7 +281,7 @@ Migration/data-safety gaps carried forward
 ### Fail-Closed Rules
 
 - A delivery-governed close with phase lifecycle result `PARTIAL`, `BLOCKED`, or `DEFERRED` fails if carry-forward obligations are missing.
-- A delivery-governed continuation fails if a previous partial phase has no Phase Progress Ledger.
+- A delivery-governed continuation fails if a previous partial phase has no Phase Progress Pointer Index.
 - Phase progress cannot be inferred from chat summaries alone.
 - A phase cannot advance to `ACCEPTED` while unresolved adopted work remains open, partial, blocked, or deferred without explicit exclusion/deferral.
 - `CURRENT_SYSTEM_STATE.md`, `DELIVERY_PLAN.md`, and `PHASE-xx.md` must agree on the active/next phase after partial or blocked close.
@@ -299,7 +299,7 @@ Before `PHASE-xx.md` may record `Lifecycle status: ACCEPTED`, HIRMOS must verify
 - all adopted Session Scope items are reviewed;
 - every implementation unit has execution evidence and unit review;
 - `SESSION_SCOPE.md` close verification records phase coverage and acceptance verdict;
-- `SESSION_EXECUTION.md` close/update control pointers records the accepted phase transaction;
+- `SESSION_LEDGER.md` close/update control pointers records the accepted phase transaction;
 - Delivery Plan and Phase file status are updated;
 - `CURRENT_SYSTEM_STATE.md` delivery pointers are refreshed;
 - unresolved, partial, blocked, or deferred work is reconciled before acceptance.
@@ -334,7 +334,7 @@ Required Phase Lifecycle Status Report fields:
 - Phase type
 - Phase Entry Gate status
 - Phase adoption status
-- Phase Progress Ledger status
+- Phase Progress Pointer Index status
 - Carry-Forward Items status
 - Phase Acceptance Evidence Gate status
 - Missing evidence / blocked controls

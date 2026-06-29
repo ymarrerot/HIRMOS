@@ -114,7 +114,7 @@ def write_basic_active_artifacts(root: Path) -> None:
     (session / "bootstrap").mkdir(exist_ok=True)
     (session / "bootstrap" / "BOOTSTRAP_REPORT.md").write_text(_l831a_full_bootstrap())
     (session / "SESSION_SCOPE.md").write_text("# SESSION_SCOPE.md\n")
-    (session / "SESSION_EXECUTION.md").write_text("# SESSION_EXECUTION.md\n")
+    (session / "SESSION_LEDGER.md").write_text("# SESSION_LEDGER.md\n")
     (session / "unresolved-items.md").write_text("# unresolved-items.md\n")
     (session / "SESSION_SCOPE.md close verification").write_text("# SESSION_SCOPE.md close verification\n")
 
@@ -287,7 +287,7 @@ Exactly one recommended next command:
     session_route_status = "PENDING" if stale_post_continue_ledger else "COMPLETED"
     phase_concordance_status = "NOT_APPLICABLE" if stale_post_continue_ledger else "SATISFIED"
     session_concordance_status = "NOT_APPLICABLE" if stale_post_continue_ledger else "SATISFIED"
-    (session / "SESSION_EXECUTION.md").write_text(f"""# SESSION_EXECUTION.md
+    (session / "SESSION_LEDGER.md").write_text(f"""# SESSION_LEDGER.md
 
 ## Focus-Aware Capability Routing Log
 
@@ -435,7 +435,7 @@ Next governed command: hirmos continue
         status = "DELIVERY_STATUS_UPDATE_APPLIED" if close_applied else "DELIVERY_STATUS_PENDING"
         cf_status = "RECORDED" if carry_forward_recorded else "NOT_APPLICABLE"
         cf_target = "_hirmos/system/delivery/fixture-delivery/phases/PHASE-02.md" if carry_forward_recorded else ""
-        (session / "SESSION_EXECUTION.md").write_text((session / "SESSION_EXECUTION.md").read_text() + f"""
+        (session / "SESSION_LEDGER.md").write_text((session / "SESSION_LEDGER.md").read_text() + f"""
 
 ## Close-Time Delivery / Phase Status Transaction
 
@@ -465,7 +465,7 @@ def mutate_idle_stale_scope(root: Path) -> None:
 def mutate_active_missing_unresolved_items(root: Path) -> None:
     activate_session(root)
     session = root / "session"
-    for filename in ["SESSION_SCOPE.md", "SESSION_EXECUTION.md"]:
+    for filename in ["SESSION_SCOPE.md", "SESSION_LEDGER.md"]:
         (session / filename).write_text(f"# {filename}\n")
     # Deliberately omit unresolved-items.md.
 
@@ -506,7 +506,7 @@ Delivery governance active: NOT_APPLICABLE
 Selected delivery shape: SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS
 Single-session safety justification: fixture bounded scope.
 """)
-    (session / "SESSION_EXECUTION.md").write_text("# SESSION_EXECUTION.md\n\n## Runtime Route Record\nSelected route: SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS\n")
+    (session / "SESSION_LEDGER.md").write_text("# SESSION_LEDGER.md\n\n## Runtime Route Record\nSelected route: SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS\n")
     (session / "unresolved-items.md").write_text("# unresolved-items.md\n")
 
 
@@ -642,7 +642,7 @@ def mutate_delivery_baseline_without_session_scope_passes(root: Path) -> None:
         p = session / rel
         if p.exists():
             p.unlink()
-    (session / "SESSION_EXECUTION.md").write_text("# SESSION_EXECUTION.md\n\nCurrent focus: delivery_baseline\nActive authority: _hirmos/system/delivery/fixture-delivery/DELIVERY_SCOPE.md\nCheckpoint: Delivery Baseline — Review or Change\n")
+    (session / "SESSION_LEDGER.md").write_text("# SESSION_LEDGER.md\n\nCurrent focus: delivery_baseline\nActive authority: _hirmos/system/delivery/fixture-delivery/DELIVERY_SCOPE.md\nCheckpoint: Delivery Baseline — Review or Change\n")
     delivery = root / "system" / "delivery" / "fixture-delivery"
     delivery.mkdir(parents=True, exist_ok=True)
     (root / "system" / "delivery" / "DELIVERY_PLAN.md").write_text("# DELIVERY_PLAN.md\n\nDelivery Index\n")
@@ -742,7 +742,7 @@ def _write_generated_history_session(root: Path, *, checkpoint: bool = True, thi
     }
     (sess / "SESSION_STATE.json").write_text(json.dumps(state, indent=2) + "\n")
     if checkpoint:
-        (sess / "SESSION_EXECUTION.md").write_text("""# SESSION_EXECUTION.md
+        (sess / "SESSION_LEDGER.md").write_text("""# SESSION_LEDGER.md
 
 ## PROD-L8.24 Pre-Execution Ledger Enforcement
 
@@ -753,10 +753,13 @@ Source phase/session authority: SESSION_SCOPE.md SR-01
 IU files verified: implementation-units/IU-01.md
 IU Set Authority Checkpoint present: YES
 Authorization decision: IMPLEMENTATION_AUTHORIZED
+IU_EXECUTION_AUTHORIZED: PASS
+Active gate validator result: PASS
+Active generated-artifact validation result: PASS
 Material implementation started: NO
 First material-edit command/event: NOT_STARTED
 Retrospective checkpoint or IU expansion: NO
-Evidence path(s): SESSION_EXECUTION.md, implementation-units/IU-01.md
+Evidence path(s): SESSION_LEDGER.md, implementation-units/IU-01.md
 
 ## PROD-L8.21 IU Set Authority Checkpoint
 Authorization decision: IMPLEMENTATION_AUTHORIZED
@@ -774,7 +777,7 @@ Files/areas about to be edited: app/fixture.ts
 Authorization pointer: Pre-Material-Edit Ledger Row
 """)
     else:
-        (sess / "SESSION_EXECUTION.md").write_text("# SESSION_EXECUTION.md\n\nImplementation completed.\n")
+        (sess / "SESSION_LEDGER.md").write_text("# SESSION_LEDGER.md\n\nImplementation completed.\n")
     if no_iu:
         return sess
     if thin_iu:
@@ -845,7 +848,7 @@ def mutate_generated_archived_session_null_timestamps_fails(root: Path) -> None:
 
 def mutate_generated_iu_session_retrospective_cleanup_fails(root: Path) -> None:
     sess = _write_generated_history_session(root, checkpoint=True, thin_iu=False)
-    p = sess / "SESSION_EXECUTION.md"
+    p = sess / "SESSION_LEDGER.md"
     p.write_text(p.read_text() + "\n## Close Cleanup\nAdding the required IU authority checkpoint to satisfy the validator.\n")
 
 
@@ -904,7 +907,7 @@ def _l831a_write_generated_session(root: Path, name: str = "2026-01-02-l831a-fix
     }, indent=2) + "\n")
     (sess / "bootstrap" / "BOOTSTRAP_REPORT.md").write_text(bootstrap if bootstrap is not None else _l831a_full_bootstrap())
     (sess / "SESSION_SCOPE.md").write_text(scope or "# SESSION_SCOPE.md\n")
-    (sess / "SESSION_EXECUTION.md").write_text(execution or "# SESSION_EXECUTION.md\n")
+    (sess / "SESSION_LEDGER.md").write_text(execution or "# SESSION_LEDGER.md\n")
     if iu_bodies:
         for idx, body in enumerate(iu_bodies, 1):
             (sess / "implementation-units" / f"IU-{idx:02d}.md").write_text(body)
@@ -931,12 +934,90 @@ Contract sealed before material edits: YES
 """
 
 
+
+def _l832k_full_iu() -> str:
+    sections = [
+        "# IU-01 — L8.32K Fixture Implementation Unit",
+        "",
+        "## PROD-L8.21 Minimum IU Contract",
+        "",
+        "## Unit Identity / Contract Metadata",
+        "- Unit ID: IU-01",
+        "- Contract sealed before material edits: YES",
+        "",
+        "## Unit Scope / Authority",
+        "### Objective",
+        "Implement the L8.32K fixture behavior.",
+        "### Source Scope",
+        "- SR-01 from SESSION_SCOPE.md",
+        "### In Scope",
+        "- Fixture implementation only.",
+        "### Out of Scope",
+        "- Any unrelated behavior.",
+        "### Files / Areas",
+        "- app/fixture.ts",
+        "",
+        "## Implementation Requirements",
+        "- Implement fixture behavior exactly.",
+        "- Preserve route-back conditions.",
+        "",
+        "## Verification Commands / Checks",
+        "- fixture verification check",
+        "",
+        "## Evidence Requirements",
+        "- Provide command output for fixture validation.",
+        "",
+        "## Runtime Integration Posture",
+        "| Area | Authorized posture | Evidence required |",
+        "|---|---|---|",
+        "| fixture | local only | validator output |",
+        "",
+        "## Binary Acceptance Criteria",
+        "| Criterion | Status | Evidence |",
+        "|---|---|---|",
+        "| fixture passes | PENDING | validator output |",
+        "",
+        "## Pre-Execution Checks",
+        "| Check | Result | Evidence / notes |",
+        "|---|---|---|",
+        "| Full IU contract sections populated before material edits | YES | fixture |",
+        "| Failure / route-back condition recorded | YES | fixture |",
+        "",
+        "## Execution Record",
+        "### Actions Performed",
+        "- Pending until IU execution is authorized.",
+        "### Files / Artifacts Changed",
+        "- Pending.",
+        "### Validation / Checks Performed",
+        "- Pending.",
+        "### Claim Evidence Produced",
+        "- Pending.",
+        "### Execution Result",
+        "- Pending.",
+        "",
+        "## Unit Review",
+        "### Request-to-Result Review",
+        "- Pending.",
+        "### Validation Review",
+        "- Pending.",
+        "### Claim Reconciliation",
+        "- Pending.",
+        "### Unit Result",
+        "Unit Result: PASS — Evidence: active gate validator result PASS and fixture validation output.",
+        "",
+        "## Retries",
+        "- None.",
+    ]
+    for i in range(7):
+        sections.append(f"LLM Write Permission: fixture permission {i+1}")
+    return "\n".join(sections) + "\n"
+
 def mutate_l831_generated_session_incomplete_bootstrap_fails(root: Path) -> None:
     _l831a_write_generated_session(
         root,
         name="2026-01-02-l831a-incomplete-bootstrap",
         bootstrap=_l831a_incomplete_bootstrap(),
-        execution="# SESSION_EXECUTION.md\n\nStarted generated session.\n",
+        execution="# SESSION_LEDGER.md\n\nStarted generated session.\n",
     )
 
 
@@ -945,7 +1026,7 @@ def mutate_l831_planned_ius_no_files_fails(root: Path) -> None:
         root,
         name="2026-01-02-l831a-planned-no-iu",
         scope="# SESSION_SCOPE.md\n\n## PROD-L8.31 Planned IU Count Gate\nImplementation units required: YES\nPlanned IU count: 3\nImplementation may begin before full IU artifacts exist: NO\n",
-        execution="# SESSION_EXECUTION.md\n\nIU mode / IU planned: YES\nPlanned IU count: 3\n",
+        execution="# SESSION_LEDGER.md\n\nIU mode / IU planned: YES\nPlanned IU count: 3\n",
     )
 
 
@@ -954,7 +1035,7 @@ def mutate_l831_thin_ius_fail(root: Path) -> None:
         root,
         name="2026-01-02-l831a-thin-ius",
         scope="# SESSION_SCOPE.md\n\nImplementation units required: YES\nPlanned IU count: 1\n",
-        execution="""# SESSION_EXECUTION.md
+        execution="""# SESSION_LEDGER.md
 
 ## PROD-L8.21 IU Set Authority Checkpoint
 Authorization decision: IMPLEMENTATION_AUTHORIZED
@@ -976,7 +1057,7 @@ def mutate_l831_lifecycle_claim_without_active_validation_fails(root: Path) -> N
     _l831a_write_generated_session(
         root,
         name="2026-01-02-l831a-no-active-validation",
-        execution="# SESSION_EXECUTION.md\n\nimplementation_complete\n\n## PROD-L8.31 Generated-Run Mechanical Gate Record\nMechanical gate decision: PASS\n",
+        execution="# SESSION_LEDGER.md\n\nimplementation_complete\n\n## PROD-L8.31 Generated-Run Mechanical Gate Record\nMechanical gate decision: PASS\n",
     )
 
 
@@ -984,9 +1065,117 @@ def mutate_l831_lifecycle_claim_without_mechanical_gate_fails(root: Path) -> Non
     _l831a_write_generated_session(
         root,
         name="2026-01-02-l831a-no-mechanical-record",
-        execution="# SESSION_EXECUTION.md\n\nimplementation_complete\nActive generated-artifact validation result: PASS\n",
+        execution="# SESSION_LEDGER.md\n\nimplementation_complete\nActive generated-artifact validation result: PASS\n",
     )
 
+
+
+def mutate_l832k_material_edit_before_iu_execution_authorized_fails(root: Path) -> None:
+    _l831a_write_generated_session(
+        root,
+        name="2026-01-02-l832k-material-before-auth",
+        scope="# SESSION_SCOPE.md\n\nImplementation units required: YES\nPlanned IU count: 1\nImplementation may begin before full IU artifacts exist: NO\n",
+        execution="""# SESSION_LEDGER.md
+
+## PROD-L8.21 IU Set Authority Checkpoint
+Authorization decision: IMPLEMENTATION_AUTHORIZED
+IU files created before material edits: YES
+Non-placeholder IU review: PASS
+IU Set Coverage Map
+| Source scope item | Source artifact | IU file(s) | Coverage status | Notes |
+|---|---|---|---|---|
+| SR-01 | SESSION_SCOPE.md | IU-01.md | COVERED | fixture |
+
+## IU Planning / IU Execution Boundary Record
+| Gate | Required before | Status | Authority source | Evidence pointer | Next allowed transition |
+|---|---|---|---|---|---|
+| IU_PLANNING_COMPLETE | before IU plan review checkpoint | PASS | implementation-units/IU-01.md | validation PASS | pause for IU Plan Review |
+
+## Material Edit Start Record
+Timestamp: 2026-01-02T00:02:00Z
+Files/areas about to be edited: app/fixture.ts
+""",
+        iu_bodies=[_l832k_full_iu()],
+    )
+
+
+def mutate_l832k_lifecycle_claim_before_iu_execution_authorized_fails(root: Path) -> None:
+    _l831a_write_generated_session(
+        root,
+        name="2026-01-02-l832k-lifecycle-before-auth",
+        scope="# SESSION_SCOPE.md\n\nImplementation units required: YES\nPlanned IU count: 1\n",
+        execution="""# SESSION_LEDGER.md
+
+## PROD-L8.21 IU Set Authority Checkpoint
+Authorization decision: IMPLEMENTATION_AUTHORIZED
+IU files created before material edits: YES
+Non-placeholder IU review: PASS
+IU Set Coverage Map
+| Source scope item | Source artifact | IU file(s) | Coverage status | Notes |
+|---|---|---|---|---|
+| SR-01 | SESSION_SCOPE.md | IU-01.md | COVERED | fixture |
+
+Active generated-artifact validation result: PASS
+implementation_complete
+""",
+        iu_bodies=[_l832k_full_iu()],
+    )
+
+
+def mutate_l832k_authorized_material_transition_passes(root: Path) -> None:
+    _l831a_write_generated_session(
+        root,
+        name="2026-01-02-l832k-authorized-transition",
+        scope="# SESSION_SCOPE.md\n\nImplementation units required: YES\nPlanned IU count: 1\n",
+        execution="""# SESSION_LEDGER.md
+
+## PROD-L8.24 Pre-Execution Ledger Enforcement
+
+### Pre-Material-Edit Ledger Row
+Timestamp: 2026-01-02T00:01:00Z
+Active session id: 2026-01-02-l832k-authorized-transition
+Source phase/session authority: SESSION_SCOPE.md SR-01
+IU files verified: implementation-units/IU-01.md
+IU Set Authority Checkpoint present: YES
+Authorization decision: IMPLEMENTATION_AUTHORIZED
+IU_EXECUTION_AUTHORIZED: PASS
+Active gate validator result: PASS
+Active generated-artifact validation result: PASS
+Material implementation started: NO
+First material-edit command/event: NOT_STARTED
+Retrospective checkpoint or IU expansion: NO
+Evidence path(s): SESSION_LEDGER.md, implementation-units/IU-01.md
+
+## PROD-L8.21 IU Set Authority Checkpoint
+Authorization decision: IMPLEMENTATION_AUTHORIZED
+IU files created before material edits: YES
+Non-placeholder IU review: PASS
+IU Set Coverage Map
+| Source scope item | Source artifact | IU file(s) | Coverage status | Notes |
+|---|---|---|---|---|
+| SR-01 | SESSION_SCOPE.md | IU-01.md | COVERED | fixture |
+
+## PROD-L8.32K Runtime Boundary Validation Record
+Command file used: _hirmos/core/commands/continue.md
+Active gate validator result: PASS
+IU_EXECUTION_AUTHORIZED: PASS
+Material project-file edits before authorization: NO
+Transition claim allowed: YES
+
+## Material Edit Start Record
+Timestamp: 2026-01-02T00:02:00Z
+Command/trigger: fixture implementation
+Files/areas about to be edited: app/fixture.ts
+Authorization pointer: Pre-Material-Edit Ledger Row
+
+Implementation complete
+
+## PROD-L8.31 Generated-Run Mechanical Gate Record
+Mechanical gate decision: PASS
+Planned IU count matches actual full IU files: PASS
+""",
+        iu_bodies=[_l832k_full_iu()],
+    )
 
 def mutate_l831_approved_carry_forward_without_source_fails(root: Path) -> None:
     cf = root / "system" / "accepted-state" / "CARRY_FORWARD.md"
@@ -1018,6 +1207,9 @@ Next recommended phase: TBD
 # retained marker: accepted-state index reappears
 CASES = [
     Case("valid baseline", mutate_none, True, "PASS:"),
+    Case("L8.32K material edit before IU execution authorization fails", mutate_l832k_material_edit_before_iu_execution_authorized_fails, False, "PROD-L8.32K IU-mode material edit before IU_EXECUTION_AUTHORIZED"),
+    Case("L8.32K lifecycle claim before IU execution authorization fails", mutate_l832k_lifecycle_claim_before_iu_execution_authorized_fails, False, "PROD-L8.32K IU-mode lifecycle transition claim before IU_EXECUTION_AUTHORIZED"),
+    Case("L8.32K authorized material transition passes", mutate_l832k_authorized_material_transition_passes, True, "PASS:"),
     Case("idle stale SESSION_SCOPE", mutate_idle_stale_scope, False, "stale active-session"),
     Case("active missing unresolved-items", mutate_active_missing_unresolved_items, False, "missing canonical root artifact"),
     Case("unsupported legacy command", mutate_unsupported_legacy_command, False, "unsupported command"),
@@ -1061,7 +1253,7 @@ CASES = [
     Case("delivery baseline active wording fails", mutate_delivery_baseline_active_wording_fails, False, "delivery wording conflict"),
     Case("root accepted-state requirements without governance fails", mutate_root_accepted_requirements_without_governance_fails, False, "default root accepted-state artifact exists"),
     Case("root accepted-state requirements with governance passes", mutate_root_accepted_requirements_with_governance_passes, True, "PASS:"),
-    Case("generated IU session missing checkpoint fails", mutate_generated_iu_session_missing_checkpoint_fails, False, "missing SESSION_EXECUTION marker"),
+    Case("generated IU session missing checkpoint fails", mutate_generated_iu_session_missing_checkpoint_fails, False, "missing SESSION_LEDGER marker"),
     Case("generated IU session thin IU fails", mutate_generated_iu_session_thin_iu_fails, False, "generated IU too thin"),
     Case("generated archived session null timestamps fails", mutate_generated_archived_session_null_timestamps_fails, False, "missing created_at"),
     Case("generated IU retrospective cleanup fails", mutate_generated_iu_session_retrospective_cleanup_fails, False, "retrospective IU governance"),

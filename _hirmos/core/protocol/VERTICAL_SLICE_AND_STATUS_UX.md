@@ -165,7 +165,7 @@ Close output must not introduce new Design or Implementation work. It may recomm
 
 If later evidence shows that a selected Phase, status, or next recommendation was wrong, HIRMOS must:
 
-1. record a route-back in `SESSION_EXECUTION.md`;
+1. record a route-back in `SESSION_LEDGER.md`;
 2. mark affected Phase status as `BLOCKED` or `SUPERSEDED`;
 3. update the governing Design artifact through the proper lifecycle path;
 4. avoid continuing from stale status summaries.

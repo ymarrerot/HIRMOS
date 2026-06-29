@@ -63,7 +63,7 @@ Capabilities may produce artifacts, findings, evidence, draft decisions, impleme
 They must not silently replace the authority of:
 
 - `SESSION_SCOPE.md`;
-- `SESSION_EXECUTION.md`;
+- `SESSION_LEDGER.md`;
 - `unresolved-items.md`;
 - `SESSION_SCOPE.md` close verification;
 - `CURRENT_SYSTEM_STATE.md`.

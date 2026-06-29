@@ -23,5 +23,22 @@
     "source": null
   },
   "created_at": null,
-  "updated_at": null
+  "updated_at": null,
+  "_derived_state_notice": "allowed_next_commands and recommended_next_command are derived command-state cache fields. They must be recomputed from SESSION_LEDGER.md gates, pending_correction, lifecycle_stage, and command legality rules; they are not independent writable truth.",
+  "_canonical_state_sources": [
+    "_hirmos/session/SESSION_LEDGER.md",
+    "_hirmos/session/SESSION_SCOPE.md",
+    "_hirmos/session/bootstrap/BOOTSTRAP_REPORT.md",
+    "_hirmos/session/implementation-units/",
+    "_hirmos/core/commands/*.md"
+  ],
+  "_derived_command_state": {
+    "status": "DERIVED_CACHE",
+    "source_ledger_event": null,
+    "source_runtime_packet": null,
+    "active_gate_validator_result": null,
+    "validity": "UNVERIFIED",
+    "rule": "allowed_next_commands and recommended_next_command are recomputed from SESSION_LEDGER.md gates, IU planning/execution authorization, pending_correction, lifecycle_stage, and runtime command packet legality. They must not be authored as independent truth."
+  },
+  "_jit_artifact_creation_notice": "Optional active artifacts are created just in time only when their owning concern becomes applicable; absence of EVIDENCE.md, unresolved-items.md, REQUIREMENTS.md, DESIGN.md, delivery files, phase files, or IU files is valid until required by the active boundary."
 }

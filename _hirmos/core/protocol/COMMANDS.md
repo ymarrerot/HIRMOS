@@ -5,6 +5,14 @@ Purpose: define how user command intent routes into HIRMOS lifecycle responsibil
 
 Commands are user actions. Commands are not lifecycle stages. Commands activate, continue, inspect, or close governed work by routing into lifecycle responsibilities.
 
+## PROD-L8.32H command runtime discipline
+
+Normal command execution must begin with the compact command file under `_hirmos/core/commands/<command>.md`. The larger command and protocol files are reference authority, not the default context payload. HIRMOS reads deeper protocols only when the command file names a gate requiring them, when the active artifacts contradict each other, or when validation/close/recovery needs detail.
+
+This rule is a token-cost control: write less, validate more, point instead of duplicate, and keep runtime context small while preserving mechanical gates.
+
+Commands are user actions. Commands are not lifecycle stages. Commands activate, continue, inspect, or close governed work by routing into lifecycle responsibilities.
+
 ## Public commands
 
 ### Governance posture for every command
@@ -65,10 +73,10 @@ Every advancing command must:
 
 1. verify bootstrap completion;
 2. read the matching command specification;
-3. create or read `_hirmos/session/SESSION_EXECUTION.md` as required by the command;
+3. create or read `_hirmos/session/SESSION_LEDGER.md` as required by the command;
 4. establish command-specific execution controls before doing lifecycle work;
 5. read adaptive command, capability, stack, template, and validation files only as controls require them;
-6. update `SESSION_EXECUTION.md` before every user-facing readiness, completion, or blocked checkpoint;
+6. update `SESSION_LEDGER.md` before every user-facing readiness, completion, or blocked checkpoint;
 7. fail closed if required controls are `PENDING` or `BLOCKED` at a readiness or completion boundary.
 
 ## Read-only command rule
@@ -77,7 +85,7 @@ Every advancing command must:
 
 ## Command summaries
 
-`hirmos start` starts a governed session from a User Request. It begins with request capture, creates `SESSION_EXECUTION.md`, establishes controls, and starts with Understand System State.
+`hirmos start` starts a governed session from a User Request. It begins with request capture, creates `SESSION_LEDGER.md`, establishes controls, and starts with Understand System State.
 
 `hirmos continue` advances the current lifecycle boundary only when the active execution controls allow continuation.
 
@@ -100,13 +108,13 @@ Required command-state discipline for all commands:
 | Legality check | Read `SESSION_STATE.json` before advancing work and verify the requested command is legal for `status`, `lifecycle_stage`, and `allowed_next_commands`. |
 | Artifact-state check | Verify active/idle session scaffold consistency before executing an advancing command. |
 | State mutation | Update `SESSION_STATE.json` whenever a command changes lifecycle stage, continuation pass, blocking state, or recommended next command. |
-| Execution ledger | Update `SESSION_EXECUTION.md` for every advancing command, and append rather than overwrite command history. |
+| Execution ledger | Update `SESSION_LEDGER.md` for every advancing command, and append rather than overwrite command history. |
 | Response discipline | Surface exactly one primary next governed command that is legal under the updated `SESSION_STATE.json`. |
 | Fail closed | If legality, artifacts, or state are contradictory, stop before lifecycle work and recommend exactly one governed recovery command. |
 
 Command-specific files must use this protocol as their local command authority.
 
-Every command must apply `_hirmos/core/protocol/COMMAND_STATE_MACHINE.md` before recommending or executing a next command. `SESSION_STATE.json` is the machine-readable command-state authority. `SESSION_EXECUTION.md` explains execution history but must not override `SESSION_STATE.json`.
+Every command must apply `_hirmos/core/protocol/COMMAND_STATE_MACHINE.md` before recommending or executing a next command. `SESSION_STATE.json` is the machine-readable command-state authority. `SESSION_LEDGER.md` explains execution history but must not override `SESSION_STATE.json`.
 
 Command legality is determined by:
 
@@ -114,7 +122,7 @@ Command legality is determined by:
 - `SESSION_STATE.json.lifecycle_stage`;
 - `SESSION_STATE.json.allowed_next_commands`;
 - active-session artifact presence or absence;
-- fail-closed controls recorded in `SESSION_EXECUTION.md`.
+- fail-closed controls recorded in `SESSION_LEDGER.md`.
 
 If command legality is unclear or contradictory, the command must stop at a blocked/fail-closed state and recommend exactly one governed recovery command.
 
@@ -128,7 +136,7 @@ Full implementation-unit artifacts must not be instantiated before the session s
 
 ## Cumulative continue pass rule
 
-`hirmos continue` is append-only. Each invocation must append a continuation pass record in `SESSION_EXECUTION.md`. Corrections, scope amendments, validation reruns, and route-backs must preserve prior pass history instead of overwriting it.
+`hirmos continue` is append-only. Each invocation must append a continuation pass record in `SESSION_LEDGER.md`. Corrections, scope amendments, validation reruns, and route-backs must preserve prior pass history instead of overwriting it.
 
 ## Exactly-one-next-command rule
 
@@ -166,7 +174,7 @@ At minimum, capability routing is material when:
 - unresolved items, project type, stack evidence, delivery governance, runtime services, or current-state evidence affects which specialized work must run;
 - a capability may produce or update artifacts required for a readiness claim, completion claim, blocker, route-back, or user-facing checkpoint.
 
-When routing is material, the runner must read `_hirmos/core/protocol/CAPABILITY_ROUTING.md`, resolve the required extension and capability entrypoints through the installed manifests, and record the capability decision in `_hirmos/session/SESSION_EXECUTION.md`.
+When routing is material, the runner must read `_hirmos/core/protocol/CAPABILITY_ROUTING.md`, resolve the required extension and capability entrypoints through the installed manifests, and record the capability decision in `_hirmos/session/SESSION_LEDGER.md`.
 
 Commands must not expose capability routing details by default unless the routing creates a user decision, blocker, validation failure, route-back, or inspectable checkpoint.
 
@@ -175,7 +183,7 @@ Commands must not expose capability routing details by default unless the routin
 
 Advancing commands must activate runtime integration controls when material services such as database, auth, messaging, storage, payments, deployment, or provider APIs affect the active request.
 
-Commands must not claim implementation completion, production readiness, update-state readiness, or close success beyond the posture and evidence recorded in `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md`, `SESSION_EXECUTION.md`, and relevant review artifacts.
+Commands must not claim implementation completion, production readiness, update-state readiness, or close success beyond the posture and evidence recorded in `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md`, `SESSION_LEDGER.md`, and relevant review artifacts.
 
 ## Vertical slice and status UX discipline
 
@@ -198,8 +206,8 @@ Commands must not preserve momentum by hiding blockers. Status summaries must di
 Close success requires a consistent transaction across:
 
 - active session evidence;
-- `SESSION_EXECUTION.md` close/update control pointers;
-- `SESSION_EXECUTION.md` close controls;
+- `SESSION_LEDGER.md` close/update control pointers;
+- `SESSION_LEDGER.md` close controls;
 - archive manifest;
 - accepted-state records;
 - reset `SESSION_STATE.json`;
@@ -250,7 +258,7 @@ Commands that surface accepted current truth must use `_hirmos/system/accepted-s
 
 Commands that create session identifiers, archive paths, close records, accepted-state timestamps, or dated reports must resolve the actual current date from the runtime environment, available tool context, or explicit user-provided date. They must not reuse example dates, prior session dates, generated template dates, or stale dates from copied artifacts.
 
-If the current date cannot be established, the command must record the uncertainty in `_hirmos/session/SESSION_EXECUTION.md` and avoid date-specific claims until the date is resolved. Session IDs and archive folder names must be consistent with the resolved current date or explicitly documented as user-provided identifiers.
+If the current date cannot be established, the command must record the uncertainty in `_hirmos/session/SESSION_LEDGER.md` and avoid date-specific claims until the date is resolved. Session IDs and archive folder names must be consistent with the resolved current date or explicitly documented as user-provided identifiers.
 
 ## PROD-L8.9 command-to-capability routing behavior
 
@@ -261,9 +269,9 @@ Command-specific behavior:
 - `hirmos start` must perform Delivery Shape Decision and `session_focus` routing before claiming any readiness checkpoint. It creates only the artifacts required by the selected focus and route.
 - `hirmos continue` must re-check the active focus and route before delivery-baseline acceptance, phase/session baseline preparation, implementation, retry, or correction work. It must not silently switch from delivery-governed work to single-session work or adopt a different phase without a recorded authority amendment.
 - `hirmos status` must report the active session_focus, delivery route when applicable, required capabilities, artifact readiness, blocked capability decisions, and exactly one safe next governed command.
-- `hirmos close` must reconcile the route and focus used by the session against the active authority (`DELIVERY_SCOPE.md` or `SESSION_SCOPE.md`), `SESSION_EXECUTION.md`, delivery artifacts, evidence, unresolved items, and accepted-state pointers before close success.
+- `hirmos close` must reconcile the route and focus used by the session against the active authority (`DELIVERY_SCOPE.md` or `SESSION_SCOPE.md`), `SESSION_LEDGER.md`, delivery artifacts, evidence, unresolved items, and accepted-state pointers before close success.
 
-The command surface does not redefine capability methods. It reads `_hirmos/core/protocol/CAPABILITY_ROUTING.md`, resolves installed extension/capability manifests, records the routing decisions in `SESSION_EXECUTION.md`, and follows the selected entrypoints.
+The command surface does not redefine capability methods. It reads `_hirmos/core/protocol/CAPABILITY_ROUTING.md`, resolves installed extension/capability manifests, records the routing decisions in `SESSION_LEDGER.md`, and follows the selected entrypoints.
 
 
 ## Runtime session envelope and focus rule
@@ -296,7 +304,7 @@ SESSION_SCOPE.md is required when the session focus has a bounded phase/session 
 
 ## PROD-L8.10 delivery-baseline session-surface minimality
 
-During `session_focus = delivery_baseline`, commands must preserve a minimal session runtime surface: `SESSION_STATE.json` and `SESSION_EXECUTION.md` only. Delivery-level authority and unresolved items live under `_hirmos/system/delivery/<delivery-id>/`. Do not create `_hirmos/session/SESSION_SCOPE.md` or `_hirmos/session/unresolved-items.md` until the flow advances to `phase_session_baseline` or another bounded session-scope focus. `hirmos status` must report session unresolved as `NOT_APPLICABLE` in delivery-baseline focus and point reviewers to `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`.
+During `session_focus = delivery_baseline`, commands must preserve a minimal session runtime surface: `SESSION_STATE.json` and `SESSION_LEDGER.md` only. Delivery-level authority and unresolved items live under `_hirmos/system/delivery/<delivery-id>/`. Do not create `_hirmos/session/SESSION_SCOPE.md` or `_hirmos/session/unresolved-items.md` until the flow advances to `phase_session_baseline` or another bounded session-scope focus. `hirmos status` must report session unresolved as `NOT_APPLICABLE` in delivery-baseline focus and point reviewers to `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`.
 
 L8.10 explicit prohibition: during `session_focus = delivery_baseline`, HIRMOS must not create `_hirmos/session/unresolved-items.md`; delivery unresolved items belong only in `_hirmos/system/delivery/<delivery-id>/unresolved-items.md` until a bounded session baseline exists.
 
@@ -321,10 +329,10 @@ This matrix is the first authority for resolving protocol-document overlap. It d
 | Concern | Canonical owner | Supporting surfaces | Must not redefine |
 |---|---|---|---|
 | Lifecycle responsibility boundaries | `core/authority/LIFECYCLE.md` | command files, capability routing | command files, extension entrypoints |
-| Command legality, command state, and next-command discipline | `core/protocol/COMMAND_STATE_MACHINE.md` plus the matching `core/commands/<command>.md` | `COMMANDS.md`, `SESSION_STATE.json`, `SESSION_EXECUTION.md` | capability entrypoints |
+| Command legality, command state, and next-command discipline | `core/protocol/COMMAND_STATE_MACHINE.md` plus the matching `core/commands/<command>.md` | `COMMANDS.md`, `SESSION_STATE.json`, `SESSION_LEDGER.md` | capability entrypoints |
 | Command-to-capability routing algorithm | `core/protocol/CAPABILITY_ROUTING.md` | extension manifests, capability manifests, command files | individual capability entrypoints |
 | Accepted-state navigation and current-state spine | `core/protocol/CURRENT_SYSTEM_STATE.md` | `CURRENT_SYSTEM_STATE.md` template, `close.md`, `status.md` | delivery/session source artifacts |
-| Close/archive/update-state transaction | `core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md` | `CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, `SESSION_EXECUTION.md`, `close.md` | status or continue command docs |
+| Close/archive/update-state transaction | `core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md` | `CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, `SESSION_LEDGER.md`, `close.md` | status or continue command docs |
 | Delivery authority and delivery-baseline behavior | `core/protocol/DELIVERY_GOVERNANCE.md` | `DELIVERY_SCOPE.md`, `DELIVERY_PLAN.md`, delivery checkpoint template | session scope templates during delivery baseline |
 | Phase lifecycle and phase-entry gates | `core/protocol/PHASE_LIFECYCLE.md` | `PHASE-xx.md` template, `continue.md`, `SESSION_SCOPE.md` | delivery plan summaries |
 | Session artifact responsibility and active-session surface | `core/protocol/SESSION_ARTIFACTS.md` | `ARTIFACT_MODEL.md`, session templates | accepted-state docs |
@@ -340,3 +348,7 @@ Ownership rule: one canonical owner per concern. When two documents appear to go
 ## Close-Time Carry-Forward Candidate Review
 
 `hirmos close` must treat carry-forward as a last-resort disposition. Before recommending post-close `hirmos start` for follow-up work, close must auto-resolve safe in-scope candidates, surface user-needed candidates, and record only user-approved deferrals as active carry-forward.
+
+## PROD-L8.32L Artifact Creation / Derived Pointer Doctrine
+
+HIRMOS must not create optional artifacts simply because a template exists. Optional artifacts are created just in time when the current governed boundary makes their owning concern applicable. Derived pointer indexes must be recomputed from canonical source artifacts, filesystem paths, active session state, session ledgers, delivery/phase directories, and archive manifests. Stale pointer rows are defects, not truth.

@@ -174,9 +174,9 @@ Required source-reading behavior:
 2. Read active-governance pointers when present: active delivery scope, active phase, active session scope, active unresolved registers, latest close/archive pointer, and active carry-forward records.
 3. Read source artifacts materially relevant to the user request before material Design or Implementation. Source artifacts may include delivery/session scope, optional requirements/design, phase files, unresolved registers, implementation-unit records, evidence, close/archive records, and stack guidance.
 4. Use scoped/progressive reading depth. Small isolated requests require only directly relevant sources; broad planning, architecture, refactor, requirements, close, or delivery/session continuation requires deeper source coverage.
-5. Record material read coverage in `SESSION_EXECUTION.md` or `BOOTSTRAP_REPORT.md` when the session will design, implement, close, or update accepted state.
+5. Record material read coverage in `SESSION_LEDGER.md` or `BOOTSTRAP_REPORT.md` when the session will design, implement, close, or update accepted state.
 6. If a required source artifact is missing, stale, contradictory, or inaccessible, surface it as an unresolved item, technical-review item, or fail-closed blocker before proceeding.
 
-This rule reuses existing `CURRENT_SYSTEM_STATE.md`, `SESSION_EXECUTION.md`, bootstrap, unresolved-item, and evidence surfaces. Do not add a new governance artifact only to record source reading unless the existing surfaces cannot safely own the responsibility.
+This rule reuses existing `CURRENT_SYSTEM_STATE.md`, `SESSION_LEDGER.md`, bootstrap, unresolved-item, and evidence surfaces. Do not add a new governance artifact only to record source reading unless the existing surfaces cannot safely own the responsibility.
 
 Current-state understanding is source-complete, not content-complete: it must identify and read the canonical sources needed for the request without duplicating every source into one summary artifact.

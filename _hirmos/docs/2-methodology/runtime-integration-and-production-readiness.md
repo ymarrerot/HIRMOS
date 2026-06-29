@@ -1,52 +1,44 @@
-# Runtime integration and production readiness
+# Runtime Integration and Production Readiness
 
-HIRMOS should not silently treat a fixture-backed demo as a production-ready implementation.
+HIRMOS separates implementation, local runtime evidence, and production readiness.
 
-For Domain Expert users, HIRMOS keeps this simple: it uses safe local defaults when appropriate and surfaces low-level integration choices only when they affect domain behavior, risk, cost, compliance, ownership, implementation authorization, or production readiness.
+## Local runtime evidence
 
-Underneath, HIRMOS tracks the current implementation level for material areas such as database, authentication, messaging, storage, deployment, and provider APIs.
+A session may prove that work runs locally through:
 
-Before claiming production readiness, HIRMOS must surface:
+- build/test/lint output;
+- local app startup;
+- browser/user testing;
+- API/provider smoke checks;
+- fixture or scripted verification.
 
-- current implementation level;
-- HIRMOS primary recommendation;
-- alternatives;
-- why the recommendation fits;
-- decision owner;
-- technical-review path;
-- blockers before production readiness.
+Local evidence is valuable, but it does not automatically prove deployment readiness.
 
-A passing build is not enough to prove production readiness. Real runtime behavior and provider readiness require specific evidence.
+## Production readiness
 
-## Canonical runtime posture values
+Production readiness requires evidence for the production-shaped system actually in scope. Depending on the project, that may include:
 
-Runtime integration posture fields use only the canonical posture values from `RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`. Do not use shorthand such as `LOCAL_REAL`, `provider-ready`, or `production ready pending credentials` in posture fields.
-
-
-## Production-shaped by default
-
-HIRMOS now treats production-shaped implementation as the default posture for governed software work. This does not mean every session must deploy to production or use enterprise-grade infrastructure. It means the local implementation should preserve the architecture shape needed for production where practical.
-
-Examples:
-
-- use local PostgreSQL when PostgreSQL is the intended production database;
-- use a persisted job/worker/cron shape for long-running AI or image work;
-- make metered-state/billing mutations transactional, idempotent, or explicitly limited;
-- keep secrets and runtime-generated files out of release or handoff packages.
+- deployed environment validation;
+- durable storage and queues;
+- authentication/security posture;
+- payment/credit correctness;
+- observability and failure handling;
+- operational rollback/retry behavior.
 
 If a session intentionally uses a prototype, fixture, demo-only, or local-only shortcut, the limitation must be authorized in the Session Scope and preserved at close.
 
-## PROD-L8.22 Review Gate Salvage
+## Honest close posture
 
-HIRMOS preserves legacy evidence-backed review discipline through existing artifacts instead of restoring legacy review files.
+Close should distinguish:
 
-Review gates must answer:
+- accepted local MVP;
+- accepted implementation but runtime not verified;
+- partial close with carry-forward;
+- production-ready outcome.
 
-- What authority was reviewed?
-- What evidence was reviewed?
-- Was the final codebase or file state inspected?
-- Does the evidence prove unit, session, phase, delivery, runtime, or production claims?
-- What remains unproven?
-- Why is the terminal state honest?
+Do not collapse these into one “done” claim.
 
-A passing static check is not a delivery review. A completed implementation unit is not a phase review. A phase review is not a delivery review unless cross-phase behavior and delivery-level acceptance posture are reviewed.
+
+## Current implementation level
+
+At every close, HIRMOS should state the current implementation level: design-only, implemented-not-runtime-verified, local-runtime verified, or production-ready with matching evidence.

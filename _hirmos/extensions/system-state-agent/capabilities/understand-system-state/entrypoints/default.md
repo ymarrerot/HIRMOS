@@ -10,7 +10,7 @@ Produce general and User Request-focused system-state understanding before Desig
 
 - `_hirmos/session/DESIGN.md`
 - `_hirmos/session/unresolved-items.md` updates
-- `_hirmos/session/SESSION_EXECUTION.md` system-state control status
+- `_hirmos/session/SESSION_LEDGER.md` system-state control status
 
 ### Terminal States
 
@@ -44,7 +44,7 @@ Produce general and User Request-focused system-state understanding before Desig
 
 ## Method
 
-1. Verify the active working-copy root and record it in `SESSION_EXECUTION.md`.
+1. Verify the active working-copy root and record it in `SESSION_LEDGER.md`.
 2. Read request intake and source/prototype ingestion outputs when present.
 3. Perform general and focused system-state understanding. For general understanding, inspect broadly enough to avoid tunnel vision:
    - project/repository structure;
@@ -68,42 +68,26 @@ Produce general and User Request-focused system-state understanding before Desig
 
 ## Required behavior
 
-1. Confirm and record this capability decision under `_hirmos/core/protocol/CAPABILITY_ROUTING.md` in `_hirmos/session/SESSION_EXECUTION.md`.
-2. Instantiate or update only the canonical artifacts required by the active request path.
-3. Produce non-placeholder content before claiming completion.
-4. Preserve lifecycle ownership boundaries; route back in `SESSION_EXECUTION.md` when evidence invalidates an earlier stage.
-5. Apply the extension method and this capability-specific execution surface; do not execute from chat summaries or raw inputs alone.
+Apply the shared Required behavior baseline in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md`. This entrypoint retains only capability-specific obligations below; do not duplicate the shared checklist here.
 
 ## Canonical interaction posture visibility
 
-Use the canonical HIRMOS interaction posture from `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail.
-
-- By default, surface only user-owned decisions, blockers, readiness/completion status, and concise artifact pointers.
-- Surface capability result, assumptions, artifacts/evidence, and review implications when requested or needed for responsible review.
-- Surface activation reason, entrypoint path, controls, artifacts, unresolved-item contribution, route-back decisions, and terminal-state basis when validation failure, blocker state, route-back, or inspection need requires it.
+Apply the shared interaction-posture rules in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the canonical posture authority at `_hirmos/core/authority/INTERACTION_POSTURE.md`. Surface rich governed pause/checkpoint outputs when they support user decision-making; do not reduce checkpoint clarity to save tokens.
 
 ## Unresolved-item producer obligation
 
-This capability is an unresolved-item producer and MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`.
-
-Before marking the capability complete, record exactly one producer outcome in `_hirmos/session/unresolved-items.md`: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`.
-
-Record full item fields in `unresolved-items.md`, including current status, downstream impact, and revalidation point; do not duplicate the full field schema in this entrypoint.
+Apply the shared unresolved-item producer obligation in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the owning protocol: this capability MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`. It must record exactly one producer outcome in the focus-appropriate unresolved register: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`. When items exist, preserve current status, downstream impact, and revalidation point.
 
 ## Project Context and Stack Classification
 
-When this capability encounters project-type or stack evidence, record material findings in `DESIGN.md` / `SESSION_SCOPE.md`, `stack-resolution.json` for machine-readable stack routing, or `SESSION_EXECUTION.md` as required by active controls.
+When this capability encounters project-type or stack evidence, record material findings in `DESIGN.md` / `SESSION_SCOPE.md`, `stack-resolution.json` for machine-readable stack routing, or `SESSION_LEDGER.md` as required by active controls.
 
 User Request labels and prototype technology signals are focus evidence, not final classification authority.
 
 
 ## Runtime integration responsibilities
 
-When material runtime services are involved, follow `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`.
-
-Record or consume `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` as required by execution controls.
-
-Do not claim fixture/mock/boundary/local/production integration levels beyond what the active artifacts and evidence support.
+Apply the shared runtime-integration responsibilities in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`. Keep detailed evidence in the owning IU, `EVIDENCE.md`, or accepted-state/archive source; this entrypoint should point rather than duplicate.
 
 ## Current-System-State-First Requirement
 
@@ -115,7 +99,7 @@ Required sequence for accepted-state understanding:
 2. If it exists, read it first as the primary accepted current-state source.
 3. Read `_hirmos/system/accepted-state/CARRY_FORWARD.md` and conditional `_hirmos/system/accepted-state/DECISION_LOG.md` as supporting accepted-state records when present and active. Read latest-close metadata from `CURRENT_SYSTEM_STATE.md`.
 4. Use session archives only as history/evidence or to resolve contradictions. Do not reconstruct current truth from archives when `CURRENT_SYSTEM_STATE.md` exists.
-5. Record the read status, missing status, contradictions, and confidence in `_hirmos/session/DESIGN.md` and `_hirmos/session/SESSION_EXECUTION.md`.
+5. Record the read status, missing status, contradictions, and confidence in `_hirmos/session/DESIGN.md` and `_hirmos/session/SESSION_LEDGER.md`.
 6. Set terminal state `BLOCKED` when accepted-state contradictions make safe Design impossible without clarification.
 
 Completion is invalid until the current-system-state-first control is `SATISFIED` or explicitly `NOT_APPLICABLE` with rationale.

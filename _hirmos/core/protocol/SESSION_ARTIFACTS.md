@@ -49,7 +49,7 @@ New governed sessions use the smallest sufficient active-session surface:
 ```text
 _hirmos/session/
   SESSION_STATE.json              # always present scaffold; machine state
-  SESSION_EXECUTION.md            # required for active governed sessions
+  SESSION_LEDGER.md            # required for active governed sessions
   SESSION_SCOPE.md             # required only when a bounded session/phase scope exists
   unresolved-items.md             # conditional; required when session-level unresolved items exist or must be verified
   REQUIREMENTS.md        # conditional independent requirements authority
@@ -60,14 +60,14 @@ _hirmos/session/
   stack-resolution.json           # conditional machine-readable stack resolution only
 ```
 
-`stack-resolution.json` is a conditional root session artifact because it is machine-readable routing state. Continuation handoff lives in `SESSION_EXECUTION.md` Current Continuation Snapshot. Other support files are not part of the new default session model.
+`stack-resolution.json` is a conditional root session artifact because it is machine-readable routing state. Continuation handoff lives in `SESSION_LEDGER.md` Current Continuation Snapshot. Other support files are not part of the new default session model.
 
 ## Major artifact responsibilities
 
 | Artifact | Required when | Owns |
 |---|---|---|
 | `SESSION_STATE.json` | installed scaffold / active sessions | machine-readable command state |
-| `SESSION_EXECUTION.md` | any active governed session | Current Continuation Snapshot, command timeline, controls, route-backs, boundary log, close/archive/reset control pointers |
+| `SESSION_LEDGER.md` | any active governed session | Current Continuation Snapshot, command timeline, controls, route-backs, boundary log, close/archive/reset control pointers |
 | `SESSION_SCOPE.md` | before implementation authorization and for scoped governed work | session scope, exclusions, acceptance criteria, production-shaped gate, delivery shape decision, close verification |
 | `unresolved-items.md` | session-level unresolved items exist or must be explicitly verified | gated items, assumptions, risks, decisions, dispositions, revalidation for the active session only |
 | `REQUIREMENTS.md` | requirements materially govern scope; target name `REQUIREMENTS.md` | normalized requirements, source traceability, requirement coverage |
@@ -85,14 +85,14 @@ The following former support-artifact responsibilities are now embedded in major
 |---|---|
 | request intake / source-material summary | `SESSION_SCOPE.md` parent authority and `DESIGN.md` source matrix |
 | prototype or external input ingestion | `DESIGN.md` source matrix and requirements/design sections |
-| system-state understanding | `DESIGN.md` current-state basis and `SESSION_EXECUTION.md` current-state-first controls |
+| system-state understanding | `DESIGN.md` current-state basis and `SESSION_LEDGER.md` current-state-first controls |
 | technical review | `DESIGN.md` technical review section |
-| implementation readiness | `DESIGN.md` readiness basis, `SESSION_SCOPE.md` engineering gate, `SESSION_EXECUTION.md` readiness controls |
+| implementation readiness | `DESIGN.md` readiness basis, `SESSION_SCOPE.md` engineering gate, `SESSION_LEDGER.md` readiness controls |
 | implementation evidence / local runtime evidence / role workflow smoke | `EVIDENCE.md` |
 | runtime integration readiness | `DESIGN.md` for planned posture and `EVIDENCE.md` for verified posture |
 | claim reconciliation | `EVIDENCE.md` claim reconciliation summary and `SESSION_SCOPE.md` close verification |
 | session scope review | `SESSION_SCOPE.md` close verification |
-| close checklist / system-state update / archive manifest | `SESSION_EXECUTION.md` close/archive/reset control pointers and accepted-state artifacts |
+| close checklist / system-state update / archive manifest | `SESSION_LEDGER.md` close/archive/reset control pointers and accepted-state artifacts |
 
 Do not recreate those former major artifact sections for new sessions unless a future protocol explicitly reintroduces them.
 
@@ -102,7 +102,7 @@ Do not recreate those former major artifact sections for new sessions unless a f
 - `unresolved-items.md` owns unresolved-item details.
 - `DESIGN.md` owns design authority, current-state basis, technical review, and implementation-readiness rationale when those are material.
 - `EVIDENCE.md` owns material evidence and claim reconciliation for implementation/close claims.
-- `SESSION_EXECUTION.md` owns command/lifecycle execution control and archive/reset control pointers only.
+- `SESSION_LEDGER.md` owns command/lifecycle execution control and archive/reset control pointers only.
 - `SESSION_STATE.json` owns machine-readable command state.
 - `CURRENT_SYSTEM_STATE.md` owns durable current system truth.
 
@@ -116,22 +116,28 @@ A fresh installed framework may contain only minimal active-session scaffolding:
 _hirmos/session/.gitkeep
 _hirmos/session/SESSION_STATE.json
 _hirmos/session/bootstrap/.gitkeep
-_hirmos/session/SESSION_EXECUTION.md#current-continuation-snapshot.gitkeep
+_hirmos/session/SESSION_LEDGER.md#current-continuation-snapshot.gitkeep
 _hirmos/session/implementation-units/.gitkeep
 
 ```
 
-A fresh framework must not ship with pre-populated runtime artifacts such as `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, `DESIGN.md`, `EVIDENCE.md`, `unresolved-items.md`, or implementation evidence. Those files are created only when a governed session needs them.
+A fresh framework must not ship with pre-populated runtime artifacts such as `SESSION_SCOPE.md`, `SESSION_LEDGER.md`, `DESIGN.md`, `EVIDENCE.md`, `unresolved-items.md`, or implementation evidence. Those files are created only when a governed session needs them.
 
 ## Governed session activation
 
-A governed session is active only when `_hirmos/session/SESSION_EXECUTION.md` exists and records session identity, active command, User Request, canonical interaction posture acknowledgement, lifecycle stage, continuation state, required execution controls, and references to required major artifacts.
+A governed session is active only when `_hirmos/session/SESSION_LEDGER.md`
 
-`hirmos start` must instantiate `_hirmos/session/SESSION_EXECUTION.md` before lifecycle work begins.
+PROD-L8.32I: In IU mode, `SESSION_LEDGER.md` must distinguish `IU_PLANNING_COMPLETE` from `IU_EXECUTION_AUTHORIZED`; the former pauses for IU review and the latter permits material project-file edits.
+ exists and records session identity, active command, User Request, canonical interaction posture acknowledgement, lifecycle stage, continuation state, required execution controls, and references to required major artifacts.
+
+`hirmos start` must instantiate `_hirmos/session/SESSION_LEDGER.md`
+
+PROD-L8.32I: In IU mode, `SESSION_LEDGER.md` must distinguish `IU_PLANNING_COMPLETE` from `IU_EXECUTION_AUTHORIZED`; the former pauses for IU review and the latter permits material project-file edits.
+ before lifecycle work begins.
 
 ## Mandatory governed-session artifacts
 
-A governed software session must create or update `_hirmos/session/bootstrap/BOOTSTRAP_REPORT.md` during bootstrap/startup and must keep `SESSION_EXECUTION.md` Current Continuation Snapshot current for continuation state. The bootstrap report must include every bootstrap quiz answer with a durable source and answer basis; chat memory, compressed chat summaries, and prior model recollection are not valid bootstrap answer sources.
+A governed software session must create or update `_hirmos/session/bootstrap/BOOTSTRAP_REPORT.md` during bootstrap/startup and must keep `SESSION_LEDGER.md` Current Continuation Snapshot current for continuation state. The bootstrap report must include every bootstrap quiz answer with a durable source and answer basis; chat memory, compressed chat summaries, and prior model recollection are not valid bootstrap answer sources.
 
 A governed software session must instantiate these before claiming Implementation Readiness:
 
@@ -144,7 +150,7 @@ _hirmos/session/unresolved-items.md
 
 ## Snapshot-backed checkpoint rule
 
-Governed Current Continuation Snapshots use `_hirmos/core/templates/session/SESSION_EXECUTION.md#current-continuation-snapshot` and must be instantiated as `_hirmos/session/SESSION_EXECUTION.md#current-continuation-snapshot` when a checkpoint asks for decisions, claims readiness/completion, fails closed, pauses, or changes continuation state.
+Governed Current Continuation Snapshots use `_hirmos/core/templates/session/SESSION_LEDGER.md#current-continuation-snapshot` and must be instantiated as `_hirmos/session/SESSION_LEDGER.md#current-continuation-snapshot` when a checkpoint asks for decisions, claims readiness/completion, fails closed, pauses, or changes continuation state.
 
 HIRMOS must not tell the user that an artifact exists, is ready, can be inspected, or authorizes continuation unless the artifact exists in `_hirmos/session/` and contains non-placeholder content.
 
@@ -152,7 +158,10 @@ HIRMOS must not tell the user that an artifact exists, is ready, can be inspecte
 
 `hirmos start` and `hirmos continue` instantiate only the artifacts required by the active request path, lifecycle boundary, execution controls, delivery shape, project state, and canonical interaction posture.
 
-Every artifact instantiation must be recorded in `_hirmos/session/SESSION_EXECUTION.md` under `Artifact Instantiation Log` with target artifact, source template, lifecycle stage, reason required, and non-placeholder check status.
+Every artifact instantiation must be recorded in `_hirmos/session/SESSION_LEDGER.md`
+
+PROD-L8.32I: In IU mode, `SESSION_LEDGER.md` must distinguish `IU_PLANNING_COMPLETE` from `IU_EXECUTION_AUTHORIZED`; the former pauses for IU review and the latter permits material project-file edits.
+ under `Artifact Instantiation Log` with target artifact, source template, lifecycle stage, reason required, and non-placeholder check status.
 
 ## Baseline by lifecycle responsibility
 
@@ -166,7 +175,7 @@ Do not create separate intake support files by default. Record source coverage i
 
 ### Understand System State
 
-Record current-state-first completion in `SESSION_EXECUTION.md`. Put material current-state findings in `DESIGN.md` when they affect Design or Implementation. Unknowns, contradictions, assumptions, risks, blockers, or user-owned decisions must be captured in `unresolved-items.md`.
+Record current-state-first completion in `SESSION_LEDGER.md`. Put material current-state findings in `DESIGN.md` when they affect Design or Implementation. Unknowns, contradictions, assumptions, risks, blockers, or user-owned decisions must be captured in `unresolved-items.md`.
 
 ### Design / Scope Authority
 
@@ -198,7 +207,7 @@ Implementation artifacts consume `SESSION_SCOPE.md` and `DESIGN.md`. They must n
 Do not create separate close-checklist, system-state-update, archive-manifest, claim-reconciliation, or session-scope-review support files for new sessions. Close uses:
 
 - `SESSION_SCOPE.md` close verification;
-- `SESSION_EXECUTION.md` close/archive/reset control pointers;
+- `SESSION_LEDGER.md` close/archive/reset control pointers;
 - `EVIDENCE.md` when material evidence/claim reconciliation exists;
 - accepted-state artifacts under `_hirmos/system/accepted-state/`;
 - archive copy under `_hirmos/system/history/sessions/<session-id>/`.
@@ -216,7 +225,7 @@ _hirmos/system/delivery/<delivery-id>/phases/PHASE-xx.md
 
 A durable Delivery Plan is required for `MULTI_SESSION_DELIVERY` and `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`. Separate phase files are required only for `MULTI_SESSION_DELIVERY_WITH_PHASE_FILES`. Phase count must also be minimized: use the fewest phases that preserve honest execution, review, validation, continuity, and accepted-state update. Thin phases should be merged unless they provide independent value, validation boundary, risk isolation, dependency sequencing, material human approval, or separate evidence posture.
 
-Every implementation-capable session must record the Delivery Shape Decision in `DESIGN.md` when substantial design is active and in `SESSION_SCOPE.md` / `SESSION_EXECUTION.md` before implementation readiness.
+Every implementation-capable session must record the Delivery Shape Decision in `DESIGN.md` when substantial design is active and in `SESSION_SCOPE.md` / `SESSION_LEDGER.md` before implementation readiness.
 
 ## Session Scope and Implementation Unit rule
 
@@ -229,7 +238,7 @@ Use stable names for root session-wide artifacts:
 ```text
 SESSION_STATE.json
 SESSION_SCOPE.md
-SESSION_EXECUTION.md
+SESSION_LEDGER.md
 unresolved-items.md
 REQUIREMENTS.md
 DESIGN.md
@@ -260,7 +269,7 @@ After successful normal close, `_hirmos/session/` resets to clean idle state:
 _hirmos/session/.gitkeep
 _hirmos/session/SESSION_STATE.json
 _hirmos/session/bootstrap/.gitkeep
-_hirmos/session/SESSION_EXECUTION.md#current-continuation-snapshot.gitkeep
+_hirmos/session/SESSION_LEDGER.md#current-continuation-snapshot.gitkeep
 _hirmos/session/implementation-units/.gitkeep
 
 ```
@@ -275,7 +284,7 @@ Runtime integration readiness artifact responsibilities now live in DESIGN.md an
 
 ## Close / archive integrity extension
 
-The strict-necessity model preserves close/archive integrity through SESSION_SCOPE.md close verification, SESSION_EXECUTION.md close/archive/reset control pointers, EVIDENCE.md when material, and accepted-state artifacts.
+The strict-necessity model preserves close/archive integrity through SESSION_SCOPE.md close verification, SESSION_LEDGER.md close/archive/reset control pointers, EVIDENCE.md when material, and accepted-state artifacts.
 Archive history is not accepted state by itself.
 
 Claim reconciliation artifact responsibilities now live in EVIDENCE.md and SESSION_SCOPE.md close verification.
@@ -347,3 +356,17 @@ Active session artifacts are working authorities until the pre-archive validatio
 Generated implementation-unit artifacts must be validated while the session is active and before archive. A generated IU is close-eligible only when its sealed contract sections were fully instantiated before execution and its append-only Execution Record and Unit Review contain concrete evidence-backed completion/review results.
 
 Active close must fail closed, downgrade to partial, or route back when IU status contradicts session/phase/delivery close claims. In particular, implementation-complete, phase-accepted, delivery-accepted, or delivery-closed claims are invalid when any applicable IU remains `Execution status: NOT_STARTED`, `Review status: PENDING`, lacks Unit Result, lacks validation/evidence comparison, or lacks a required Test / Fixture / Validator Change Rationale. Historical archives must not be expanded to repair these defects after snapshot; apply PROD-L8.27 archive immutability instead.
+
+
+## PROD-L8.32D Session Scope / IU Ownership Boundary
+
+`SESSION_SCOPE.md` owns accepted work boundaries and compact IU planning pointers. `implementation-units/IU-xx.md` owns IU contract, execution, review, and handoff detail. `SESSION_LEDGER.md` owns gate/event status and pointers. HIRMOS must point between these artifacts instead of duplicating detailed IU authority in session scope.
+
+
+## PROD-L8.32S command runtime reference discipline
+
+Session artifacts should point to command results and gate sources, not duplicate broad command/protocol prose. Normal command execution is governed by compact runtime command packets under `_hirmos/core/commands/`; deeper protocols remain reference authority.
+
+## PROD-L8.32L Artifact Creation / Derived Pointer Doctrine
+
+HIRMOS must not create optional artifacts simply because a template exists. Optional artifacts are created just in time when the current governed boundary makes their owning concern applicable. Derived pointer indexes must be recomputed from canonical source artifacts, filesystem paths, active session state, session ledgers, delivery/phase directories, and archive manifests. Stale pointer rows are defects, not truth.

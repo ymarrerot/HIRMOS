@@ -53,11 +53,11 @@ Routing must consider:
 7. Project type and stack evidence.
 8. Delivery governance and phase state, when active.
 9. Runtime integration posture, when material.
-10. Existing execution controls in `_hirmos/session/SESSION_EXECUTION.md`.
+10. Existing execution controls in `_hirmos/session/SESSION_LEDGER.md`.
 11. Installed extension manifests.
 12. Installed capability manifests.
 
-Project type and stack decisions recorded in `DESIGN.md`, `SESSION_SCOPE.md`, `stack-resolution.json`, and `SESSION_EXECUTION.md` may require, skip, or shape capabilities. They do not replace lifecycle authority.
+Project type and stack decisions recorded in `DESIGN.md`, `SESSION_SCOPE.md`, `stack-resolution.json`, and `SESSION_LEDGER.md` may require, skip, or shape capabilities. They do not replace lifecycle authority.
 
 Rules:
 
@@ -69,7 +69,7 @@ Rules:
 
 When an advancing command reaches a lifecycle boundary that requires capability routing, follow this workflow:
 
-1. Confirm the active lifecycle stage from `_hirmos/session/SESSION_STATE.json` and `_hirmos/session/SESSION_EXECUTION.md`.
+1. Confirm the active lifecycle stage from `_hirmos/session/SESSION_STATE.json` and `_hirmos/session/SESSION_LEDGER.md`.
 2. Read this protocol before selecting extension or capability entrypoints.
 3. Inspect installed extension manifests at `_hirmos/extensions/*/extension.json`.
 4. Select candidate extensions whose `lifecycle_stages` includes the active lifecycle stage.
@@ -83,7 +83,7 @@ When an advancing command reaches a lifecycle boundary that requires capability 
 12. For every `REQUIRED` capability and every selected `OPTIONAL` capability, resolve the runnable entrypoint from `capability.json.entrypoints.default`.
 13. Read the capability entrypoint before executing capability-specific work.
 14. Run only the capability-specific work needed by the active lifecycle boundary.
-15. Record decisions, entrypoint paths, reasons, controls, terminal states, and unresolved-item producer outcomes in `_hirmos/session/SESSION_EXECUTION.md`.
+15. Record decisions, entrypoint paths, reasons, controls, terminal states, and unresolved-item producer outcomes in `_hirmos/session/SESSION_LEDGER.md`.
 16. Do not claim lifecycle-boundary completion until required capability controls are `SATISFIED`, `BLOCKED`, or `NOT_APPLICABLE` with rationale.
 
 This workflow is the canonical routing path. Command files may point to it, but they must not redefine it.
@@ -196,7 +196,7 @@ If no capability trigger matches, the decision is usually `NOT_APPLICABLE`, not 
 
 ## Capability activity record
 
-Capability decisions are recorded in `_hirmos/session/SESSION_EXECUTION.md`.
+Capability decisions are recorded in `_hirmos/session/SESSION_LEDGER.md`.
 
 Use this shape inside the execution spine:
 
@@ -237,7 +237,7 @@ A capability is complete only when:
 2. expected artifacts/evidence were produced or explicitly marked not applicable;
 3. unresolved-item producer obligations were handled;
 4. required execution controls are `SATISFIED` or `NOT_APPLICABLE` with rationale;
-5. `_hirmos/session/SESSION_EXECUTION.md` records the capability status.
+5. `_hirmos/session/SESSION_LEDGER.md` records the capability status.
 
 ## Missing or conflicting provider rule
 
@@ -310,7 +310,7 @@ Routing guardrails:
 - Single-session routes must not instantiate durable delivery artifacts just to satisfy governance.
 - Durable delivery routes must not be downgraded to single-session routing merely because the current user message is short.
 
-Fail-closed rule: if the focus, route, active authority, or Delivery Shape Decision is `UNCERTAIN`, or if the selected route cannot satisfy its authority artifacts, the command must set the relevant capability decision to `BLOCKED` or `ROUTE_BACK_REQUIRED`, record the reason in `SESSION_EXECUTION.md`, and stop before implementation.
+Fail-closed rule: if the focus, route, active authority, or Delivery Shape Decision is `UNCERTAIN`, or if the selected route cannot satisfy its authority artifacts, the command must set the relevant capability decision to `BLOCKED` or `ROUTE_BACK_REQUIRED`, record the reason in `SESSION_LEDGER.md`, and stop before implementation.
 
 Legacy route labels are history only. Runtime routing uses `DELIVERY_BASELINE / delivery_baseline → delivery-baseline` before session scope when durable delivery baseline is not yet accepted, and `DELIVERY_PHASE_SESSION / phase_session_baseline → phase-baseline → session-scope → implementation-readiness` after acceptance. Fail-closed rule: if the Delivery Shape Decision is `UNCERTAIN`, the route must block before implementation.
 

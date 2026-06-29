@@ -189,3 +189,7 @@ During `delivery_baseline`, HIRMOS must not create, update, list, or depend on `
 ## PROD-L8.13 Current-State-First Wording
 
 The checkpoint must explain delivery/session/phase routing from current system state, request scope, governance need, validation risk, continuity requirements, and artifact-authority boundaries. It may mention project-type classification as supporting metadata, but must not present greenfield/brownfield labels as the primary reason for durable delivery governance.
+
+## Optional artifact creation note
+
+Do not create empty optional artifacts for future work. Name expected future artifact paths only as expected paths until the governed boundary creates them. If an optional artifact is not applicable, say so explicitly.

@@ -20,7 +20,7 @@
   "produces_artifacts": [
     "project files when authorized",
     "_hirmos/session/implementation-units/IU-<unit-id>.md",
-    "_hirmos/session/SESSION_EXECUTION.md"
+    "_hirmos/session/SESSION_LEDGER.md"
   ],
   "execution_controls": [
     "implementation-execution control",

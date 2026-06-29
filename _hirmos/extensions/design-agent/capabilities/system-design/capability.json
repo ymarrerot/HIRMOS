@@ -21,7 +21,7 @@
     "_hirmos/system/delivery/<delivery-id>/DESIGN.md when session_focus = delivery_baseline and separate design authority is justified",
     "_hirmos/session/DESIGN.md when a bounded session scope justifies separate design authority",
     "focus-appropriate unresolved-items.md",
-    "_hirmos/session/SESSION_EXECUTION.md"
+    "_hirmos/session/SESSION_LEDGER.md"
   ],
   "execution_controls": [
     "Design control",

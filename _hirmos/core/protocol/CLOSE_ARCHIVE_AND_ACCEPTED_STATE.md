@@ -8,9 +8,9 @@ Purpose: ensure `hirmos close` is a governed state transaction, not a chat summa
 `hirmos close` is not complete until four surfaces agree:
 
 1. **Session scope truth** — `_hirmos/session/SESSION_SCOPE.md`, especially close verification, shows what was promised, what was verified, unresolved-item disposition, and the final fail-closed verdict.
-2. **Execution truth** — `_hirmos/session/SESSION_EXECUTION.md` records the close command, execution controls, evidence pointers, archive/reset control pointers, and exactly one legal next command or action.
+2. **Execution truth** — `_hirmos/session/SESSION_LEDGER.md` records the close command, execution controls, evidence pointers, archive/reset control pointers, and exactly one legal next command or action.
 3. **Accepted current truth** — `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`, active-only `CARRY_FORWARD.md`, and conditional `DECISION_LOG.md` when explicit decision-log governance is active reflect only accepted outcomes, active carry-forward obligations, and governed durable decisions.
-4. **Archive/reset truth** — the archive records archived artifacts and post-close verification, while active `_hirmos/session/` is reset to idle scaffolding. Archive manifest information belongs in history at `ARCHIVE_MANIFEST.md` and in `SESSION_EXECUTION.md` archive controls; do not create a separate active-session archive manifest support file.
+4. **Archive/reset truth** — the archive records archived artifacts and post-close verification, while active `_hirmos/session/` is reset to idle scaffolding. Archive manifest information belongs in history at `ARCHIVE_MANIFEST.md` and in `SESSION_LEDGER.md` archive controls; do not create a separate active-session archive manifest support file.
 
 If any surface disagrees, HIRMOS must report `Close Blocked`, not `Closed / Archived`.
 
@@ -22,11 +22,11 @@ Close is an integrity-sensitive operation. HIRMOS must not claim close success, 
 
 A normal close is a transaction with seven ordered parts:
 
-1. **Readiness verification** — verify `SESSION_SCOPE.md` including close verification, `unresolved-items.md`, `SESSION_EXECUTION.md`, implementation-unit reviews, `EVIDENCE.md` when present, and active execution controls.
+1. **Readiness verification** — verify `SESSION_SCOPE.md` including close verification, `unresolved-items.md`, `SESSION_LEDGER.md`, implementation-unit reviews, `EVIDENCE.md` when present, and active execution controls.
 2. **Close-time carry-forward triage** — classify every unresolved/evidence/follow-up candidate before final close as `AUTO_RESOLVED_NOW`, `USER_RESOLVED_NOW`, `APPROVED_CARRY_FORWARD`, `BLOCKING_UNRESOLVED`, or `NO_LONGER_APPLIES`.
 3. **Accepted-state decision** — classify every material session outcome as accepted, superseded, rejected / not applied, evidence-only, approved carry-forward, or blocked.
 4. **Accepted-state application** — update `_hirmos/system/accepted-state/` only for accepted outcomes, durable decisions, and user-approved active carry-forward items.
-4. **Archive preservation** — copy the complete active session artifact set to `_hirmos/system/history/sessions/<session-id>/` and create `SESSION_EXECUTION.md` archive controls there.
+4. **Archive preservation** — copy the complete active session artifact set to `_hirmos/system/history/sessions/<session-id>/` and create `SESSION_LEDGER.md` archive controls there.
 5. **Archive-state normalization** — preserve pre-close state as history, and ensure the archived `SESSION_STATE.json` is terminal (`closed`, `archived`, or `history_only`), not active.
 6. **Active-session reset** — reset `_hirmos/session/` to minimal idle scaffolding after archive preservation succeeds.
 7. **Post-close verification** — verify archive path, current-state latest-close metadata, active-only carry-forward state, idle session state, and no stale active artifacts before surfacing close success.
@@ -40,7 +40,7 @@ Before normal close can be claimed, these active-session authorities must exist 
 - `_hirmos/session/SESSION_SCOPE.md` — scope, completion criteria, and close-verification mirror;
 - `_hirmos/session/SESSION_SCOPE.md` close verification — governed promised-vs-verified review and final verdict;
 - `_hirmos/session/unresolved-items.md` — governed unresolved-item register and disposition history;
-- `_hirmos/session/SESSION_EXECUTION.md` — close execution controls, evidence log, and reset controls.
+- `_hirmos/session/SESSION_LEDGER.md` — close execution controls, evidence log, and reset controls.
 
 Implementation sessions also require:
 
@@ -48,7 +48,7 @@ Implementation sessions also require:
 
 Evidence beyond implementation-unit records is required only when the claim family is active and cannot be captured clearly in the relevant implementation-unit artifact. In that case, use root `EVIDENCE.md` as the consolidated evidence surface. Do not create separate runtime-readiness, local-runtime-evidence, role-workflow-smoke, claim-reconciliation, close-checklist, archive-manifest, or session-scope-review support files for new sessions.
 
-`SESSION_EXECUTION.md` close/update control pointers, implementation-unit reviews, `EVIDENCE.md`, and `SESSION_SCOPE.md` close verification are the close evidence surfaces in the strict-necessity model. Close authority comes from `SESSION_SCOPE.md`, `SESSION_EXECUTION.md`, `unresolved-items.md`, implementation-unit artifacts, `EVIDENCE.md` when present, and accepted-state files.
+`SESSION_LEDGER.md` close/update control pointers, implementation-unit reviews, `EVIDENCE.md`, and `SESSION_SCOPE.md` close verification are the close evidence surfaces in the strict-necessity model. Close authority comes from `SESSION_SCOPE.md`, `SESSION_LEDGER.md`, `unresolved-items.md`, implementation-unit artifacts, `EVIDENCE.md` when present, and accepted-state files.
 
 ## Close-time carry-forward triage doctrine
 
@@ -114,7 +114,7 @@ Normal close requires all checks below to pass:
 
 | Check | Required result |
 |---|---|
-| Session identity consistency | `SESSION_SCOPE.md`, `SESSION_SCOPE.md` close verification, `SESSION_EXECUTION.md`, archive path, and `SESSION_STATE.json` reference the same session id or explain why not applicable. |
+| Session identity consistency | `SESSION_SCOPE.md`, `SESSION_SCOPE.md` close verification, `SESSION_LEDGER.md`, archive path, and `SESSION_STATE.json` reference the same session id or explain why not applicable. |
 | Scope review | `SESSION_SCOPE.md` close verification directly reviews `SESSION_SCOPE.md`, `unresolved-items.md`, implementation units, validation/evidence appendices, and current system state as applicable. |
 | Execution controls | no required control remains `PENDING`, `UNSATISFIED`, or `BLOCKED`. |
 | Close-time carry-forward triage | every unresolved/evidence/follow-up candidate is auto-resolved, user-resolved, approved for carry-forward, blocked, or marked no-longer-applicable with evidence. |
@@ -146,7 +146,7 @@ The following are stale after normal close and must block close success if they 
 
 ```text
 SESSION_SCOPE.md
-SESSION_EXECUTION.md
+SESSION_LEDGER.md
 unresolved-items.md
 REQUIREMENTS.md
 DESIGN.md
@@ -196,17 +196,17 @@ Close is not complete until archive state and active state are both truthful.
 
 HIRMOS must enforce these rules:
 
-1. **Archive the pre-close truth without leaving active-state contradictions.** If the active session state is useful as historical evidence, preserve it as `PRE_CLOSE_SESSION_STATE.json` or an explicitly labeled section in `SESSION_EXECUTION.md` archive controls.
+1. **Archive the pre-close truth without leaving active-state contradictions.** If the active session state is useful as historical evidence, preserve it as `PRE_CLOSE_SESSION_STATE.json` or an explicitly labeled section in `SESSION_LEDGER.md` archive controls.
 2. **Normalize the archived session state.** The archive copy of `SESSION_STATE.json` must not say `active`, `implementation_complete`, or any active-session status after normal close. It must say the session is closed, archived, or history-only.
 3. **Reset the active session state.** `_hirmos/session/SESSION_STATE.json` must say idle / no active session after normal close.
-4. **Reconcile all three state views.** `SESSION_EXECUTION.md`, `SESSION_EXECUTION.md` archive controls, and active `_hirmos/session/SESSION_STATE.json` must agree about close result, latest archive, and accepted-state update.
+4. **Reconcile all three state views.** `SESSION_LEDGER.md`, `SESSION_LEDGER.md` archive controls, and active `_hirmos/session/SESSION_STATE.json` must agree about close result, latest archive, and accepted-state update.
 5. **Block close on disagreement.** If archived state, active state, accepted state, or close controls disagree, HIRMOS must report `Close Blocked`. It must not claim archive success or update-state success.
 
 Firm rule: archive only after the change is complete and state is consistent. A chat statement that close succeeded is not close evidence.
 
 ### Required archive-state fields
 
-`SESSION_EXECUTION.md` archive controls must record:
+`SESSION_LEDGER.md` archive controls must record:
 
 - `pre_close_session_state_recorded`: yes / no / not_applicable;
 - `archived_session_state_status`: closed / archived / history_only / missing / conflict;
@@ -276,7 +276,7 @@ Before normal close, HIRMOS must materialize the owning evidence artifact when i
 | Any local runtime, database, provider, setup, seed, dev-server, route, or user-environment claim | `_hirmos/session/EVIDENCE.md` | Record setup attempts and limitations with canonical evidence states. |
 | Any role, actor, approval, user journey, or workflow-readiness claim | `_hirmos/session/EVIDENCE.md` | Record smoke checks or `NOT_RUN` / `BLOCKED` / `NOT_APPLICABLE` per material workflow. |
 | Any runtime provider / integration posture claim | `_hirmos/session/DESIGN.md` / `_hirmos/session/EVIDENCE.md` | Use canonical runtime posture values only. |
-| Any package, export, downloadable zip, or review-package claim | package-cleanliness record in `SESSION_EXECUTION.md` archive controls, `SESSION_EXECUTION.md`, or the package report | Record excluded/allowed local files and block clean-package claims if dirty files are present. |
+| Any package, export, downloadable zip, or review-package claim | package-cleanliness record in `SESSION_LEDGER.md` archive controls, `SESSION_LEDGER.md`, or the package report | Record excluded/allowed local files and block clean-package claims if dirty files are present. |
 
 ### Close-time validator gate
 
@@ -300,7 +300,7 @@ Before normal close, HIRMOS must scan generated session and accepted-state artif
 - `_hirmos/session/EVIDENCE.md` when present;
 - `_hirmos/session/EVIDENCE.md` when present;
 - `_hirmos/session/SESSION_SCOPE.md`;
-- `_hirmos/session/SESSION_EXECUTION.md`;
+- `_hirmos/session/SESSION_LEDGER.md`;
 - `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`;
 - `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` accepted-state navigation/latest-close section;
 - `_hirmos/system/accepted-state/CARRY_FORWARD.md`;
@@ -317,7 +317,7 @@ Firm rule: close does not get a compliance grace period. Missing evidence artifa
 
 ## PROD-L6 accepted-state/history alignment
 
-ARCHIVE_MANIFEST.md is history-only. It records the close transaction and concordance checks, but it does not become accepted current truth by itself. Normal close is valid only when the archive manifest, `SESSION_EXECUTION.md` close controls, `SESSION_SCOPE.md` close verification, active-session reset, and accepted-state files agree.
+ARCHIVE_MANIFEST.md is history-only. It records the close transaction and concordance checks, but it does not become accepted current truth by itself. Normal close is valid only when the archive manifest, `SESSION_LEDGER.md` close controls, `SESSION_SCOPE.md` close verification, active-session reset, and accepted-state files agree.
 
 For delivery-governed work, close must verify that Current System State delivery pointers refreshed or were explicitly verified unchanged. The required pointer model is:
 
@@ -469,7 +469,7 @@ Close/archive must validate fixable active work before creating historical archi
 Before archive preservation begins, HIRMOS must run an active-session validation gate over the active close surfaces:
 
 - `_hirmos/session/SESSION_SCOPE.md` close verification;
-- `_hirmos/session/SESSION_EXECUTION.md` close controls, IU timing controls, review gates, and evidence pointers;
+- `_hirmos/session/SESSION_LEDGER.md` close controls, IU timing controls, review gates, and evidence pointers;
 - `_hirmos/session/implementation-units/IU-xx.md` sealed contract sections and append-only execution/review records when IU mode is active;
 - `_hirmos/session/EVIDENCE.md` when present;
 - `_hirmos/session/unresolved-items.md` or the active delivery unresolved register, depending on session focus;
@@ -519,3 +519,12 @@ Generated close cannot rely on narrative compliance. Before archive preservation
 - current-state and delivery pointers are refreshed and concordant.
 
 Any failure must be fixed while active, downgraded honestly, or recorded as blocked/partial. Do not archive a clean close when generated-run mechanical gates failed.
+
+## PROD-L8.32L Artifact Creation / Derived Pointer Doctrine
+
+HIRMOS must not create optional artifacts simply because a template exists. Optional artifacts are created just in time when the current governed boundary makes their owning concern applicable. Derived pointer indexes must be recomputed from canonical source artifacts, filesystem paths, active session state, session ledgers, delivery/phase directories, and archive manifests. Stale pointer rows are defects, not truth.
+
+
+## PROD-L8.32Q Delivery Completion Concordance Simplification
+
+Delivery completion concordance is simplification-first. Remove duplicated mutable status where possible, derive completion posture from source artifacts, and add targeted checks for known contradiction classes. Do not add broad prose obligations that require the model to synchronize delivery status across roadmap, delivery scope, phase files, session ledger, evidence, and accepted-state summaries. Rich governed pause outputs and IU execution gates remain unchanged.

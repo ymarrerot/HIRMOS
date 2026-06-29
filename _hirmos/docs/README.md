@@ -4,6 +4,23 @@ HIRMOS is an orchestration framework for AI-assisted software development.
 
 This documentation is organized as an onboarding path. Start with the lane that matches what you want to do now; you do not need to read the whole framework before using it.
 
+## How HIRMOS routes work
+
+HIRMOS always follows the lifecycle:
+
+```text
+Understand System State → Design → Implementation → Update System State
+```
+
+The work shape determines how much structure is needed:
+
+- **Single-session route** — for bounded work that can be scoped, implemented, reviewed, and closed in one governed session.
+- **Delivery route** — for larger work that needs a Delivery Plan and Delivery Baseline before phase/session implementation.
+- **Phase/session route** — for implementing the next accepted slice of a durable delivery.
+- **IU implementation route** — for implementation work that needs Implementation Unit planning before execution.
+
+If you only remember one operational rule: **do not implement before the relevant scope is accepted, and do not execute IUs before the IU plan is accepted.**
+
 ## 1 — Use HIRMOS for software work
 
 Use this lane when you want to install HIRMOS, start a real project run, or understand the basic workflow inside an AI coding tool.
@@ -40,73 +57,32 @@ Start here:
 
 ## Reference
 
-Use this lane when you need a definition, artifact map, runtime-surface explanation, or terminology lookup.
+Use this lane when you need a deeper map of artifacts, commands, runtime surfaces, integrations, stacks, or terminology.
 
 Start here:
 
-- [Reference](reference/README.md)
+- [Reference Overview](reference/README.md)
 - [Artifact Model](reference/artifact-model.md)
-- [CLI Reference](reference/cli-reference.md)
+- [Runtime Surfaces](reference/runtime-surfaces.md)
 - [Framework Command Reference](reference/framework-command-reference.md)
-- [Integration Tools](reference/integration-tools.md)
-- [Runtime Surfaces](reference/runtime-surfaces.md)
 - [Glossary](reference/glossary.md)
-- [Stacks](reference/stacks.md)
-- [Interaction Posture](reference/interaction-posture.md)
 
-## Decide what you want to do next
+## What to read first
 
-| I want to... | Go here |
+| Goal | Read |
 |---|---|
-| Install HIRMOS in a project | [Installation](1-use-hirmos/getting-started/installation.md) |
-| Start using HIRMOS quickly | [Quickstart](1-use-hirmos/getting-started/quickstart.md) |
-| Run my first real project session | [First Real Run](1-use-hirmos/getting-started/first-real-run.md) |
-| Understand the command flow | [Commands](1-use-hirmos/getting-started/commands.md) |
-| Understand the methodology | [Methodology Overview](2-methodology/README.md) |
-| Understand current-state-first work | [Current-State-First Work](2-methodology/current-state-first.md) |
-| Understand unresolved decisions and assumptions | [Unresolved Items](2-methodology/unresolved-items.md) |
-| Extend or contribute to HIRMOS | [Extend & Contribute](3-extend-contribute/README.md) |
-| Understand framework structure | [Framework Structure](3-extend-contribute/framework-structure.md) |
-| Use the terminal CLI | [CLI Reference](reference/cli-reference.md) |
-| Use HIRMOS workflow commands inside an AI tool | [Framework Command Reference](reference/framework-command-reference.md) |
-| Understand AI-tool integrations | [Integration Tools](reference/integration-tools.md) |
-| Look up artifact names or terminology | [Reference](reference/README.md) |
+| Install HIRMOS | [Installation](1-use-hirmos/getting-started/installation.md) |
+| Run it for the first time | [Quickstart](1-use-hirmos/getting-started/quickstart.md) |
+| See a realistic tutorial | [First Real Run](1-use-hirmos/getting-started/first-real-run.md) |
+| Understand larger delivery work | [Multi-Session Work](1-use-hirmos/getting-started/multi-session-work.md) |
+| Inspect artifacts | [Artifact Model](reference/artifact-model.md) |
+| Contribute safely | [Validation](3-extend-contribute/validation.md) |
 
-## If you only remember one thing
+## Onboarding posture
 
-Use `hirmos init` to install the framework and generate the AI-tool integration file for your tool. That generated integration file is the normal bootstrap path. For complete CLI usage, including install, update, `--integration`, `--source`, `--version`, and `--offline`, see the [CLI Reference](reference/cli-reference.md).
+HIRMOS docs follow four principles:
 
-If you are not using the CLI yet, installed HIRMOS manually, or your AI tool did not load the generated integration file, use this fallback bootstrap prompt:
-
-```text
-Read and follow _hirmos/AGENTS.md
-```
-
-Then use HIRMOS workflow commands inside the AI-agent conversation, not as terminal CLI commands:
-
-```text
-hirmos start "<your request>"
-hirmos status
-hirmos continue
-hirmos close
-```
-
-
-## Scope authority model
-
-Current HIRMOS releases use `SESSION_SCOPE.md` as active session authority. Durable multi-session work uses `_hirmos/system/delivery/DELIVERY_PLAN.md` as the delivery roadmap/register and `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` as the scoped authority for one delivery/release.
-
-## Focus-aware delivery and session workflow
-
-Current HIRMOS uses a focus-aware runtime model. Every command runs inside a governed session envelope, but HIRMOS creates only the artifacts required by the selected focus.
-
-- Small work can stay minimal.
-- Single-session implementation uses `SESSION_SCOPE.md` as the complete active authority.
-- Durable delivery work first uses `DELIVERY_SCOPE.md` and delivery-level unresolved items, then creates phase/session authority after the delivery baseline is accepted.
-
-See:
-
-- [Command Guide](1-use-hirmos/getting-started/commands.md)
-- [Multi-Session Work](1-use-hirmos/getting-started/multi-session-work.md)
-- [Delivery Baseline and Phase/Session Flow](1-use-hirmos/examples/delivery-baseline-and-phase-session.md)
-- [Runtime Surfaces](reference/runtime-surfaces.md)
+- **Simple by default** — start with commands and visible pauses.
+- **Transparent by design** — show where decisions, assumptions, and evidence live.
+- **Rigorous underneath** — keep validator, artifact, and lifecycle rules available in methodology/reference docs.
+- **Progressive in disclosure** — link deeper details instead of front-loading them.

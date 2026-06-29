@@ -23,6 +23,7 @@ This template is not a session artifact. It prevents free-form checkpoint output
 - Do not create or reference concrete future `PHASE-xx.md` paths unless those files exist.
 - Do not create or reference full implementation-unit artifacts before the relevant baseline has been accepted or amended.
 - Recommend exactly one next governed command when the baseline is acceptable: `hirmos continue`.
+- When IU mode is expected, label that next step as `IU Planning`, not implementation or IU execution.
 
 ## Canonical interaction posture density
 
@@ -39,7 +40,7 @@ If there are no gated delivery decisions requiring user input, `hirmos continue`
 For `session_baseline`, `phase_session_baseline`, and implementation-capable `minimal_session`, the output must say:
 
 ```text
-If you run `hirmos continue`, HIRMOS will treat this session baseline as accepted unless you request changes first. It will then instantiate implementation-unit artifacts if needed and begin governed implementation.
+If you run `hirmos continue`, HIRMOS will treat this session baseline as accepted unless you request changes first. If implementation units are required, the next step is IU Planning only: HIRMOS will create or verify the full IU files, run active generated-artifact validation, and pause for IU Plan — Review or Change. It will not edit project files or begin IU execution until you later accept the IU plan. If no IU mode is required, HIRMOS will follow the lightweight implementation path allowed by the accepted baseline.
 ```
 
 ## Compatibility phrase for minimal/session baseline checkpoints
@@ -62,3 +63,8 @@ Reply exactly: Stop / do not continue
 ```
 
 - Do not create or reference full implementation-unit artifacts before the session scope baseline has been accepted or amended.
+- Do not describe the next baseline-acceptance continuation as implementation when IU mode applies; describe it as IU Planning and a pause for IU Plan review.
+
+## Optional artifact creation note
+
+Do not create empty optional artifacts for future work. Name expected future artifact paths only as expected paths until the governed boundary creates them. If an optional artifact is not applicable, say so explicitly.

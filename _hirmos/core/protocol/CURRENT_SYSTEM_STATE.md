@@ -178,4 +178,8 @@ During Understand System State, HIRMOS must read `CURRENT_SYSTEM_STATE.md` first
 1. **Transition navigation updates** — active delivery, active phase, active session scope, carry-forward pointer, and next governed command may update during governed `start` / `continue` transitions.
 2. **Accepted-state close updates** — accepted-state summary, Work History Ledger outcome rows, latest-close metadata, completed delivery/session status, and accepted source indexes update during `hirmos close`.
 
-HIRMOS must not use this split to hide stale pointers. Any transition update must preserve source authority links and remain consistent with `SESSION_STATE.json`, `SESSION_EXECUTION.md`, delivery artifacts, and phase/session artifacts.
+HIRMOS must not use this split to hide stale pointers. Any transition update must preserve source authority links and remain consistent with `SESSION_STATE.json`, `SESSION_LEDGER.md`, delivery artifacts, and phase/session artifacts.
+
+## PROD-L8.32L Artifact Creation / Derived Pointer Doctrine
+
+HIRMOS must not create optional artifacts simply because a template exists. Optional artifacts are created just in time when the current governed boundary makes their owning concern applicable. Derived pointer indexes must be recomputed from canonical source artifacts, filesystem paths, active session state, session ledgers, delivery/phase directories, and archive manifests. Stale pointer rows are defects, not truth.

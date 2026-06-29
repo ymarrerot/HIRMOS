@@ -106,6 +106,15 @@ python3 _hirmos/tools/validate.py
 
 Validation checks the installed framework structure and key static rules. It does not prove that a particular run was correct; active run correctness depends on session artifacts, execution controls, unresolved-item disposition, and evidence.
 
+When you install an AI-tool integration, the framework package should include and install the integration registry and templates:
+
+```text
+_hirmos/integrations/agent-tools/registry.json
+_hirmos/integrations/agent-tools/templates/
+```
+
+If `hirmos init --integration <tool>` reports a missing registry or template, reinstall from a complete framework package before starting a dogfood run.
+
 ## Runtime state
 
 A fresh installation includes minimal runtime folders. Active session artifacts are created from templates when HIRMOS commands require them. Do not edit templates as if they were runtime evidence.

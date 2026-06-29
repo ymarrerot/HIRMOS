@@ -106,8 +106,8 @@ Close evidence must prove a state transaction, not merely a user-facing summary.
 
 Required close evidence includes:
 
-- `SESSION_EXECUTION.md` close/update control pointers accepted/rejected/evidence-only/carry-forward classification;
-- `SESSION_EXECUTION.md` close controls close readiness and integrity checks;
+- `SESSION_LEDGER.md` close/update control pointers accepted/rejected/evidence-only/carry-forward classification;
+- `SESSION_LEDGER.md` close controls close readiness and integrity checks;
 - archive manifest under `_hirmos/system/history/sessions/<session-id>/`;
 - current-state latest-close metadata and carry-forward updates;
 - reset `SESSION_STATE.json` after normal close;
@@ -166,7 +166,7 @@ Validator checks must protect runtime safety and artifact authority before they 
 | Class | Keep by default? | Purpose | Examples |
 |---|---|---|---|
 | Authority-safety | Yes | Prevent invalid authority surfaces or unsafe lifecycle progress. | delivery baseline must not create session scope; session optional authority must not appear during delivery baseline; root accepted-state requirements must not exist without explicit governance. |
-| Freshness/concordance | Yes | Prevent stale mirrors from contradicting active machine state or evidence. | `SESSION_STATE.json` conflicts with `SESSION_EXECUTION.md`; phase status remains pending after implementation; evidence says both passed and not-run. |
+| Freshness/concordance | Yes | Prevent stale mirrors from contradicting active machine state or evidence. | `SESSION_STATE.json` conflicts with `SESSION_LEDGER.md`; phase status remains pending after implementation; evidence says both passed and not-run. |
 | Structural/status | Yes | Require machine-checkable fields, legal statuses, and referenced paths. | scalar `Entry criteria status`; current phase pointer exists; allowed next command is legal. |
 | Exact wording | Avoid unless it protects authority safety | Require particular prose. Convert to structural/status checks when possible. | pre-acceptance delivery should be tested by status + absence of accepted/active labels, not by requiring one exact sentence. |
 | Release-marker / plan-marker | Avoid | Historical implementation-plan markers should not be long-term validation authority. | `PROD-Lx` strings are not runtime invariants unless the phrase names a current contract. |
@@ -181,7 +181,7 @@ For L8.19, validator-relevant risks are:
 
 - idle `hirmos continue` must not be represented as a legal mutation path;
 - IU-governed implementation must not claim normal governance when IU artifacts were created only after material edits;
-- material correction commands must be individually traceable in `SESSION_EXECUTION.md`;
+- material correction commands must be individually traceable in `SESSION_LEDGER.md`;
 - archive/session chronology must be monotonic or explicitly explained;
 - delivery-plan active/pointer sections must not remain stale at close.
 
@@ -245,6 +245,9 @@ When implementation changed project files, review records must state whether the
 
 
 ## PROD-L8.23 Generated-Run Runtime Artifact Validation
+
+PROD-L8.32I IU boundary validation: active generated-artifact validation after IU planning must pass before the IU Plan checkpoint can offer execution authorization. Validation must not treat session-baseline acceptance or `IU_PLANNING_COMPLETE` as permission to edit project files.
+
 Validators must distinguish framework-template validation from generated-run validation. A framework can pass static validation while a generated project run fails runtime-artifact validation. When generated artifacts exist, validation should inspect them for authority safety and concordance, including IU authority checkpoints, minimum IU substance, timestamp completeness, phase close freshness, delivery close-log freshness, and evidence-claim honesty.
 
 Runtime generated-artifact validation may fail:
@@ -306,3 +309,15 @@ Generated-run validation must convert common narrative-compliance failures into 
 - delivery or current-system-state pointers are stale, absent, or contradictory after delivery-governed close.
 
 Validator output for generated-run mechanical gates must aggregate generated-run failures. It must not stop after the first archived-session or current-state pointer defect when additional generated-session defects can be reported safely. Earlier framework static checks may still fail fast when the framework package itself is structurally unreadable.
+
+
+## PROD-L8.32D Scope/IU Boundary Validation
+
+Generated-run validation must reject attempts to use `SESSION_SCOPE.md` as IU authority. Scope may contain only compact IU pointers: planned IU ID, one-line objective, covered scope item IDs, and expected IU file path. Full IU contracts, binary acceptance detail per IU, execution steps, sealed-contract status, and review/evidence detail must live in IU files and `EVIDENCE.md`/`SESSION_LEDGER.md` pointers. If lifecycle claims rely on scope-only IU detail, validation fails.
+
+
+## PROD-L8.32K Runtime Boundary Validation
+
+Generated-run validation must fail when an IU-mode session records material project-file edits, implementation-complete claims, close-readiness claims, or close/archive transition claims before `SESSION_LEDGER.md` records `IU_EXECUTION_AUTHORIZED` after IU plan review.
+
+Before any lifecycle transition claim, the active command packet must require an active gate validator result. Narrative compliance statements, IU planning tables, or retrospective IU files are not substitutes for the validator result.

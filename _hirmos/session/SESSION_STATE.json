@@ -12,5 +12,13 @@
   "recommended_next_command": "hirmos start",
   "blocking_reason": null,
   "created_at": null,
-  "updated_at": null
+  "updated_at": null,
+  "_derived_command_state": {
+    "status": "DERIVED_CACHE",
+    "source_ledger_event": null,
+    "source_runtime_packet": null,
+    "active_gate_validator_result": null,
+    "validity": "UNVERIFIED"
+  },
+  "_jit_artifact_creation_notice": "Optional active artifacts are absent until their owning concern becomes applicable."
 }

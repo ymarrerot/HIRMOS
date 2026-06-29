@@ -1,82 +1,61 @@
 # Glossary
 
-## User Request
+## Accepted State
 
-The entry trigger for HIRMOS work. It may include plain-language instructions, uploaded notes, tickets, screenshots, prototypes, or files. It guides focus but is not final authority.
+The durable current truth HIRMOS should use at the start of future work. Accepted state is updated at close and is navigated through `CURRENT_SYSTEM_STATE.md`.
 
-## Understand System State
+## Current-State-First
 
-The lifecycle responsibility that establishes general and request-focused current system understanding before governed Design or Implementation.
-
-## Design
-
-The lifecycle responsibility that turns source inputs and system-state findings into governed requirements, design, delivery structure, Session Scope scope, decisions, and implementation readiness.
-
-## Implementation
-
-The lifecycle responsibility that realizes accepted Design through implementation units, project-file changes when authorized, validation, review, retry, and evidence. It is not limited to coding.
-
-## Update System State
-
-The lifecycle responsibility that records accepted outcomes, preserves history, carries forward unresolved items, and prepares future sessions. It is not implementation.
-
-## Execution Control
-
-A required control recorded in `SESSION_EXECUTION.md` that must be satisfied, blocked, pending, or not applicable before HIRMOS can claim progress or readiness.
-
-## Gated Unresolved Item
-
-An unresolved item that blocks the affected lifecycle boundary until resolved.
-
-## Non-Gating Unresolved Item
-
-An unresolved item that can be carried forward as an explicit assumption or constraint.
-
-## Delivery Unit
-
-A governed decomposition unit for delivery. A phase is the default Delivery Unit type when ordered staged delivery is natural.
-
-## Session Scope
-
-The Design-owned authority that defines what the current session may and may not do, and what Implementation is authorized to realize.
-
-
-## Runtime integration posture
-
-The internal HIRMOS classification for the actual level of a material runtime integration such as database, authentication, messaging, storage, deployment, or provider API.
-
-Domain Expert users normally see a simplified recommendation and production-readiness decision, not the full internal taxonomy.
-
-## Terminal CLI Command
-
-A shell command run in a terminal. In current HIRMOS, the primary terminal CLI command is `hirmos init`, which installs framework and integration files into a project.
-
-## Framework Workflow Command
-
-A command phrase used inside an AI coding tool conversation, such as `hirmos start`, `hirmos status`, `hirmos continue`, or `hirmos close`. These commands are executed through the AI-tool integration and HIRMOS framework instructions, not by the terminal CLI.
-
-## Integration Tool
-
-An AI coding tool or agent environment that can read HIRMOS bootstrap instructions, such as Cursor, Claude, Copilot, Codex, OpenCode, Gemini, Windsurf, Kiro, or an AGENTS.md-compatible environment.
-
-## Capability
-
-A modular unit of HIRMOS behavior contributed by an extension. Capabilities produce governed artifacts, findings, evidence, controls, or implementation outputs under core lifecycle authority.
-
-## Entrypoint
-
-A framework file that describes how an extension or capability is activated and what it produces. Runnable entrypoints expose an execution contract with purpose, produced outputs, and terminal states.
-
-## Session Focus
-
-The active work focus recorded in `SESSION_STATE.json.session_focus`. It tells HIRMOS which authority surface is active and which artifacts are required.
-
-Examples include `minimal_session`, `session_baseline`, `delivery_baseline`, `phase_session_baseline`, `implementation`, `correction`, `close`, and `status`.
+The principle that HIRMOS starts by understanding the current system before designing or implementing work.
 
 ## Delivery Baseline
 
-A proposed durable delivery authority prepared before phase/session implementation work. It is governed by `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md` and `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`, then surfaced through `Delivery Baseline — Review or Change`.
+A proposed durable delivery authority prepared before phase/session implementation work. It is surfaced through `Delivery Baseline — Review or Change` and stored under `_hirmos/system/delivery/<delivery-id>/` when accepted.
 
-## Phase Coverage Plan
+## Delivery Plan
 
-The section of `DELIVERY_SCOPE.md` that maps planned phases to delivery requirements, design/engineering decisions, production-shaped gates, and exit evidence. It allows HIRMOS to verify planned phase coverage before future phase files are instantiated.
+The project-level delivery roadmap/register at `_hirmos/system/delivery/DELIVERY_PLAN.md`. It points to delivery authority and should not duplicate mutable runtime status.
+
+## Derived Pointer Index
+
+A navigation cache derived from source artifacts such as delivery directories, phase files, session archives, close records, and current-state pointers. Source artifacts win if the derived index conflicts.
+
+## Gate
+
+A required control recorded in `SESSION_LEDGER.md` that must be satisfied, blocked, pending, or not applicable before HIRMOS can claim progress or readiness.
+
+## Implementation Unit / IU
+
+A bounded implementation authority file under `_hirmos/session/implementation-units/`. IU files own unit scope, execution evidence, review, and retry records when IU mode applies.
+
+## IU Planning
+
+The governed step after session baseline acceptance where HIRMOS creates and validates IU files. IU Planning does not authorize material project-file edits.
+
+## IU Execution
+
+The governed implementation step after the user accepts the IU plan. Material project-file edits require IU Execution authorization when IU mode applies.
+
+## Phase
+
+A delivery unit used when ordered staged delivery is natural. Phase authority lives under `_hirmos/system/delivery/<delivery-id>/phases/` and is created just in time.
+
+## Phase/Session Route
+
+The route used when an accepted delivery advances into a bounded implementation session for the next phase or delivery unit.
+
+## Session Baseline
+
+A reviewable checkpoint that defines the active session scope before implementation or other governed work proceeds.
+
+## Session Ledger
+
+`SESSION_LEDGER.md`, the compact command/gate ledger for the active session.
+
+## Session Scope
+
+`SESSION_SCOPE.md`, the canonical active session authority.
+
+## Unresolved Item
+
+A governed blocker, assumption, technical-review item, or carry-forward item that must remain visible until resolved, accepted, deferred, or explicitly carried forward.

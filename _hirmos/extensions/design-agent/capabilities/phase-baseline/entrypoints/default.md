@@ -9,7 +9,7 @@ Instantiate the next phase authority just in time and prepare SESSION_SCOPE.md f
 ### Produces
 
 - focus-specific authority artifacts defined by `_hirmos/core/protocol/CAPABILITY_ROUTING.md`
-- `_hirmos/session/SESSION_EXECUTION.md` control updates
+- `_hirmos/session/SESSION_LEDGER.md` control updates
 
 ### Terminal States
 
@@ -24,7 +24,7 @@ Instantiate the next phase authority just in time and prepare SESSION_SCOPE.md f
 1. Confirm `SESSION_STATE.json.session_focus` before producing artifacts.
 2. Use the active authority and unresolved-item target required by `_hirmos/core/protocol/CAPABILITY_ROUTING.md`.
 3. Do not create artifacts outside the selected focus.
-4. Record capability status in `_hirmos/session/SESSION_EXECUTION.md`.
+4. Record capability status in `_hirmos/session/SESSION_LEDGER.md`.
 
 ## Activation triggers
 
@@ -34,7 +34,7 @@ Instantiate the next phase authority just in time and prepare SESSION_SCOPE.md f
 ## Required inputs
 
 - `_hirmos/session/SESSION_STATE.json`
-- `_hirmos/session/SESSION_EXECUTION.md`
+- `_hirmos/session/SESSION_LEDGER.md`
 - Current System State when available
 
 ## Execution controls contributed
@@ -45,12 +45,9 @@ Instantiate the next phase authority just in time and prepare SESSION_SCOPE.md f
 
 ## Canonical interaction posture visibility
 
-Use the canonical HIRMOS interaction posture from `_hirmos/core/authority/INTERACTION_POSTURE.md`: concise user-facing output, transparent artifact pointers for governed claims, and progressive disclosure when risk, validation failure, blocker state, route-back, or user request requires more detail.
+Apply the shared interaction-posture rules in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the canonical posture authority at `_hirmos/core/authority/INTERACTION_POSTURE.md`. Surface rich governed pause/checkpoint outputs when they support user decision-making; do not reduce checkpoint clarity to save tokens.
 
 ## Unresolved-item producer obligation
 
-This capability is an unresolved-item producer and MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`.
+Apply the shared unresolved-item producer obligation in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the owning protocol: this capability MUST apply `_hirmos/core/protocol/UNRESOLVED_ITEMS.md`. It must record exactly one producer outcome in the focus-appropriate unresolved register: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`. When items exist, preserve current status, downstream impact, and revalidation point.
 
-Before marking the capability complete, record exactly one producer outcome in the focus-appropriate unresolved register: `ITEMS_FOUND`, `NONE_FOUND`, `NOT_APPLICABLE`, or `BLOCKED`.
-
-Record full item fields in the focus-appropriate unresolved register, including current status, downstream impact, and revalidation point; do not duplicate the full field schema in this entrypoint.

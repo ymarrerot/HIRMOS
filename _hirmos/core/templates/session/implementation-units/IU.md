@@ -1,5 +1,9 @@
 # Implementation Unit
 
+Canonical owner: implementation-unit contract, execution, review, and handoff detail for one bounded implementation unit.
+
+`SESSION_SCOPE.md` may point to this IU by ID, one-line objective, covered scope item IDs, and file path only. Full IU authority lives here, not in `SESSION_SCOPE.md`.
+
 Status: active-session implementation-unit Main Artifact.
 Purpose: define a sealed execution contract for one bounded implementation unit, then preserve append-only execution, review, retry, and handoff records in clearly separated sections.
 
@@ -207,6 +211,8 @@ Does the actual implementation satisfy 100% of this implementation unit authorit
 - Reason:
 
 ### Unit Result
+
+`Unit Result` is the unit execution/review result before close-time external or user-environment verification unless explicitly updated later. Do not reopen every IU at close solely to synchronize user/runtime verification. If later evidence changes final confidence, record it in EVIDENCE.md and use the optional Close Evidence Contribution pointer below.
 
 - PASS | PASS_WITH_LIMITATIONS | FAIL | BLOCKED | ROUTE_BACK_REQUIRED
 - Rationale:

@@ -220,7 +220,7 @@ DELIVERY_PHASE_SESSION / phase_session_baseline
 - `delivery-baseline` creates or updates `_hirmos/system/delivery/DELIVERY_PLAN.md`, `_hirmos/system/delivery/<delivery-id>/DELIVERY_SCOPE.md`, `_hirmos/system/delivery/<delivery-id>/unresolved-items.md`, and optional delivery-level `REQUIREMENTS.md` / `DESIGN.md` only when justified.
 - `delivery-baseline` must stop at `Delivery Baseline — Review or Change`; it must not create `SESSION_SCOPE.md`, `PHASE-xx.md`, or implementation units before baseline acceptance by default.
 - `phase-baseline` runs only after delivery-baseline acceptance or amendment. It instantiates the next needed `PHASE-xx.md` when phase files are selected and prepares the bounded phase/session authority.
-- `phase-baseline` must write a scalar `Entry criteria status` field in the instantiated phase and refresh `DELIVERY_PLAN.md`, `SESSION_EXECUTION.md`, and Current System State delivery pointers so post-continue artifacts do not retain delivery-baseline-only `PENDING`, `NOT_APPLICABLE`, or `Current phase: none` values.
+- `phase-baseline` must write a scalar `Entry criteria status` field in the instantiated phase and refresh `DELIVERY_PLAN.md`, `SESSION_LEDGER.md`, and Current System State delivery pointers so post-continue artifacts do not retain delivery-baseline-only `PENDING`, `NOT_APPLICABLE`, or `Current phase: none` values.
 - `session-scope` adopts and narrows the accepted `DELIVERY_SCOPE.md` and, when applicable, the active `PHASE-xx.md` into `_hirmos/session/SESSION_SCOPE.md`.
 - `implementation-readiness` verifies the focus-specific authority chain and blocks implementation when required artifacts are missing, stale, contradictory, placeholder-only, or not accepted/amended.
 
@@ -329,7 +329,7 @@ Delivery-Need Classification Gate must route phase-backed work through the Phase
 
 ## Phase Progress / Carry-Forward Routing
 
-Phase Progress Ledger and Carry-Forward Items must be reconciled before continuation or close. CURRENT_SYSTEM_STATE.md active/next phase pointers must agree with phase progress and carry-forward state.
+Phase Progress Pointer Index and Carry-Forward Items must be reconciled before continuation or close. CURRENT_SYSTEM_STATE.md active/next phase pointers must agree with phase progress and carry-forward state.
 
 ## Phase Acceptance Routing
 
@@ -337,7 +337,7 @@ Phase Acceptance Evidence Gate must be evaluated before marking phase work accep
 
 ## Phase Lifecycle Status Reporting
 
-Status output must report CURRENT_SYSTEM_STATE.md` delivery pointers, Phase Progress Ledger status, Phase Acceptance Evidence Gate status, and Status Blocked By Phase Lifecycle Conflict when authorities disagree.
+Status output must report CURRENT_SYSTEM_STATE.md` delivery pointers, Phase Progress Pointer Index status, Phase Acceptance Evidence Gate status, and Status Blocked By Phase Lifecycle Conflict when authorities disagree.
 
 ## PROD-L8.9 runtime command and capability route binding
 
@@ -394,3 +394,12 @@ Delivery artifacts and checkpoints must be status-aware. Before a delivery basel
 Generated artifacts must explain delivery shape from current-state-first evidence: inspected system state, scope size, governance need, validation risk, continuity need, authority boundaries, and practical user interaction/token cost. Project-type labels such as greenfield, brownfield, mixed, or unknown may be recorded as supporting evidence metadata or phase-control routing metadata, but they must not be the primary user-facing justification for delivery governance, session scope, or phase creation. Framework testing, inspection, or dogfood context must not be used as a reason to select a heavier delivery shape.
 
 When the delivery status is `READY_FOR_BASELINE_REVIEW`, the roadmap/register may identify the candidate delivery and its delivery authority, but it must not imply implementation authority. Implementation remains unauthorized until the delivery baseline is accepted/amended and narrowed into phase/session authority.
+
+## PROD-L8.32L Artifact Creation / Derived Pointer Doctrine
+
+HIRMOS must not create optional artifacts simply because a template exists. Optional artifacts are created just in time when the current governed boundary makes their owning concern applicable. Derived pointer indexes must be recomputed from canonical source artifacts, filesystem paths, active session state, session ledgers, delivery/phase directories, and archive manifests. Stale pointer rows are defects, not truth.
+
+
+## PROD-L8.32Q Delivery Completion Concordance Simplification
+
+Delivery completion concordance is simplification-first. Remove duplicated mutable status where possible, derive completion posture from source artifacts, and add targeted checks for known contradiction classes. Do not add broad prose obligations that require the model to synchronize delivery status across roadmap, delivery scope, phase files, session ledger, evidence, and accepted-state summaries. Rich governed pause outputs and IU execution gates remain unchanged.

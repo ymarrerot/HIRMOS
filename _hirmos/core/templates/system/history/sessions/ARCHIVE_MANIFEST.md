@@ -3,7 +3,7 @@
 Status: history-only archive manifest.
 Purpose: record the normal-close archive transaction and concordance between archived session truth, accepted-state updates, active-session reset, and post-close status.
 
-This file is created inside `_hirmos/system/history/sessions/<session-id>/` during normal close. It is not an active-session authority artifact and must not replace `CURRENT_SYSTEM_STATE.md`, `SESSION_EXECUTION.md` close controls, `SESSION_SCOPE.md` close verification, or accepted-state records.
+This file is created inside `_hirmos/system/history/sessions/<session-id>/` during normal close. It is not an active-session authority artifact and must not replace `CURRENT_SYSTEM_STATE.md`, `SESSION_LEDGER.md` close controls, `SESSION_SCOPE.md` close verification, or accepted-state records.
 
 ## 1. Archive Identity
 
@@ -21,7 +21,7 @@ This file is created inside `_hirmos/system/history/sessions/<session-id>/` duri
 | Field | Value |
 |---|---|
 | Pre-close SESSION_STATE preserved | YES / NO |
-| Pre-close state location | `PRE_CLOSE_SESSION_STATE.json` / `SESSION_EXECUTION.md` archive controls / other |
+| Pre-close state location | `PRE_CLOSE_SESSION_STATE.json` / `SESSION_LEDGER.md` archive controls / other |
 | Pre-close lifecycle stage | |
 | Pre-close recommended command | |
 
@@ -31,7 +31,7 @@ This file is created inside `_hirmos/system/history/sessions/<session-id>/` duri
 |---|---:|---|
 | SESSION_STATE.json | YES / NO | |
 | SESSION_SCOPE.md | YES / NO / NOT_APPLICABLE | |
-| SESSION_EXECUTION.md | YES / NO | |
+| SESSION_LEDGER.md | YES / NO | |
 | unresolved-items.md | YES / NO / NOT_APPLICABLE | |
 | implementation-units/ | YES / NO / NOT_APPLICABLE | |
 | EVIDENCE.md | YES / NO / NOT_APPLICABLE | |
@@ -77,7 +77,7 @@ Use when delivery governance was active.
 | Active SESSION_STATE.json reset to idle | PASS / BLOCKED |
 | Active session contains only idle scaffolding | PASS / BLOCKED |
 | No stale SESSION_SCOPE.md remains active | PASS / BLOCKED |
-| No stale SESSION_EXECUTION.md remains active | PASS / BLOCKED |
+| No stale SESSION_LEDGER.md remains active | PASS / BLOCKED |
 | No stale unresolved-items.md remains active | PASS / BLOCKED |
 
 ## 8. Post-Close Concordance
@@ -85,7 +85,7 @@ Use when delivery governance was active.
 | Surface | Concordance result | Notes |
 |---|---|---|
 | SESSION_SCOPE.md close verification | PASS / PARTIAL / BLOCKED / NOT_APPLICABLE | |
-| SESSION_EXECUTION.md close controls | PASS / PARTIAL / BLOCKED | |
+| SESSION_LEDGER.md close controls | PASS / PARTIAL / BLOCKED | |
 | CURRENT_SYSTEM_STATE.md latest close metadata | PASS / PARTIAL / BLOCKED | |
 | CARRY_FORWARD.md active items | PASS / PARTIAL / BLOCKED / NOT_APPLICABLE | |
 | Conditional DECISION_LOG.md durable decisions | PASS / PARTIAL / BLOCKED / NOT_APPLICABLE | |

@@ -7,7 +7,7 @@ Governed checkpoints are user-facing outputs that can affect continuation. They 
 
 ## Required rule
 
-HIRMOS must not surface a checkpoint that claims a decision, readiness state, artifact availability, implementation authorization, evidence result, or close/update readiness unless the claim is backed by existing non-placeholder session artifacts and current `SESSION_EXECUTION.md` controls.
+HIRMOS must not surface a checkpoint that claims a decision, readiness state, artifact availability, implementation authorization, evidence result, or close/update readiness unless the claim is backed by existing non-placeholder session artifacts and current `SESSION_LEDGER.md` controls.
 
 ## Checkpoint types
 
@@ -25,7 +25,7 @@ STATUS_ONLY
 
 ## Required checkpoint inputs
 
-Before surfacing a governed checkpoint, verify and record in `SESSION_EXECUTION.md`:
+Before surfacing a governed checkpoint, verify and record in `SESSION_LEDGER.md`:
 
 - checkpoint type;
 - active lifecycle boundary;
@@ -38,7 +38,7 @@ Before surfacing a governed checkpoint, verify and record in `SESSION_EXECUTION.
 
 ## Required Current Continuation Snapshot
 
-For checkpoints that request a user decision, claim implementation-readiness, claim implementation completion, claim update-state readiness, fail closed, pause, or change continuation state, HIRMOS must update `_hirmos/session/SESSION_EXECUTION.md` → `Current Continuation Snapshot` before surfacing the user-facing checkpoint.
+For checkpoints that request a user decision, claim implementation-readiness, claim implementation completion, claim update-state readiness, fail closed, pause, or change continuation state, HIRMOS must update `_hirmos/session/SESSION_LEDGER.md` → `Current Continuation Snapshot` before surfacing the user-facing checkpoint.
 
 The snapshot must summarize the current lifecycle stage, terminal state, authoritative artifacts reviewed, unresolved status, evidence status, next safe governed command, and what the next model must not do.
 
@@ -75,7 +75,7 @@ Non-gating assumptions may be carried only when the assumption, risk, scope, own
 A checkpoint is complete only when:
 
 - Current Continuation Snapshot is current when required;
-- `SESSION_EXECUTION.md` Continuation Boundary Log records the surfaced boundary;
+- `SESSION_LEDGER.md` Continuation Boundary Log records the surfaced boundary;
 - execution controls reflect the checkpoint terminal state;
 - unresolved-item dispositions affected by the checkpoint are recorded;
 - the user-facing output does not claim more than the artifacts support.

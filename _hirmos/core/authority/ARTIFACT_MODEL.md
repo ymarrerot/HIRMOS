@@ -54,11 +54,11 @@ A separate active-session artifact is justified only when it is strictly necessa
 
 Files under `_hirmos/session/` are active runtime artifacts for the current HIRMOS session.
 
-A governed session is active only after `_hirmos/session/SESSION_EXECUTION.md` exists and declares an open or in-progress session. New governed sessions use the strict-necessity session surface:
+A governed session is active only after `_hirmos/session/SESSION_LEDGER.md` exists and declares an open or in-progress session. New governed sessions use the strict-necessity session surface:
 
 ```text
 SESSION_STATE.json
-SESSION_EXECUTION.md
+SESSION_LEDGER.md
 SESSION_SCOPE.md
 unresolved-items.md
 REQUIREMENTS.md      # conditional
@@ -73,11 +73,11 @@ stack-resolution.json           # conditional machine-readable stack routing onl
 
 Each lifecycle responsibility owns its authority inside the smallest sufficient artifact set:
 
-- Understand System State records the current-state-first control in `SESSION_EXECUTION.md` and material state findings in `DESIGN.md` when they affect Design or Implementation.
+- Understand System State records the current-state-first control in `SESSION_LEDGER.md` and material state findings in `DESIGN.md` when they affect Design or Implementation.
 - Design / Scope Authority owns requirements, design, delivery/phase scopes, production-shaped engineering posture, and the active `SESSION_SCOPE.md`.
 - Implementation owns `implementation-units/IU-xx.md` artifacts and `EVIDENCE.md` when evidence is material.
-- Update System State owns accepted-state update and archive records through `SESSION_SCOPE.md` close verification, `SESSION_EXECUTION.md` close/archive/reset control pointers, `EVIDENCE.md` when needed, and accepted-state artifacts.
-- `SESSION_EXECUTION.md` owns the human-readable Current Continuation Snapshot, execution-control ledger, and append-only lifecycle history only; it does not own scope or acceptance criteria.
+- Update System State owns accepted-state update and archive records through `SESSION_SCOPE.md` close verification, `SESSION_LEDGER.md` close/archive/reset control pointers, `EVIDENCE.md` when needed, and accepted-state artifacts.
+- `SESSION_LEDGER.md` owns the human-readable Current Continuation Snapshot, execution-control ledger, and append-only lifecycle history only; it does not own scope or acceptance criteria.
 
 Later stages may reference earlier-stage authority, but must not silently rewrite it. If a later stage discovers a problem, it must route back to the owning stage.
 
@@ -91,7 +91,7 @@ DESIGN.md current-state basis, source matrix, design authority, technical review
 REQUIREMENTS.md requirements authority when material; target name REQUIREMENTS.md
 unresolved-items.md governed decision/assumption/risk register
 EVIDENCE.md material validation/runtime/claim/close evidence
-SESSION_EXECUTION.md command and lifecycle execution-control spine
+SESSION_LEDGER.md command and lifecycle execution-control spine
 SESSION_STATE.json minimal machine-readable command state only
 ```
 
@@ -101,7 +101,7 @@ Implementation-unit authority:
 implementation-units/IU-xx.md
 ```
 
-Session infrastructure is intentionally minimized. `bootstrap/` remains required for startup/bootstrap evidence. `stack-resolution.json` is retained as a conditional root session artifact because stack resolution is machine-readable routing state. `SESSION_STATE.json` remains minimal machine state; continuation handoff lives in `SESSION_EXECUTION.md` Current Continuation Snapshot. Other former support responsibilities live in the major artifacts listed above.
+Session infrastructure is intentionally minimized. `bootstrap/` remains required for startup/bootstrap evidence. `stack-resolution.json` is retained as a conditional root session artifact because stack resolution is machine-readable routing state. `SESSION_STATE.json` remains minimal machine state; continuation handoff lives in `SESSION_LEDGER.md` Current Continuation Snapshot. Other former support responsibilities live in the major artifacts listed above.
 
 ## Accepted system state
 
@@ -153,7 +153,7 @@ Separate phase files are instantiated just in time after delivery-baseline accep
 
 ## Root session filename discipline
 
-Root session files must remain intentionally few and must be major/governed artifacts only. New auxiliary/evidence artifacts must not be introduced unless they satisfy strict necessity and cannot safely live in `SESSION_SCOPE.md`, `DESIGN.md`, `EVIDENCE.md`, `SESSION_EXECUTION.md`, or `implementation-units/IU-xx.md`.
+Root session files must remain intentionally few and must be major/governed artifacts only. New auxiliary/evidence artifacts must not be introduced unless they satisfy strict necessity and cannot safely live in `SESSION_SCOPE.md`, `DESIGN.md`, `EVIDENCE.md`, `SESSION_LEDGER.md`, or `implementation-units/IU-xx.md`.
 
 ## Accepted state and archive distinction
 

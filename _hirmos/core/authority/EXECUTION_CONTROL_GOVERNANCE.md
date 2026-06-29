@@ -5,10 +5,10 @@ Purpose: define the execution-control governance mechanism that makes HIRMOS exe
 
 ## Execution spine
 
-The active session execution spine is:
+The active session ledger spine is:
 
 ```text
-_hirmos/session/SESSION_EXECUTION.md
+_hirmos/session/SESSION_LEDGER.md
 ```
 
 A governed HIRMOS session is not active until this file exists and records:
@@ -66,11 +66,11 @@ A control is not satisfied by intent, summary, or template presence. It is satis
 
 ## Capability contribution
 
-Capabilities may contribute required controls when activated. Those controls must be recorded in `SESSION_EXECUTION.md` and resolved before the relevant lifecycle boundary can pass.
+Capabilities may contribute required controls when activated. Those controls must be recorded in `SESSION_LEDGER.md` and resolved before the relevant lifecycle boundary can pass.
 
 ## Archive rule
 
-When a session closes, `SESSION_EXECUTION.md` must be preserved in session history with final control statuses and continuation state.
+When a session closes, `SESSION_LEDGER.md` must be preserved in session history with final control statuses and continuation state.
 
 ## Claim reconciliation control
 

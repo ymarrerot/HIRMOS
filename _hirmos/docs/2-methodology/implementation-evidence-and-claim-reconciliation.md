@@ -1,99 +1,78 @@
 # Implementation Evidence and Claim Reconciliation
 
-HIRMOS uses evidence-backed review to avoid overstating what the project can do.
-
-A passing build is useful evidence, but it is not the same as a working local app. A provider adapter is useful implementation work, but it is not the same as verified provider delivery. A close summary is useful, but it is not the same as a consistent archive and accepted-state update.
-
-## The rule
-
-HIRMOS must reconcile material claims before surfacing readiness, implementation completion, production readiness, package readiness, or close success.
-
-It checks:
-
-- what HIRMOS said;
-- what files actually exist;
-- what session artifacts record;
-- what commands/logs prove;
-- what runtime behavior was verified;
-- what remains not run, blocked, assumed, or not applicable.
+HIRMOS treats implementation claims as evidence-backed claims, not just model assertions.
 
 ## Evidence levels
 
-HIRMOS distinguishes:
+Implementation work may produce several kinds of evidence:
+
+- code diff evidence;
+- static validation evidence;
+- build/test/lint evidence;
+- runtime smoke evidence;
+- user-observed runtime evidence;
+- production-readiness evidence when production readiness is actually in scope.
+
+A claim must match the evidence level. A local MVP can be accepted as local runtime work without claiming production readiness.
+
+## IU evidence
+
+When implementation units are used, each IU should record:
+
+- requested outcome;
+- files/artifacts changed;
+- checks performed;
+- evidence produced;
+- unit result;
+- review result.
+
+`SESSION_LEDGER.md` should point to IU/evidence records instead of duplicating all evidence detail.
+
+## Claim reconciliation
+
+Before completion or close claims, HIRMOS must reconcile:
+
+- accepted scope;
+- implementation results;
+- validation output;
+- unresolved items;
+- production/runtime limitations;
+- carry-forward items.
+
+If evidence is missing or contradictory, HIRMOS should report blocked or partial status rather than overclaiming.
+
+## Generated-run validation boundary
+
+Generated HIRMOS artifacts are part of the run. They must satisfy generated-run mechanical gates before HIRMOS claims a clean implementation or close.
+
+## No retrospective compliance
+
+HIRMOS must not implement first and then backfill governance artifacts as if they authorized the work. Retrospective correction may honestly document what happened, but it does not turn an unauthorized action into a clean gate pass.
+
+## IU Planning before IU Execution
+
+When IU mode applies:
 
 ```text
-not run
-claimed but not logged
-logged command passed
-local runtime verified
-user environment verified
-production readiness verified
-blocked
-not applicable
+Session Baseline accepted → IU Planning only
+IU Plan accepted → IU Execution
 ```
 
-This prevents a narrow success from being treated as a wider success.
+Material project-file edits require IU execution authorization.
 
-## Examples
 
-- `npm run build` passed does not prove the app was manually exercised in a browser.
-- A database schema file does not prove runtime persistence is active.
-- Local PostgreSQL working does not prove production database readiness.
-- Console fallback for SMS/email does not prove real provider delivery.
-- An archive folder does not prove accepted system state was updated.
+## Command and environment evidence wording
 
-## Domain Expert UX
-
-Domain Expert mode should not expose every evidence table by default. It should surface a concise truthful summary:
-
-```text
-Implementation is complete for the authorized local MVP slice.
-Build/typecheck passed.
-Local runtime was not verified because dependency installation failed.
-Production provider delivery is not yet ready and is tracked for review.
-```
-
-Technical Supervisor and Framework Diagnostics modes can expose deeper evidence records.
-
-## Canonical values in generated artifacts
-
-Generated HIRMOS artifacts must use the canonical evidence states from `EVIDENCE.md` claim reconciliation. Do not use shorthand such as `observed`, `build pass`, `accepted at close`, or `deferred` as evidence states. Translate them into canonical values and explain nuance in rationale fields.
-
-## PROD-L8.21 Acceptance Evidence Semantics
-
-HIRMOS must distinguish three acceptance levels and must not collapse them into a single `PASS` claim.
-
-| Evidence level | Meaning | Allowed claim |
-|---|---|---|
-| Implementation accepted | Scope was implemented and code/static evidence passed | implementation accepted |
-| Runtime verified | Local runtime/user-flow/provider behavior was exercised and passed | runtime verified |
-| Production verified | Deployment/production-like constraints were exercised or explicitly assessed | production verified |
-
-A delivery or phase may be implementation-accepted while runtime/provider/production verification remains pending, partial, blocked, or carry-forward. Close summaries must not claim full MVP/runtime/production acceptance unless the corresponding evidence level is complete.
-
-## PROD-L8.22 Review Gate Salvage
-
-HIRMOS preserves legacy evidence-backed review discipline through existing artifacts instead of restoring legacy review files.
-
-Review gates must answer:
-
-- What authority was reviewed?
-- What evidence was reviewed?
-- Was the final codebase or file state inspected?
-- Does the evidence prove unit, session, phase, delivery, runtime, or production claims?
-- What remains unproven?
-- Why is the terminal state honest?
-
-A passing static check is not a delivery review. A completed implementation unit is not a phase review. A phase review is not a delivery review unless cross-phase behavior and delivery-level acceptance posture are reviewed.
-
+A claim should say whether the logged command passed, failed, was not run, or was user environment verified. User environment verified evidence is useful, but it should be labeled separately from commands the agent actually ran.
 
 ## PROD-L8.23 Generated-Run Validation Boundary
-A generated run must be evaluated against its produced artifacts, not only against shipped framework templates. Runtime evidence and IU authority are credible only when the generated session archives contain the required authority checkpoint, substantive IU contracts, coverage mapping, timestamp completeness, and reconciled review/close records.
 
+Generated session archives are part of the evidence record. HIRMOS must validate active and archived generated artifacts before claiming a clean generated-run result.
 
 ## PROD-L8.24 Retrospective Compliance Boundary
-A generated run is not clean merely because the archive was edited until validation passed. HIRMOS must be able to show that IU authority and generated review gates existed at the right lifecycle boundary. The active ledger must prove pre-execution authorization before material edits, and phase/delivery close must prove acceptance without overclaiming runtime/provider/production evidence.
+
+The active ledger must prove pre-execution authorization. Backfilled artifacts can document a correction honestly, but they cannot convert unauthorized implementation into a clean pre-execution gate pass.
 
 ## PROD-L8.31 Generated-Run Mechanical Gates
 
-Generated-run artifacts must be mechanically checked before lifecycle claims. The validator should report all generated-run gate failures it can safely detect in one run, including missing bootstrap answers, missing or thin IUs, missing active generated-artifact validation, missing carry-forward approval sources, and stale current-state/delivery pointers.
+HIRMOS must report all generated-run gate failures instead of hiding failures behind a generic completion claim.

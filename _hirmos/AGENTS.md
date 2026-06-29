@@ -54,7 +54,7 @@ If the user asks only to read or follow this file, or only to complete HIRMOS bo
 
 After bootstrap passes, do not run `hirmos start`, `hirmos continue`, `hirmos status`, `hirmos close`, or any other runtime command unless the user explicitly requested that command.
 
-A bootstrap report is not an active governed work session. A governed work session is active only when `_hirmos/session/SESSION_EXECUTION.md` exists and declares an open or in-progress session.
+A bootstrap report is not an active governed work session. A governed work session is active only when `_hirmos/session/SESSION_LEDGER.md` exists and declares an open or in-progress session.
 
 ## Required next action
 
@@ -65,3 +65,7 @@ _hirmos/core/bootstrap.md
 ```
 
 Do not proceed from memory. If any instruction, artifact, command, protocol, or current session state is uncertain, re-check the relevant HIRMOS file before answering, executing, validating, or surfacing results.
+
+## PROD-L8.32L runtime cost control
+
+HIRMOS creates optional artifacts just in time and treats pointer indexes as derived navigation caches. This reduces stale placeholder artifacts and prevents roadmap/current-state/phase pointer rows from becoming independent mutable truth.
