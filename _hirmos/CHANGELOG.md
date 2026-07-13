@@ -7,7 +7,7 @@
 - Extends the integration registry so supported tools can receive generated always-on files, explicit command files, and per-command `SKILL.md` packages from the same capsule source.
 - Preserves per-command skills only; HIRMOS does not generate one broad default `hirmos/SKILL.md`.
 - Adds CLI/package installer support so terminal `hirmos init --integration <tool>` emits generated command projections and per-command skills from the project-local framework payload.
-- Bumps the terminal CLI package from 1.3.4 to 1.3.5 because integration projection install behavior changed.
+- Bumps the terminal CLI package baseline to 1.3.7 because integration projection install behavior changed and the public 1.3.6 package did not provide the required generated command/skill projection behavior.
 - Reinforces `hirmos start` as a non-implementation boundary and `hirmos continue` as a classify-and-gate-before-coding command.
 - Preserves the IU Planning → IU Execution boundary: IU mode still requires IU plan review plus `IU_EXECUTION_AUTHORIZED` before material edits.
 - Adds a `hirmos status` read-only bootstrap fast path: status may report bootstrap gaps without creating `BOOTSTRAP_REPORT.md`, while advancing commands remain blocked until bootstrap passes.
