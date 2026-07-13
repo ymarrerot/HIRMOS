@@ -1,6 +1,8 @@
 # Evidence-Backed Review
 
-HIRMOS review is evidence-backed. The model should not claim that work is complete merely because it produced plausible code or prose.
+HIRMOS review is evidence-backed. In serious software work, done is not a declaration; it is a claim that must match evidence.
+
+AI-assisted development makes this discipline more important because generated code or prose can look plausible before it has been tested, reviewed, or reconciled against accepted scope. HIRMOS therefore requires completion claims to be supported by appropriate evidence.
 
 ## What counts as evidence
 

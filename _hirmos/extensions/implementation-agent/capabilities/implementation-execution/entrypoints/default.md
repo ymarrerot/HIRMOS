@@ -132,3 +132,7 @@ Implementation execution must not start from a `SESSION_SCOPE.md` IU table, prev
 ## PROD-L8.32K Runtime Boundary Execution Block
 
 Implementation execution must not start from session baseline acceptance or IU planning completion. It may start only after `SESSION_LEDGER.md` records `IU_EXECUTION_AUTHORIZED` after IU plan review and the active gate validator result allows execution. If the validator is not run or fails, do not edit project files.
+
+## PROD-L8.32Z baseline acceptance gate
+
+Material project/source edits require accepted baseline authority recorded in `SESSION_SCOPE.md` and `SESSION_LEDGER.md`. When IU mode applies, accepted baseline authority authorizes IU planning only; implementation execution still requires full IU artifacts, IU plan review, and `IU_EXECUTION_AUTHORIZED`.

@@ -26,6 +26,8 @@ Governance posture: this preview is not implementation authority.
 
 Full IU authority belongs in `_hirmos/session/implementation-units/IU-xx.md`.
 
+Detailed user instructions are scope input, not implementation authorization. `hirmos start` must leave this scope under baseline review; it must not self-accept the scope or authorize material project/source edits.
+
 
 ## 1. Session Identity
 
@@ -68,6 +70,8 @@ State the bounded result this session is authorized to produce.
 - Success posture: ACCEPTED | PARTIAL | BLOCKED | FAILED
 - User-visible output expected:
 - Project-file mutation authorized before baseline acceptance: NO
+- Baseline acceptance authority recorded: YES / NO / PENDING
+- Material project/source edit authorization: NOT_AUTHORIZED | AUTHORIZED_WITHOUT_IU | REQUIRES_IU_EXECUTION_AUTHORIZATION | BLOCKED
 
 ## 4. Scoped Requirements
 
@@ -231,7 +235,8 @@ Boundary rule:
 - `SESSION_SCOPE.md` may identify planned IU IDs, one-line objectives, scope item IDs, and future file paths.
 - `SESSION_SCOPE.md` must not define IU contract detail or execution authority.
 - Full implementation-unit artifacts must not be created until the session scope baseline is accepted or amended.
-- Material implementation may not begin until full IU artifacts exist, are non-placeholder, and the `SESSION_LEDGER.md` IU gate records PASS.
+- Accepted baseline authority is required before any material project/source edit.
+- Material implementation may not begin until full IU artifacts exist, are non-placeholder, active generated-artifact validation passes, and the `SESSION_LEDGER.md` IU gate records `IU_EXECUTION_AUTHORIZED` after IU plan review when IU mode applies.
 
 ### Required implementation-unit coverage question
 
@@ -297,11 +302,13 @@ Use binary or explicitly inspectable criteria. Avoid vague criteria.
 
 ## 14. Scope Amendments
 
-Record every scope change after initial session scope approval.
+Record every scope change after initial session scope approval. Reuse this section for continuation authority deltas; do not create a separate amendment artifact.
 
-| Amendment ID | Trigger | Change | User approval / evidence | Impact on criteria |
-|---|---|---|---|---|
-| AM-01 | | | | |
+Update this section only when a later `hirmos continue` changes accepted authority: scope promises, exclusions, implementation-unit objectives, acceptance criteria, required validation, unresolved-item disposition, or close-satisfaction criteria. Same-scope corrections that do not change accepted authority belong in `SESSION_LEDGER.md`, affected IU records, unresolved-items, and evidence instead.
+
+| Amendment ID | Trigger / continue pass | Change | User approval / evidence | Impact on criteria / validation / close satisfaction | Ledger pointer |
+|---|---|---|---|---|---|
+| AM-01 | | | | | |
 
 ## 15. Session Satisfaction Review and Close Verification
 
@@ -398,3 +405,12 @@ The planned IU count must match actual full `IU-xx.md` files before material imp
 Session scope may name optional artifacts only as applicability decisions or expected future paths. It must not require empty placeholder artifacts. Session-level `REQUIREMENTS.md`, `DESIGN.md`, `EVIDENCE.md`, `unresolved-items.md`, and IU files are created just in time when their owning concern becomes active and applicable.
 
 For each optional artifact named here, record one of: `created now`, `expected future path`, `not created because not applicable`, or `blocked pending decision`. Do not leave blank placeholder paths that future runs may mistake for active authority.
+
+
+## PROD-L8.33A Continue Implementation Gate
+
+- `hirmos continue` implementation authority: classify and gate before coding.
+- IU required/requested decision: PENDING / REQUIRED / NOT_REQUIRED.
+- IU plan status: NOT_APPLICABLE / PENDING / READY_FOR_REVIEW / ACCEPTED.
+- No-IU rationale, if applicable: PENDING until recorded before material project/source edits.
+- Material project/source edit authority: BLOCKED until accepted baseline authority exists and, when IU mode applies, `IU_EXECUTION_AUTHORIZED` is recorded after IU plan review.

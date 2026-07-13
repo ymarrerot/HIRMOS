@@ -16,6 +16,31 @@ Terminal states: Status Reported / Status Blocked By Integrity Conflict.
 
 Read this command file first, apply its gate checklist exactly, and read deeper protocols only when this command file names a gate requiring deeper detail, validation fails, or active artifacts contradict each other. Do not route through the removed runtime packet wrapper layer.
 
+## PROD-L8.33E Status read-only bootstrap fast path
+
+`hirmos status` may run a read-only preflight/status pass without creating `_hirmos/session/bootstrap/BOOTSTRAP_REPORT.md`. Bootstrap completion remains required before advancing commands: `hirmos start`, `hirmos continue`, and `hirmos close`.
+
+If bootstrap is absent or incomplete, status must report that fact, report that advancing commands are blocked until bootstrap passes, and continue only as a read-only status/preflight report. Status must not create bootstrap artifacts, backfill accepted-state artifacts, repair carry-forward registers, update lifecycle state, or edit project/source files.
+
+## PROD-L8.33E Status minimum read set
+
+Idle or post-close status must start with this minimum read set:
+
+1. `_hirmos/hirmos.config.json`
+2. `_hirmos/session/SESSION_STATE.json`
+3. `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`
+4. `_hirmos/system/accepted-state/CARRY_FORWARD.md`
+5. The latest archive manifest, if referenced by accepted-state pointers or discoverable under `_hirmos/system/history/sessions/`
+
+Active-session status must add only the session artifacts needed to explain current authority:
+
+1. `_hirmos/session/SESSION_LEDGER.md`
+2. `_hirmos/session/SESSION_SCOPE.md`
+3. `_hirmos/session/unresolved-items.md`, when present or when unresolved-item state is relevant
+4. `_hirmos/session/implementation-units/*.md`, only when IU mode, IU plan status, or IU execution authorization is relevant
+
+Delivery or phase status must add delivery/phase files only when accepted-state or session pointers indicate active delivery/phase context. Deeper protocol reads are escalation reads, not default status reads; use them only when the minimum reads reveal a contradiction, missing required field, active gate, or delivery/phase state that cannot be explained from the compact status surface.
+
 ## Runtime gate checklist
 - Command-state gate and Command-state reporting: report status without mutating files.
 - Status invariant and canonical-value reporting: do not invent state; read machine state and current artifacts.
@@ -33,6 +58,13 @@ Read this command file first, apply its gate checklist exactly, and read deeper 
 - CLI / Status UX Phase Lifecycle Reporting: include Phase Lifecycle Status Report with Greenfield status group and Brownfield status group when applicable.
 - Delivery Status Concordance Reporting: surface Status Blocked By Delivery Status Conflict.
 - Status Blocked By Delivery Route Conflict and integrity conflict must be explicit.
+
+
+## PROD-L8.33A Status Command Read-Only Gate
+
+`hirmos status` is read-only. It reports current lifecycle stage, active gate, integrity conflicts, baseline authority state, IU execution authorization when IU mode applies, and exactly one recommended next command. It must not edit product/source files, advance lifecycle state, or backfill artifacts to make status appear clean.
+
+Status output must explicitly report whether implementation is blocked by missing baseline acceptance, missing IU plan review, or missing `IU_EXECUTION_AUTHORIZED`.
 
 ## Post-close status behavior
 There is no active session, so `hirmos continue` is not applicable. Post-close follow-up command clarity requires a concrete `hirmos start` recommendation when follow-up is needed.

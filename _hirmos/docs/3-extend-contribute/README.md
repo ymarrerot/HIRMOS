@@ -40,11 +40,20 @@ Progressive in disclosure.
 
 Good contributions usually make one of these things clearer:
 
+- what governance requirement the change protects;
 - what the AI agent should do;
 - what the user should see;
 - what artifact owns a decision;
 - what validation proves;
 - what future sessions can rely on.
+
+When updating methodology docs, lead with the durable governance requirement before describing current AI-agent failure modes. Prefer this pattern:
+
+```text
+governance requirement → practical example → consequence → HIRMOS mechanism → evidence
+```
+
+Do not frame HIRMOS governance primarily as compensation for weak models. Current model behavior is context; accountable execution is the durable requirement.
 
 ## Extension model
 

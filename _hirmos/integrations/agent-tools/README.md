@@ -98,3 +98,32 @@ hirmos <command>[:entrypoint] [arguments]
 ```
 
 Workflow commands resolve through installed extension manifests using `hirmos_commands`.
+
+## PROD-L8.32Z pre-edit gate propagation
+
+All registry integrations, including shared-target integrations, must carry the same HIRMOS pre-edit gate through their generated guidance. The current registry targets are `agents`, `claude`, `cursor`, `copilot`, `codex`, `opencode`, `gemini`, `windsurf`, and `kiro`. Shared templates still count for every integration that uses them.
+
+## PROD-L8.33A continue/status command capsule propagation
+
+All registry integrations must carry the same compact, project-agnostic command capsules for `hirmos start`, `hirmos continue`, `hirmos status`, and `hirmos close`.
+
+The `hirmos continue` capsule must state that `hirmos continue` must classify and gate before it codes, must append a continuation pass record before action, must evaluate whether implementation units are required even when the user does not request them, and must stop at `IU Plan — Review or Change` when IUs are required or requested but no accepted IU plan exists.
+
+The `hirmos status` capsule must state that `hirmos status` is read-only, reports the current gate and exactly one recommended next command, and must not mutate product/source files or backfill artifacts.
+
+This propagation applies to all current registry integrations: `agents`, `claude`, `cursor`, `copilot`, `codex`, `opencode`, `gemini`, `windsurf`, and `kiro`.
+
+
+## PROD-L8.33C-2 generated projection model
+
+HIRMOS integration surfaces are generated projections of canonical command capsules. The source authority remains `_hirmos/core/*` and `_hirmos/AGENTS.md`; generated tool surfaces repeat the minimum command gates where the agent is most likely to ingest them.
+
+Projection rules:
+
+- always-on integration files carry compact recognition and safety invariants;
+- command files carry the full per-command capsule for explicit command invocation;
+- per-command `SKILL.md` packages carry the same full per-command capsule where a tool supports skills;
+- HIRMOS does not generate one broad default `hirmos/SKILL.md`;
+- commands and skills may duplicate behavior only as generated projection duplication from the same capsule marker.
+
+The currently projected command capsules are `start`, `continue`, `status`, and `close`.

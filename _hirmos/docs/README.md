@@ -35,7 +35,7 @@ Start here:
 
 ## 2 — Learn the methodology
 
-Use this lane when you want to understand how HIRMOS organizes AI-assisted software work.
+Use this lane when you want to understand how HIRMOS organizes AI-assisted software work as governed execution: accountable context, decisions, scope, evidence, and accepted outcomes.
 
 Start here:
 

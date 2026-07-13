@@ -31,7 +31,7 @@ Compact resume surface. Update before readiness, completion, blocked, status, or
 Allowed concordance values: `MATCH`, `MISMATCH`, `NOT_CHECKED`. A `MISMATCH` blocks readiness, implementation-completion, and close claims.
 
 ## Append-Only Ledger Covenant
-Append-only for command history, continuation passes, route-backs, control-state changes, and boundary records. Preserve prior pass rows; do not collapse multiple continue passes into one summary. Corrections require a dated note and Control Mutation Ledger row. Forbidden edits: deleting prior continuation pass rows, silently rewriting terminal state, or collapsing multiple continue passes. Fail-closed rule: if HIRMOS cannot preserve prior ledger history while applying a correction or amendment, it must stop at `Blocked / Fail-Closed`.
+Append-only for command history, continuation passes, route-backs, control-state changes, and boundary records. Preserve prior pass rows; do not collapse multiple continue passes into one summary. Every `hirmos continue` is a governed pass and must be classified before action. Corrections require a dated note and Control Mutation Ledger row. Forbidden edits: deleting prior continuation pass rows, silently rewriting terminal state, or collapsing multiple continue passes. Fail-closed rule: if HIRMOS cannot preserve prior ledger history while applying a correction or amendment, it must stop at `Blocked / Fail-Closed`.
 
 
 ## Derived Command-State Record
@@ -128,7 +128,18 @@ This record proves the model used the compact runtime path and invoked validatio
 |---|---|---|---|---|---|---|
 | start / continue / IU planning / IU execution / completion / close | `_hirmos/core/commands/<command>.md` | PASS / FAIL / BLOCKED / NOT_RUN | YES / NO / NOT_APPLICABLE | BLOCKED / NO / YES_INVALID | YES / NO | |
 
-Fail-closed rule: `NOT_RUN`, `FAIL`, `BLOCKED`, or `YES_INVALID` blocks implementation-complete, close-readiness, close, archive, and accepted-state transition claims. Material project-file edits before `IU_EXECUTION_AUTHORIZED` are validation failures, not warning-level issues.
+Fail-closed rule: `NOT_RUN`, `FAIL`, `BLOCKED`, or `YES_INVALID` blocks implementation-complete, close-readiness, close, archive, and accepted-state transition claims. Material project/source edits before accepted baseline authority are validation failures, not warning-level issues. In IU mode, material project/source edits before `IU_EXECUTION_AUTHORIZED` are validation failures, not warning-level issues.
+
+## Start / Baseline Pre-Edit Gate
+This gate prevents `hirmos start` from being collapsed into start + implementation. `hirmos start` may create/update HIRMOS governance artifacts and surface a baseline checkpoint only; it must not edit project/source files outside `_hirmos/`.
+
+| Gate | Required before | Status | Authority source | Evidence pointer | Next allowed transition |
+|---|---|---|---|---|---|
+| BASELINE_UNDER_REVIEW | end of `hirmos start` | PASS / BLOCKED / NOT_APPLICABLE | `SESSION_SCOPE.md` or delivery baseline artifact | baseline checkpoint output | wait for `hirmos continue` |
+| BASELINE_ACCEPTED_OR_AMENDED | material project/source edits | PENDING / PASS / BLOCKED / NOT_APPLICABLE | user continuation + `SESSION_SCOPE.md` status | Continuation Pass Register | implementation readiness or IU planning |
+| PRE_MATERIAL_EDIT_GATE | immediately before first material edit | PENDING / PASS / BLOCKED / NOT_APPLICABLE | accepted baseline + command state + IU gate if applicable | Pre-Material-Edit Ledger Row | material edits may start only if all applicable gates pass |
+
+Fail-closed rule: detailed user instructions are scope input, not implementation authorization. If baseline acceptance is missing, or if IU mode applies and `IU_EXECUTION_AUTHORIZED` is missing, material edits are blocked.
 
 ## IU Planning / IU Execution Boundary Record
 This boundary prevents session-baseline acceptance from being confused with implementation authorization. In IU mode, baseline acceptance authorizes IU planning/materialization only. Material project-file edits require a later explicit IU execution authorization.
@@ -137,13 +148,14 @@ This boundary prevents session-baseline acceptance from being confused with impl
 |---|---|---|---|---|---|
 | IU_PLANNING_REQUIRED | after accepted session baseline when IU mode applies | PENDING / PASS / BLOCKED / NOT_APPLICABLE | `SESSION_SCOPE.md` compact IU pointers | planned IU count and expected paths | create full IU files, no project-file edits |
 | IU_PLANNING_COMPLETE | before IU plan review checkpoint | PENDING / PASS / BLOCKED / NOT_APPLICABLE | `implementation-units/IU-*.md` | active generated-artifact validation result | pause for `IU Plan — Review or Change` |
-| IU_EXECUTION_AUTHORIZED | before material project-file edits | PENDING / PASS / BLOCKED / NOT_APPLICABLE | user accepted IU plan + sealed IU files | `hirmos continue "Accept IU plan and begin IU execution"` | implementation execution may start |
+| IU_EXECUTION_AUTHORIZED | before material project/source edits when IU mode applies | PENDING / PASS / BLOCKED / NOT_APPLICABLE | user accepted IU plan + sealed IU files | `hirmos continue "Accept IU plan and begin IU execution"` | implementation execution may start |
 
 Fail-closed rule: `IU_PLANNING_COMPLETE` is not implementation authorization. `IU_EXECUTION_AUTHORIZED` must exist before the first material edit when IU mode applies.
 ## Fail-Closed Conditions
 - `SESSION_STATE.json` and `SESSION_LEDGER.md` disagree on active status, lifecycle stage, continuation pass, or next governed command.
 - Required owner artifacts are missing, placeholder-only, stale, or not reviewed when readiness/completion/close is claimed.
-- IU mode applies and the session attempts material project-file edits before `IU_EXECUTION_AUTHORIZED` is recorded after IU plan review.
+- The session attempts material project/source edits before accepted baseline authority is recorded.
+- IU mode applies and the session attempts material project/source edits before `IU_EXECUTION_AUTHORIZED` is recorded after IU plan review.
 - Gated unresolved items block the boundary; evidence is claimed without a pointer or not-run rationale; delivery/phase/current-state pointers contradict; IU coverage is incomplete; archive/accepted-state/reset evidence is missing; prior continuation rows are collapsed/overwritten.
 
 ## Command Timeline
@@ -155,12 +167,22 @@ Fail-closed rule: `IU_PLANNING_COMPLETE` is not implementation authorization. `I
 |---|---|---|---|---|---|
 
 ## Continuation Pass Register
-| Pass | Command | Pass type | Scope effect | Artifacts updated | Evidence pointer | Result | Next governed command |
-|---:|---|---|---|---|---|---|---|
-Allowed pass types: `INITIAL_IMPLEMENTATION`, `CORRECTIVE`, `SCOPE_AMENDMENT`, `VALIDATION_ONLY`, `ROUTE_BACK`.
+| Pass | Command | Pass type | Scope effect | SESSION_SCOPE.md impact | Artifacts updated | Evidence pointer | Result | Next governed command |
+|---:|---|---|---|---|---|---|---|---|
+Allowed pass types: `ACCEPTANCE_ONLY`, `INITIAL_IMPLEMENTATION`, `IU_EXECUTION_AUTHORIZATION`, `CORRECTIVE_PASS`, `SCOPE_AMENDMENT`, `VALIDATION_ONLY`, `ROUTE_BACK`, `CLOSE_PREPARATION`, `BLOCKED`.
+Pass concordance rule: latest pass number in this register must match `SESSION_STATE.json.continuation_pass`; missing intermediate pass rows fail close/readiness claims.
+Scope-effect rule: if the pass changes accepted authority, acceptance criteria, IU objectives, exclusions, validation requirements, unresolved disposition, or close-satisfaction criteria, record `SESSION_SCOPE.md impact` as `AUTHORITY_DELTA_APPENDED` and update `SESSION_SCOPE.md` before continuing. If not, record `NO_SCOPE_CHANGE` and explain the owner artifact updated.
 
 ### Continue Pass <n> — <type>
 - User command / Reason / Scope effect / SESSION_SCOPE.md impact / IUs affected / unresolved pointer / files changed / evidence pointer / result / next governed command:
+
+## PROD-L8.33A Continue/Status Gate Notes
+
+- `hirmos continue` must classify and gate before it codes.
+- Continue pass records are appended before implementation, validation-readiness, route-back, correction, or close-preparation action.
+- If IUs are requested or required and no accepted IU plan exists, the pass result is IU planning / IU plan review, not material implementation.
+- If IUs are not required, record the no-IU rationale before material project/source edits.
+- `hirmos status` is read-only and must not mutate this ledger, product/source files, lifecycle state, or governance artifacts.
 
 ## Route-Back Records
 Alias for corrections and earlier-stage route-backs.

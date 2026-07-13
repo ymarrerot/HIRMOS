@@ -4,13 +4,25 @@ This file records version-level operational notes for the installed HIRMOS frame
 
 The framework version source of truth is `_hirmos/hirmos.config.json` under `framework.version`.
 
-## Current baseline — 1.2.0
+## Current baseline — 1.2.1
 
-HIRMOS 1.2.0 is the post-dogfood simplification and onboarding-alignment baseline.
+HIRMOS 1.2.1 is the integration-projection, CLI-installer, and status-readiness hardening baseline.
 
-It builds on 1.1.9 by consolidating the compact runtime command surface into `_hirmos/core/commands/`, preserving the IU Planning → IU Execution boundary that proved effective in real dogfood, reducing duplicated mutable delivery/phase status, strengthening derived delivery concordance and installed-project fixture isolation, hardening package/install hygiene, and refreshing onboarding documentation for first-time users.
+It builds on 1.2.0 by adding canonical integration command capsules, generated per-command command surfaces, generated per-command `SKILL.md` packages where supported, and CLI installer support for emitting those projections from the project-local framework payload.
 
-No terminal CLI version bump is required because terminal CLI behavior did not change. The CLI package remains 1.3.4.
+The generated projection model changes terminal `hirmos init` behavior: CLI 1.3.5 or newer is required to emit command projections and per-command skill packages from the project-local `_hirmos/` payload. CLI 1.3.4 can still write older always-on integration files but does not reliably install the new command/skill projections.
+
+HIRMOS 1.2.1 also clarifies `hirmos status` as a read-only command with an explicit bootstrap fast path and minimum read set. `hirmos status` may report that bootstrap is incomplete without creating `BOOTSTRAP_REPORT.md`; advancing commands (`hirmos start`, `hirmos continue`, and `hirmos close`) still require bootstrap completion before execution.
+
+The L8.32X hardening retained in the 1.2.x line strengthens continuation behavior for real sessions: every `hirmos continue` is a governed pass recorded in `SESSION_LEDGER.md`, and `SESSION_SCOPE.md` is updated only for accepted authority deltas such as changed scope, IU objectives, acceptance criteria, validation requirements, unresolved-item disposition, or close-satisfaction criteria.
+
+## HIRMOS 1.2.0 baseline
+
+HIRMOS 1.2.0 is the post-dogfood simplification and onboarding-alignment baseline. It consolidated the compact runtime command surface into `_hirmos/core/commands/`, preserved the IU Planning → IU Execution boundary, reduced duplicated mutable delivery/phase status, strengthened derived delivery concordance and installed-project fixture isolation, hardened package/install hygiene, and refreshed onboarding documentation for first-time users.
+
+## CLI 1.3.5 projection installer baseline
+
+Use CLI package 1.3.5 or newer when installing HIRMOS integration projections from framework 1.2.1 packages that include generated command capsules and per-command skills. For local dogfooding, call the workspace CLI directly with `node tools/cli/dist/index.js init <project> --integration <id> --offline` after `_hirmos/` has been installed into the target project.
 
 ## HIRMOS 1.1.9 baseline
 

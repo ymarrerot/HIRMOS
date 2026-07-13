@@ -226,7 +226,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.2.0'
+expected_version = '1.2.1'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -953,7 +953,7 @@ for rel, phrases in {
     'core/commands/start.md': ['Command-state gate', 'Fail-Closed', 'Mandatory implementation-readiness pause'],
     'core/commands/continue.md': ['Command-state gate', 'append a new continuation pass record', 'Fail-Closed'],
     'core/commands/close.md': ['Command-state gate', 'stale active-session artifacts', 'Close Blocked'],
-    'core/commands/status.md': ['Command-state reporting', 'without mutating files'],
+    'core/commands/status.md': ['Command-state reporting', 'without mutating files', 'Status read-only bootstrap fast path', 'Status minimum read set'],
 }.items():
     body = (root/rel).read_text()
     for phrase in phrases:
@@ -1037,7 +1037,7 @@ if 'including `NON_GATING` items' not in _unresolved_template or 'Non-gating ite
 for rel, phrases in {
     'core/commands/start.md': ['Command-state gate', 'Required state mutation', 'status` is `idle`', 'final start state'],
     'core/commands/continue.md': ['Command-state gate', 'Required state mutation', 'increment `SESSION_STATE.json.continuation_pass`', 'bare `hirmos continue` is rejected'],
-    'core/commands/status.md': ['Command-state gate', 'without mutating files', 'recommended_next_command'],
+    'core/commands/status.md': ['Command-state gate', 'without mutating files', 'recommended_next_command', 'Status read-only bootstrap fast path', 'Status minimum read set'],
     'core/commands/close.md': ['Command-state gate', 'Required state mutation', 'archived `SESSION_STATE.json` normalized', 'stale active-session artifacts'],
 }.items():
     body = (root/rel).read_text()
@@ -1370,7 +1370,7 @@ if 'including `NON_GATING` items' not in _unresolved_template or 'Non-gating ite
 for rel, phrases in {
     'core/commands/start.md': ['Command-state gate', 'Required state mutation', 'status` is `idle`', 'final start state'],
     'core/commands/continue.md': ['Command-state gate', 'Required state mutation', 'increment `SESSION_STATE.json.continuation_pass`', 'bare `hirmos continue` is rejected'],
-    'core/commands/status.md': ['Command-state gate', 'without mutating files', 'recommended_next_command'],
+    'core/commands/status.md': ['Command-state gate', 'without mutating files', 'recommended_next_command', 'Status read-only bootstrap fast path', 'Status minimum read set'],
     'core/commands/close.md': ['Command-state gate', 'Required state mutation', 'archived `SESSION_STATE.json` normalized', 'stale active-session artifacts'],
 }.items():
     body = (root/rel).read_text()
@@ -2568,6 +2568,490 @@ for phrase in [
 ]:
     if phrase not in status_command:
         fail(f' hirmos status command missing ledger status phrase: {phrase}')
+
+
+# PROD-L8.32X continue pass delta recording and scope amendment concordance
+for phrase in [
+    'classify every `hirmos continue` invocation before action',
+    'Continue Pass Delta Recording Gate',
+    'if the pass changes accepted authority, append the corresponding `SESSION_SCOPE.md` authority delta before implementation continues',
+]:
+    if phrase not in continue_command:
+        fail(f'PROD-L8.32X hirmos continue command missing pass-delta phrase: {phrase}')
+for phrase in [
+    'Every `hirmos continue` is a governed pass',
+    'SESSION_STATE.json.continuation_pass` must equal the latest pass number',
+    'CLOSE_PREPARATION',
+]:
+    if phrase not in command_state_protocol:
+        fail(f'PROD-L8.32X COMMAND_STATE_MACHINE.md missing pass classification phrase: {phrase}')
+for phrase in [
+    'Every `hirmos continue` is a governed pass and must be classified before action',
+    'Pass concordance rule: latest pass number in this register must match `SESSION_STATE.json.continuation_pass`',
+    'AUTHORITY_DELTA_APPENDED',
+]:
+    if phrase not in execution_template:
+        fail(f'PROD-L8.32X SESSION_LEDGER.md missing pass register phrase: {phrase}')
+_session_scope_template = (root / 'core/templates/session/SESSION_SCOPE.md').read_text(errors='ignore')
+for phrase in [
+    'continuation authority deltas',
+    'changes accepted authority',
+    'Same-scope corrections that do not change accepted authority belong in `SESSION_LEDGER.md`',
+]:
+    if phrase not in _session_scope_template:
+        fail(f'PROD-L8.32X SESSION_SCOPE.md missing continuation authority delta phrase: {phrase}')
+
+
+def _l832x_latest_ledger_pass(ledger_text: str) -> int | None:
+    nums: list[int] = []
+    # The Continuation Pass Register is the preferred source. Older or partially
+    # filled ledgers may preserve pass headings below the table; both count, but
+    # command timeline rows do not.
+    for line in ledger_text.splitlines():
+        m = re.match(r'(?i)^\|\s*(\d+)\s*\|\s*hirmos continue\s*\|', line)
+        if m:
+            nums.append(int(m.group(1)))
+        h = re.match(r'(?i)^###\s+Continue Pass\s+(\d+)\b', line)
+        if h:
+            nums.append(int(h.group(1)))
+    return max(nums) if nums else None
+
+_active_state_path = root / 'session/SESSION_STATE.json'
+_active_ledger_path = root / 'session/SESSION_LEDGER.md'
+if _active_state_path.exists():
+    try:
+        _active_state = json.loads(_active_state_path.read_text(errors='ignore'))
+    except Exception as exc:
+        fail(f'PROD-L8.32X active SESSION_STATE.json invalid JSON: {exc}')
+        _active_state = {}
+    _state_pass = int(_active_state.get('continuation_pass') or 0)
+    _state_status = _active_state.get('status')
+    if _state_pass > 0 or _state_status in {'active', 'blocked'}:
+        if not _active_ledger_path.exists():
+            fail('PROD-L8.32X active session with continuation_pass/status active must include SESSION_LEDGER.md')
+        else:
+            _latest = _l832x_latest_ledger_pass(_active_ledger_path.read_text(errors='ignore'))
+            if _state_pass > 0 and _latest != _state_pass:
+                fail(f'PROD-L8.32X continuation pass mismatch: session/SESSION_STATE.json continuation_pass={_state_pass}, latest SESSION_LEDGER.md pass={_latest}')
+
+_history_root = root / 'system/history/sessions'
+if _history_root.exists():
+    for _state_path in _history_root.glob('*/SESSION_STATE.json'):
+        try:
+            _arch_state = json.loads(_state_path.read_text(errors='ignore'))
+        except Exception:
+            continue
+        _arch_pass = int(_arch_state.get('continuation_pass') or 0)
+        if _arch_pass <= 0:
+            continue
+        _ledger_path = _state_path.parent / 'SESSION_LEDGER.md'
+        if not _ledger_path.exists():
+            fail(f'PROD-L8.32X archived session missing SESSION_LEDGER.md for continuation concordance: {_state_path.parent.relative_to(root)}')
+            continue
+        _latest = _l832x_latest_ledger_pass(_ledger_path.read_text(errors='ignore'))
+        if _latest != _arch_pass:
+            fail(f'PROD-L8.32X archived continuation pass mismatch in {_state_path.parent.relative_to(root)}: SESSION_STATE continuation_pass={_arch_pass}, ledger latest pass={_latest}')
+
+print('PASS: HIRMOS PROD-L8.32X continue pass delta recording and scope amendment concordance static/runtime check')
+
+
+# PROD-L8.32Z start command non-implementation boundary and baseline acceptance gate
+_l832z_required = {
+    'AGENTS.md': [
+        'Pre-edit gate',
+        'Detailed user instructions are scope input, not implementation authorization',
+        '`hirmos start` is non-implementation',
+        'IU_EXECUTION_AUTHORIZED',
+    ],
+    'core/commands/start.md': [
+        'PROD-L8.32Z Start Non-Implementation Boundary',
+        '`hirmos start` is a non-implementation command',
+        'scope input, not implementation authorization',
+        'must not edit project/source files outside `_hirmos/`',
+    ],
+    'core/commands/continue.md': [
+        'PROD-L8.32Z Baseline Acceptance Gate',
+        'Accepted baseline authority is necessary but not always sufficient for implementation',
+        'baseline acceptance authorizes IU planning/materialization only',
+        'IU_EXECUTION_AUTHORIZED',
+    ],
+    'core/protocol/COMMAND_STATE_MACHINE.md': [
+        'Material project/source edit authority',
+        'Detailed user instructions are scope input, not implementation authorization',
+        'Accepted baseline authority is necessary before implementation, but it does not weaken the IU Planning / IU Execution boundary',
+        'must not self-accept the baseline',
+    ],
+    'core/protocol/COMMANDS.md': [
+        'PROD-L8.32Z Start Non-Implementation Boundary',
+        'Implementation details inside a start request are scope input only',
+        'accepted baseline authority recorded in `SESSION_SCOPE.md` and `SESSION_LEDGER.md`',
+    ],
+    'core/templates/session/SESSION_SCOPE.md': [
+        'Detailed user instructions are scope input, not implementation authorization',
+        'Baseline acceptance authority recorded',
+        'Material project/source edit authorization',
+        'Accepted baseline authority is required before any material project/source edit',
+    ],
+    'core/templates/session/SESSION_LEDGER.md': [
+        'Start / Baseline Pre-Edit Gate',
+        'BASELINE_ACCEPTED_OR_AMENDED',
+        'PRE_MATERIAL_EDIT_GATE',
+        'detailed user instructions are scope input, not implementation authorization',
+    ],
+    'core/templates/checkpoints/START_CHECKPOINT_OUTPUT.md': [
+        'implementation still cannot begin until the applicable implementation gate is satisfied',
+        'Do not edit project/source files during `hirmos start`',
+    ],
+    'integrations/agent-tools/README.md': [
+        'PROD-L8.32Z pre-edit gate propagation',
+        'agents`, `claude`, `cursor`, `copilot`, `codex`, `opencode`, `gemini`, `windsurf`, and `kiro`',
+    ],
+    'tools/test_l832z_start_boundary_gate.py': [
+        'Focused fixtures for PROD-L8.32Z start non-implementation boundary',
+        'expected at least 3 L8.32Z focused cases',
+    ],
+    'tools/fixtures/README.md': [
+        'PROD-L8.32Z Start Non-Implementation Boundary Fixtures',
+        'start command cannot edit project/source files before accepted baseline authority',
+    ],
+}
+for _rel, _phrases in _l832z_required.items():
+    _p = root / _rel
+    if not _p.exists():
+        fail(f'PROD-L8.32Z missing surface: {_rel}')
+    _body = _p.read_text(errors='ignore')
+    for _phrase in _phrases:
+        if _phrase.lower() not in _body.lower():
+            fail(f'PROD-L8.32Z {_rel} missing phrase: {_phrase}')
+
+# All registry integrations must inherit the pre-edit gate through their template, including shared-target integrations.
+_registry_path = root / 'integrations/agent-tools/registry.json'
+try:
+    _registry = json.loads(_registry_path.read_text(errors='ignore'))
+except Exception as exc:
+    fail(f'PROD-L8.32Z integration registry invalid JSON: {exc}')
+_integrations = _registry.get('integrations', {})
+_expected_integrations = {'agents','claude','cursor','copilot','codex','opencode','gemini','windsurf','kiro'}
+if set(_integrations) != _expected_integrations:
+    fail(f'PROD-L8.32Z expected exactly current integration set {_expected_integrations}, found {set(_integrations)}')
+for _name, _cfg in _integrations.items():
+    _template = _cfg.get('template')
+    if not _template:
+        fail(f'PROD-L8.32Z integration {_name} missing template')
+    _template_path = root / 'integrations/agent-tools' / _template
+    if not _template_path.exists():
+        fail(f'PROD-L8.32Z integration {_name} template missing: {_template}')
+    _body = _template_path.read_text(errors='ignore')
+    for _phrase in ['HIRMOS pre-edit gate', '`hirmos start` is non-implementation', 'scope input, not implementation authorization', 'IU_EXECUTION_AUTHORIZED']:
+        if _phrase.lower() not in _body.lower():
+            fail(f'PROD-L8.32Z integration {_name} template missing pre-edit phrase: {_phrase}')
+
+# Runtime generated-session guard: a start/readiness session must not show material edits before accepted baseline authority.
+def _l832z_scope_has_accepted_baseline(scope_text: str) -> bool:
+    return bool(re.search(r'Scope status:\s*(ACCEPTED|AMENDED)\b', scope_text, re.I) or re.search(r'Baseline acceptance authority recorded:\s*(YES|PASS|ACCEPTED)', scope_text, re.I) or re.search(r'BASELINE_ACCEPTED_OR_AMENDED\s*\|[^\n]*\b(PASS|YES)', scope_text, re.I))
+
+def _l832z_ledger_has_baseline_acceptance(ledger_text: str) -> bool:
+    return bool(re.search(r'BASELINE_ACCEPTED_OR_AMENDED\s*\|[^\n]*\b(PASS|YES)', ledger_text, re.I) or re.search(r'\|\s*\d+\s*\|\s*hirmos continue\s*\|\s*(ACCEPTANCE_ONLY|SCOPE_AMENDMENT)\s*\|[^\n]*(AUTHORITY_DELTA_APPENDED|BASELINE_ACCEPTED|ACCEPTED)', ledger_text, re.I) or re.search(r'baseline\s+(?:accepted|amended)\s*:\s*(YES|PASS|ACCEPTED)', ledger_text, re.I))
+
+def _l832z_has_material_edit_signal(text: str) -> bool:
+    return bool(re.search(r'material project/source edits?\s*:\s*(?:YES|STARTED)|material project-file edits?\s*:\s*(?:YES|STARTED)|project-file diff\s*:\s*(?:YES|PRESENT)|Files/areas about to be edited\s*:', text, re.I))
+
+
+def _l832z_generated_session_dirs():
+    _dirs = []
+    _history = root / 'system/history/sessions'
+    if _history.exists():
+        for _child in sorted(_history.iterdir()):
+            if _child.is_dir() and ((_child / 'SESSION_LEDGER.md').exists() or (_child / 'SESSION_STATE.json').exists()):
+                _dirs.append(_child)
+    _active = root / 'session'
+    if _active.exists() and ((_active / 'SESSION_LEDGER.md').exists() or (_active / 'SESSION_SCOPE.md').exists()):
+        try:
+            _st = json.loads((_active / 'SESSION_STATE.json').read_text(errors='ignore')) if (_active / 'SESSION_STATE.json').exists() else {}
+        except Exception:
+            _st = {}
+        if _st.get('status') in {'active', 'blocked'} or int(_st.get('continuation_pass') or 0) > 0:
+            _dirs.append(_active)
+    return _dirs
+
+for _session_dir in _l832z_generated_session_dirs():
+    _scope_txt = (_session_dir / 'SESSION_SCOPE.md').read_text(errors='ignore') if (_session_dir / 'SESSION_SCOPE.md').exists() else ''
+    _ledger_txt = (_session_dir / 'SESSION_LEDGER.md').read_text(errors='ignore') if (_session_dir / 'SESSION_LEDGER.md').exists() else ''
+    _combined = _scope_txt + '\n' + _ledger_txt
+    if not _l832z_has_material_edit_signal(_combined):
+        continue
+    _baseline_ok = _l832z_scope_has_accepted_baseline(_scope_txt) and _l832z_ledger_has_baseline_acceptance(_ledger_txt)
+    if not _baseline_ok:
+        fail(f'PROD-L8.32Z material edit before accepted baseline authority in {_session_dir.relative_to(root)}')
+    _iu_mode_required = bool(re.search(r'Implementation units required:\s*YES|IU mode / IU planned:\s*YES|Planned IU ID', _scope_txt, re.I))
+    _iu_authorized = bool(re.search(r'IU_EXECUTION_AUTHORIZED\s*:\s*(PASS|YES|AUTHORIZED)', _ledger_txt, re.I) or re.search(r'\|\s*IU_EXECUTION_AUTHORIZED\s*\|[^\n]*\|\s*(PASS|YES|AUTHORIZED)\s*\|', _ledger_txt, re.I))
+    if _iu_mode_required and not _iu_authorized:
+        fail(f'PROD-L8.32Z IU-mode material edit before IU_EXECUTION_AUTHORIZED in {_session_dir.relative_to(root)}')
+
+print('PASS: HIRMOS PROD-L8.32Z start non-implementation boundary and baseline acceptance gate static/runtime check')
+
+
+# PROD-L8.33A continue command integration gate and IU planning enforcement
+_l833a_required = {
+    'AGENTS.md': [
+        'PROD-L8.33A continue/status command capsules',
+        'classify and gate before coding',
+        'Never create IU files after material implementation to show compliance',
+        '`hirmos status`, report state only',
+    ],
+    'core/commands/continue.md': [
+        'PROD-L8.33A Continue Command Integration Gate and IU Planning Enforcement',
+        '`hirmos continue` must classify and gate before it codes',
+        'If the user does not request implementation units, HIRMOS must still evaluate whether IUs are required',
+        'record a concise no-IU rationale',
+        'Never create IU files after material implementation to show compliance',
+    ],
+    'core/commands/status.md': [
+        'PROD-L8.33A Status Command Read-Only Gate',
+        '`hirmos status` is read-only',
+        'exactly one recommended next command',
+        'must not edit product/source files',
+        'must not edit product/source files, advance lifecycle state, or backfill artifacts',
+    ],
+    'core/protocol/COMMANDS.md': [
+        'PROD-L8.33A continue/status command integration gate',
+        '`hirmos continue` must classify and gate before it codes',
+        'stop at `IU Plan — Review or Change`',
+        '`hirmos status` is read-only',
+    ],
+    'core/protocol/COMMAND_STATE_MACHINE.md': [
+        'PROD-L8.33A Continue/Status Gate Invariant',
+        'Baseline acceptance can permit implementation only when the active session does not require implementation units',
+        'If implementation units are required or requested, baseline acceptance transitions to IU Planning',
+        '`hirmos status` is read-only',
+    ],
+    'core/templates/session/SESSION_LEDGER.md': [
+        'PROD-L8.33A Continue/Status Gate Notes',
+        '`hirmos continue` must classify and gate before it codes',
+        'If IUs are requested or required and no accepted IU plan exists',
+        '`hirmos status` is read-only',
+    ],
+    'core/templates/session/SESSION_SCOPE.md': [
+        'PROD-L8.33A Continue Implementation Gate',
+        'IU required/requested decision',
+        'No-IU rationale',
+        'Material project/source edit authority',
+    ],
+    'integrations/agent-tools/README.md': [
+        'PROD-L8.33A continue/status command capsule propagation',
+        'The `hirmos continue` capsule must state that `hirmos continue` must classify and gate before it codes',
+        'The `hirmos status` capsule must state that `hirmos status` is read-only',
+        '`agents`, `claude`, `cursor`, `copilot`, `codex`, `opencode`, `gemini`, `windsurf`, and `kiro`',
+    ],
+    'tools/test_l833a_continue_integration_gate.py': [
+        'Focused fixtures for PROD-L8.33A continue command integration gate',
+        'expected at least 3 L8.33A focused cases',
+    ],
+    'tools/fixtures/README.md': [
+        'PROD-L8.33A Continue Command Integration Gate Fixtures',
+        '`hirmos continue` must classify and gate before coding',
+        '`hirmos status` as read-only',
+    ],
+}
+for _rel, _phrases in _l833a_required.items():
+    _p = root / _rel
+    if not _p.exists():
+        fail(f'PROD-L8.33A missing surface: {_rel}')
+    _body = _p.read_text(errors='ignore')
+    for _phrase in _phrases:
+        if _phrase.lower() not in _body.lower():
+            fail(f'PROD-L8.33A {_rel} missing phrase: {_phrase}')
+
+# All integration templates must include direct continue/status capsules, not only a pointer to AGENTS.
+try:
+    _registry = json.loads((root / 'integrations/agent-tools/registry.json').read_text(errors='ignore'))
+except Exception as exc:
+    fail(f'PROD-L8.33A integration registry invalid JSON: {exc}')
+_integrations = _registry.get('integrations', {})
+for _name, _cfg in _integrations.items():
+    _template = _cfg.get('template')
+    _template_path = root / 'integrations/agent-tools' / _template
+    if not _template_path.exists():
+        fail(f'PROD-L8.33A integration {_name} template missing: {_template}')
+        continue
+    _body = _template_path.read_text(errors='ignore')
+    for _phrase in [
+        '## hirmos continue command gate',
+        '`hirmos continue` must classify and gate before it codes',
+        'If the user requests implementation units and no accepted IU plan exists',
+        'If the user does not request implementation units, still evaluate whether IUs are required',
+        'Never create IU files after material implementation to show compliance',
+        '## hirmos status command gate',
+        '`hirmos status` is read-only',
+        'Do not backfill artifacts to make status appear clean',
+    ]:
+        if _phrase.lower() not in _body.lower():
+            fail(f'PROD-L8.33A integration {_name} template missing command capsule phrase: {_phrase}')
+    _lower = _body.lower()
+    for _bad in ['miluna', 'menugen', 'govcon', 'government contracts', 'bedtime struggle']:
+        if _bad in _lower:
+            fail(f'PROD-L8.33A integration {_name} template contains project-specific term: {_bad}')
+
+# Runtime guard: if material edits are claimed while IUs are planned/requested but not accepted/authorized, fail.
+def _l833a_session_dirs():
+    _dirs = []
+    _history = root / 'system/history/sessions'
+    if _history.exists():
+        for _child in sorted(_history.iterdir()):
+            if _child.is_dir() and ((_child / 'SESSION_LEDGER.md').exists() or (_child / 'SESSION_SCOPE.md').exists()):
+                _dirs.append(_child)
+    _active = root / 'session'
+    if _active.exists() and ((_active / 'SESSION_LEDGER.md').exists() or (_active / 'SESSION_SCOPE.md').exists()):
+        try:
+            _st = json.loads((_active / 'SESSION_STATE.json').read_text(errors='ignore')) if (_active / 'SESSION_STATE.json').exists() else {}
+        except Exception:
+            _st = {}
+        if _st.get('status') in {'active', 'blocked'} or int(_st.get('continuation_pass') or 0) > 0:
+            _dirs.append(_active)
+    return _dirs
+
+def _l833a_material_edit(text: str) -> bool:
+    return bool(re.search(r'material project/source edits?\s*:\s*(?:YES|STARTED)|material project-file edits?\s*:\s*(?:YES|STARTED)|project-file diff\s*:\s*(?:YES|PRESENT)|Files/areas about to be edited\s*:', text, re.I))
+
+def _l833a_ius_required_or_requested(scope: str, ledger: str) -> bool:
+    scope_required = bool(re.search(r'Implementation units required\s*:\s*YES|IU required/requested decision\s*:\s*REQUIRED', scope, re.I))
+    ledger_requested = bool(re.search(r'IU Planning requested by user|Implementation units requested by user|IU required/requested decision\s*:\s*REQUIRED', ledger, re.I))
+    return scope_required or ledger_requested
+
+def _l833a_iu_plan_accepted(ledger: str, scope: str) -> bool:
+    text = ledger + '\n' + scope
+    return bool(re.search(r'IU_PLAN_ACCEPTED\s*:\s*(?:PASS|YES|ACCEPTED)|IU plan status\s*:\s*ACCEPTED', text, re.I))
+
+def _l833a_iu_execution_authorized(ledger: str) -> bool:
+    return bool(re.search(r'IU_EXECUTION_AUTHORIZED\s*:?\s*(?:PASS|YES|AUTHORIZED)|\|\s*IU_EXECUTION_AUTHORIZED\s*\|[^\n]*\|\s*(?:PASS|YES|AUTHORIZED)\s*\|', ledger, re.I))
+
+for _session_dir in _l833a_session_dirs():
+    _scope = (_session_dir / 'SESSION_SCOPE.md').read_text(errors='ignore') if (_session_dir / 'SESSION_SCOPE.md').exists() else ''
+    _ledger = (_session_dir / 'SESSION_LEDGER.md').read_text(errors='ignore') if (_session_dir / 'SESSION_LEDGER.md').exists() else ''
+    _combined = _scope + '\n' + _ledger
+    if not _l833a_material_edit(_combined):
+        continue
+    if _l833a_ius_required_or_requested(_scope, _ledger) and not _l833a_iu_execution_authorized(_ledger):
+        fail(f'PROD-L8.33A material edit before accepted IU plan and IU_EXECUTION_AUTHORIZED in {_session_dir.relative_to(root)}')
+    if re.search(r'No-IU rationale(?:, if applicable)?\s*:\s*(?:PENDING|TBD|$)', _scope, re.I) and not _l833a_ius_required_or_requested(_scope, _ledger):
+        fail(f'PROD-L8.33A material edit without recorded no-IU rationale in {_session_dir.relative_to(root)}')
+
+print('PASS: HIRMOS PROD-L8.33A continue command integration gate and IU planning enforcement static/runtime check')
+
+
+
+# PROD-L8.33C-2 generated command and skill projection checks
+_l833c2_root = root / 'integrations/agent-tools'
+_l833c2_required_files = [
+    'capsules/invariants.md',
+    'capsules/commands/start.md',
+    'capsules/commands/continue.md',
+    'capsules/commands/status.md',
+    'capsules/commands/close.md',
+    'templates/skills/per-command-skill.md',
+]
+for _rel in _l833c2_required_files:
+    if not (_l833c2_root / _rel).exists():
+        fail(f'PROD-L8.33C-2 missing integration projection file: integrations/agent-tools/{_rel}')
+
+_l833c2_capsule_markers = {
+    'invariants.md': ['HIRMOS-CAPSULE:invariants:PROD-L8.33C-2 canonical command capsule v1', 'Detailed user instructions are scope input, not implementation authorization.', 'hirmos continue` must classify and gate before it codes', 'hirmos status` is read-only'],
+    'start.md': ['HIRMOS-CAPSULE:start:PROD-L8.33C-2 canonical command capsule v1', 'Detailed implementation instructions as implementation authorization', 'must end at a governed baseline checkpoint'],
+    'continue.md': ['HIRMOS-CAPSULE:continue:PROD-L8.33C-2 canonical command capsule v1', '`hirmos continue` must classify and gate before it codes', 'If the user requests implementation units and no accepted IU plan exists', 'Never create IU files after material implementation to show compliance'],
+    'status.md': ['HIRMOS-CAPSULE:status:PROD-L8.33C-2 canonical command capsule v1', '`hirmos status` is read-only', 'Do not advance lifecycle state'],
+    'close.md': ['HIRMOS-CAPSULE:close:PROD-L8.33C-2 canonical command capsule v1', '`hirmos close` requires evidence-backed close', 'Fail closed'],
+}
+for _name, _phrases in _l833c2_capsule_markers.items():
+    _path = _l833c2_root / ('capsules/invariants.md' if _name == 'invariants.md' else f'capsules/commands/{_name}')
+    _body = _path.read_text(errors='ignore')
+    for _phrase in _phrases:
+        if _phrase.lower() not in _body.lower():
+            fail(f'PROD-L8.33C-2 capsule {_path.relative_to(root)} missing phrase: {_phrase}')
+
+try:
+    _l833c2_registry = json.loads((_l833c2_root / 'registry.json').read_text(errors='ignore'))
+except Exception as exc:
+    fail(f'PROD-L8.33C-2 integration registry invalid JSON: {exc}')
+_l833c2_projection = _l833c2_registry.get('projection_model') or {}
+if _l833c2_projection.get('broad_skill_default') != 'disabled':
+    fail('PROD-L8.33C-2 broad default hirmos/SKILL.md must be disabled')
+if _l833c2_projection.get('commands') != ['start', 'continue', 'status', 'close']:
+    fail('PROD-L8.33C-2 projection_model.commands must be start/continue/status/close')
+
+_l833c2_expected = {
+    'agents': {'commands': False, 'skills': False},
+    'claude': {'commands': '.claude/commands/hirmos/{command}.md', 'skills': '.claude/skills/hirmos-{command}/SKILL.md'},
+    'cursor': {'commands': '.cursor/commands/hirmos-{command}.md', 'skills': '.cursor/skills/hirmos-{command}/SKILL.md'},
+    'copilot': {'commands': '.github/prompts/hirmos-{command}.prompt.md', 'skills': '.github/skills/hirmos-{command}/SKILL.md'},
+    'codex': {'commands': False, 'skills': '.codex/skills/hirmos-{command}/SKILL.md'},
+    'opencode': {'commands': '.opencode/commands/hirmos-{command}.md', 'skills': '.opencode/skills/hirmos-{command}/SKILL.md'},
+    'gemini': {'commands': '.gemini/commands/hirmos/{command}.toml', 'skills': '.gemini/skills/hirmos-{command}/SKILL.md'},
+    'windsurf': {'commands': '.windsurf/workflows/hirmos-{command}.md', 'skills': '.windsurf/skills/hirmos-{command}/SKILL.md'},
+    'kiro': {'commands': '.kiro/prompts/hirmos-{command}.prompt.md', 'skills': '.kiro/skills/hirmos-{command}/SKILL.md'},
+}
+_integrations = _l833c2_registry.get('integrations', {})
+for _name, _expect in _l833c2_expected.items():
+    if _name not in _integrations:
+        fail(f'PROD-L8.33C-2 missing integration: {_name}')
+    _cfg = _integrations[_name]
+    _template = _cfg.get('template')
+    _template_path = _l833c2_root / _template
+    if not _template_path.exists():
+        fail(f'PROD-L8.33C-2 integration {_name} missing always-on template: {_template}')
+    _template_body = _template_path.read_text(errors='ignore')
+    if '{{INVARIANTS_BODY}}' not in _template_body:
+        fail(f'PROD-L8.33C-2 integration {_name} always-on template must include canonical invariant projection placeholder')
+    _commands = _cfg.get('commands')
+    if _expect['commands'] is False:
+        if _commands:
+            fail(f'PROD-L8.33C-2 integration {_name} must not generate default command files')
+    else:
+        if not _commands or _commands.get('target_pattern') != _expect['commands']:
+            fail(f'PROD-L8.33C-2 integration {_name} command target pattern mismatch')
+        if _commands.get('commands') != ['start', 'continue', 'status', 'close']:
+            fail(f'PROD-L8.33C-2 integration {_name} commands must be start/continue/status/close')
+        _wrapper = _l833c2_root / _commands.get('wrapper', '')
+        if not _wrapper.exists():
+            fail(f'PROD-L8.33C-2 integration {_name} command wrapper missing')
+        _wrapper_body = _wrapper.read_text(errors='ignore')
+        if '{{CAPSULE_BODY}}' not in _wrapper_body:
+            fail(f'PROD-L8.33C-2 integration {_name} command wrapper must project canonical capsule body')
+    _skills = _cfg.get('skills')
+    if _expect['skills'] is False:
+        if _skills:
+            fail(f'PROD-L8.33C-2 integration {_name} must not generate default skills')
+    else:
+        if not _skills or _skills.get('target_pattern') != _expect['skills']:
+            fail(f'PROD-L8.33C-2 integration {_name} skill target pattern mismatch')
+        if _skills.get('commands') != ['start', 'continue', 'status', 'close']:
+            fail(f'PROD-L8.33C-2 integration {_name} skills must be per-command start/continue/status/close')
+        if '/hirmos/SKILL.md' in _skills.get('target_pattern', ''):
+            fail(f'PROD-L8.33C-2 integration {_name} must not generate one broad hirmos/SKILL.md')
+        _wrapper = _l833c2_root / _skills.get('wrapper', '')
+        if not _wrapper.exists():
+            fail(f'PROD-L8.33C-2 integration {_name} skill wrapper missing')
+        _wrapper_body = _wrapper.read_text(errors='ignore')
+        for _phrase in ['name: hirmos-{{COMMAND_ID}}', '{{CAPSULE_BODY}}', 'not a broad generic HIRMOS skill']:
+            if _phrase not in _wrapper_body:
+                fail(f'PROD-L8.33C-2 skill wrapper missing phrase: {_phrase}')
+
+for _bad in ['miluna', 'menugen', 'govcon', 'government contracts', 'bedtime struggle']:
+    for _p in list((_l833c2_root / 'capsules').rglob('*')) + list((_l833c2_root / 'templates/commands').rglob('*')) + list((_l833c2_root / 'templates/skills').rglob('*')):
+        if _p.is_file() and _bad in _p.read_text(errors='ignore').lower():
+            fail(f'PROD-L8.33C-2 project-specific term {_bad} found in {_p.relative_to(root)}')
+
+# PROD-L8.33E status read-only fast path and minimum read set checks
+_status_command = (root/'core/commands/status.md').read_text(errors='ignore')
+_status_capsule = (_l833c2_root/'capsules/commands/status.md').read_text(errors='ignore')
+for _phrase in ['Status read-only bootstrap fast path', 'without creating `_hirmos/session/bootstrap/BOOTSTRAP_REPORT.md`', 'Status minimum read set', '_hirmos/session/SESSION_STATE.json', '_hirmos/system/accepted-state/CARRY_FORWARD.md']:
+    if _phrase not in _status_command:
+        fail(f'PROD-L8.33E status command missing phrase: {_phrase}')
+for _phrase in ['Status read-only bootstrap fast path', 'without creating `BOOTSTRAP_REPORT.md`', 'Status minimum read set', 'Active session: add `SESSION_LEDGER.md`']:
+    if _phrase not in _status_capsule:
+        fail(f'PROD-L8.33E status capsule missing phrase: {_phrase}')
+print('PASS: HIRMOS PROD-L8.33E status read-only fast path and minimum read set static check')
+
+print('PASS: HIRMOS PROD-L8.33C-2 generated command and per-command skill projection static check')
 
 print('PASS: HIRMOS SESSION_LEDGER command ledger integrity static check')
 

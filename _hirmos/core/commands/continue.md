@@ -21,8 +21,9 @@ Read this command file first, apply its gate checklist exactly, and read deeper 
 - Governance posture check: HIRMOS is active governance; Do not patch first and reconstruct artifacts after the fact.
 - Command-state gate: status is active, `hirmos continue` is legal, and required active-session artifacts exist.
 - Required state mutation: increment `SESSION_STATE.json.continuation_pass`, update lifecycle status, allowed commands, recommended command, pending correction, and blocking reason.
-- Cumulative continuation pass model: append a new continuation pass record; preserve prior pass history.
-- Append-only ledger gate: append a new continuation pass record before surfaced claims.
+- Cumulative continuation pass model: classify every `hirmos continue` invocation before action, append a new continuation pass record, and preserve prior pass history.
+- Continue Pass Delta Recording Gate: before project-file edits, implementation continuation, corrective work, validation reruns, route-backs, or completion claims, record the pass classification in `SESSION_LEDGER.md` and update `SESSION_STATE.json.continuation_pass`.
+- Append-only ledger gate: append a new continuation pass record before surfaced claims; if the pass changes accepted authority, append the corresponding `SESSION_SCOPE.md` scope amendment / authority delta before implementation continues.
 - Runtime Freshness Gate: verify ledger and machine state agree before mutation.
 - Current-State-First Source Reading Gate: when routing or accepted-state facts matter, inspect current-state pointers before downstream artifacts.
 - Durable Delivery Pointer Concordance: reconcile `Next recommended delivery`; if inconsistent, route back to delivery governance reconciliation.
@@ -33,6 +34,19 @@ Read this command file first, apply its gate checklist exactly, and read deeper 
 - Delivery Status Continuation Guard: route back to delivery status reconciliation when delivery status conflicts exist.
 
 ## Baseline and implementation boundary
+- PROD-L8.32Z Baseline Acceptance Gate: baseline acceptance or amendment must be recorded before material project/source edits. If the user says `hirmos continue` from a baseline checkpoint, classify the pass first and update `SESSION_LEDGER.md`; if authority changes, append the `SESSION_SCOPE.md` authority delta before edits.
+- Accepted baseline authority is necessary but not always sufficient for implementation. When IU mode is required or planned, baseline acceptance authorizes IU planning/materialization only and does not authorize material project/source edits.
+- If IU mode is not required, implementation may begin only after accepted baseline authority is recorded, the ledger pre-edit gate is PASS, and the current command state allows implementation.
+- If the user asks to accept baseline and implement in one message, split the work at the applicable boundary: create/validate IU plan first when IU mode applies, or record accepted baseline authority and pre-edit ledger gate before any material edits when IU mode does not apply.
+
+
+## PROD-L8.33A Continue Command Integration Gate and IU Planning Enforcement
+
+`hirmos continue` must classify and gate before it codes. The command is not automatically an implementation command. Before material project/source edits, implementation claims, validation reruns that affect readiness, route-backs, or close-preparation claims, HIRMOS must read the active session state, classify the continuation request, increment `SESSION_STATE.json.continuation_pass`, and append the continuation pass record to `SESSION_LEDGER.md`.
+
+When the user requests implementation units and no accepted IU plan exists, `hirmos continue` must create or revise the IU plan, run active generated-artifact validation, surface `IU Plan — Review or Change`, and stop. If the user does not request implementation units, HIRMOS must still evaluate whether IUs are required by scope, risk, multi-file impact, validation complexity, or governance value. If IUs are required, baseline acceptance authorizes IU Planning only and does not authorize material project/source edits.
+
+If implementation units are not required, record a concise no-IU rationale in the existing session governance artifacts before implementation begins. Never create IU files after material implementation to show compliance.
 
 ## IU Planning / IU Execution boundary
 - PROD-L8.32I IU Planning Boundary Restoration: when the current pause is a session baseline and IU mode is required/planned, `hirmos continue "Accept session baseline"` authorizes IU planning only. It must create or verify full `implementation-units/IU-xx.md` files, update `SESSION_LEDGER.md` with `IU_PLANNING_COMPLETE`, run active generated-artifact validation, and pause for IU plan review. It must not edit project files or execute IUs in the same continuation.
@@ -53,6 +67,8 @@ Read this command file first, apply its gate checklist exactly, and read deeper 
 
 ## Scope and delivery safety
 Do not expand delivery scope silently. If the user request changes authority, route back or amend scope before implementation. If unsafe, Fail-Closed.
+
+For every `hirmos continue`, classify the pass as `ACCEPTANCE_ONLY`, `INITIAL_IMPLEMENTATION`, `SCOPE_AMENDMENT`, `CORRECTIVE_PASS`, `VALIDATION_ONLY`, `ROUTE_BACK`, `IU_EXECUTION_AUTHORIZATION`, `CLOSE_PREPARATION`, or `BLOCKED` before acting. Same-scope corrections require a ledger pass record and affected IU/evidence updates. New or changed acceptance criteria, IU objectives, scope promises, exclusions, validation requirements, or close-satisfaction criteria require both a ledger pass record and an append-only `SESSION_SCOPE.md` authority delta before project-file edits continue.
 
 
 ## Artifact synchronization rule
@@ -87,6 +103,8 @@ This file is the canonical compact command runtime authority for `hirmos continu
 - compare it to `SESSION_STATE.json.continuation_pass`
 - append the control mutation and ledger integrity records
 - Do not replace an earlier continuation pass
+- classify every `hirmos continue` invocation before action
+- if the pass changes accepted authority, append the corresponding `SESSION_SCOPE.md` authority delta before implementation continues
 - Beyond Clear Specs execution-control subset
 - clear command/boundary controls
 - strict self-validation before surfaced claims

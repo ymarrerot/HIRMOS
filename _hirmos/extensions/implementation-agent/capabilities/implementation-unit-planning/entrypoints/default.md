@@ -152,3 +152,7 @@ Baseline acceptance authorizes IU planning/materialization only. After full IU f
 
 
 Implementation-unit planning must not treat a detailed table or narrative in `SESSION_SCOPE.md` as IU authority. If scope contains more than compact IU pointers, rewrite or compact the scope boundary before creating IUs. Full IU contract authority exists only in `_hirmos/session/implementation-units/IU-xx.md`; the ledger records coverage and gate status, not contract detail.
+
+## PROD-L8.32Z baseline acceptance gate
+
+Material project/source edits require accepted baseline authority recorded in `SESSION_SCOPE.md` and `SESSION_LEDGER.md`. When IU mode applies, accepted baseline authority authorizes IU planning only; implementation execution still requires full IU artifacts, IU plan review, and `IU_EXECUTION_AUTHORIZED`.

@@ -134,9 +134,18 @@ The user-facing pause must use `_hirmos/core/templates/checkpoints/START_CHECKPO
 
 Full implementation-unit artifacts must not be instantiated before the session scope baseline has been accepted or amended. The next governed command is `hirmos continue`.
 
+
+## PROD-L8.33A continue/status command integration gate
+
+Generated integration guidance must include compact, project-agnostic command capsules for `hirmos continue` and `hirmos status`; those capsules repeat the minimum runtime gates at the tool-native instruction surface while HIRMOS core remains the authority. `hirmos continue` must classify and gate before it codes. It must append the continuation pass record before action, handle baseline acceptance or amendment first, evaluate whether implementation units are required or requested, stop at `IU Plan — Review or Change` when IU planning is required and no accepted IU plan exists, and never create IU files after material edits to show compliance.
+
+`hirmos status` is read-only. It reports the current gate, integrity conflicts, baseline acceptance, IU execution authorization when relevant, and exactly one recommended next command; it must not mutate product/source files, advance lifecycle state, or backfill artifacts.
+
 ## Cumulative continue pass rule
 
-`hirmos continue` is append-only. Each invocation must append a continuation pass record in `SESSION_LEDGER.md`. Corrections, scope amendments, validation reruns, and route-backs must preserve prior pass history instead of overwriting it.
+`hirmos continue` is append-only. Each invocation must append a continuation pass record in `SESSION_LEDGER.md`. Corrections, scope amendments, validation reruns, acceptance-only advances, IU execution authorization, close-preparation passes, and route-backs must preserve prior pass history instead of overwriting it.
+
+Before acting on any `hirmos continue`, HIRMOS must classify the invocation as `ACCEPTANCE_ONLY`, `SCOPE_AMENDMENT`, `CORRECTIVE_PASS`, `VALIDATION_ONLY`, `ROUTE_BACK`, `IU_EXECUTION_AUTHORIZATION`, `CLOSE_PREPARATION`, or `BLOCKED`; increment `SESSION_STATE.json.continuation_pass`; and append the matching continuation pass record in `SESSION_LEDGER.md`. If the user request changes accepted scope, IU objectives, acceptance criteria, exclusions, required validation, unresolved-item disposition, or close-satisfaction criteria, HIRMOS must append an authority delta in `SESSION_SCOPE.md` before project-file edits or completion claims continue.
 
 ## Exactly-one-next-command rule
 
@@ -352,3 +361,7 @@ Ownership rule: one canonical owner per concern. When two documents appear to go
 ## PROD-L8.32L Artifact Creation / Derived Pointer Doctrine
 
 HIRMOS must not create optional artifacts simply because a template exists. Optional artifacts are created just in time when the current governed boundary makes their owning concern applicable. Derived pointer indexes must be recomputed from canonical source artifacts, filesystem paths, active session state, session ledgers, delivery/phase directories, and archive manifests. Stale pointer rows are defects, not truth.
+
+## PROD-L8.32Z Start Non-Implementation Boundary
+
+`hirmos start` establishes governed authority; it is not implementation authorization. Implementation details inside a start request are scope input only. Material project/source edits outside `_hirmos/` require accepted baseline authority recorded in `SESSION_SCOPE.md` and `SESSION_LEDGER.md`. When IU mode is required or planned, accepted baseline authority authorizes IU planning only; material edits additionally require full IU artifacts, IU plan review, and `IU_EXECUTION_AUTHORIZED`.

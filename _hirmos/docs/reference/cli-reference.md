@@ -106,7 +106,7 @@ By default, `hirmos init` downloads the latest HIRMOS framework release from Git
 To install a specific framework release:
 
 ```bash
-hirmos init --version 1.2.0
+hirmos init --version 1.2.1
 ```
 
 `hirmos init --version X.Y.Z` resolves the GitHub framework release tag `vX.Y.Z` and downloads the corresponding `hirmos-framework.zip` release asset.
@@ -142,6 +142,31 @@ hirmos init ./my-project --source ./hirmos-framework.zip --offline
 ```
 
 If `_hirmos/` is missing and no source is provided, offline mode fails clearly instead of attempting a network download.
+
+
+## Local development CLI smoke test
+
+When testing an unpublished HIRMOS workspace, make sure you run the updated local CLI binary, not an older globally installed `hirmos` command.
+
+If the target project already has the desired `_hirmos/` payload installed, run the local CLI against that project in offline mode:
+
+```bash
+node /path/to/HIRMOS/tools/cli/dist/index.js init /path/to/your-project --integration cursor --offline
+```
+
+For example:
+
+```bash
+node /path/to/HIRMOS/tools/cli/dist/index.js init /Users/yaniermarrero/work/milunaapp.com --integration cursor --offline
+```
+
+This updates the selected integration projections from the project-local `_hirmos/` payload. For Cursor, the expected generated surfaces include the always-on rule, explicit command files, and per-command skill packages.
+
+If the target project does not have `_hirmos/` yet, provide a local source package or source folder instead of `--offline` alone:
+
+```bash
+node /path/to/HIRMOS/tools/cli/dist/index.js init /path/to/your-project --source /path/to/HIRMOS/ops/dist/hirmos-framework.zip --integration cursor --offline
+```
 
 ## CLI update notice
 

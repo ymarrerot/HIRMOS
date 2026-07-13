@@ -2,7 +2,9 @@
 
 Unresolved items are continuation-control records, not notes.
 
-HIRMOS uses unresolved-item governance to prevent hidden assumptions from becoming implementation direction. When a question, assumption, blocker, ambiguity, or technical concern can affect the work, HIRMOS records it, classifies it, and applies it at lifecycle boundaries.
+Unresolved decisions require governance because unrecorded decisions become system behavior. Serious software work needs a durable record of what is unknown, who can decide it, whether work may safely continue, and where the decision must be revalidated.
+
+HIRMOS uses unresolved-item governance to prevent hidden assumptions from becoming implementation direction. AI-assisted development makes this more acute because an agent can select defaults quickly and invisibly unless the workflow forces uncertainty to be surfaced. When a question, assumption, blocker, ambiguity, or technical concern can affect the work, HIRMOS records it, classifies it, and applies it at lifecycle boundaries.
 
 Authoritative active-session register:
 

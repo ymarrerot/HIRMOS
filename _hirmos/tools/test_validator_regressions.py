@@ -1034,8 +1034,18 @@ def mutate_l831_thin_ius_fail(root: Path) -> None:
     _l831a_write_generated_session(
         root,
         name="2026-01-02-l831a-thin-ius",
-        scope="# SESSION_SCOPE.md\n\nImplementation units required: YES\nPlanned IU count: 1\n",
+        scope="# SESSION_SCOPE.md\n\n## 1. Session Identity\n\n- Scope status: ACCEPTED\n\n## 3. Authorized Scope / Outcome\n\n- Baseline acceptance authority recorded: YES\n- Material project/source edit authorization: REQUIRES_IU_EXECUTION_AUTHORIZATION\n\nImplementation units required: YES\nPlanned IU count: 1\n",
         execution="""# SESSION_LEDGER.md
+
+## Start / Baseline Pre-Edit Gate
+| Gate | Required before | Status | Authority source | Evidence pointer | Next allowed transition |
+|---|---|---|---|---|---|
+| BASELINE_ACCEPTED_OR_AMENDED | material project/source edits | PASS | user continuation + `SESSION_SCOPE.md` status | Continuation Pass Register | IU planning |
+
+## Continuation Pass Register
+| Pass | Command | Pass type | Scope effect | SESSION_SCOPE.md impact | Artifacts updated | Evidence pointer | Result | Next governed command |
+|---:|---|---|---|---|---|---|---|---|
+| 1 | hirmos continue | ACCEPTANCE_ONLY | BASELINE_ACCEPTED | BASELINE_ACCEPTED | SESSION_SCOPE.md SESSION_LEDGER.md | fixture | PASS | hirmos continue |
 
 ## PROD-L8.21 IU Set Authority Checkpoint
 Authorization decision: IMPLEMENTATION_AUTHORIZED
@@ -1103,8 +1113,18 @@ def mutate_l832k_lifecycle_claim_before_iu_execution_authorized_fails(root: Path
     _l831a_write_generated_session(
         root,
         name="2026-01-02-l832k-lifecycle-before-auth",
-        scope="# SESSION_SCOPE.md\n\nImplementation units required: YES\nPlanned IU count: 1\n",
+        scope="# SESSION_SCOPE.md\n\n## 1. Session Identity\n\n- Scope status: ACCEPTED\n\n## 3. Authorized Scope / Outcome\n\n- Baseline acceptance authority recorded: YES\n- Material project/source edit authorization: REQUIRES_IU_EXECUTION_AUTHORIZATION\n\nImplementation units required: YES\nPlanned IU count: 1\n",
         execution="""# SESSION_LEDGER.md
+
+## Start / Baseline Pre-Edit Gate
+| Gate | Required before | Status | Authority source | Evidence pointer | Next allowed transition |
+|---|---|---|---|---|---|
+| BASELINE_ACCEPTED_OR_AMENDED | material project/source edits | PASS | user continuation + `SESSION_SCOPE.md` status | Continuation Pass Register | IU planning |
+
+## Continuation Pass Register
+| Pass | Command | Pass type | Scope effect | SESSION_SCOPE.md impact | Artifacts updated | Evidence pointer | Result | Next governed command |
+|---:|---|---|---|---|---|---|---|---|
+| 1 | hirmos continue | ACCEPTANCE_ONLY | BASELINE_ACCEPTED | BASELINE_ACCEPTED | SESSION_SCOPE.md SESSION_LEDGER.md | fixture | PASS | hirmos continue |
 
 ## PROD-L8.21 IU Set Authority Checkpoint
 Authorization decision: IMPLEMENTATION_AUTHORIZED
@@ -1126,8 +1146,18 @@ def mutate_l832k_authorized_material_transition_passes(root: Path) -> None:
     _l831a_write_generated_session(
         root,
         name="2026-01-02-l832k-authorized-transition",
-        scope="# SESSION_SCOPE.md\n\nImplementation units required: YES\nPlanned IU count: 1\n",
+        scope="# SESSION_SCOPE.md\n\n## 1. Session Identity\n\n- Scope status: ACCEPTED\n\n## 3. Authorized Scope / Outcome\n\n- Baseline acceptance authority recorded: YES\n- Material project/source edit authorization: REQUIRES_IU_EXECUTION_AUTHORIZATION\n\nImplementation units required: YES\nPlanned IU count: 1\n",
         execution="""# SESSION_LEDGER.md
+
+## Start / Baseline Pre-Edit Gate
+| Gate | Required before | Status | Authority source | Evidence pointer | Next allowed transition |
+|---|---|---|---|---|---|
+| BASELINE_ACCEPTED_OR_AMENDED | material project/source edits | PASS | user continuation + `SESSION_SCOPE.md` status | Continuation Pass Register | IU planning |
+
+## Continuation Pass Register
+| Pass | Command | Pass type | Scope effect | SESSION_SCOPE.md impact | Artifacts updated | Evidence pointer | Result | Next governed command |
+|---:|---|---|---|---|---|---|---|---|
+| 1 | hirmos continue | ACCEPTANCE_ONLY | BASELINE_ACCEPTED | BASELINE_ACCEPTED | SESSION_SCOPE.md SESSION_LEDGER.md | fixture | PASS | hirmos continue |
 
 ## PROD-L8.24 Pre-Execution Ledger Enforcement
 

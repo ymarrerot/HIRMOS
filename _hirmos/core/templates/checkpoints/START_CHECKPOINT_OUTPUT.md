@@ -46,7 +46,7 @@ If you run `hirmos continue`, HIRMOS will treat this session baseline as accepte
 ## Compatibility phrase for minimal/session baseline checkpoints
 
 ```text
-If you run `hirmos continue`, HIRMOS will treat this recommended baseline as accepted unless you request changes first. It will then follow the focus-specific continuation semantics above.
+If you run `hirmos continue`, HIRMOS will treat this recommended baseline as accepted unless you request changes first; implementation still cannot begin until the applicable implementation gate is satisfied. It will then follow the focus-specific continuation semantics above.
 ```
 
 ## Compatibility response options for recommended/session baseline
@@ -62,7 +62,7 @@ To stop without continuing:
 Reply exactly: Stop / do not continue
 ```
 
-- Do not create or reference full implementation-unit artifacts before the session scope baseline has been accepted or amended.
+- Do not create or reference full implementation-unit artifacts before the session scope baseline has been accepted or amended. Do not edit project/source files during `hirmos start`; detailed implementation instructions are scope input, not implementation authorization.
 - Do not describe the next baseline-acceptance continuation as implementation when IU mode applies; describe it as IU Planning and a pause for IU Plan review.
 
 ## Optional artifact creation note

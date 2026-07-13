@@ -6,7 +6,9 @@ That means HIRMOS must establish enough current system state before it designs, 
 
 ## Why this matters
 
-AI-assisted development often fails when the agent starts from the latest instruction alone:
+Current-state understanding is a governance requirement: you cannot safely change a software system without knowing the accepted state you are changing from. The latest user request focuses the work, but it does not replace repository evidence, accepted-state records, unresolved items, delivery/session authority, or validation history.
+
+AI-assisted development makes this requirement more acute because an agent can move quickly from instruction to implementation. If it starts from the latest instruction alone, the run can drift into this pattern:
 
 ```text
 User asks for a change

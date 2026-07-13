@@ -1,6 +1,6 @@
 # Close, Archive, and Accepted State
 
-HIRMOS treats close as a governed state transaction, not as the end of a chat.
+HIRMOS treats close as a governed state transaction, not as the end of a chat. Close is where a run proves what future sessions may trust.
 
 A successful close must prove four things:
 
@@ -19,7 +19,7 @@ It does not design missing work, implement missing work, repair evidence, or sil
 
 The archive preserves what happened.
 
-Accepted state records what future sessions may treat as current truth.
+Accepted state records what future sessions may treat as current truth. That makes accepted-state update a governance act, not a summary-writing task.
 
 A file in the archive is not automatically accepted truth. `SESSION_LEDGER.md` close/update control pointers decides what was accepted, rejected, preserved as evidence only, or carried forward.
 

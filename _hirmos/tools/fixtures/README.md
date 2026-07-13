@@ -126,3 +126,12 @@ Focused fixtures verify that optional active artifacts are absent-valid until ap
 ## PROD-L8.32S Runtime Command Surface Unification Fixtures
 
 Focused fixtures verify that the obsolete packet wrapper layer has been removed, `_hirmos/core/commands/*.md` is the canonical compact command runtime authority, and active framework files do not route through the obsolete packet wrapper layer.
+
+## PROD-L8.32Z Start Non-Implementation Boundary Fixtures
+
+Focused fixtures verify that the start command cannot edit project/source files before accepted baseline authority. They also verify that baseline acceptance does not weaken IU mode: when implementation units are required, material edits still require IU plan review and `IU_EXECUTION_AUTHORIZED`.
+
+## PROD-L8.33A Continue Command Integration Gate Fixtures
+
+Focused fixtures protect that `hirmos continue` must classify and gate before coding, must stop at IU plan review when IUs are requested or required and no accepted IU plan exists, and must treat `hirmos status` as read-only. Integration templates for all nine supported tools must include direct continue/status command capsules.
+

@@ -18,6 +18,8 @@ Terminal states: Needs User Decision / Session Baseline Review / IU Planning Req
 Read this command file first, apply its gate checklist exactly, and read deeper protocols only when this command file names a gate requiring deeper detail, validation fails, or active artifacts contradict each other. Do not route through the removed runtime packet wrapper layer.
 
 ## Runtime gate checklist
+- PROD-L8.32Z Start Non-Implementation Boundary: `hirmos start` is a non-implementation command. It may inspect, design, scope, create/update HIRMOS governance artifacts, and surface a governed baseline checkpoint only. It must not edit project/source files outside `_hirmos/`.
+- PROD-L8.32Z pre-edit gate: detailed user implementation instructions are scope input, not implementation authorization; no material project/source edit is allowed before accepted baseline authority exists.
 - General run preflight: record `PRECHECK_PASS`, `PRECHECK_WARNING`, or `PRECHECK_BLOCKER`; do not create special run-category semantics.
 - Command-state gate: `SESSION_STATE.json` exists, `status` is `idle`, `hirmos start` is legal, and stale active-session artifacts are absent.
 - Runtime timestamp source: derive timestamps from `SESSION_STATE.json.run_context`, not memory.
@@ -41,7 +43,7 @@ Read this command file first, apply its gate checklist exactly, and read deeper 
 
 ## State mutation and terminal boundary
 Required state mutation: set active session id, focus, lifecycle status, allowed commands, recommended command, blocking reason, and updated timestamp.
-The final start state is the focus-appropriate governed checkpoint. Mandatory implementation-readiness pause: must not begin implementation during `hirmos start`. If IU mode is expected, the checkpoint must say the next continuation creates the IU plan/files and pauses for IU review; it must not say the next continuation begins implementation.
+The final start state is the focus-appropriate governed checkpoint. Mandatory implementation-readiness pause: must not begin implementation during `hirmos start`, even when the user provides complete implementation details or says to implement after a design summary. `hirmos start` treats implementation details as scope input only. If IU mode is expected, the checkpoint must say the next continuation creates the IU plan/files and pauses for IU review; it must not say the next continuation begins implementation. If IU mode is not required, the checkpoint must still require accepted baseline authority before material project/source edits.
 If preconditions fail, stop at Fail-Closed.
 
 ## Follow-up work after no active session exists
@@ -61,6 +63,7 @@ Optional artifacts are not created to satisfy a template checklist. Create them 
 - session `REQUIREMENTS.md` / `DESIGN.md` only when separate session-level authority is explicitly justified after the flow reaches session or phase-session scope.
 - delivery `DELIVERY_PLAN.md`, `DELIVERY_SCOPE.md`, delivery unresolved register, and `PHASE-xx.md` only when delivery governance is selected and the specific delivery/phase boundary is active.
 - implementation-unit files only after session baseline acceptance and during IU planning; never during `hirmos start` pre-acceptance planning.
+- product/source files outside `_hirmos/` only after accepted baseline authority; and when IU mode applies, only after later `IU_EXECUTION_AUTHORIZED`.
 
 Pointer indexes in Current System State, Delivery Plan, Phase files, and ledger status surfaces are derived navigation caches. Prefer deriving them from filesystem paths, active session state, session ledger rows, archive manifests, and delivery/phase directories. If a derived pointer index conflicts with source artifacts, source artifacts win and the runtime must fail closed instead of preserving the stale pointer row.
 

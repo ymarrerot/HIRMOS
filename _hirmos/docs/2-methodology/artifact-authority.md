@@ -1,6 +1,6 @@
 # Artifact Authority
 
-HIRMOS artifacts are useful only when each artifact has a clear ownership role.
+HIRMOS artifacts are useful only when each artifact has a clear ownership role. Artifact authority is a governance rule: if two mutable artifacts can own the same fact and disagree, neither one is reliable authority for future work.
 
 The rule is:
 
@@ -40,7 +40,7 @@ Separate `REQUIREMENTS.md` or `DESIGN.md` files are optional. Create them only w
 
 ## Avoid duplicated mutable status
 
-Do not ask the model to maintain the same status in several artifacts.
+Duplicate mutable state weakens accountability. Do not ask the model to maintain the same status in several artifacts.
 
 Examples of values that should be derived or pointed to instead of duplicated:
 

@@ -15,6 +15,19 @@ You are the executor inside HIRMOS governance, not an autonomous actor that late
 
 Do not perform work first and reconstruct HIRMOS artifacts afterward. If the active command state, session authority, implementation-unit authority, or correction authority is missing, fail closed and route to the governed command or lifecycle boundary that creates the authority before editing files.
 
+## Pre-edit gate
+
+Before editing any project/source file outside `_hirmos/`, verify all applicable authority gates from the current HIRMOS command. Detailed user instructions are scope input, not implementation authorization.
+
+Minimum gate:
+
+- `hirmos start` is non-implementation. It may read, inspect, create/update HIRMOS governance artifacts, and present a Session Baseline or Delivery Baseline checkpoint. It must not edit product/source files.
+- Material project/source edits require accepted baseline authority recorded in `_hirmos/session/SESSION_SCOPE.md` and `_hirmos/session/SESSION_LEDGER.md`.
+- If implementation units are required, accepted baseline authority authorizes IU planning only. Material project/source edits additionally require full IU artifacts and `IU_EXECUTION_AUTHORIZED` recorded after IU plan review.
+- Never mark `SESSION_SCOPE.md` accepted by self-inference during `hirmos start`; acceptance requires a later governed continuation or explicit user authority at the correct boundary.
+
+If any gate is missing or contradictory, stop before edits and surface the governed checkpoint or fail-closed recovery.
+
 ## First-contact working-copy rules
 
 1. The installed `_hirmos/` folder and the current project working copy are authoritative for this run.
@@ -69,3 +82,10 @@ Do not proceed from memory. If any instruction, artifact, command, protocol, or 
 ## PROD-L8.32L runtime cost control
 
 HIRMOS creates optional artifacts just in time and treats pointer indexes as derived navigation caches. This reduces stale placeholder artifacts and prevents roadmap/current-state/phase pointer rows from becoming independent mutable truth.
+
+
+## PROD-L8.33A continue/status command capsules
+
+For `hirmos continue`, classify and gate before coding. A baseline acceptance pass does not authorize material project/source edits when implementation units are required or requested; it authorizes IU Planning and the `IU Plan — Review or Change` pause. If implementation units are not requested, still evaluate whether they are required and record a no-IU rationale before implementation when they are not. Never create IU files after material implementation to show compliance.
+
+For `hirmos status`, report state only. Do not mutate product/source files, advance lifecycle state, or backfill artifacts.

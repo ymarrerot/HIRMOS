@@ -22,18 +22,20 @@ Small work can stay as one governed session. Larger work can become a delivery w
 
 ## Why HIRMOS exists
 
-AI coding tools can move fast, but serious software work needs more than fast code generation. It needs grounded context, explicit scope, visible assumptions, reviewable decisions, validation evidence, and continuity across sessions.
+Serious software development needs governed execution: grounded context, accepted scope, visible assumptions, reviewable decisions, validation evidence, and continuity across sessions.
 
-HIRMOS is designed for common AI-assisted development failures:
+AI coding tools make that requirement more important, not less. They can move quickly from request to implementation, compress many decisions into one exchange, and change a system faster than a human can inspect the reasoning trail.
 
-- starting from stale or incomplete project context;
-- treating notes, prototypes, tickets, or chat history as final authority;
-- hiding unresolved decisions inside prose;
-- implementing outside the agreed scope;
-- claiming completion without evidence;
-- losing what changed between one session and the next.
+HIRMOS exists to make AI-assisted software work accountable, inspectable, and continuable. Without that governance, AI-assisted work can easily:
 
-HIRMOS keeps the interaction simple, but adds enough structure around the agent to make the work inspectable.
+- start from stale or incomplete project context;
+- treat notes, prototypes, tickets, or chat history as final authority;
+- hide unresolved decisions inside prose;
+- implement outside the agreed scope;
+- claim completion without evidence;
+- lose what changed between one session and the next.
+
+HIRMOS keeps the interaction simple, but adds enough structure around the agent to preserve an accountable execution trail.
 
 ## How HIRMOS works
 

@@ -10,28 +10,92 @@
       "target": "AGENTS.md",
       "template": "templates/agents.md",
       "mode": "managed_block",
-      "target_class": "shared_generic_agent_guidance"
+      "target_class": "shared_generic_agent_guidance",
+      "projection_role": "always_on"
     },
     "claude": {
       "description": "Claude project bootstrap guidance.",
       "target": "CLAUDE.md",
       "template": "templates/claude.md",
       "mode": "managed_block",
-      "target_class": "tool_conventional_project_guidance"
+      "target_class": "tool_conventional_project_guidance",
+      "projection_role": "always_on",
+      "commands": {
+        "wrapper": "templates/commands/claude.md",
+        "target_pattern": ".claude/commands/hirmos/{command}.md",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      },
+      "skills": {
+        "wrapper": "templates/skills/per-command-skill.md",
+        "target_pattern": ".claude/skills/hirmos-{command}/SKILL.md",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      }
     },
     "cursor": {
       "description": "Cursor project rule bootstrap guidance.",
       "target": ".cursor/rules/hirmos.mdc",
       "template": "templates/cursor.mdc",
       "mode": "managed_block",
-      "target_class": "dedicated_hirmos_tool_file"
+      "target_class": "dedicated_hirmos_tool_file",
+      "projection_role": "always_on",
+      "commands": {
+        "wrapper": "templates/commands/cursor.md",
+        "target_pattern": ".cursor/commands/hirmos-{command}.md",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      },
+      "skills": {
+        "wrapper": "templates/skills/per-command-skill.md",
+        "target_pattern": ".cursor/skills/hirmos-{command}/SKILL.md",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      }
     },
     "copilot": {
       "description": "GitHub Copilot repository instruction bootstrap guidance.",
       "target": ".github/copilot-instructions.md",
       "template": "templates/copilot.md",
       "mode": "managed_block",
-      "target_class": "tool_conventional_project_guidance"
+      "target_class": "tool_conventional_project_guidance",
+      "projection_role": "always_on",
+      "commands": {
+        "wrapper": "templates/commands/copilot.prompt.md",
+        "target_pattern": ".github/prompts/hirmos-{command}.prompt.md",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      },
+      "skills": {
+        "wrapper": "templates/skills/per-command-skill.md",
+        "target_pattern": ".github/skills/hirmos-{command}/SKILL.md",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      }
     },
     "codex": {
       "description": "Codex-compatible generic project bootstrap guidance using AGENTS.md in v1.",
@@ -42,7 +106,18 @@
         "agents",
         "opencode"
       ],
-      "target_class": "shared_generic_agent_guidance"
+      "target_class": "shared_generic_agent_guidance",
+      "projection_role": "always_on",
+      "skills": {
+        "wrapper": "templates/skills/per-command-skill.md",
+        "target_pattern": ".codex/skills/hirmos-{command}/SKILL.md",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      }
     },
     "opencode": {
       "description": "OpenCode-compatible generic project bootstrap guidance using AGENTS.md in v1.",
@@ -53,29 +128,126 @@
         "agents",
         "codex"
       ],
-      "target_class": "shared_generic_agent_guidance"
+      "target_class": "shared_generic_agent_guidance",
+      "projection_role": "always_on",
+      "commands": {
+        "wrapper": "templates/commands/opencode.md",
+        "target_pattern": ".opencode/commands/hirmos-{command}.md",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      },
+      "skills": {
+        "wrapper": "templates/skills/per-command-skill.md",
+        "target_pattern": ".opencode/skills/hirmos-{command}/SKILL.md",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      }
     },
     "gemini": {
       "description": "Gemini project bootstrap guidance.",
       "target": "GEMINI.md",
       "template": "templates/gemini.md",
       "mode": "managed_block",
-      "target_class": "tool_conventional_project_guidance"
+      "target_class": "tool_conventional_project_guidance",
+      "projection_role": "always_on",
+      "commands": {
+        "wrapper": "templates/commands/gemini.toml",
+        "target_pattern": ".gemini/commands/hirmos/{command}.toml",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      },
+      "skills": {
+        "wrapper": "templates/skills/per-command-skill.md",
+        "target_pattern": ".gemini/skills/hirmos-{command}/SKILL.md",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      }
     },
     "windsurf": {
       "description": "Windsurf project rule bootstrap guidance.",
       "target": ".windsurf/rules/hirmos.md",
       "template": "templates/windsurf.md",
       "mode": "managed_block",
-      "target_class": "dedicated_hirmos_tool_file"
+      "target_class": "dedicated_hirmos_tool_file",
+      "projection_role": "always_on",
+      "commands": {
+        "wrapper": "templates/commands/windsurf.md",
+        "target_pattern": ".windsurf/workflows/hirmos-{command}.md",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      },
+      "skills": {
+        "wrapper": "templates/skills/per-command-skill.md",
+        "target_pattern": ".windsurf/skills/hirmos-{command}/SKILL.md",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      }
     },
     "kiro": {
       "description": "Kiro steering bootstrap guidance.",
       "target": ".kiro/steering/hirmos.md",
       "template": "templates/kiro.md",
       "mode": "managed_block",
-      "target_class": "dedicated_hirmos_tool_file"
+      "target_class": "dedicated_hirmos_tool_file",
+      "projection_role": "always_on",
+      "commands": {
+        "wrapper": "templates/commands/kiro.prompt.md",
+        "target_pattern": ".kiro/prompts/hirmos-{command}.prompt.md",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      },
+      "skills": {
+        "wrapper": "templates/skills/per-command-skill.md",
+        "target_pattern": ".kiro/skills/hirmos-{command}/SKILL.md",
+        "commands": [
+          "start",
+          "continue",
+          "status",
+          "close"
+        ]
+      }
     }
   },
-  "source": "_hirmos/integrations/agent-tools/README.md"
+  "source": "_hirmos/integrations/agent-tools/README.md",
+  "projection_model": {
+    "schema_version": 1,
+    "capsule_dir": "capsules/commands",
+    "invariants": "capsules/invariants.md",
+    "commands": [
+      "start",
+      "continue",
+      "status",
+      "close"
+    ],
+    "skill_wrapper": "templates/skills/per-command-skill.md",
+    "broad_skill_default": "disabled"
+  }
 }

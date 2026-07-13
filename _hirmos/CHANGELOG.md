@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.2.1 — Integration projection, CLI installer, and status-readiness hardening
+
+- Bumps framework metadata and validator expected version from 1.2.0 to 1.2.1.
+- Adds canonical integration command capsules for `hirmos start`, `hirmos continue`, `hirmos status`, and `hirmos close`.
+- Extends the integration registry so supported tools can receive generated always-on files, explicit command files, and per-command `SKILL.md` packages from the same capsule source.
+- Preserves per-command skills only; HIRMOS does not generate one broad default `hirmos/SKILL.md`.
+- Adds CLI/package installer support so terminal `hirmos init --integration <tool>` emits generated command projections and per-command skills from the project-local framework payload.
+- Bumps the terminal CLI package from 1.3.4 to 1.3.5 because integration projection install behavior changed.
+- Reinforces `hirmos start` as a non-implementation boundary and `hirmos continue` as a classify-and-gate-before-coding command.
+- Preserves the IU Planning → IU Execution boundary: IU mode still requires IU plan review plus `IU_EXECUTION_AUTHORIZED` before material edits.
+- Adds a `hirmos status` read-only bootstrap fast path: status may report bootstrap gaps without creating `BOOTSTRAP_REPORT.md`, while advancing commands remain blocked until bootstrap passes.
+- Defines explicit minimum read sets for idle/post-close status, active-session status, and delivery/phase escalation reads.
+- Adds projection, installer, and status fast-path validator/static/package coverage while preserving project-agnostic framework language.
+
 ## 1.2.0 — Post-dogfood simplification, command-surface unification, and onboarding alignment
 
 - Bumps framework metadata and validator expected version to 1.2.0.
@@ -9,6 +23,8 @@
 - Simplifies duplicated mutable delivery/phase status by deriving completion and roadmap posture from source artifacts instead of asking the model to maintain multiple narrative status mirrors.
 - Aligns onboarding documentation around the four onboarding principles, refreshes the first-real-run tutorial with clear example-project credit, simplifies the root README for first-time visitors, and separates the GitHub `_hirmos/README.md` folder guide from the packaged installed-project onboarding README.
 - Keeps CLI package version at 1.3.4 because terminal CLI command behavior did not change.
+- Adds PROD-L8.32X continue-pass delta hardening: every `hirmos continue` must be classified as a governed pass, recorded in `SESSION_LEDGER.md`, reconciled with `SESSION_STATE.json.continuation_pass`, and reflected in `SESSION_SCOPE.md` only when accepted authority changes.
+- Adds PROD-L8.32Y governance-first methodology documentation reframe: README and methodology docs now lead with permanent governed-execution requirements before current AI-agent reliability context.
 
 ## 1.1.9 — Token-efficient runtime boundary and derived-state stabilization
 
@@ -68,6 +84,14 @@ This changelog records user-visible changes to the HIRMOS framework payload.
 The framework version source of truth is `_hirmos/hirmos.config.json` under `framework.version`. This file explains what changed; it is not the machine-readable version source.
 
 ## Unreleased
+
+### PROD-L8.32Z — Start command non-implementation boundary
+
+- Strengthened `hirmos start` as a non-implementation command: detailed implementation instructions are scope input, not implementation authorization.
+- Added a baseline acceptance pre-edit gate across command surfaces, session templates, and all current AI-tool integration templates.
+- Preserved the existing IU Planning → IU Execution boundary: baseline acceptance authorizes IU planning only when IU mode applies; material edits still require `IU_EXECUTION_AUTHORIZED`.
+- Added validator/fixture coverage for start-time material edits before baseline acceptance and integration-template pre-edit gate propagation.
+
 
 ## 1.1.3 — IU authority and evidence-backed review stabilization
 

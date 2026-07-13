@@ -1,0 +1,8 @@
+description = "HIRMOS {{COMMAND_TITLE}} command projection"
+prompt = """
+# HIRMOS {{COMMAND_TITLE}}
+
+This file is a generated tool-facing projection of the canonical HIRMOS command capsule. It is not independent behavioral authority. Read `_hirmos/AGENTS.md` as deeper HIRMOS authority when using this command.
+
+{{CAPSULE_BODY}}
+"""

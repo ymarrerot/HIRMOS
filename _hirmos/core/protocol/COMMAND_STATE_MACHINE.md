@@ -98,7 +98,7 @@ Illegal transitions fail closed. In particular:
 
 ## Mandatory start pause rule
 
-`hirmos start` must not go directly into implementation.
+`hirmos start` must not go directly into implementation. Detailed user instructions are scope input, not implementation authorization.
 
 For implementation-capable sessions, `hirmos start` must stop at `implementation_readiness` after creating or updating:
 
@@ -121,7 +121,24 @@ The user-facing result must explain:
 - required validation;
 - exactly one next governed command: `hirmos continue`.
 
-Design-only or analysis-only sessions may complete the requested design/analysis during `hirmos start`, but must still stop before implementation.
+Design-only or analysis-only sessions may complete the requested design/analysis during `hirmos start`, but must still stop before implementation. `hirmos start` must not self-accept the baseline, infer implementation authorization from the request text, or backfill governance after project/source edits.
+
+
+## Material project/source edit authority
+
+A material project/source edit is any mutation outside `_hirmos/` that changes application code, product assets, configuration, routes, tests, scripts, documentation owned by the user project, or other project deliverables.
+
+Material project/source edits are allowed only when all applicable gates are true:
+
+1. `SESSION_SCOPE.md` records accepted or amended baseline authority for the work.
+2. `SESSION_LEDGER.md` records the command/pass that accepted or amended that authority.
+3. The current command state permits implementation work.
+4. The Pre-Material-Edit Ledger Row records that material implementation has not already started and that no retrospective checkpoint or IU expansion is being used.
+5. If implementation units are required or planned, full IU files exist, active generated-artifact validation passed, the IU Plan checkpoint was surfaced, and a later `IU_EXECUTION_AUTHORIZED` record exists.
+
+Accepted baseline authority is necessary before implementation, but it does not weaken the IU Planning / IU Execution boundary. In IU mode, baseline acceptance authorizes IU planning only; `IU_EXECUTION_AUTHORIZED` remains the required gate for material project/source edits.
+
+If these gates are missing, HIRMOS must fail closed before edits. It must not implement first, write artifacts afterward, or claim that the prompt itself accepted the baseline.
 
 ## Cumulative continue pass model
 
@@ -133,16 +150,26 @@ Continuation pass types:
 
 | Type | Meaning | Required behavior |
 |---|---|---|
-| Initial implementation pass | first implementation continuation after start/readiness | execute authorized implementation units |
-| Corrective pass | user identifies a bug, gap, or issue inside current session scope before close | append correction pass, update affected IU/review/evidence |
-| Scope amendment pass | user requests new work outside the existing Session Scope | amend `SESSION_SCOPE.md` before implementation |
-| Validation-only pass | user asks to rerun or complete validation | append validation evidence and update review surfaces |
-| Route-back pass | later evidence invalidates earlier authority | record route-back and reset affected controls |
+| ACCEPTANCE_ONLY | user accepts the current baseline, plan, or checkpoint without changing accepted authority | append pass record, mutate machine state, and advance only to the next authorized boundary |
+| INITIAL_IMPLEMENTATION | first implementation continuation after start/readiness when implementation is already authorized | execute authorized implementation units only after required gates pass |
+| IU_EXECUTION_AUTHORIZATION | user explicitly accepts the IU plan and authorizes material IU execution | append `IU_EXECUTION_AUTHORIZED`, update pass register, and only then allow material project-file edits |
+| CORRECTIVE_PASS | user identifies a bug, gap, or issue inside current accepted session scope before close | append correction pass, update affected IU/review/evidence, and record whether scope authority changed |
+| SCOPE_AMENDMENT | user requests new work or changes accepted authority, criteria, exclusions, validation, or close satisfaction | amend `SESSION_SCOPE.md` before implementation or completion claims continue |
+| VALIDATION_ONLY | user asks to rerun or complete validation | append validation evidence and update review surfaces without silently changing scope |
+| ROUTE_BACK | later evidence invalidates earlier authority or requires returning to a prior lifecycle boundary | record route-back, reset affected controls, and preserve previous pass history |
+| CLOSE_PREPARATION | user asks for pre-close cleanup, hardening, or verification before close | append pass record; if it changes acceptance criteria, add a `SESSION_SCOPE.md` authority delta before close |
+| BLOCKED | command cannot safely advance | append blocked pass record when possible and stop at fail-closed recovery |
+
+Pass classification rule:
+
+- Every `hirmos continue` is a governed pass, including later same-session hardening requests after implementation appears complete.
+- HIRMOS must classify the pass before acting, increment `SESSION_STATE.json.continuation_pass`, and append a matching row in `SESSION_LEDGER.md` before project-file edits, validation claims, completion claims, or close-preparation claims.
+- `SESSION_STATE.json.continuation_pass` must equal the latest pass number in the `SESSION_LEDGER.md` Continuation Pass Register.
 
 Scope rules:
 
 - Same-scope corrections do not rewrite the Authorized Scope; they append correction records.
-- Scope expansions require a `Scope Amendment` section in `SESSION_SCOPE.md` before implementation.
+- Scope expansions or changes to acceptance criteria, IU objectives, exclusions, required validation, unresolved-item disposition, or close-satisfaction criteria require a `Scope Amendment` / authority delta in `SESSION_SCOPE.md` before implementation or close claims continue.
 - `unresolved-items.md` dispositions must be appended, not deleted.
 - `SESSION_SCOPE.md` close verification must add review passes, not replace prior reviews.
 - `implementation-units/IU-xx.md` must append attempts/retries/reviews.
@@ -154,7 +181,7 @@ Scope rules:
 Required ledger invariants:
 
 - every advancing command appends to the command timeline;
-- every `hirmos continue` appends a continuation pass record;
+- every `hirmos continue` appends a continuation pass record with a classified pass type;
 - control status changes are appended to a control mutation ledger;
 - route-backs are recorded instead of silently rewriting earlier authority;
 - corrections and scope amendments preserve earlier implementation/evidence records;
@@ -272,3 +299,11 @@ This rule reuses the existing command-state gate and does not create a new comma
 Command legality is a precondition for action, not a post-action reporting check. If a command is illegal for the current state, the model must not perform useful edits and then describe them as a correction. It must stop before mutation, surface the invalid command state, and route to the existing governed command that can establish authority.
 
 HIRMOS artifacts are active authority and live execution records. They are not compliance documents to be reconstructed after implementation.
+## PROD-L8.33A Continue/Status Gate Invariant
+
+`hirmos continue` is a state-driven command, not an automatic implementation command. Every continuation must classify and gate before it codes. Baseline acceptance can permit implementation only when the active session does not require implementation units. If implementation units are required or requested, baseline acceptance transitions to IU Planning, not material project/source edits; IU-mode implementation requires `IU_EXECUTION_AUTHORIZED` after IU plan review.
+
+When a continue request omits implementation units, HIRMOS must still evaluate whether IUs are required by scope, risk, multi-file impact, validation complexity, or governance value. If IUs are not required, HIRMOS must record a concise no-IU rationale before material edits.
+
+`hirmos status` is read-only and must not advance lifecycle state, mutate artifacts, or backfill governance. It reports the current gate, missing authority, IU execution authorization when relevant, integrity conflicts, and exactly one recommended next command.
+

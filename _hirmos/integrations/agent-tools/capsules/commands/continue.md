@@ -1,0 +1,22 @@
+<!-- HIRMOS-CAPSULE:continue:PROD-L8.33C-2 canonical command capsule v1 -->
+## hirmos continue command capsule
+
+`hirmos continue` must classify and gate before it codes.
+
+Before any product/source edit or implementation claim, the agent must:
+1. Read `_hirmos/session/SESSION_STATE.json`, `_hirmos/session/SESSION_SCOPE.md`, and `_hirmos/session/SESSION_LEDGER.md` when present.
+2. Classify the continue request as acceptance, amendment, IU planning, IU execution authorization, correction, validation, route-back, close preparation, or blocked.
+3. Append the continuation pass record to `SESSION_LEDGER.md` before acting.
+4. If the request changes accepted authority, append the corresponding authority delta to `SESSION_SCOPE.md` before implementation continues.
+5. Evaluate whether implementation units are required or requested.
+
+IU planning rules:
+- If the user requests implementation units and no accepted IU plan exists, create or revise the IU plan and stop at `IU Plan — Review or Change`.
+- If the user does not request implementation units, still evaluate whether IUs are required by scope, risk, multi-file impact, validation complexity, or governance value.
+- If IUs are required, baseline acceptance authorizes IU Planning only. It does not authorize product/source edits.
+- Product/source edits in IU mode require a later explicit continuation that records `IU_EXECUTION_AUTHORIZED` after IU plan review.
+- Never create IU files after material implementation to show compliance.
+
+If implementation units are not required, record a concise no-IU rationale in the existing session governance artifacts before implementation begins.
+
+<!-- /HIRMOS-CAPSULE:continue:PROD-L8.33C-2 canonical command capsule v1 -->

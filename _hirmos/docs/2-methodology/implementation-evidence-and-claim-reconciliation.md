@@ -1,6 +1,8 @@
 # Implementation Evidence and Claim Reconciliation
 
-HIRMOS treats implementation claims as evidence-backed claims, not just model assertions.
+HIRMOS treats implementation claims as evidence-backed claims, not just model assertions. In serious software work, implementation status must be demonstrated by evidence that matches the scope of the claim.
+
+AI-assisted development makes claim reconciliation more important because an agent can complete many edits before the human has inspected whether the evidence supports local runtime, production readiness, partial completion, or a blocked result.
 
 ## Evidence levels
 
