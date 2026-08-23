@@ -2262,7 +2262,7 @@ require_phrases('durable current-system-state merge and accepted-state invariant
     'core/protocol/CURRENT_SYSTEM_STATE.md': ['canonical accepted current truth', 'Required accepted-state artifacts', 'Accepted-state tracks', 'Close blocking rules', 'Accepted-state navigation and latest-close metadata live in `CURRENT_SYSTEM_STATE.md`', 'Accepted-State Artifact Invariants', 'Work History Ledger', 'Source Artifact Index'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Product State', 'Delivery State', 'Runtime Integration State', 'Production Readiness State', 'Work History Ledger', 'Source Artifact Index'],
     'system/accepted-state/CURRENT_SYSTEM_STATE.md': ['accepted-state navigation authority', 'Production Readiness State', 'Accepted-State Artifact Invariants:', 'Work History Ledger', 'Source Artifact Index'],
-    'system/accepted-state/CARRY_FORWARD.md': ['Active Carry-Forward Items', 'Active-Only Rule', 'Do not maintain a closed carry-forward table', 'Accepted-State Artifact Invariants:'],
+    'system/accepted-state/CARRY_FORWARD.md': ['Active Carry-Forward Register', 'Resolved Carry-Forward Register', 'Carry-Forward Lifecycle Rule', 'Accepted-State Artifact Invariants:'],
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['CURRENT_SYSTEM_STATE.md', 'conditional `DECISION_LOG.md`', 'accepted-state invariant'],
     'core/templates/session/SESSION_LEDGER.md': ['Current-State Execution Controls', 'Invariant / Canonical Value Controls'],
     'core/commands/close.md': ['Durable current-system-state merge invariant', 'accepted-state navigation and latest-close metadata'],
@@ -2288,9 +2288,9 @@ for rel in ['system/accepted-state/CURRENT_SYSTEM_STATE.md', 'core/templates/sys
             sys.exit(1)
 for rel in ['system/accepted-state/CARRY_FORWARD.md', 'core/protocol/CURRENT_SYSTEM_STATE.md']:
     body = (root/rel).read_text()
-    for phrase in ['active', 'closed carry-forward history']:
+    for phrase in ['active', 'resolved carry-forward', 'CARRY_FORWARD.md']:
         if phrase.lower() not in body.lower():
-            print(f'FAIL: carry-forward active-only rule: {rel} missing required phrase: {phrase}')
+            print(f'FAIL: carry-forward lifecycle rule: {rel} missing required phrase: {phrase}')
             sys.exit(1)
 print('PASS: HIRMOS accepted-state simplification static check')
 
@@ -2300,7 +2300,7 @@ for rel, phrases in {
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['Close-time carry-forward triage doctrine', 'Carry-forward is a last-resort close disposition', 'APPROVED_CARRY_FORWARD', 'A post-close `hirmos start` recommendation is valid only'],
     'core/templates/session/SESSION_LEDGER.md': ['Close-Time Carry-Forward Candidate Review', 'Safe to resolve now?', 'User approval for deferral'],
     'core/templates/session/SESSION_SCOPE.md': ['Carry-forward candidate review completed', 'Approved carry-forward required after triage'],
-    'system/accepted-state/CARRY_FORWARD.md': ['Only items with close-time disposition `APPROVED_CARRY_FORWARD` may appear here', 'Approval / deferral source'],
+    'system/accepted-state/CARRY_FORWARD.md': ['Only items with close-time disposition `APPROVED_CARRY_FORWARD` may appear here', 'Approval / deferral source', 'CF-YYYYMMDD-NNN'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': ['Close-time carry-forward triage must first auto-resolve safe candidates'],
     'core/protocol/COMMANDS.md': ['Close-Time Carry-Forward Candidate Review'],
     'core/templates/checkpoints/SESSION_BASELINE_CHECKPOINT_OUTPUT.md': ['To continue from this pause:', 'Reply exactly: Stop / do not continue'],
@@ -2440,9 +2440,9 @@ for rel in required_canonical_templates:
         fail(f'canonical template missing: {rel}')
 
 carry = (root / 'system/accepted-state/CARRY_FORWARD.md').read_text()
-for forbidden_heading in ['Closed Carry-Forward Items', 'Resolved Carry-Forward Items', 'Completed Carry-Forward Items']:
-    if forbidden_heading.lower() in carry.lower():
-        fail(f'CARRY_FORWARD.md must be active-only; found heading: {forbidden_heading}')
+for phrase in ['Active Carry-Forward Register', 'Resolved Carry-Forward Register', 'Carry-Forward Lifecycle Rule', 'CF-YYYYMMDD-NNN']:
+    if phrase.lower() not in carry.lower():
+        fail(f'CARRY_FORWARD.md missing carry-forward lifecycle phrase: {phrase}')
 
 current = (root / 'system/accepted-state/CURRENT_SYSTEM_STATE.md').read_text()
 for phrase in [
@@ -2958,8 +2958,8 @@ _l833c2_capsule_markers = {
     'invariants.md': ['HIRMOS-CAPSULE:invariants:PROD-L8.33C-2 canonical command capsule v1', 'Detailed user instructions are scope input, not implementation authorization.', 'hirmos continue` must classify and gate before it codes', 'hirmos status` is read-only'],
     'start.md': ['HIRMOS-CAPSULE:start:PROD-L8.33C-2 canonical command capsule v1', 'Detailed implementation instructions as implementation authorization', 'must end at a governed baseline checkpoint'],
     'continue.md': ['HIRMOS-CAPSULE:continue:PROD-L8.33C-2 canonical command capsule v1', '`hirmos continue` must classify and gate before it codes', 'If the user requests implementation units and no accepted IU plan exists', 'Never create IU files after material implementation to show compliance'],
-    'status.md': ['HIRMOS-CAPSULE:status:PROD-L8.33C-2 canonical command capsule v1', '`hirmos status` is read-only', 'Do not advance lifecycle state'],
-    'close.md': ['HIRMOS-CAPSULE:close:PROD-L8.33C-2 canonical command capsule v1', '`hirmos close` requires evidence-backed close', 'Fail closed'],
+    'status.md': ['HIRMOS-CAPSULE:status:PROD-L8.33C-2 canonical command capsule v1', '`hirmos status` is read-only', 'Do not advance lifecycle state', 'Carry-forward concordance'],
+    'close.md': ['HIRMOS-CAPSULE:close:PROD-L8.33C-2 canonical command capsule v1', '`hirmos close` requires evidence-backed close', 'Fail closed', 'Carry-Forward Attention'],
 }
 for _name, _phrases in _l833c2_capsule_markers.items():
     _path = _l833c2_root / ('capsules/invariants.md' if _name == 'invariants.md' else f'capsules/commands/{_name}')
@@ -3050,6 +3050,30 @@ for _phrase in ['Status read-only bootstrap fast path', 'without creating `BOOTS
     if _phrase not in _status_capsule:
         fail(f'PROD-L8.33E status capsule missing phrase: {_phrase}')
 print('PASS: HIRMOS PROD-L8.33E status read-only fast path and minimum read set static check')
+
+# PROD-L8.33G carry-forward lifecycle consolidation checks
+for _rel, _phrases in {
+    'system/accepted-state/CARRY_FORWARD.md': ['single accepted-state authority for carry-forward lifecycle', 'Active Carry-Forward Register', 'Resolved Carry-Forward Register', 'CF-YYYYMMDD-NNN', 'source_ref', 'Removal / Resolution Concordance Rule', 'Accepted-State Maintenance Flow'],
+    'core/commands/status.md': ['Carry-forward lifecycle concordance', 'Status Blocked By Carry-Forward Concordance Conflict', 'CF-YYYYMMDD-NNN', 'matching resolved carry-forward row'],
+    'core/commands/close.md': ['Carry-Forward Attention block', 'CF-YYYYMMDD-NNN', 'source local ID', 'accepted-state maintenance'],
+    'core/commands/start.md': ['Accepted-state maintenance classification', 'ACCEPTED_STATE_MAINTENANCE', 'CARRY_FORWARD_RESOLUTION'],
+    'core/commands/continue.md': ['Accepted-state maintenance continue gate', 'accepted-state-only write boundary', 'Resolved Carry-Forward Register'],
+    'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['Carry-forward lifecycle consolidation', 'Carry-Forward Attention block', 'CF-YYYYMMDD-NNN'],
+    'integrations/agent-tools/capsules/commands/status.md': ['Carry-forward concordance', 'CARRY_FORWARD.md', 'hirmos start'],
+    'integrations/agent-tools/capsules/commands/close.md': ['Carry-Forward Attention', 'CF-YYYYMMDD-NNN'],
+    'integrations/agent-tools/capsules/commands/start.md': ['ACCEPTED_STATE_MAINTENANCE', 'CARRY_FORWARD_RESOLUTION'],
+    'integrations/agent-tools/capsules/commands/continue.md': ['ACCEPTED_STATE_MAINTENANCE', 'Resolved'],
+    'integrations/agent-tools/capsules/invariants.md': ['Carry-forward lifecycle is consolidated in `CARRY_FORWARD.md`', 'CF-YYYYMMDD-NNN'],
+}.items():
+    _body = (root / _rel).read_text(errors='ignore')
+    for _phrase in _phrases:
+        if _phrase.lower() not in _body.lower():
+            fail(f'PROD-L8.33G {_rel} missing carry-forward lifecycle phrase: {_phrase}')
+print('PASS: HIRMOS PROD-L8.33G carry-forward lifecycle consolidation static check')
+_l833g_fixture = root / 'tools/test_l833g_carry_forward_lifecycle.py'
+if not _l833g_fixture.exists():
+    fail('PROD-L8.33G missing focused fixture runner: tools/test_l833g_carry_forward_lifecycle.py')
+print('PASS: HIRMOS PROD-L8.33G focused fixture coverage static check')
 
 print('PASS: HIRMOS PROD-L8.33C-2 generated command and per-command skill projection static check')
 
@@ -3614,7 +3638,7 @@ for rel, phrases in {
     'core/templates/session/EVIDENCE.md': ['PROD-L8.21 Acceptance Evidence Semantics', 'Implementation accepted', 'Runtime verified', 'Production verified'],
     'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.21 Acceptance Evidence Semantics', 'implementation accepted', 'runtime verified', 'production verified'],
     'core/templates/system/CURRENT_SYSTEM_STATE.md': ['PROD-L8.21 Source Artifact Index Placeholder Rule', 'none', 'not separately created'],
-    'system/accepted-state/CARRY_FORWARD.md': ['PROD-L8.21 Carry-Forward Template Concordance', 'Active-Only Rule'],
+    'system/accepted-state/CARRY_FORWARD.md': ['PROD-L8.21 Carry-Forward Template Concordance', 'Carry-Forward Lifecycle Rule'],
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.21 close-time concordance hardening', 'timestamp completeness and monotonicity', 'evidence semantics separation'],
 }.items():
     body = (root/rel).read_text(errors='ignore')

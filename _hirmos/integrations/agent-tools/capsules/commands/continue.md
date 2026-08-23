@@ -20,3 +20,8 @@ IU planning rules:
 If implementation units are not required, record a concise no-IU rationale in the existing session governance artifacts before implementation begins.
 
 <!-- /HIRMOS-CAPSULE:continue:PROD-L8.33C-2 canonical command capsule v1 -->
+
+Accepted-state maintenance rules:
+- For `ACCEPTED_STATE_MAINTENANCE` / `CARRY_FORWARD_RESOLUTION`, enforce accepted-state-only writes.
+- Move a carry-forward item from Active to Resolved only with matching global `CF-YYYYMMDD-NNN` ID, source ref, resolution basis, evidence posture, and authority/evidence pointer.
+- Do not mutate historical archives or product/source files.

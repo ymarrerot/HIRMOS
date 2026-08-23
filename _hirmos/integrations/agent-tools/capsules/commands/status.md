@@ -17,6 +17,11 @@ Status read-only bootstrap fast path:
 - If bootstrap is absent or incomplete, report that advancing commands are blocked until bootstrap passes.
 - Do not create bootstrap artifacts, backfill accepted-state artifacts, repair carry-forward registers, or advance lifecycle state during status.
 
+Carry-forward concordance:
+- Treat `CARRY_FORWARD.md` as the single carry-forward lifecycle authority.
+- Report active/resolved mismatches, missing resolved rows, bare local accepted-state CF IDs, or user/production verification claims without resolved carry-forward provenance.
+- Do not repair carry-forward during status; recommend one `hirmos start` accepted-state maintenance command when repair is needed.
+
 Status minimum read set:
 - Idle/post-close: `_hirmos/hirmos.config.json`, `_hirmos/session/SESSION_STATE.json`, `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`, `_hirmos/system/accepted-state/CARRY_FORWARD.md`, and latest archive manifest if referenced or discoverable.
 - Active session: add `SESSION_LEDGER.md`, `SESSION_SCOPE.md`, unresolved register when relevant, and IU files only when IU state is relevant.

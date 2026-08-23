@@ -41,6 +41,20 @@ Active-session status must add only the session artifacts needed to explain curr
 
 Delivery or phase status must add delivery/phase files only when accepted-state or session pointers indicate active delivery/phase context. Deeper protocol reads are escalation reads, not default status reads; use them only when the minimum reads reveal a contradiction, missing required field, active gate, or delivery/phase state that cannot be explained from the compact status surface.
 
+
+## PROD-L8.33G Carry-forward lifecycle concordance
+
+`hirmos status` must treat `_hirmos/system/accepted-state/CARRY_FORWARD.md` as the single carry-forward lifecycle authority. Status remains read-only: it reports concordance defects but does not repair active or resolved carry-forward rows.
+
+Status must report `Status Blocked By Carry-Forward Concordance Conflict` when any of these are true:
+
+- an active carry-forward item disappeared from the Active Carry-Forward Register without a matching Resolved Carry-Forward Register row for the same global `CF-YYYYMMDD-NNN` ID;
+- `CURRENT_SYSTEM_STATE.md` claims `USER_ENVIRONMENT_VERIFIED`, `PRODUCTION_READINESS_VERIFIED`, or equivalent carry-forward resolution without a matching resolved carry-forward row;
+- active carry-forward summary in `CURRENT_SYSTEM_STATE.md` disagrees with `CARRY_FORWARD.md`;
+- a bare local ID such as `CF-01` is used as an accepted-state carry-forward ID instead of a source-local pointer.
+
+When conflicts exist, status must name the exact missing or mismatched CF IDs and recommend exactly one next command using the existing surface, usually `hirmos start "Record carry-forward resolution for CF-YYYYMMDD-NNN"`.
+
 ## Runtime gate checklist
 - Command-state gate and Command-state reporting: report status without mutating files.
 - Status invariant and canonical-value reporting: do not invent state; read machine state and current artifacts.

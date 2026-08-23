@@ -9,7 +9,7 @@ Purpose: ensure `hirmos close` is a governed state transaction, not a chat summa
 
 1. **Session scope truth** — `_hirmos/session/SESSION_SCOPE.md`, especially close verification, shows what was promised, what was verified, unresolved-item disposition, and the final fail-closed verdict.
 2. **Execution truth** — `_hirmos/session/SESSION_LEDGER.md` records the close command, execution controls, evidence pointers, archive/reset control pointers, and exactly one legal next command or action.
-3. **Accepted current truth** — `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`, active-only `CARRY_FORWARD.md`, and conditional `DECISION_LOG.md` when explicit decision-log governance is active reflect only accepted outcomes, active carry-forward obligations, and governed durable decisions.
+3. **Accepted current truth** — `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md` carry-forward lifecycle authority, and conditional `DECISION_LOG.md` when explicit decision-log governance is active reflect only accepted outcomes, active/resolved carry-forward lifecycle records, and governed durable decisions.
 4. **Archive/reset truth** — the archive records archived artifacts and post-close verification, while active `_hirmos/session/` is reset to idle scaffolding. Archive manifest information belongs in history at `ARCHIVE_MANIFEST.md` and in `SESSION_LEDGER.md` archive controls; do not create a separate active-session archive manifest support file.
 
 If any surface disagrees, HIRMOS must report `Close Blocked`, not `Closed / Archived`.
@@ -29,7 +29,7 @@ A normal close is a transaction with seven ordered parts:
 4. **Archive preservation** — copy the complete active session artifact set to `_hirmos/system/history/sessions/<session-id>/` and create `SESSION_LEDGER.md` archive controls there.
 5. **Archive-state normalization** — preserve pre-close state as history, and ensure the archived `SESSION_STATE.json` is terminal (`closed`, `archived`, or `history_only`), not active.
 6. **Active-session reset** — reset `_hirmos/session/` to minimal idle scaffolding after archive preservation succeeds.
-7. **Post-close verification** — verify archive path, current-state latest-close metadata, active-only carry-forward state, idle session state, and no stale active artifacts before surfacing close success.
+7. **Post-close verification** — verify archive path, current-state latest-close metadata, carry-forward active/resolved lifecycle state, idle session state, and no stale active artifacts before surfacing close success.
 
 If any required part fails, HIRMOS must stop at `Close Blocked` or use explicit `Abort Closed` when authorized. It must not partially claim normal close success.
 
@@ -66,6 +66,17 @@ Before normal close, HIRMOS must run a **Close-Time Carry-Forward Candidate Revi
 
 User approval for deferral must be explicit when the item materially affects acceptance, evidence posture, runtime/production claims, or future implementation. A post-close `hirmos start` recommendation is valid only for `APPROVED_CARRY_FORWARD` items or separately scoped new work.
 
+
+## PROD-L8.33G Carry-forward lifecycle consolidation
+
+`CARRY_FORWARD.md` is the single accepted-state authority for active and resolved carry-forward lifecycle. Close-time archives remain historical snapshots; post-close carry-forward resolution must not rewrite them. Later resolution is governed through the existing `hirmos start` → `hirmos continue` → `hirmos close` flow as an accepted-state maintenance session.
+
+Close must create active carry-forward rows with global `CF-YYYYMMDD-NNN` IDs and separate source pointers (`source_session`, `source_local_id`, `source_ref`). Bare local IDs such as `CF-01` are valid only as source-local pointers.
+
+Before close success, output a Carry-Forward Attention block that either lists every approved carry-forward item and future resolution instruction or states that no active carry-forward remains.
+
+When closing an accepted-state maintenance / carry-forward resolution session, verify that every resolved item moved out of Active appears in the Resolved Carry-Forward Register with matching global CF ID, source ref, resolution basis, evidence posture, and authority/evidence pointer.
+
 ## Accepted-state records
 
 Accepted state lives under:
@@ -77,7 +88,7 @@ _hirmos/system/accepted-state/
 The baseline accepted-state files are:
 
 - `CURRENT_SYSTEM_STATE.md` — accepted-state navigation authority, current governance pointers, chronological Work History Ledger, Source Artifact Index, concise current-state summary, and latest-close metadata;
-- `CARRY_FORWARD.md` — active carry-forward obligations only;
+- `CARRY_FORWARD.md` — active carry-forward obligations and resolved carry-forward provenance;
 - `DECISION_LOG.md` — conditional durable accepted, rejected, superseded, and replaced decisions when explicit decision-log governance is active.
 
 Default HIRMOS must not create root accepted-state `REQUIREMENTS.md`, `DESIGN.md`, `SYSTEM_SCOPE.md`, `DECISIONS.md`, or `ACCEPTED_CHANGES.md`. Requirements, design, and scope remain source authorities at delivery/session/archive level unless a future explicit cumulative-governance mode is activated.
@@ -226,7 +237,7 @@ The accepted-state folder must contain:
 
 - `CURRENT_SYSTEM_STATE.md` — canonical merged current truth;
 - `CURRENT_SYSTEM_STATE.md` latest-close metadata — navigation, latest close pointer, and accepted-state file index;
-- `CARRY_FORWARD.md` — active carry-forward obligations only;
+- `CARRY_FORWARD.md` — active carry-forward obligations and resolved carry-forward provenance;
 - `DECISION_LOG.md` — conditional durable accepted, rejected, and superseded decisions when explicit decision-log governance is active.
 
 ### Current-state merge requirements

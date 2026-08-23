@@ -26,7 +26,7 @@ It must contain these required files:
 | Artifact | Required | Responsibility |
 |---|---:|---|
 | `CURRENT_SYSTEM_STATE.md` | yes | accepted-state navigation authority, current governance pointers, latest-close metadata, Work History Ledger, Source Artifact Index, and concise current-state summary |
-| `CARRY_FORWARD.md` | yes | active unresolved / future-session obligations only |
+| `CARRY_FORWARD.md` | yes | active/resolved carry-forward lifecycle authority |
 | `DECISION_LOG.md` | conditional | durable accepted/rejected/superseded decision support when explicit decision-log governance is active |
 
 Default HIRMOS must not create root accepted-state `REQUIREMENTS.md`, `DESIGN.md`, `SYSTEM_SCOPE.md`, `DECISIONS.md`, or `ACCEPTED_CHANGES.md`.
@@ -141,7 +141,7 @@ When a phase becomes accepted, `CURRENT_SYSTEM_STATE.md` must record the last ac
 
 Close is blocked when delivery or phase pointers are not refreshed or explicitly verified unchanged.
 
-Active carry-forward details live in CARRY_FORWARD.md; closed carry-forward history belongs in session archives and CURRENT_SYSTEM_STATE.md Work History Ledger / History / Traceability.
+Active and resolved carry-forward lifecycle details live in CARRY_FORWARD.md. Session archives remain close-time snapshots; CURRENT_SYSTEM_STATE.md summarizes current posture and points to the owning carry-forward rows.
 
 ## Current-State-First Navigation Spine
 
@@ -183,3 +183,8 @@ HIRMOS must not use this split to hide stale pointers. Any transition update mus
 ## PROD-L8.32L Artifact Creation / Derived Pointer Doctrine
 
 HIRMOS must not create optional artifacts simply because a template exists. Optional artifacts are created just in time when the current governed boundary makes their owning concern applicable. Derived pointer indexes must be recomputed from canonical source artifacts, filesystem paths, active session state, session ledgers, delivery/phase directories, and archive manifests. Stale pointer rows are defects, not truth.
+
+
+## PROD-L8.33G Carry-forward lifecycle summary rule
+
+`CURRENT_SYSTEM_STATE.md` summarizes carry-forward posture but does not own carry-forward lifecycle truth. Active and resolved carry-forward records live in `_hirmos/system/accepted-state/CARRY_FORWARD.md`. A claim that a carry-forward item is resolved, user-verified, or production-verified must point to the matching resolved row in `CARRY_FORWARD.md`.

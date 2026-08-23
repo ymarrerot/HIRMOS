@@ -218,7 +218,7 @@ Bootstrap must establish these distinctions:
 
 - `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md` is canonical merged current truth.
 - Latest-close metadata is navigation and latest-close summary; it is not the whole current state.
-- `_hirmos/system/accepted-state/CARRY_FORWARD.md` tracks unresolved and future-session obligations.
+- `_hirmos/system/accepted-state/CARRY_FORWARD.md` tracks active and resolved carry-forward lifecycle.
 - `_hirmos/system/accepted-state/DECISION_LOG.md` is conditional durable accepted/rejected/superseded decision history when explicit decision-log governance is active.
 - Session archives are history and evidence, not current accepted state by themselves.
 

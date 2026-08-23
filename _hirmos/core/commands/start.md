@@ -93,3 +93,12 @@ Command execution must update the canonical owner of each fact and use pointers 
 ## PROD-L8.32L Just-in-Time Artifact Creation and Derived Pointer Indexes
 
 Commands must not instantiate optional artifacts merely because a template exists. Create optional artifacts only when the current boundary makes the owning concern applicable. Treat Current System State, Delivery Plan, Phase, and ledger pointer rows as derived navigation caches over source artifacts; stale pointer rows fail closed.
+
+
+## PROD-L8.33G Accepted-state maintenance classification
+
+`hirmos start` must recognize requests to record carry-forward verification, resolve active carry-forward, reconcile accepted-state carry-forward posture, or repair carry-forward concordance as `ACCEPTED_STATE_MAINTENANCE` with subtype `CARRY_FORWARD_RESOLUTION` when applicable.
+
+This classification is not product implementation. Start may inspect accepted-state carry-forward artifacts and relevant archives, create a narrow session baseline, and stop for user acceptance. It must not edit product/source files or mark carry-forward resolved during `hirmos start`.
+
+The baseline must name the allowed write set: `CARRY_FORWARD.md`, `CURRENT_SYSTEM_STATE.md`, and session governance/evidence artifacts only, unless the user explicitly scopes additional accepted-state maintenance.

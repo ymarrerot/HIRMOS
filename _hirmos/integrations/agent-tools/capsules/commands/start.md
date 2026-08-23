@@ -3,6 +3,10 @@
 
 `hirmos start` establishes governed starting authority. It is not an implementation command and must end at a governed baseline checkpoint.
 
+Accepted-state maintenance:
+- Requests to record carry-forward verification or repair carry-forward concordance are `ACCEPTED_STATE_MAINTENANCE` / `CARRY_FORWARD_RESOLUTION`, not product implementation.
+- Create a narrow baseline naming allowed accepted-state writes and stop for user acceptance.
+
 Required behavior:
 1. Read `_hirmos/AGENTS.md` and the start command authority.
 2. Inspect current system state, relevant user inputs, and only the project files needed to scope the request.

@@ -1,5 +1,15 @@
 # Changelog
 
+## PROD-L8.33G — Carry-Forward Lifecycle Consolidation and Projected Command Updates
+
+- Consolidated active and resolved carry-forward lifecycle inside `CARRY_FORWARD.md`; no new carry-forward command or resolution artifact was added.
+- Added global carry-forward IDs using `CF-YYYYMMDD-NNN` plus separate source refs for close-time local IDs.
+- Added accepted-state maintenance classification for carry-forward resolution using existing `hirmos start` / `hirmos continue` / `hirmos close`.
+- Strengthened `hirmos status` to report carry-forward concordance conflicts read-only.
+- Strengthened `hirmos close` with a required Carry-Forward Attention block and future resolution instruction.
+- Projected the updated behavior through generated integration command/skill capsules.
+
+
 ## 1.2.1 — Integration projection, CLI installer, and status-readiness hardening
 
 - Bumps framework metadata and validator expected version from 1.2.0 to 1.2.1.

@@ -110,7 +110,7 @@ Files under `_hirmos/system/accepted-state/` are durable accepted state. They ma
 Accepted current system truth lives in `_hirmos/system/accepted-state/CURRENT_SYSTEM_STATE.md`. Accepted-state responsibilities are intentionally small:
 
 - `CURRENT_SYSTEM_STATE.md` owns current truth, accepted-state navigation, active development-context pointers, and latest-close metadata.
-- `CARRY_FORWARD.md` preserves active unresolved items, blockers, assumptions, and future-session instructions only.
+- `CARRY_FORWARD.md` preserves active unresolved carry-forward items and resolved carry-forward provenance.
 - `DECISION_LOG.md` is conditional durable decision support when explicit decision-log governance is active; it is not a default accepted-state root artifact.
 - `_hirmos/system/history/sessions/<session-id>/` preserves historical evidence and archived session artifacts.
 
@@ -210,3 +210,6 @@ Complexity-pressure risks to review periodically:
 - validators enforcing wording instead of authority safety;
 - project-type language replacing current-state-first routing;
 - too many places to express requirements, design, or source authority.
+
+
+PROD-L8.33G: `_hirmos/system/accepted-state/CARRY_FORWARD.md` owns active and resolved carry-forward lifecycle; `CURRENT_SYSTEM_STATE.md` summarizes only.

@@ -247,7 +247,7 @@ Use canonical evidence states from `_hirmos/core/protocol/CLAIM_RECONCILIATION.m
 
 ## 13. Unresolved / Carry-Forward State
 
-Summarize active carry-forward items only. Canonical active item details live in `CARRY_FORWARD.md`.
+Summarize active carry-forward posture only. Canonical active and resolved carry-forward lifecycle details live in `CARRY_FORWARD.md`.
 
 | Item | Type | Owner | Future-session instruction | Source |
 |---|---|---|---|---|
@@ -357,3 +357,8 @@ Literal rule: source artifacts win over derived pointer caches.
 ## PROD-L8.32Q Accepted-State Concordance Simplification
 
 Accepted-state navigation must not require duplicated delivery status logs. Current delivery/phase posture is derived from delivery scope close posture, phase acceptance records, session archive manifests, evidence records, and roadmap/status pointer indexes. Stale pointer rows are defects; stale narrative status logs should not be created.
+
+
+## PROD-L8.33G Carry-forward lifecycle summary rule
+
+`CURRENT_SYSTEM_STATE.md` summarizes carry-forward posture but does not own carry-forward lifecycle truth. Active and resolved carry-forward records live in `_hirmos/system/accepted-state/CARRY_FORWARD.md`. A claim that a carry-forward item is resolved, user-verified, or production-verified must point to the matching resolved row in `CARRY_FORWARD.md`.

@@ -122,3 +122,10 @@ Command execution must update the canonical owner of each fact and use pointers 
 ## PROD-L8.32L Just-in-Time Artifact Creation and Derived Pointer Indexes
 
 Commands must not instantiate optional artifacts merely because a template exists. Create optional artifacts only when the current boundary makes the owning concern applicable. Treat Current System State, Delivery Plan, Phase, and ledger pointer rows as derived navigation caches over source artifacts; stale pointer rows fail closed.
+
+
+## PROD-L8.33G Accepted-state maintenance continue gate
+
+When the active session is `ACCEPTED_STATE_MAINTENANCE` / `CARRY_FORWARD_RESOLUTION`, `hirmos continue` must classify the pass before edits and enforce an accepted-state-only write boundary. Allowed writes are `CARRY_FORWARD.md`, `CURRENT_SYSTEM_STATE.md`, and session governance/evidence artifacts. Product/source edits, historical archive mutation. Do not mutate historical archives, and delivery/phase scope edits are forbidden unless separately scoped and authorized.
+
+A carry-forward item may be moved out of Active only when the same global `CF-YYYYMMDD-NNN` ID is added to the Resolved Carry-Forward Register with source ref, resolution basis, evidence posture, resolved-at value, and authority/evidence pointer. Bare local IDs such as `CF-01` may be preserved only as source-local pointers, not as canonical accepted-state IDs.

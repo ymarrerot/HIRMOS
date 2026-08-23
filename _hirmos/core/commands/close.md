@@ -35,6 +35,15 @@ Read this command file first, apply its gate checklist exactly, and read deeper 
 - Phase Progress / Carry-Forward Enforcement: inspect Phase Progress Pointer Index and Carry-Forward Items.
 - Phase Acceptance Enforcement: require Phase Acceptance Evidence Gate is PASS before phase acceptance claims.
 
+
+## PROD-L8.33G Carry-Forward Attention block
+
+Before claiming close success, `hirmos close` must display a Carry-Forward Attention block. If carry-forward is present, the block must list each item with global `CF-YYYYMMDD-NNN` ID, source session, source local ID, source ref, evidence gap, approval/deferral source, future-session instruction, and expected resolution evidence. If no active carry-forward remains after triage, the block must state that explicitly.
+
+New active carry-forward rows must be written to `CARRY_FORWARD.md` using the global CF ID format and source pointers. Close must not use bare local IDs such as `CF-01` as accepted-state carry-forward IDs. Close must tell the user that later resolution uses the existing command flow: `hirmos start "Record verification that CF-YYYYMMDD-NNN is resolved"`, followed by `hirmos continue` and `hirmos close`.
+
+Accepted-state maintenance close rule: when the active session type is accepted-state maintenance / carry-forward resolution, close must verify that every carry-forward removed from Active has a matching Resolved row in `CARRY_FORWARD.md`, that `CURRENT_SYSTEM_STATE.md` only summarizes the result, and that no historical archive was mutated.
+
 ## Carry-forward triage
 Close-Time Carry-Forward Candidate Review: Carry-forward is a last-resort close disposition.
 Allowed dispositions: AUTO_RESOLVED_NOW, USER_RESOLVED_NOW, APPROVED_CARRY_FORWARD, BLOCKING_UNRESOLVED, NO_LONGER_APPLIES.
