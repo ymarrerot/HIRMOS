@@ -65,6 +65,23 @@ If implementation units are not required, record a concise no-IU rationale in th
 - L8.32K negative fixture rule: if baseline acceptance creates IU files but no `IU_EXECUTION_AUTHORIZED` gate exists, any project-file diff, Material Edit Start Record, or implementation-complete claim must fail validation.
 
 
+## PROD-L8.33H Implementation Completion Convergence
+
+`IU_EXECUTION_AUTHORIZATION` is an authorization gate, not a mandatory terminal pause after the authorized edits finish. Once implementation execution is authorized, `hirmos continue` must keep advancing through the remaining Implementation-stage controls that can be completed safely in the same pass.
+
+When all authorized implementation work / IUs have reached their execution boundary, HIRMOS must not end the pass merely with "implementation executed" while session implementation review is still pending. Before responding, route and run the applicable validation review, implementation-unit review, unresolved-item review, and `session-implementation-review` when their required inputs are available.
+
+Converge to one of these outcomes:
+
+- **Implementation complete:** session implementation review supports the accepted Session Scope, required evidence is sufficient, and no gated blocker remains. Set `lifecycle_stage = implementation_complete`, recompute command state, and recommend `hirmos close`.
+- **User-owned evidence / decision required:** remain at the truthful active or blocked boundary, surface the exact missing evidence/decision, and recommend one purpose-specific `hirmos continue "..."` invocation rather than an ambiguous bare continue.
+- **Correction / route-back required:** classify and record the required correction or route-back before further completion claims.
+- **Remaining authorized implementation exists:** remain in Implementation and identify the concrete remaining work; do not pretend close preparation is next.
+
+Recovery rule for a bare `hirmos continue`: if all authorized IUs/work are already executed and the only remaining same-stage boundary is validation/session implementation review, infer `CLOSE_PREPARATION` / implementation-completion review from current state and perform that review. Do not restart implementation or require the user to know the internal pass label.
+
+This rule preserves the IU Planning → IU Execution pause. It does not add a routine third pause between IU execution and implementation completion, and it does not execute `hirmos close` inside Implementation.
+
 ## Scope and delivery safety
 Do not expand delivery scope silently. If the user request changes authority, route back or amend scope before implementation. If unsafe, Fail-Closed.
 

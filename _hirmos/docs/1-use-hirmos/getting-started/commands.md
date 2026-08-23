@@ -48,12 +48,14 @@ Continuation does not always mean “start coding.” It can mean:
 - continue a correction or review pass;
 - proceed toward close readiness.
 
-When IU mode applies, the expected sequence is:
+When IU mode applies, the expected planned pauses are:
 
 ```text
 hirmos continue "Accept session baseline and create IU plan"
 hirmos continue "Accept IU plan and begin IU execution"
 ```
+
+After IU execution is authorized, HIRMOS should normally execute, validate, review the units together against the Session Scope, and reach the implementation-completion decision in that same continuation. If review passes, the next command is `hirmos close`. A third `hirmos continue` pause is conditional: use it only when review needs user-owned evidence/decision, correction, or blocker resolution.
 
 Material project-file edits require implementation authorization. IU Planning alone is not implementation authorization.
 

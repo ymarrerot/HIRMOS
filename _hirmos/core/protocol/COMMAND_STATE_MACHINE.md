@@ -157,7 +157,7 @@ Continuation pass types:
 | SCOPE_AMENDMENT | user requests new work or changes accepted authority, criteria, exclusions, validation, or close satisfaction | amend `SESSION_SCOPE.md` before implementation or completion claims continue |
 | VALIDATION_ONLY | user asks to rerun or complete validation | append validation evidence and update review surfaces without silently changing scope |
 | ROUTE_BACK | later evidence invalidates earlier authority or requires returning to a prior lifecycle boundary | record route-back, reset affected controls, and preserve previous pass history |
-| CLOSE_PREPARATION | user asks for pre-close cleanup, hardening, or verification before close | append pass record; if it changes acceptance criteria, add a `SESSION_SCOPE.md` authority delta before close |
+| CLOSE_PREPARATION | explicit request or current-state inference shows that implementation is executed and pre-close validation/session review is the next remaining Implementation boundary | append pass record; complete the review/verification boundary; if it changes acceptance criteria, add a `SESSION_SCOPE.md` authority delta before close |
 | BLOCKED | command cannot safely advance | append blocked pass record when possible and stop at fail-closed recovery |
 
 Pass classification rule:
@@ -173,6 +173,14 @@ Scope rules:
 - `unresolved-items.md` dispositions must be appended, not deleted.
 - `SESSION_SCOPE.md` close verification must add review passes, not replace prior reviews.
 - `implementation-units/IU-xx.md` must append attempts/retries/reviews.
+
+## Implementation completion convergence rule
+
+A continue pass that authorizes and executes Implementation does not have to stop after project-file edits or IU execution. If all authorized implementation work has reached its execution boundary and the required inputs are available, the same pass should run applicable validation/unit/session implementation review and decide whether Implementation is complete.
+
+The normal IU-mode path therefore has two planned user pauses before execution: Session Baseline review and IU Plan review. A third pre-close pause is conditional, not mandatory. It exists only when implementation review finds user-owned evidence, a decision, a blocker, correction work, or another condition that cannot safely be resolved in the current pass.
+
+If an older or interrupted run is left at `lifecycle_stage = implementation` with all authorized IUs/work executed but session implementation review still pending, a bare legal `hirmos continue` must infer that review / close-preparation boundary from current artifacts rather than treating the request as open-ended implementation.
 
 ## SESSION_LEDGER append-only ledger requirements
 
@@ -223,6 +231,18 @@ tell me when ready
 continue if you want
 hirmos continue or hirmos close
 ```
+
+## Purposeful continue rendering
+
+`SESSION_STATE.json.recommended_next_command` remains the base governed command (`hirmos start`, `hirmos continue`, `hirmos status`, or `hirmos close`) so machine legality stays simple. User-facing output may and should render that one legal command as a purpose-specific invocation when the next boundary is unambiguous.
+
+Preferred pattern when `hirmos continue` is the base command:
+
+```text
+Next governed command: hirmos continue "Provide required runtime evidence and complete implementation review"
+```
+
+A purpose-specific invocation is still exactly one governed command. Do not force the user to infer the intended continuation from a bare `hirmos continue` when HIRMOS already knows the next boundary.
 
 ## Fail-closed command behavior
 

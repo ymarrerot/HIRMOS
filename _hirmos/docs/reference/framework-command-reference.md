@@ -34,12 +34,14 @@ Continuation may mean:
 - continue correction/review work;
 - proceed toward close readiness.
 
-When IU mode applies, implementation must follow:
+When IU mode applies, the two planned pauses before execution are:
 
 ```text
 hirmos continue "Accept session baseline and create IU plan"
 hirmos continue "Accept IU plan and begin IU execution"
 ```
+
+After IU execution begins, HIRMOS should normally continue through validation, IU/session review, and the implementation-completion decision in that same continuation. If review passes, recommend `hirmos close`. Add another `hirmos continue "..."` pause only when review needs user-owned evidence/decision, correction, or blocker resolution.
 
 ## `hirmos status`
 

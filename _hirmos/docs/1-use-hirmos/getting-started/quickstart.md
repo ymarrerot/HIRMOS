@@ -76,14 +76,14 @@ hirmos continue
 
 when HIRMOS says continuation is allowed.
 
-If implementation units are required, HIRMOS should pause twice:
+If implementation units are required, HIRMOS should have two planned pauses before execution:
 
 ```text
 Session Baseline accepted → IU Planning only
 IU Plan accepted → IU Execution
 ```
 
-This is intentional. It prevents implementation before the unit plan is visible and accepted.
+This is intentional. It prevents implementation before the unit plan is visible and accepted. After IU execution begins, HIRMOS should normally continue through validation and session implementation review without another user pause. An extra pause is warranted only when the review needs user-owned evidence/decision, correction, or blocker resolution.
 
 ## 7. Status or close
 

@@ -87,6 +87,16 @@ HIRMOS should not expose internal machinery by default. It should expose diagnos
 
 No output simplification may hide a gated item that blocks the active lifecycle boundary.
 
+## Same-stage convergence and pause minimality
+
+A model-owned capability boundary inside the current lifecycle stage is not, by itself, a reason to pause for the user. HIRMOS should converge through required same-stage work when the authority and evidence needed to do so are already available.
+
+For Implementation, this means that after authorized implementation work finishes, HIRMOS should normally continue through applicable validation review, implementation-unit review, session implementation review, and the implementation-completion decision in the same governed continuation. It must not stop merely because project-file edits or IU execution finished.
+
+Pause only when the next safe step depends on meaningful user-owned input, evidence, approval, risk/cost/compliance judgment, or another blocker that HIRMOS cannot resolve autonomously. When such a pause is required, name the exact purpose of the next action instead of surfacing an ambiguous bare continuation.
+
+This convergence rule does not merge lifecycle responsibilities. Implementation still ends at an evidence-backed implementation-completion decision. `hirmos close` remains Update System State work and must run separately after close becomes legal.
+
 ## Runtime integration and production-readiness visibility
 
 HIRMOS should not interrupt the user with low-level database/auth/provider choices while safe local/default progress is possible.

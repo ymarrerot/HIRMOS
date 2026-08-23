@@ -67,11 +67,19 @@ hirmos continue "Accept IU plan and begin IU execution"
 
 This pause prevents post-hoc IU creation. IU files must exist and pass generated-artifact validation before IU execution starts.
 
-## IU Execution and close
+## IU Execution, implementation review, and close
 
-After IU plan acceptance, HIRMOS can implement under the accepted scope and sealed IU files. At close it should:
+After IU plan acceptance, HIRMOS can implement under the accepted scope and sealed IU files. When the authorized implementation finishes, HIRMOS should normally continue in the same continuation through unit review, validation/evidence review, and session implementation review. If that aggregate review supports implementation completion, the next command is:
 
-- reconcile implementation evidence;
+```text
+hirmos close
+```
+
+A separate pre-close `hirmos continue` is not a routine third pause. It is used only when the review needs user-owned evidence/decision, correction, or blocker resolution.
+
+At close HIRMOS should:
+
+- reconcile close/update-state evidence;
 - preserve limitations and carry-forward items;
 - update current system state with accepted outcomes and pointers;
 - archive the session.

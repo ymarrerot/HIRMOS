@@ -226,7 +226,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.2.1'
+expected_version = '1.2.2'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -3070,6 +3070,27 @@ for _rel, _phrases in {
         if _phrase.lower() not in _body.lower():
             fail(f'PROD-L8.33G {_rel} missing carry-forward lifecycle phrase: {_phrase}')
 print('PASS: HIRMOS PROD-L8.33G carry-forward lifecycle consolidation static check')
+
+
+# PROD-L8.33H implementation completion convergence and purposeful continue routing checks
+for _rel, _phrases in {
+    'core/authority/INTERACTION_POSTURE.md': ['Same-stage convergence and pause minimality', 'It must not stop merely because project-file edits or IU execution finished', 'Pause only when the next safe step depends on meaningful user-owned input'],
+    'core/commands/continue.md': ['PROD-L8.33H Implementation Completion Convergence', 'authorization gate, not a mandatory terminal pause', 'recommend `hirmos close`', 'Recovery rule for a bare `hirmos continue`'],
+    'core/protocol/COMMAND_STATE_MACHINE.md': ['Implementation completion convergence rule', 'two planned user pauses before execution', 'Purposeful continue rendering'],
+    'core/protocol/COMMANDS.md': ['Implementation continuation convergence', 'implementation-completion decision', 'purpose-specific `hirmos continue "..."` invocation'],
+    'extensions/implementation-agent/entrypoints/default.md': ['Same-pass implementation convergence', 'Model-owned review is not by itself a user-owned pause'],
+    'extensions/implementation-agent/capabilities/session-implementation-review/entrypoints/default.md': ['Invocation timing', 'does not require a separate user request'],
+    'integrations/agent-tools/capsules/commands/continue.md': ['Implementation completion convergence', 'recommend `hirmos close`', 'infer close-preparation / implementation-completion review'],
+    'docs/1-use-hirmos/getting-started/quickstart.md': ['two planned pauses before execution', 'An extra pause is warranted only when the review needs user-owned evidence/decision'],
+}.items():
+    _body = (root / _rel).read_text(errors='ignore')
+    for _phrase in _phrases:
+        if _phrase.lower() not in _body.lower():
+            fail(f'PROD-L8.33H {_rel} missing implementation convergence phrase: {_phrase}')
+print('PASS: HIRMOS PROD-L8.33H implementation completion convergence static check')
+_l833h_fixture = root / 'tools/test_l833h_implementation_completion_convergence.py'
+if not _l833h_fixture.exists():
+    fail('PROD-L8.33H missing focused fixture runner: tools/test_l833h_implementation_completion_convergence.py')
 _l833g_fixture = root / 'tools/test_l833g_carry_forward_lifecycle.py'
 if not _l833g_fixture.exists():
     fail('PROD-L8.33G missing focused fixture runner: tools/test_l833g_carry_forward_lifecycle.py')

@@ -19,6 +19,13 @@ IU planning rules:
 
 If implementation units are not required, record a concise no-IU rationale in the existing session governance artifacts before implementation begins.
 
+Implementation completion convergence:
+- IU execution authorization is not a mandatory stop after edits finish.
+- After all authorized implementation work/IUs execute, continue through applicable validation, IU review, unresolved-item review, and session implementation review in the same pass when inputs are available.
+- If aggregate review supports completion, move to `implementation_complete` and recommend `hirmos close`.
+- Pause only when review needs user-owned evidence/decision or hits a blocker/correction; then recommend one purpose-specific `hirmos continue "..."` invocation.
+- If a bare `hirmos continue` arrives with all authorized work already executed and session review still pending, infer close-preparation / implementation-completion review from current state.
+
 <!-- /HIRMOS-CAPSULE:continue:PROD-L8.33C-2 canonical command capsule v1 -->
 
 Accepted-state maintenance rules:

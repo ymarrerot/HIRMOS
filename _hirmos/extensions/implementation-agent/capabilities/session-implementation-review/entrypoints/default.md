@@ -27,6 +27,12 @@ Review all implementation units together against the Session Scope, delivery/pha
 - implementation completion is being considered
 - Update System State readiness depends on implementation result
 
+## Invocation timing
+
+This capability should be invoked automatically when all active implementation units/work have reached their execution/review boundary and Implementation completion is being considered. It does not require a separate user request or a dedicated pre-close continuation when its required inputs are already available.
+
+If required evidence is unavailable and only the user can provide or decide it, surface that specific evidence/decision checkpoint. Otherwise complete the aggregate review in the same continuation that finished implementation execution.
+
 ## Required inputs
 
 - `_hirmos/session/SESSION_SCOPE.md`

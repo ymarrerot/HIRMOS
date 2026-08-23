@@ -86,6 +86,12 @@ Implementation routes back when it discovers missing authority, contradictory cu
 
 Apply the shared interaction-posture rules in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and the canonical posture authority at `_hirmos/core/authority/INTERACTION_POSTURE.md`. Surface rich governed pause/checkpoint outputs when they support user decision-making; do not reduce checkpoint clarity to save tokens.
 
+### Same-pass implementation convergence
+
+When authorized implementation execution reaches the end of all active units/work, do not return to the user solely because edits finished. If required inputs are available, route directly through applicable unit review, validation review, unresolved-item review, and session implementation review in the same governed continuation.
+
+A separate user pause before session implementation review is required only when review depends on user-owned evidence, a decision, or a blocker that cannot be resolved autonomously. Model-owned review is not by itself a user-owned pause. If the aggregate review supports completion, hand off at `IMPLEMENTATION_COMPLETE` / close legality; do not run Update System State or archive from this extension.
+
 ### Completion Rule
 
 Implementation may claim completion only when all authorized units are executed or validly not applicable, local reviews are recorded, validation/evidence gates are satisfied, gated unresolved items are closed or non-blocking, and session implementation review supports the claim.

@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.2.2 — Carry-forward, implementation-convergence, and distribution-boundary hardening
+
+- Bumps framework metadata and validator expected version from 1.2.1 to 1.2.2; terminal CLI package remains 1.3.7 because CLI implementation did not change.
+- Consolidates carry-forward lifecycle handling into the canonical carry-forward artifact, adds globally stable carry-forward IDs, strengthens status/close concordance, and projects the behavior through generated command/skill capsules.
+- Makes authorized Implementation converge through validation, IU review, session implementation review, and the implementation-completion decision in the same continuation when evidence is available; extra pre-close pauses now occur only for real user-owned evidence/decisions, correction, or blockers.
+- Adds purposeful recovery/routing for post-execution `hirmos continue` so stranded implementation sessions converge toward close readiness instead of acting as open-ended implementation.
+- Removes maintainer-only CLI development instructions from shipping framework docs and adds package verification that rejects maintainer-workspace path leakage before publication, while preserving the independent public-repository verifier.
+
+## PROD-L8.33I — Install-Payload Maintainer-Path Boundary Hardening
+
+- Removes maintainer-only local CLI smoke-test instructions from the shipping CLI reference; maintainer development/install procedures remain owned by `playbook.md`.
+- Adds install-package verification that rejects public-facing packaged docs/integration material referencing maintainer-only workspace surfaces.
+- Keeps the existing public-repository maintainer-path verifier as an independent downstream guard.
+
+
+## PROD-L8.33H — Implementation Completion Convergence and Purposeful Continue Routing
+
+- Clarifies that IU execution authorization is not a mandatory terminal pause after project-file edits finish.
+- Requires authorized Implementation to converge through applicable validation, IU review, unresolved-item review, session implementation review, and the implementation-completion decision in the same continuation when evidence is available.
+- Keeps the two planned IU-mode pauses (Session Baseline review and IU Plan review) while making any additional pre-close pause conditional on real user-owned evidence/decision, correction, or blocker resolution.
+- Adds recovery behavior so a bare `hirmos continue` after all authorized IUs/work are executed infers the pending implementation-review / close-preparation boundary instead of acting as open-ended implementation.
+- Allows user-facing next-command output to render a purpose-specific `hirmos continue "..."` invocation while keeping `SESSION_STATE.json.recommended_next_command` as the simple base command cache.
+- Projects the convergence rule through the canonical continue capsule for generated command and per-command skill surfaces.
+
+
 ## PROD-L8.33G — Carry-Forward Lifecycle Consolidation and Projected Command Updates
 
 - Consolidated active and resolved carry-forward lifecycle inside `CARRY_FORWARD.md`; no new carry-forward command or resolution artifact was added.

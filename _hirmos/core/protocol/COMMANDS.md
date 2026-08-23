@@ -94,6 +94,14 @@ Every advancing command must:
 `hirmos close` runs Update System State when ready, archives the session, and resets the active session area.
 
 
+## Implementation continuation convergence
+
+When `hirmos continue` authorizes IU execution, the authorized pass should continue through the remaining model-owned Implementation work when possible: implementation execution, unit review, validation/evidence review, session implementation review, and the implementation-completion decision. Completing edits is not itself a user checkpoint.
+
+If the review can complete without user-owned input, the pass should reach `implementation_complete` and the next governed command should be `hirmos close`. If the review needs user-owned evidence or a decision, HIRMOS may pause and should surface one purpose-specific `hirmos continue "..."` invocation. If a run is already stranded after execution with session review pending, a bare continue should infer that review boundary from current state.
+
+This behavior preserves lifecycle ownership: review/completion remain Implementation responsibilities; archive/accepted-state mutation remain `hirmos close` / Update System State responsibilities.
+
 ## Command state machine discipline
 
 
