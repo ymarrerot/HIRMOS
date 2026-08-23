@@ -25,6 +25,7 @@ required = [
     'AGENTS.md',
     'tools/test_validator_regressions.py',
     'tools/test_l831_generated_run_gates.py',
+    'tools/test_l833j_bootstrap_front_door.py',
     'tools/fixtures/README.md',
     'README.md',
     'LICENSE',
@@ -226,7 +227,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.2.2'
+expected_version = '1.2.3'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -2658,7 +2659,7 @@ print('PASS: HIRMOS PROD-L8.32X continue pass delta recording and scope amendmen
 # PROD-L8.32Z start command non-implementation boundary and baseline acceptance gate
 _l832z_required = {
     'AGENTS.md': [
-        'Pre-edit gate',
+        'Pre-edit safety',
         'Detailed user instructions are scope input, not implementation authorization',
         '`hirmos start` is non-implementation',
         'IU_EXECUTION_AUTHORIZED',
@@ -2793,12 +2794,6 @@ print('PASS: HIRMOS PROD-L8.32Z start non-implementation boundary and baseline a
 
 # PROD-L8.33A continue command integration gate and IU planning enforcement
 _l833a_required = {
-    'AGENTS.md': [
-        'PROD-L8.33A continue/status command capsules',
-        'classify and gate before coding',
-        'Never create IU files after material implementation to show compliance',
-        '`hirmos status`, report state only',
-    ],
     'core/commands/continue.md': [
         'PROD-L8.33A Continue Command Integration Gate and IU Planning Enforcement',
         '`hirmos continue` must classify and gate before it codes',
@@ -3050,6 +3045,66 @@ for _phrase in ['Status read-only bootstrap fast path', 'without creating `BOOTS
     if _phrase not in _status_capsule:
         fail(f'PROD-L8.33E status capsule missing phrase: {_phrase}')
 print('PASS: HIRMOS PROD-L8.33E status read-only fast path and minimum read set static check')
+
+
+# PROD-L8.33J bootstrap front-door simplification and authority deduplication checks
+_l833j_agents = (root/'AGENTS.md').read_text(errors='ignore')
+_l833j_bootstrap = (root/'core/bootstrap.md').read_text(errors='ignore')
+_l833j_commands = (root/'core/protocol/COMMANDS.md').read_text(errors='ignore')
+
+for _phrase in [
+    'HIRMOS is an open framework for governed AI-assisted software development',
+    'You are operating as a HIRMOS-governed engineering agent for this project',
+    'Governance posture rule',
+    'First-contact working-copy rules',
+    'Bootstrap and command routing',
+    'Bootstrap-only request boundary',
+    'Required next action',
+    'Full bootstrap is required before the advancing commands `hirmos start`, `hirmos continue`, and `hirmos close`',
+    '`hirmos status` is the exception',
+]:
+    if _phrase not in _l833j_agents:
+        fail(f'PROD-L8.33J AGENTS first-contact surface missing phrase: {_phrase}')
+
+for _rel, _body in [('AGENTS.md', _l833j_agents), ('core/bootstrap.md', _l833j_bootstrap)]:
+    if re.search(r'PROD-L8\.\d+', _body, re.I):
+        fail(f'PROD-L8.33J {_rel} contains historical PROD-L hardening labels')
+
+for _phrase in [
+    'mandatory bootstrap authority for advancing HIRMOS work',
+    'advancing runtime commands are blocked until full bootstrap passes',
+    '`hirmos status` may use only its defined read-only bootstrap fast path',
+    '_hirmos/core/templates/session/bootstrap/BOOTSTRAP_REPORT.md',
+    'Do not maintain a second report schema in this bootstrap procedure',
+]:
+    if _phrase not in _l833j_bootstrap:
+        fail(f'PROD-L8.33J bootstrap surface missing phrase: {_phrase}')
+
+if '_hirmos/core/commands/<command>.md\n_hirmos/core/commands/<command>.md' in _l833j_bootstrap:
+    fail('PROD-L8.33J bootstrap contains duplicate adaptive command pointer')
+if '## Bootstrap Discipline Answer Recovery' in _l833j_bootstrap:
+    fail('PROD-L8.33J bootstrap still duplicates obsolete bootstrap-report schema')
+
+_l833j_quiz = re.search(r'## Step 12 — Bootstrap quiz(.*?)## Step 13 — Bootstrap report', _l833j_bootstrap, re.S)
+if not _l833j_quiz:
+    fail('PROD-L8.33J bootstrap quiz/report boundaries missing')
+else:
+    _quiz_questions = re.findall(r'^\d+\.', _l833j_quiz.group(1), re.M)
+    if len(_quiz_questions) != 16:
+        fail(f'PROD-L8.33J bootstrap quiz must preserve 16 questions; found {len(_quiz_questions)}')
+for _step in range(3, 12):
+    if f'## Step {_step} —' not in _l833j_bootstrap:
+        fail(f'PROD-L8.33J bootstrap must preserve Step {_step}')
+
+for _phrase in [
+    'Full bootstrap is required before advancing commands: `hirmos start`, `hirmos continue`, and `hirmos close`',
+    '`hirmos status` is the read-only exception',
+    'without creating `BOOTSTRAP_REPORT.md`',
+]:
+    if _phrase not in _l833j_commands:
+        fail(f'PROD-L8.33J COMMANDS bootstrap/status alignment missing phrase: {_phrase}')
+
+print('PASS: HIRMOS PROD-L8.33J bootstrap front-door simplification and authority deduplication static check')
 
 # PROD-L8.33G carry-forward lifecycle consolidation checks
 for _rel, _phrases in {

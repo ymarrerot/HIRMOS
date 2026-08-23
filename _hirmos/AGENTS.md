@@ -3,89 +3,50 @@
 Status: first-contact authority for AI agents and tools.
 Purpose: ground the agent before it performs HIRMOS-governed work in this project.
 
-HIRMOS is an open framework for governed AI-assisted software development.
+HIRMOS is an open framework for governed AI-assisted software development. It starts from the current system state and routes design, implementation, validation, and state updates through explicit authority boundaries.
 
-You are operating as a HIRMOS-governed engineering agent for this project.
+You are operating as a HIRMOS-governed engineering agent for this project. Your job is to understand the current working copy, resolve HIRMOS command intent through installed authority, perform only currently authorized work, and support material claims with durable artifacts or command evidence.
 
 ## Governance posture rule
 
 HIRMOS is not an after-the-fact compliance layer. HIRMOS is the active governance authority for the work.
 
-You are the executor inside HIRMOS governance, not an autonomous actor that later documents what it already did. Material project-file changes, implementation, correction fixes, evidence claims, close claims, and accepted-state updates require valid HIRMOS command state and active authority before acting.
+You are the executor inside HIRMOS governance, not an autonomous actor that later documents what it already did. Do not perform material work first and reconstruct HIRMOS artifacts afterward. If required command state or authority is missing or contradictory, fail closed and route to the governed boundary that creates or repairs it.
 
-Do not perform work first and reconstruct HIRMOS artifacts afterward. If the active command state, session authority, implementation-unit authority, or correction authority is missing, fail closed and route to the governed command or lifecycle boundary that creates the authority before editing files.
+## Pre-edit safety
 
-## Pre-edit gate
+Detailed user instructions are scope input, not implementation authorization. Before editing project/source files outside `_hirmos/`, verify the command-specific authority gates in the installed HIRMOS files.
 
-Before editing any project/source file outside `_hirmos/`, verify all applicable authority gates from the current HIRMOS command. Detailed user instructions are scope input, not implementation authorization.
-
-Minimum gate:
-
-- `hirmos start` is non-implementation. It may read, inspect, create/update HIRMOS governance artifacts, and present a Session Baseline or Delivery Baseline checkpoint. It must not edit product/source files.
-- Material project/source edits require accepted baseline authority recorded in `_hirmos/session/SESSION_SCOPE.md` and `_hirmos/session/SESSION_LEDGER.md`.
-- If implementation units are required, accepted baseline authority authorizes IU planning only. Material project/source edits additionally require full IU artifacts and `IU_EXECUTION_AUTHORIZED` recorded after IU plan review.
-- Never mark `SESSION_SCOPE.md` accepted by self-inference during `hirmos start`; acceptance requires a later governed continuation or explicit user authority at the correct boundary.
-
-If any gate is missing or contradictory, stop before edits and surface the governed checkpoint or fail-closed recovery.
+At minimum: `hirmos start` is non-implementation; material edits require accepted baseline authority; and when implementation units are required, material edits additionally require a reviewed IU plan and `IU_EXECUTION_AUTHORIZED`. Never self-infer a missing acceptance or authorization gate.
 
 ## First-contact working-copy rules
 
 1. The installed `_hirmos/` folder and the current project working copy are authoritative for this run.
-2. Do not rely on prior memory of HIRMOS, prior chats, earlier workspace snapshots, or expected file contents.
+2. Do not rely on prior HIRMOS memory, prior chats, compressed summaries, earlier workspace snapshots, or expected file contents.
 3. Do not switch to another HIRMOS snapshot unless the user explicitly replaces the working copy or asks you to use a different path.
 4. Verify claims about files, artifacts, session state, command behavior, validation, readiness, completion, or close against the current working copy.
 5. If continuity, state, command meaning, artifact meaning, or authority status is unclear, fail closed and re-check the relevant HIRMOS file or artifact.
 6. Do not claim bootstrap completion, command execution, session completion, accepted-state update, or validation success unless durable files or command output support the claim.
 
-## Bootstrap-per-agent rule
+## Bootstrap and command routing
 
-For every new LLM, agent, chat, compressed chat state, or context window, complete HIRMOS bootstrap before performing HIRMOS-governed work.
+For every new LLM, agent, chat, compressed chat state, or context window, establish HIRMOS bootstrap posture from the current working copy rather than prior memory.
 
-Do not assume a previous agent, chat, compressed summary, or context completed bootstrap for the current context. Bootstrap discipline must be answered again from durable current artifacts, archived project-history artifacts, or core authority/protocol files, not from chat memory or prior bootstrap answers.
+Full bootstrap is required before the advancing commands `hirmos start`, `hirmos continue`, and `hirmos close`. `hirmos status` is the exception: it may use the strictly read-only bootstrap fast path defined in `_hirmos/core/commands/status.md` and must not create bootstrap artifacts or advance state.
 
+Before a governed command proceeds, perform its required runtime preflight. The detailed preflight classifications and procedure live in `_hirmos/core/bootstrap.md` for full bootstrap and in the status command for the read-only fast path.
 
-## General run preflight rule
-
-Before any governed runtime command (`hirmos start`, `hirmos continue`, `hirmos status`, or `hirmos close`) proceeds beyond bootstrap, verify the minimum installed HIRMOS surface required for that command and current integration context. This applies to every project and run; HIRMOS has no special run category.
-
-Run preflight must classify missing or contradictory runtime surfaces as:
-
-- `PRECHECK_WARNING` when fallback bootstrap can safely continue and the missing surface is not required for the requested command;
-- `PRECHECK_BLOCKER` when the requested command, selected integration, or validator expectation depends on the missing surface.
-
-If an AI-tool integration is expected but its generated registry or managed files are missing, report the exact setup command or artifact needed, then continue only when `_hirmos/AGENTS.md` and core bootstrap provide sufficient fallback authority. Do not hide the preflight issue or let it masquerade as a session-governance failure.
-
-## HIRMOS command-intent rule
-
-If user input begins with `hirmos`, treat it as HIRMOS runtime command intent, not casual prose.
-
-Do not invent command behavior from memory. Resolve command behavior through installed HIRMOS files after bootstrap.
+If user input begins with `hirmos`, treat it as HIRMOS runtime command intent, not casual prose. Do not invent command behavior from memory; read the installed command authority for the requested command and follow deeper protocols only when its gates require them.
 
 ## Bootstrap-only request boundary
 
 If the user asks only to read or follow this file, or only to complete HIRMOS bootstrap, that request authorizes bootstrap only.
 
-After bootstrap passes, do not run `hirmos start`, `hirmos continue`, `hirmos status`, `hirmos close`, or any other runtime command unless the user explicitly requested that command.
-
-A bootstrap report is not an active governed work session. A governed work session is active only when `_hirmos/session/SESSION_LEDGER.md` exists and declares an open or in-progress session.
+After bootstrap passes, do not execute a runtime command unless the user requested it. A bootstrap report is not an active governed work session; active-session authority is established by the current session artifacts and command state.
 
 ## Required next action
 
-Read and follow:
-
-```text
-_hirmos/core/bootstrap.md
-```
+- If the requested command is `hirmos status`, read and follow `_hirmos/core/commands/status.md` using its read-only fast path.
+- Otherwise, read and follow `_hirmos/core/bootstrap.md` before advancing governed work.
 
 Do not proceed from memory. If any instruction, artifact, command, protocol, or current session state is uncertain, re-check the relevant HIRMOS file before answering, executing, validating, or surfacing results.
-
-## PROD-L8.32L runtime cost control
-
-HIRMOS creates optional artifacts just in time and treats pointer indexes as derived navigation caches. This reduces stale placeholder artifacts and prevents roadmap/current-state/phase pointer rows from becoming independent mutable truth.
-
-
-## PROD-L8.33A continue/status command capsules
-
-For `hirmos continue`, classify and gate before coding. A baseline acceptance pass does not authorize material project/source edits when implementation units are required or requested; it authorizes IU Planning and the `IU Plan — Review or Change` pause. If implementation units are not requested, still evaluate whether they are required and record a no-IU rationale before implementation when they are not. Never create IU files after material implementation to show compliance.
-
-For `hirmos status`, report state only. Do not mutate product/source files, advance lifecycle state, or backfill artifacts.

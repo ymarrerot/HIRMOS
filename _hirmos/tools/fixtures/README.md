@@ -135,3 +135,6 @@ Focused fixtures verify that the start command cannot edit project/source files 
 
 Focused fixtures protect that `hirmos continue` must classify and gate before coding, must stop at IU plan review when IUs are requested or required and no accepted IU plan exists, and must treat `hirmos status` as read-only. Integration templates for all nine supported tools must include direct continue/status command capsules.
 
+## PROD-L8.33J Bootstrap Front-Door Simplification Fixtures
+
+Focused checks protect the compact first-contact role of `AGENTS.md`, preserve bootstrap Steps 3–11 and the complete 16-question open-book quiz, keep the canonical bootstrap-report template as the structural authority, and require the `hirmos status` read-only bootstrap fast path to remain aligned across first-contact, bootstrap, command protocol, and status command surfaces. Historical PROD-L hardening labels are not allowed to accumulate in `AGENTS.md` or `core/bootstrap.md`.

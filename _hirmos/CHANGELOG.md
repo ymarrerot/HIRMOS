@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.2.3 — Bootstrap front-door simplification and authority deduplication
+
+- Bumps framework metadata and validator expected version from 1.2.2 to 1.2.3; terminal CLI package remains 1.3.7 because CLI implementation did not change.
+- Simplifies the first-contact `AGENTS.md` surface while preserving HIRMOS identity, AI-agent orientation, current-working-copy authority, governance/pre-edit safety, per-context bootstrap discipline, command intent, and bootstrap-only boundaries.
+- Normalizes full bootstrap as an advancing-command prerequisite while preserving the strictly read-only `hirmos status` fast path.
+- Removes historical hardening labels and duplicated command/report-schema mechanics from the two bootstrap front-door files while deliberately preserving bootstrap Steps 3–11, all required core reads, and the complete 16-question open-book quiz pending dedicated model validation of any deeper compression.
+- Adds focused validator/regression coverage for first-contact identity, status/bootstrap concordance, quiz preservation, report-template ownership, and command-pointer deduplication.
+
+
+## PROD-L8.33J — Bootstrap Front-Door Simplification and Authority Deduplication
+
+- Returns `AGENTS.md` to a compact first-contact role while preserving the original orientation/identity material and later governance/pre-edit safety boundaries that remain operationally necessary.
+- Removes historical PROD-L hardening sections and detailed command-specific behavior from `AGENTS.md`; canonical command/capability/protocol surfaces retain that behavioral authority.
+- Preserves bootstrap Steps 3–11, all required core reads, and the complete 16-question open-book quiz pending dedicated weak/strong-model validation of any deeper bootstrap compression.
+- Aligns bootstrap and `COMMANDS.md` with the existing read-only `hirmos status` bootstrap fast path while retaining full bootstrap for advancing commands.
+- Fixes duplicate/malformed command pointers and makes the canonical `BOOTSTRAP_REPORT.md` template the sole report-structure authority instead of duplicating a drifting schema inside `bootstrap.md`.
+- Adds validator and focused regression coverage for first-contact identity, status/bootstrap concordance, quiz preservation, report-template ownership, command-pointer deduplication, and removal of historical PROD-L labels from the two front-door files.
+
+
 ## 1.2.2 — Carry-forward, implementation-convergence, and distribution-boundary hardening
 
 - Bumps framework metadata and validator expected version from 1.2.1 to 1.2.2; terminal CLI package remains 1.3.7 because CLI implementation did not change.

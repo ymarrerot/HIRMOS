@@ -46,9 +46,11 @@ hirmos close
 
 ## Bootstrap prerequisite
 
-No command may execute until bootstrap has passed for the current agent/context.
+Full bootstrap is required before advancing commands: `hirmos start`, `hirmos continue`, and `hirmos close`. Those commands may not execute until bootstrap has passed for the current agent/context.
 
-Bootstrap completion means the bootstrap report exists, records a passed quiz, includes every bootstrap discipline answer with durable source and allowed answer basis, and does not rely on chat memory or compressed chat summaries. Acknowledging files were read is not enough.
+`hirmos status` is the read-only exception. It may use the bootstrap fast path defined in `_hirmos/core/commands/status.md` without creating `BOOTSTRAP_REPORT.md`; when full bootstrap is absent, status must report that advancing commands remain blocked and must not mutate or advance HIRMOS state.
+
+Full bootstrap completion means the bootstrap report exists, records a passed quiz, includes every bootstrap discipline answer with durable source and allowed answer basis, and does not rely on chat memory or compressed chat summaries. Acknowledging files were read is not enough.
 
 
 ## General run preflight

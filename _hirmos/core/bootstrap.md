@@ -1,7 +1,7 @@
 # HIRMOS Bootstrap
 
-Status: mandatory bootstrap authority.
-Purpose: give the current agent a linear, quiz-gated path before it performs HIRMOS-governed work.
+Status: mandatory bootstrap authority for advancing HIRMOS work.
+Purpose: give the current agent a linear, quiz-gated path before it performs advancing HIRMOS-governed work.
 
 Read this file in order.
 
@@ -11,8 +11,9 @@ Bootstrap is not complete until the required reads, quiz, and bootstrap report a
 
 - Do not skip ahead.
 - Do not treat partial reading as bootstrap completion.
-- Do not begin runtime command execution until bootstrap passes.
-- Do not claim command readiness until the bootstrap report says bootstrap passed.
+- Do not begin an advancing runtime command (`hirmos start`, `hirmos continue`, or `hirmos close`) until full bootstrap passes.
+- `hirmos status` may use the strictly read-only bootstrap fast path defined in `_hirmos/core/commands/status.md`; that path must not create bootstrap artifacts or advance state.
+- Do not claim advancing-command readiness until the bootstrap report says bootstrap passed.
 - Do not answer quiz questions from memory when the question names an authority or protocol file.
 - Do not treat chat memory, compressed chat summaries, or prior model recollection as bootstrap evidence.
 - If a required file is missing or contradictory, fail closed and report the issue.
@@ -23,10 +24,7 @@ Bootstrap is not complete until the required reads, quiz, and bootstrap report a
 
 ### Governance posture
 
-HIRMOS is not an after-the-fact compliance layer. HIRMOS is the active governance authority for the run. The model is the executor inside that governance, not an autonomous actor that later documents completed work.
-
-Before material design, implementation, correction, evidence, close, or accepted-state work, confirm that the current command state and active authority authorize the action. If authority is missing or invalid, fail closed before editing project files or reconstructing artifacts after the fact.
-
+Carry forward the first-contact governance posture from `_hirmos/AGENTS.md`: HIRMOS is the active governance authority for the run, not an after-the-fact compliance layer. The model remains the executor inside HIRMOS governance. Before material design, implementation, correction, evidence, close, or accepted-state work, verify that current command state and active authority permit the action; otherwise fail closed before mutation.
 
 You are inside HIRMOS bootstrap.
 
@@ -35,7 +33,8 @@ Bootstrap teaches the minimum runtime model needed before commands can be truste
 Before leaving this step, verify:
 
 - bootstrap is active;
-- runtime commands are blocked until bootstrap passes;
+- advancing runtime commands are blocked until full bootstrap passes;
+- `hirmos status` may use only its defined read-only bootstrap fast path when full bootstrap is absent;
 - a bootstrap-only user request does not authorize a runtime command.
 
 ---
@@ -59,15 +58,14 @@ Before leaving this step, verify that you can identify the project root and inst
 
 ## Step 1A — General run preflight
 
-Before any governed runtime command proceeds, verify the minimum installed HIRMOS runtime surface required for the requested command and current integration context. This applies to every project and run; do not create or infer a special run category.
+During full bootstrap for an advancing command, verify the minimum installed HIRMOS runtime surface required for the requested command and current integration context. This applies to every project and run; do not create or infer a special run category. For `hirmos status` without full bootstrap, use the minimum read set and read-only preflight defined in `_hirmos/core/commands/status.md` instead of creating a bootstrap report.
 
 Required preflight checks:
 
 - `_hirmos/AGENTS.md` exists and has been followed for the current agent/context;
 - `_hirmos/hirmos.config.json` exists;
 - required core authority/protocol files from bootstrap Step 2 exist;
-- the requested command spec exists under `_hirmos/core/commands/<command>.md
-_hirmos/core/commands/<command>.md`;
+- the requested command spec exists under `_hirmos/core/commands/<command>.md`;
 - integration registry/templates exist when the current tool integration depends on `_hirmos/integrations/agent-tools/registry.json`;
 - fallback bootstrap through `_hirmos/AGENTS.md` is explicitly recorded when an optional integration surface is missing but the command can proceed safely.
 
@@ -107,7 +105,6 @@ Do not read only the summaries below. The quiz includes questions that require t
 Adaptive files are read later, when the active command or execution controls require them:
 
 ```text
-_hirmos/core/commands/<command>.md
 _hirmos/core/commands/<command>.md
 _hirmos/core/protocol/STACKS.md
 _hirmos/core/protocol/SESSION_ARTIFACTS.md
@@ -439,39 +436,17 @@ Create or update this file:
 _hirmos/session/bootstrap/BOOTSTRAP_REPORT.md
 ```
 
-The report must include:
+Instantiate the canonical report structure from:
 
 ```text
-# Bootstrap Report
-
-## Status
-PASS or BLOCKED
-
-## Working Copy
-- Project root:
-- Installed HIRMOS path:
-
-## Files Read
-- list required files read during bootstrap
-
-## Bootstrap Discipline Answer Recovery
-- allowed recovery methods used for the answer set
-- durable sources used, including current artifacts, archived project history, or core authority/protocol files
--- prior bootstrap answers are not allowed substitutes
-
-## Bootstrap Discipline Answers
-- answer all Step 12 questions
-- each answer includes Answer, Source, and Answer basis
-- no answer relies on chat memory or compressed chat summaries
-
-## Uncertainty / Missing Files
-- list any missing or contradictory authority
-
-## Allowed Next Action
-- state whether bootstrap-only completion is the only allowed action, or name the user-requested HIRMOS command that may be resolved next
+_hirmos/core/templates/session/bootstrap/BOOTSTRAP_REPORT.md
 ```
 
-Bootstrap passes only when the report exists, every Step 12 quiz answer is freshly written in the current session with a durable source and allowed answer basis, no answer relies on memory or prior bootstrap answer recovery, and no blocking uncertainty remains.
+Do not maintain a second report schema in this bootstrap procedure. The template owns report field names and allowed report-status values; this file owns the bootstrap procedure and quiz.
+
+The report must record the full-bootstrap preflight result, required files read, all Step 12 answers with `Answer`, `Source`, and allowed `Answer basis`, missing or contradictory authority, runtime context, and the allowed next action.
+
+Bootstrap passes only when the report exists, follows the canonical template, every Step 12 quiz answer is freshly written in the current session with a durable source and allowed answer basis, no answer relies on memory or prior bootstrap answer recovery, and no blocking uncertainty remains.
 
 ---
 
@@ -479,11 +454,8 @@ Bootstrap passes only when the report exists, every Step 12 quiz answer is fresh
 
 If the user requested only bootstrap, stop after reporting bootstrap completion.
 
-If the user requested a HIRMOS command in the same message, resolve that command only after bootstrap passes, then read the matching command file and establish execution controls.
+If the user requested an advancing HIRMOS command in the same message, resolve that command only after bootstrap passes, then read `_hirmos/core/commands/<command>.md` first and establish execution controls. Command and protocol files remain reference authority and are read adaptively when command gates require deeper detail.
+
+If the user requested `hirmos status`, its command file may instead use the read-only bootstrap fast path without requiring this full bootstrap report.
 
 If no runtime command was requested, do not start a session. Recommended next command may be surfaced, but not executed.
-
-
-## PROD-L8.32H runtime command packet discipline
-
-After bootstrap, public commands read `_hirmos/core/commands/<command>.md` first. Command and protocol files remain reference authority and are read adaptively when command gates require deeper detail.

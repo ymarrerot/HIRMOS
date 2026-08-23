@@ -4,17 +4,29 @@ This file records version-level operational notes for the installed HIRMOS frame
 
 The framework version source of truth is `_hirmos/hirmos.config.json` under `framework.version`.
 
-## Current baseline — 1.2.2
+## Current baseline — 1.2.3
+
+HIRMOS 1.2.3 is the bootstrap front-door simplification and authority-deduplication baseline.
+
+It builds on 1.2.2 by returning `AGENTS.md` to a compact first-contact role while preserving HIRMOS identity, AI-agent orientation, current-working-copy authority, governance/pre-edit safety, per-context bootstrap discipline, command intent, and bootstrap-only boundaries.
+
+Full bootstrap remains mandatory for advancing commands (`hirmos start`, `hirmos continue`, and `hirmos close`), while `hirmos status` retains its strictly read-only bootstrap fast path. The canonical bootstrap-report template is the sole report-structure authority, and stale historical hardening labels plus duplicated command/report-schema mechanics were removed from the two front-door files.
+
+Bootstrap Steps 3–11, the required core reads, and the complete 16-question open-book quiz are intentionally unchanged. Any deeper removal of the current open-book repetition remains deferred until dedicated weak/strong-model validation proves it safe.
+
+No terminal CLI package bump is required for 1.2.3; CLI 1.3.7 remains the projection-installer baseline because terminal CLI implementation did not change.
+
+## HIRMOS 1.2.2 baseline
 
 HIRMOS 1.2.2 is the carry-forward, implementation-convergence, and distribution-boundary hardening baseline.
 
-It builds on 1.2.1 by consolidating carry-forward lifecycle handling into the canonical carry-forward artifact, strengthening status/close concordance, and projecting the updated carry-forward behavior through generated command and per-command skill surfaces.
+It consolidates carry-forward lifecycle handling into the canonical carry-forward artifact, strengthens status/close concordance, and projects the updated carry-forward behavior through generated command and per-command skill surfaces.
 
-Implementation now converges through applicable validation, IU review, unresolved-item review, session implementation review, and the implementation-completion decision in the same authorized continuation when evidence is available. The planned IU-mode review pauses remain intact; an additional pre-close pause is conditional on real user-owned evidence or decisions, correction, or blockers. A bare `hirmos continue` after authorized work is already executed must infer the outstanding implementation-review / close-preparation boundary instead of resuming open-ended implementation.
+Implementation converges through applicable validation, IU review, unresolved-item review, session implementation review, and the implementation-completion decision in the same authorized continuation when evidence is available. The planned IU-mode review pauses remain intact; an additional pre-close pause is conditional on real user-owned evidence or decisions, correction, or blockers. A bare `hirmos continue` after authorized work is already executed must infer the outstanding implementation-review / close-preparation boundary instead of resuming open-ended implementation.
 
-The release also hardens the distribution boundary: maintainer-only development instructions are kept out of shipping framework documentation, and package verification rejects maintainer-workspace path leakage before publication. The public-repository verifier remains an independent downstream guard.
+The 1.2.2 line also hardens the distribution boundary: maintainer-only development instructions are kept out of shipping framework documentation, and package verification rejects maintainer-workspace path leakage before publication. The public-repository verifier remains an independent downstream guard.
 
-No terminal CLI package bump is required for 1.2.2; CLI 1.3.7 remains the projection-installer baseline because terminal CLI implementation did not change.
+No terminal CLI package bump was required for 1.2.2; CLI 1.3.7 remained the projection-installer baseline because terminal CLI implementation did not change.
 
 ## HIRMOS 1.2.1 baseline
 
