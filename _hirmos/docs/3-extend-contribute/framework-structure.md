@@ -81,7 +81,7 @@ AI-tool integration templates are framework payload. They live at:
 _hirmos/integrations/agent-tools/
 ```
 
-The published `hirmos init` CLI reads this framework-owned surface and generates selected AI-tool integration files. The integration templates are not hidden CLI internals.
+The published CLI reads this framework-owned surface during `hirmos init` and `hirmos update` to generate or reconcile AI-tool integration files. The integration templates are not hidden CLI internals.
 
 ## Contribution checklist
 

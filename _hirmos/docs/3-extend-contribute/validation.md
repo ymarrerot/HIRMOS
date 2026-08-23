@@ -47,13 +47,14 @@ A good regression case is useful when a bug could come back silently, such as:
 
 ## CLI validation
 
-The terminal CLI is an installer utility. Its most important responsibility is `hirmos init`.
+The terminal CLI is an install/update utility. Its main responsibilities are `hirmos init` for first installation and `hirmos update` for state-preserving framework upgrades.
 
 From the public repository perspective, CLI behavior should be documented by what the published CLI does for users:
 
-- installs the `_hirmos/` framework payload;
+- installs or updates the `_hirmos/` framework payload;
+- preserves project-owned HIRMOS state during updates;
 - reads `_hirmos/integrations/agent-tools/`;
-- generates the selected AI-tool integration files;
+- generates or reconciles the selected/recorded AI-tool integration files;
 - keeps workflow execution inside the AI coding tool rather than the terminal CLI.
 
 ## Failure posture

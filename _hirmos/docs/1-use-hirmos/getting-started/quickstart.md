@@ -106,3 +106,16 @@ HIRMOS asks only for decisions that matter.
 HIRMOS implements only authorized work.
 HIRMOS preserves accepted outcomes.
 ```
+
+
+## Updating HIRMOS later
+
+For an existing project, update HIRMOS only at an idle governed boundary:
+
+```bash
+npm install -g hirmos@latest
+cd /your/project/path
+hirmos update
+```
+
+After a successful update, open a new AI-agent context. See [Installation](installation.md) for the state-preserving update contract and [CLI Reference](../../reference/cli-reference.md) for pinned/offline sources.

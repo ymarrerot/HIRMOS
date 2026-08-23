@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.2.4 — Safe installed-framework update and state-preserving merge
+
+- Bumps framework metadata and validator expected version from 1.2.3 to 1.2.4 and bumps the terminal CLI from 1.3.7 to 1.3.8 because this release adds new terminal update behavior.
+- Adds a first-class terminal `hirmos update [project-path] [--source <path>] [--version <version>] [--offline]` workflow for upgrading an existing project-local framework installation.
+- Requires the normal update boundary to be idle, validates the staged replacement before mutation, preserves `_hirmos/system/`, `_hirmos/session/`, and `_hirmos/inputs/`, ownership-aware merges project configuration, reconciles/reprojects recorded integrations, runs the installed validator, and restores the previous framework/integration files if a post-swap step fails.
+- Refuses semantic framework downgrades through `hirmos update`; `--offline` updates require an explicit local source package/folder.
+- Corrects direct `_hirmos` source installation so a real project's parent product README cannot overwrite the framework README.
+- Hardens maintainer `install-hirmos.sh --mode merge` so existing runtime/input/state directories are preserved exactly and project-local configuration is merged instead of replaced.
+- Adds CLI and maintainer regression coverage for state preservation, config ownership, active-session blocking, source validation, downgrade refusal, integration reprojection/obsolete-surface cleanup, post-swap rollback, and direct `_hirmos` source behavior.
+- Refreshes the public README, installation/quickstart/CLI references, and contributor/reference docs around the regular-user update workflow, including the CLI-first upgrade order and new-agent-context requirement.
+- Realigns the maintainer playbook to the current `SESSION_SCOPE.md` / `SESSION_LEDGER.md` / just-in-time artifact model and simplifies release operations around one canonical pre-publish checklist, including package verification before public-repo regeneration.
+- Repairs stale validator regression fixture data so pass-cases include current phase-status and continuation-pass fields without weakening validator requirements.
+- Parallelizes the isolated validator regression runner by default so the canonical 60-case maintainer check remains practical as the validator suite grows; worker count can be overridden with `HIRMOS_VALIDATOR_FIXTURE_WORKERS`.
+- Ships the terminal updater in CLI 1.3.8 alongside framework 1.2.4.
+
+## PROD-L8.33K — Safe Installed-Framework Update and State-Preserving CLI Upgrade
+
+- Introduces `hirmos update` as the regular-user framework upgrade command rather than overloading `hirmos init`.
+- Treats framework upgrade as a transaction over framework-owned surfaces while preserving project-owned HIRMOS state and project-local config.
+- Keeps normal updates out of active governed sessions; users close the current session under the installed framework before upgrading.
+- Reprojects already-recorded AI-tool integrations from the upgraded local payload and validates the resulting installation before success is reported.
+- Aligns maintainer merge-install ownership semantics with the CLI update model.
+
 ## 1.2.3 — Bootstrap front-door simplification and authority deduplication
 
 - Bumps framework metadata and validator expected version from 1.2.2 to 1.2.3; terminal CLI package remains 1.3.7 because CLI implementation did not change.

@@ -227,7 +227,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.2.3'
+expected_version = '1.2.4'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -3105,6 +3105,29 @@ for _phrase in [
         fail(f'PROD-L8.33J COMMANDS bootstrap/status alignment missing phrase: {_phrase}')
 
 print('PASS: HIRMOS PROD-L8.33J bootstrap front-door simplification and authority deduplication static check')
+
+# PROD-L8.33K safe installed-framework update user-surface checks
+_l833k_cli_ref = (root/'docs/reference/cli-reference.md').read_text(errors='ignore')
+_l833k_install = (root/'docs/1-use-hirmos/getting-started/installation.md').read_text(errors='ignore')
+for _phrase in [
+    'hirmos update [project-path]',
+    'idle HIRMOS session boundary',
+    'preserves `_hirmos/system/`, `_hirmos/session/`, and `_hirmos/inputs/` exactly',
+    'merges `_hirmos/hirmos.config.json`',
+    'regenerates the integrations already recorded in project configuration',
+    'rolls back the installed framework and generated integration files',
+    '`--integration` is intentionally an `init` option, not an `update` option',
+]:
+    if _phrase not in _l833k_cli_ref:
+        fail(f'PROD-L8.33K CLI reference missing safe-update phrase: {_phrase}')
+for _phrase in [
+    'hirmos update',
+    'Do not overwrite an existing project',
+    'project state and configuration are preserved',
+]:
+    if _phrase not in _l833k_install:
+        fail(f'PROD-L8.33K installation guide missing safe-update phrase: {_phrase}')
+print('PASS: HIRMOS PROD-L8.33K safe installed-framework update user-surface static check')
 
 # PROD-L8.33G carry-forward lifecycle consolidation checks
 for _rel, _phrases in {

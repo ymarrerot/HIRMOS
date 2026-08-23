@@ -4,7 +4,33 @@ This file records version-level operational notes for the installed HIRMOS frame
 
 The framework version source of truth is `_hirmos/hirmos.config.json` under `framework.version`.
 
-## Current baseline — 1.2.3
+## Current baseline — 1.2.4
+
+HIRMOS 1.2.4 is the safe installed-framework update and state-preserving merge baseline. It is released with terminal CLI 1.3.8, the first CLI version that provides the first-class `hirmos update` command.
+
+For an existing HIRMOS project, update the terminal CLI first, then update the project-local framework from an idle HIRMOS boundary:
+
+```bash
+npm install -g hirmos@latest
+cd /your/project/path
+hirmos update
+```
+
+If a governed session is active, finish and close it under the currently installed framework before upgrading. After a successful update, open a new AI-agent context so the upgraded bootstrap and generated integration surfaces are loaded.
+
+The update replaces framework-owned surfaces but preserves the project's `_hirmos/system/`, `_hirmos/session/`, and `_hirmos/inputs/` directories exactly. `_hirmos/hirmos.config.json` is ownership-aware merged so incoming framework metadata/defaults can advance while project-local stack settings, integration selection, and unknown project fields remain intact. Recorded integrations are reconciled and regenerated from the new framework payload, the installed validator must pass, and a post-swap failure restores the previous framework and affected generated integration files.
+
+`hirmos update --version X.Y.Z` pins a GitHub framework release. `--source` may use a local `_hirmos` folder, a folder containing `_hirmos`, or `hirmos-framework.zip`. Offline updates require an explicit local source. Normal updates reject semantic framework downgrades.
+
+Maintainer `install-hirmos.sh --mode merge` now follows the same ownership boundary for framework state/config: framework-owned surfaces are replaced, project-owned `system/`, `session/`, and `inputs/` are preserved exactly, and project-local configuration is ownership-aware merged.
+
+## CLI 1.3.8 state-preserving updater baseline
+
+CLI 1.3.8 or newer is required to use `hirmos update`. Older installed projects do not need an intermediate framework migration: update the npm CLI first, then run `hirmos update` from an idle project boundary.
+
+The framework and CLI versions remain independent release identities. HIRMOS framework 1.2.4 is paired with CLI 1.3.8 because both framework/package behavior and terminal CLI behavior changed in this release.
+
+## HIRMOS 1.2.3 baseline
 
 HIRMOS 1.2.3 is the bootstrap front-door simplification and authority-deduplication baseline.
 

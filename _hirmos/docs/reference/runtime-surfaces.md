@@ -76,7 +76,7 @@ AI-tool integration templates live in the framework payload under:
 _hirmos/integrations/agent-tools/
 ```
 
-The terminal CLI reads that surface during `hirmos init` and generates tool-specific files such as `AGENTS.md`, `CLAUDE.md`, Cursor rules, Copilot instructions, and other supported integration outputs.
+The terminal CLI reads that surface during `hirmos init` and `hirmos update` to generate or reconcile tool-specific files such as `AGENTS.md`, `CLAUDE.md`, Cursor rules, Copilot instructions, and other supported integration outputs.
 
 ## Derived pointer surfaces
 

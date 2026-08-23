@@ -75,7 +75,7 @@ If the tool integration is not available or did not load, use this fallback boot
 Read and follow _hirmos/AGENTS.md
 ```
 
-The agent must complete bootstrap before it treats HIRMOS commands as executable.
+The agent must complete full bootstrap before advancing commands (`hirmos start`, `hirmos continue`, `hirmos close`). `hirmos status` may use the framework's strictly read-only bootstrap fast path.
 
 ## Step 3 — Start with a request
 

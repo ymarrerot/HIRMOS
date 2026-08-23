@@ -12,11 +12,13 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import os
 import runpy
 import subprocess
 import shutil
 import sys
 import tempfile
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
@@ -262,7 +264,7 @@ Blocking open items absent or resolved: YES
 Phase lifecycle status: {phase_status or 'UNKNOWN'}
 Phase type: {phase_type}
 Phase Entry Gate status: {entry_gate_status}
-Phase Progress Ledger status: REVIEWED
+Phase Progress Pointer Index status: REVIEWED
 Carry-forward status: {"RECORDED" if carry_forward_recorded else "NOT_APPLICABLE"}
 Phase Acceptance Evidence Gate status: {"PASS" if include_acceptance_evidence else "MISSING"}
 Greenfield status group: {"COMPLETE" if phase_type in {"GREENFIELD", "MIXED"} and include_greenfield_controls else "NOT_APPLICABLE"}
@@ -288,6 +290,12 @@ Exactly one recommended next command:
     phase_concordance_status = "NOT_APPLICABLE" if stale_post_continue_ledger else "SATISFIED"
     session_concordance_status = "NOT_APPLICABLE" if stale_post_continue_ledger else "SATISFIED"
     (session / "SESSION_LEDGER.md").write_text(f"""# SESSION_LEDGER.md
+
+## Continuation Pass Register
+
+| Pass | Command | Pass type | Scope effect | SESSION_SCOPE.md impact | Artifacts updated | Evidence pointer | Result | Next governed command |
+|---:|---|---|---|---|---|---|---|---|
+| 1 | hirmos continue | {"CLOSE_PREPARATION" if close_transaction else "VALIDATION_ONLY"} | NONE | NO_SCOPE_CHANGE | fixture governance artifacts | SESSION_LEDGER.md | PASS | {"hirmos close" if close_transaction else "hirmos continue"} |
 
 ## Focus-Aware Capability Routing Log
 
@@ -329,7 +337,7 @@ Mechanical gate decision: PASS
 {acceptance_execution}
 """)
     (session / "unresolved-items.md").write_text("# unresolved-items.md\n")
-    (session / "SESSION_SCOPE.md").write_text((session / "SESSION_SCOPE.md").read_text() + f"\n\n## Phase Entry Gate Review\nWas the Phase Entry Gate status PASS? YES\n\n## Phase Progress / Carry-Forward Review\nDid the session update or verify the durable Phase Progress Ledger? YES\nIf phase outcome is not ACCEPTED, are carry-forward obligations recorded? {cf_review_answer}\n{acceptance_review}\n")
+    (session / "SESSION_SCOPE.md").write_text((session / "SESSION_SCOPE.md").read_text() + f"\n\n## Phase Entry Gate Review\nWas the Phase Entry Gate status PASS? YES\n\n## Phase Progress / Carry-Forward Review\nDid the session update or verify the durable Phase Progress Pointer Index? YES\nIf phase outcome is not ACCEPTED, are carry-forward obligations recorded? {cf_review_answer}\n{acceptance_review}\n")
 
     delivery_root = root / "system" / "delivery"
     delivery_dir = delivery_root / delivery_id
@@ -339,7 +347,7 @@ Mechanical gate decision: PASS
             (delivery_dir / "DELIVERY_PLAN.md").write_text("# DELIVERY_PLAN.md\n\n## Legacy per-delivery plan\n")
         else:
             current_phase_value = "none" if delivery_plan_current_phase_none else phase_path
-            (delivery_root / "DELIVERY_PLAN.md").write_text(f"# DELIVERY_PLAN.md\n\n## Delivery Index\n\n## Delivery Status Update Log\n\n## Active Development Context\n\n- Active delivery: {delivery_id}\n- Active delivery scope: {scope_path}\n- Current phase: {current_phase_value}\n- Next recommended delivery: none\n- Next recommended delivery scope: none\n- Next recommended phase: none\n")
+            (delivery_root / "DELIVERY_PLAN.md").write_text(f"# DELIVERY_PLAN.md\n\n## Delivery Index\n\n## Delivery Status Pointer Index\n\n## Active Development Context\n\n- Active delivery: {delivery_id}\n- Active delivery scope: {scope_path}\n- Current phase: {current_phase_value}\n- Next recommended delivery: none\n- Next recommended delivery scope: none\n- Next recommended phase: none\n")
     if include_scope:
         (delivery_dir / "DELIVERY_SCOPE.md").write_text("# DELIVERY_SCOPE.md\n\n## Delivery Close Verification\n\n## Session Adoption Rules\n")
 
@@ -362,7 +370,7 @@ Primary user/workflow slice:
 Architecture dependency status:
 Out-of-scope expansion guard:
 """
-    cf_row = "{cf_row}" if carry_forward_recorded else "| | | | | | |"
+    cf_row = "| fixture remaining item | PARTIAL | continue in PHASE-02 | _hirmos/system/delivery/fixture-delivery/phases/PHASE-02.md | no | fixture |" if carry_forward_recorded else "| | | | | | |"
 
     brownfield_controls = """
 ## Brownfield Controls
@@ -397,11 +405,11 @@ Entry gate status: {entry_gate_status}
 
 ## Phase Acceptance Review
 {acceptance_phase}
-## Phase Progress Ledger
+## Phase Progress Pointer Index
 
-| Session/archive | Adopted scope | Completed items | Partial items | Blocked items | Deferred items | Evidence pointer | Resulting lifecycle status |
-|---|---|---|---|---|---|---|---|
-| fixture-session | fixture scope | fixture completed | fixture partial | fixture blocked | fixture deferred | fixture evidence | {resulting_phase_status} |
+| Session/archive | Scope/result pointer | Evidence pointer | Remaining-work pointer | Status impact |
+|---|---|---|---|---|
+| fixture-session | `_hirmos/session/SESSION_SCOPE.md` | `_hirmos/session/SESSION_LEDGER.md` | {"_hirmos/system/delivery/fixture-delivery/phases/PHASE-02.md" if carry_forward_recorded else "none"} | {resulting_phase_status} |
 
 ## Carry-Forward Enforcement
 
@@ -506,7 +514,7 @@ Delivery governance active: NOT_APPLICABLE
 Selected delivery shape: SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS
 Single-session safety justification: fixture bounded scope.
 """)
-    (session / "SESSION_LEDGER.md").write_text("# SESSION_LEDGER.md\n\n## Runtime Route Record\nSelected route: SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS\n")
+    (session / "SESSION_LEDGER.md").write_text("# SESSION_LEDGER.md\n\n## Runtime Route Record\nSelected route: SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS\n\n## Continuation Pass Register\n\n| Pass | Command | Type | Result |\n|---:|---|---|---|\n| 1 | hirmos continue | VALIDATION_ONLY | PASS |\n")
     (session / "unresolved-items.md").write_text("# unresolved-items.md\n")
 
 
@@ -1299,32 +1307,43 @@ CASES = [
 ]
 
 
+def _run_case(case: Case) -> str | None:
+    fixture_root = make_copy()
+    try:
+        case.mutate(fixture_root)
+        result = run_validator(fixture_root)
+        combined = result.output
+        if case.should_pass:
+            if result.returncode != 0:
+                return f"{case.name}: expected pass, got failure:\n{combined}"
+        else:
+            if result.returncode == 0:
+                return f"{case.name}: expected failure, got pass"
+            if case.expected.lower() not in combined.lower():
+                return f"{case.name}: failure did not mention {case.expected!r}:\n{combined}"
+        return None
+    finally:
+        shutil.rmtree(fixture_root.parent, ignore_errors=True)
+
+
 def main() -> int:
     cleanup_stale_tempdirs()
+    requested_workers = int(os.environ.get("HIRMOS_VALIDATOR_FIXTURE_WORKERS", "8"))
+    workers = max(1, min(requested_workers, len(CASES)))
     failures: list[str] = []
-    for case in CASES:
-        fixture_root = make_copy()
-        try:
-            case.mutate(fixture_root)
-            result = run_validator(fixture_root)
-            combined = result.output
-            if case.should_pass:
-                if result.returncode != 0:
-                    failures.append(f"{case.name}: expected pass, got failure:\n{combined}")
-            else:
-                if result.returncode == 0:
-                    failures.append(f"{case.name}: expected failure, got pass")
-                elif case.expected.lower() not in combined.lower():
-                    failures.append(f"{case.name}: failure did not mention {case.expected!r}:\n{combined}")
-        finally:
-            shutil.rmtree(fixture_root.parent, ignore_errors=True)
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futures = [pool.submit(_run_case, case) for case in CASES]
+        for future in as_completed(futures):
+            failure = future.result()
+            if failure:
+                failures.append(failure)
 
     if failures:
         print("FAIL: HIRMOS validator regression fixtures")
-        for failure in failures:
+        for failure in sorted(failures):
             print("- " + failure.replace("\n", "\n "))
         return 1
-    print(f"PASS: HIRMOS validator regression fixtures ({len(CASES)} cases)")
+    print(f"PASS: HIRMOS validator regression fixtures ({len(CASES)} cases, {workers} workers)")
     return 0
 
 

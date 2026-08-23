@@ -30,16 +30,16 @@ _hirmos/integrations/agent-tools/
   templates/
 ```
 
-The published `hirmos init` CLI reads this framework-owned surface during initialization.
+The published CLI reads this framework-owned surface during first installation and framework updates.
 
 ```text
-The published `hirmos init` CLI installs integration templates; it does not own them.
+The published CLI uses the integration templates during `hirmos init` and `hirmos update`; it does not own them.
 The canonical integration registry/templates live in the framework payload under `_hirmos/integrations/agent-tools/`.
 ```
 
 ## Generated integration files
 
-Depending on selected integrations, `hirmos init` may generate files such as:
+Depending on selected integrations, `hirmos init` may generate files such as the following; `hirmos update` reconciles the already-recorded integration set against the upgraded framework:
 
 ```text
 AGENTS.md
@@ -67,11 +67,12 @@ The integration file is the normal doorway. Directly prompting the tool to read 
 
 The CLI should:
 
-- install the framework payload;
+- install or update the framework payload;
+- preserve project-owned HIRMOS state during updates;
 - read the framework-owned integration registry/templates;
-- generate the selected AI-tool integration files;
+- generate selected integrations on init and reconcile recorded integrations on update;
 - preserve user files safely;
-- verify that required framework files exist.
+- validate required framework files and the upgraded installation.
 
 The CLI should not own lifecycle semantics, capability behavior, or AI-agent workflow execution.
 

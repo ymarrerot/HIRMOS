@@ -21,7 +21,7 @@ hirmos close
 
 Those workflow commands are interpreted by the AI agent inside the coding-tool conversation. They are not terminal commands.
 
-The terminal CLI installs and updates the framework payload. The framework files inside `_hirmos/` guide the AI agent after installation.
+The terminal CLI installs and updates the framework payload. For an existing project, update the CLI first and run `hirmos update` at an idle HIRMOS boundary. The updater preserves project-owned `system/`, `session/`, and `inputs/` state plus project-local configuration, replaces framework-owned surfaces, reconciles recorded integrations, validates the result, and rolls back the framework/integration swap on failure. The framework files inside `_hirmos/` guide the AI agent after installation.
 
 ## Quick map
 

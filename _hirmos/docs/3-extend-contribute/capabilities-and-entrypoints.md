@@ -75,7 +75,7 @@ A capability that finds an issue should contribute it to the appropriate governe
 AI-tool integration templates are not owned by the terminal CLI.
 
 ```text
-The published `hirmos init` CLI installs integration templates; it does not own them.
+The published CLI uses these integration templates during `hirmos init` and `hirmos update`; it does not own them.
 The canonical integration registry/templates live in the framework payload under `_hirmos/integrations/agent-tools/`.
 ```
 

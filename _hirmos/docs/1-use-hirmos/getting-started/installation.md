@@ -25,6 +25,28 @@ hirmos init
 
 The CLI installs the framework payload and selected AI-tool integration files. It does not own the framework method, session lifecycle, or integration templates.
 
+## Update an existing installation
+
+Use the updater only at an **idle HIRMOS session boundary**. If a governed session is active, finish and close it under the currently installed framework first.
+
+Update the terminal CLI, then update the project-local framework:
+
+```bash
+npm install -g hirmos@latest
+cd /your/project/path
+hirmos update
+```
+
+To pin a specific framework release:
+
+```bash
+hirmos update --version X.Y.Z
+```
+
+The update command replaces framework-owned files while preserving `_hirmos/system/`, `_hirmos/session/`, `_hirmos/inputs/`, and project-local configuration. It reconciles and regenerates the integrations already recorded in the project, validates the staged and installed framework, and rolls back the framework/integration swap if a post-swap step fails. Python 3 is required because validation is part of the update transaction.
+
+After a successful update, open a **new AI-agent context** so the upgraded bootstrap and generated integration surfaces are loaded.
+
 For the complete CLI guide, including version checks, updates, `--integration`, `--source`, `--version`, and `--offline`, see [CLI Reference](../../reference/cli-reference.md).
 
 The canonical integration registry and templates live inside the framework payload:
@@ -53,7 +75,7 @@ Some tools intentionally share the same generated instruction file. For example,
 
 ## Manual install
 
-You can also copy the release package's `_hirmos/` folder into the target project root.
+For a **first installation only**, you can also copy the release package's `_hirmos/` folder into the target project root. Do not overwrite an existing project's `_hirmos/` folder manually to perform an upgrade; use `hirmos update` so project state and configuration are preserved.
 
 Manual installation does not generate tool-specific integration files. In that case, initialize the AI tool with this fallback bootstrap prompt:
 
