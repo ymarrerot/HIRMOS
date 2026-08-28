@@ -59,6 +59,8 @@ Session implementation review is the aggregate review above local unit review. I
 4. Complete `_hirmos/session/SESSION_SCOPE.md` close verification promised-vs-verified coverage.
 5. Reconcile unresolved items by direct review of `_hirmos/session/unresolved-items.md`.
 6. Decide whether implementation completion may be claimed or must fail closed.
+7. Reconcile the Session Scope Automated Testing Posture and every applicable IU Automated Testing Posture against the final test suite, test-delta rationales, and validation results.
+8. Confirm material testable behavior received the required automated-test layer, valid existing tests for unchanged behavior were not weakened to obtain PASS, and changed/removed behavior did not leave stale/orphan tests or fixtures without rationale.
 
 Implementation completion cannot be claimed merely because all individual units passed or because IU files were cleaned up after execution; the combined implementation must satisfy the Session Scope or explicitly fail/partial/defer under the `SESSION_SCOPE.md` close verification review rules.
 
@@ -82,6 +84,8 @@ Apply the shared unresolved-item producer obligation in `_hirmos/core/authority/
 This capability performs an aggregate evidence-backed review. It must not pass a session merely because implementation units individually claim completion.
 
 Required review dimensions:
+
+- automated-testing posture and behavioral test-integrity reconciliation;
 
 - source session authority reviewed;
 - IU set, sealed contract posture, execution records, and unit review records reviewed;
@@ -110,6 +114,6 @@ Aggregate implementation review must verify that completed IU files preserve sea
 
 ## PROD-L8.28 Active Close Concordance Review
 
-Session implementation review must reconcile IU execution/review status before close. If any applicable IU remains `Execution status: NOT_STARTED`, `Review status: PENDING`, lacks Unit Result, lacks validation/evidence comparison, or lacks required Test / Fixture / Validator Change Rationale for changed validation assets, the session must not claim implementation complete. The legal result is `PARTIAL`, `BLOCKED`, `ROUTE_BACK_REQUIRED`, or `GOVERNANCE_DEVIATION`, depending on evidence.
+Session implementation review must reconcile IU execution/review status before close. If any applicable IU remains `Execution status: NOT_STARTED`, `Review status: PENDING`, lacks Unit Result, lacks validation/evidence comparison, lacks required Automated Testing Posture, or lacks required Test / Fixture / Validator Change Rationale/test-integrity review for changed validation assets, the session must not claim implementation complete. The legal result is `PARTIAL`, `BLOCKED`, `ROUTE_BACK_REQUIRED`, or `GOVERNANCE_DEVIATION`, depending on evidence.
 
 The aggregate review must explicitly compare generated IU status with SESSION_SCOPE close claims, phase/delivery close posture, and accepted-state evidence posture before archive.

@@ -62,6 +62,22 @@ Record architecture, data, workflow, security, runtime, accepted-state, UX, and 
 
 Define required implementation behavior, interfaces, data flow, persistence, APIs, UI, integration details, or artifact changes.
 
+### Automated Testing Posture
+
+Apply `_hirmos/core/protocol/VALIDATION_AND_EVIDENCE.md` and refine the accepted Session Scope testing posture for this unit.
+
+- Unit-test posture: REQUIRED | NOT_APPLICABLE | COVERED_ELSEWHERE
+- Existing repository test framework / conventions:
+- Material behaviors requiring unit tests:
+- Other required test layers:
+- Relevant existing tests / targeted pre-change baseline command:
+- Reproducible defect regression test required: YES | NO | NOT_APPLICABLE
+- If `NOT_APPLICABLE` or `COVERED_ELSEWHERE`, rationale:
+- Test cleanup expected for changed/removed behavior:
+- Repository coverage policy, if any:
+
+Do not invent a universal HIRMOS coverage threshold. Existing valid behavioral tests must not be weakened merely to obtain PASS.
+
 ### Verification Commands / Checks
 
 List exact commands or checks. If a command is not available or not applicable, require a recorded rationale.
@@ -96,6 +112,8 @@ LLM Write Permission: Mutable only before contract seal; immutable after materia
 | Out-of-scope guard understood | | |
 | Contract status is SEALED before material edits | | |
 | Contract sections will remain immutable during execution | | |
+| Automated Testing Posture is concrete for software work or explicitly NOT_APPLICABLE | | |
+| Relevant existing tests / targeted baseline inspected and run when practical | | |
 
 ## 4. Execution Record
 
@@ -127,12 +145,17 @@ State how execution stayed within this Implementation Unit and the Session Scope
 
 ### Test / Fixture / Validator Change Rationale
 
-Required when implementation modifies tests, fixtures, mocks, snapshots, validators, expected-output files, regression fixtures, or generated expected-output artifacts.
+Required when implementation adds, removes, skips, or materially changes tests, fixtures, mocks, snapshots, validators, expected-output files, regression fixtures, or generated expected-output artifacts. Keep it concise, but make the test delta auditable.
 
 - Changed test / fixture / validator files:
+- Test delta classification(s): `NEW_BEHAVIOR | CHANGED_BEHAVIOR | REMOVED_BEHAVIOR | BUG_REGRESSION | INVALID_TEST_CORRECTION | TEST_INFRASTRUCTURE_ONLY | FIXTURE_REALISM_CHANGE | REDUNDANT_TEST_CLEANUP`
+- Governing behavioral-authority delta / pointer, when behavior changed or was removed:
+- Relevant pre-change targeted test baseline and result:
+- Tests/assertions/fixtures added, changed, removed, skipped, regenerated, or materially loosened:
 - Why the change was required:
-- Why realism or coverage is preserved or improved:
-- Risk that validation was weakened:
+- Why behavioral realism/coverage is preserved or improved:
+- Orphan/stale tests or fixtures removed because behavior changed/disappeared:
+- Risk that validation was weakened merely to obtain PASS:
 - Reviewer attention needed:
 
 ### Runtime Integration Execution Evidence
@@ -184,8 +207,10 @@ Does the actual implementation satisfy 100% of this implementation unit authorit
 
 ### Test / Fixture / Validator Change Review
 
-| Changed file/category | Rationale present? | Preserves or improves realism/coverage? | Weakening risk | Reviewer result |
-|---|---:|---:|---|---|
+| Changed file/category | Classification / authority trace valid? | Baseline/test delta explained? | Behavioral coverage preserved/improved? | Orphan/stale cleanup complete? | Weakening-to-pass risk | Reviewer result |
+|---|---:|---:|---:|---:|---|---|
+
+Review removals/skips, loosened assertions, fixture simplification, snapshot/expected-output regeneration, reduced cases, and increased mocking with heightened scrutiny. A valid test for unchanged authority must not be weakened merely to obtain PASS.
 
 ### Not Run / Not Applicable Checks
 
@@ -296,7 +321,7 @@ LLM Write Permission: Immutable after contract seal unless route-back occurs.
 
 Generated IU artifacts must instantiate the full sealed-section model before implementation execution. A thin generated IU stub is invalid even when it says `Contract status: SEALED` or `Contract sealed before material edits: YES`.
 
-Before material implementation starts, each generated IU must contain non-placeholder content for all required contract authority areas: Unit Identity / Contract Metadata, Unit Scope / Authority, Objective, Context, In Scope, Out of Scope, Files / Areas, Preservation Rules, Implementation Requirements, Verification Commands / Checks, Evidence Requirements, Runtime Integration Posture, Binary Acceptance Criteria, Pre-Execution Checks, PROD-L8.21 Minimum IU Contract, and all applicable `LLM Write Permission:` lines.
+Before material implementation starts, each generated IU must contain non-placeholder content for all required contract authority areas: Unit Identity / Contract Metadata, Unit Scope / Authority, Objective, Context, In Scope, Out of Scope, Files / Areas, Preservation Rules, Implementation Requirements, Automated Testing Posture, Verification Commands / Checks, Evidence Requirements, Runtime Integration Posture, Binary Acceptance Criteria, Pre-Execution Checks, PROD-L8.21 Minimum IU Contract, and all applicable `LLM Write Permission:` lines.
 
 Before active close can be claimed, each generated IU that contributed to implementation completion must contain append-only Execution Record and Unit Review content with concrete actions, changed files, validation/check evidence, claim evidence, execution result, review status, unit result, and any required Test / Fixture / Validator Change Rationale. A session or phase must not claim implementation completion when any applicable IU remains `Execution status: NOT_STARTED`, `Review status: PENDING`, or lacks an evidence-backed Unit Result.
 

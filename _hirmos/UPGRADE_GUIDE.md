@@ -4,11 +4,15 @@ This file records version-level operational notes for the installed HIRMOS frame
 
 The framework version source of truth is `_hirmos/hirmos.config.json` under `framework.version`.
 
-## Current baseline — 1.2.4
+## Current baseline — 1.2.5
 
-HIRMOS 1.2.4 is the safe installed-framework update and state-preserving merge baseline. It is released with terminal CLI 1.3.8, the first CLI version that provides the first-class `hirmos update` command.
+HIRMOS 1.2.5 is the governed automated-testing/test-integrity and public-documentation-hygiene baseline. Terminal CLI 1.3.8 remains the current CLI because terminal CLI implementation did not change in this framework release.
 
-For an existing HIRMOS project, update the terminal CLI first, then update the project-local framework from an idle HIRMOS boundary:
+For implementation-capable software work, HIRMOS now requires an explicit automated-testing posture. Material new or changed isolated deterministic logic should normally receive meaningful unit tests when practical; existing tests that still represent authoritative behavior must not be weakened merely to obtain PASS; and tests whose governing behavior legitimately changes or disappears should be updated or removed rather than retained as orphaned validation. Existing repository-native test conventions remain preferred, and HIRMOS does not impose a universal coverage percentage or a new default testing-report artifact family.
+
+The 1.2.5 public documentation surface also removes maintainer project-plan identifiers and adds package/public-repository guards so those internal identifiers do not leak back into user-facing README, changelog, upgrade, methodology, or reference documentation.
+
+For an existing HIRMOS project, update the terminal CLI first if needed, then update the project-local framework from an idle HIRMOS boundary:
 
 ```bash
 npm install -g hirmos@latest
@@ -22,7 +26,11 @@ The update replaces framework-owned surfaces but preserves the project's `_hirmo
 
 `hirmos update --version X.Y.Z` pins a GitHub framework release. `--source` may use a local `_hirmos` folder, a folder containing `_hirmos`, or `hirmos-framework.zip`. Offline updates require an explicit local source. Normal updates reject semantic framework downgrades.
 
-Maintainer `install-hirmos.sh --mode merge` now follows the same ownership boundary for framework state/config: framework-owned surfaces are replaced, project-owned `system/`, `session/`, and `inputs/` are preserved exactly, and project-local configuration is ownership-aware merged.
+Maintainer `install-hirmos.sh --mode merge` follows the same ownership boundary for framework state/config: framework-owned surfaces are replaced, project-owned `system/`, `session/`, and `inputs/` are preserved exactly, and project-local configuration is ownership-aware merged.
+
+## HIRMOS 1.2.4 baseline
+
+HIRMOS 1.2.4 introduced the safe installed-framework update and state-preserving merge baseline together with terminal CLI 1.3.8, the first CLI version that provides the first-class `hirmos update` command. It established the idle-session update boundary, state-preserving framework transaction, ownership-aware config merge, integration reprojection, rollback behavior, and aligned maintainer merge-install semantics.
 
 ## CLI 1.3.8 state-preserving updater baseline
 
@@ -64,7 +72,7 @@ The generated projection model changed terminal `hirmos init` behavior: CLI 1.3.
 
 HIRMOS 1.2.1 also clarified `hirmos status` as a read-only command with an explicit bootstrap fast path and minimum read set. `hirmos status` may report that bootstrap is incomplete without creating `BOOTSTRAP_REPORT.md`; advancing commands (`hirmos start`, `hirmos continue`, and `hirmos close`) still require bootstrap completion before execution.
 
-The L8.32X hardening retained in the 1.2.x line strengthened continuation behavior for real sessions: every `hirmos continue` is a governed pass recorded in `SESSION_LEDGER.md`, and `SESSION_SCOPE.md` is updated only for accepted authority deltas such as changed scope, IU objectives, acceptance criteria, validation requirements, unresolved-item disposition, or close-satisfaction criteria.
+The continuation hardening retained in the 1.2.x line strengthened behavior for real sessions: every `hirmos continue` is a governed pass recorded in `SESSION_LEDGER.md`, and `SESSION_SCOPE.md` is updated only for accepted authority deltas such as changed scope, IU objectives, acceptance criteria, validation requirements, unresolved-item disposition, or close-satisfaction criteria.
 
 ## HIRMOS 1.2.0 baseline
 
@@ -76,7 +84,7 @@ Use CLI package 1.3.7 or newer when installing HIRMOS 1.2.1+ framework packages 
 
 ## HIRMOS 1.1.9 baseline
 
-HIRMOS 1.1.9 is the token-efficient runtime boundary and derived-state stabilization baseline. It includes the L8.32C–L simplification wave: compact session ledger replacement, scope/IU authority separation, compressed bootstrap and ledger surfaces, pointer-oriented evidence/current-state/delivery/phase artifacts, restored IU planning versus IU execution pause, runtime-boundary fixtures, just-in-time optional artifact creation, and derived pointer-index support.
+HIRMOS 1.1.9 is the token-efficient runtime boundary and derived-state stabilization baseline. It includes the runtime simplification wave: compact session ledger replacement, scope/IU authority separation, compressed bootstrap and ledger surfaces, pointer-oriented evidence/current-state/delivery/phase artifacts, restored IU planning versus IU execution pause, runtime-boundary fixtures, just-in-time optional artifact creation, and derived pointer-index support.
 
 No terminal CLI version bump was required because terminal command behavior did not change.
 
@@ -94,7 +102,7 @@ HIRMOS 1.1.5 includes pre-execution ledger enforcement and generated review-gate
 
 ## HIRMOS 1.1.4 baseline
 
-HIRMOS 1.1.4 includes generated-run IU enforcement and runtime artifact validator hardening. It materially changes validation behavior for generated project runs by failing IU-mode sessions that lack the L8.21 IU Set Authority Checkpoint, an implementation authorization decision, IU coverage mapping, or substantive IU files.
+HIRMOS 1.1.4 includes generated-run IU enforcement and runtime artifact validator hardening. It materially changes validation behavior for generated project runs by failing IU-mode sessions that lack the required IU Set Authority Checkpoint, an implementation authorization decision, IU coverage mapping, or substantive IU files.
 
 ## HIRMOS 1.1.3 baseline
 

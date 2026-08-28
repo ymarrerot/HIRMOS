@@ -133,6 +133,11 @@ Out of scope for this phase:
 Implementation mode:
 - Implementation Units required.
 
+Automated-testing posture:
+- Reuse the project's existing test framework.
+- New or changed isolated auth/job/domain logic requires meaningful automated tests where practical.
+- Database/runtime boundaries still require integration/runtime evidence; unit tests do not replace those checks.
+
 Next command if accepting session baseline:
 hirmos continue "Accept session baseline and create IU plan"
 ```
@@ -163,6 +168,8 @@ Created IU files:
 - _hirmos/session/implementation-units/IU-02.md — Database schema and Prisma setup
 - _hirmos/session/implementation-units/IU-03.md — Upload and job shell
 - _hirmos/session/implementation-units/IU-04.md — Local validation and handoff evidence
+
+Each implementation IU records its automated-testing posture, the behavior that needs isolated tests, relevant existing tests/baselines when practical, and any higher-level evidence still required.
 
 Active generated-artifact validation: PASS
 
@@ -195,8 +202,10 @@ Implementation summary:
 - Ran validation checks.
 
 Evidence:
+- targeted automated tests for changed behavior: PASS where applicable
 - npm run build: PASS
 - lint/type checks: PASS where available
+- material test additions/changes/removals reconciled against the sealed behavioral authority
 - IU review rows updated with evidence pointers
 ```
 

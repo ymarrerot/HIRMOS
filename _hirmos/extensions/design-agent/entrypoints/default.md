@@ -126,6 +126,12 @@ Design must preserve the authority and traceability needed for later claim recon
 
 Design should authorize safe local/default technical progress when this avoids unnecessary user decisions. It must distinguish internal technical defaults from user-owned product, budget, compliance, or production-provider decisions.
 
+### Automated testing design discipline
+
+For implementation-capable software work, apply `_hirmos/core/protocol/VALIDATION_AND_EVIDENCE.md` before Implementation readiness. Inspect the repository's existing test framework, scripts, test locations, fixture/mocking conventions, and coverage policy when present. Design should identify which material behaviors are suitable for isolated automated tests and which require component, integration, contract, or runtime evidence instead.
+
+Do not introduce a second test framework without repository/project justification. For greenfield or currently untested codebases that will add material testable logic, plan the smallest appropriate test harness as part of implementation. Keep this posture compact in `SESSION_SCOPE.md`; use `DESIGN.md` for extra technical detail only when separate design authority is justified.
+
 ### Local setup and role-workflow smoke evidence
 
 When local setup or role-workflow behavior affects readiness, Design must require the evidence artifacts governed by `LOCAL_TECHNICAL_SETUP_AND_ROLE_WORKFLOW_SMOKE_CHECKS.md`; tests/build/lint alone do not prove runtime or workflow readiness.

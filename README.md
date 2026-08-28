@@ -79,9 +79,12 @@ A HIRMOS-installed project includes a framework folder at `_hirmos/`. That frame
 - pause when user input is needed;
 - separate implementation planning from implementation execution when the work is complex;
 - validate and record evidence before claiming completion;
+- treat automated tests as governed implementation evidence, preserving valid tests and updating or removing obsolete tests when behavior changes;
 - preserve accepted outcomes for the next session.
 
 If you want to inspect the details, HIRMOS records them in files such as `SESSION_SCOPE.md`, `SESSION_LEDGER.md`, unresolved-item registers, implementation-unit files, and accepted-state indexes under `_hirmos/`.
+
+For implementation work, HIRMOS uses the project's existing test architecture where practical. New or changed isolated logic should normally receive meaningful automated tests, while tests for behavior that remains authoritative should not be weakened merely to obtain a passing suite. When behavior legitimately changes or disappears, affected tests should change with it rather than accumulating as obsolete constraints. See [Implementation Evidence and Claim Reconciliation](./_hirmos/docs/2-methodology/implementation-evidence-and-claim-reconciliation.md) for the detailed testing/evidence posture.
 
 ## Install HIRMOS
 

@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.2.5 — Governed automated testing and public documentation hygiene
+
+- Bumps framework metadata and validator expected version from 1.2.4 to 1.2.5; terminal CLI remains 1.3.8 because terminal CLI implementation did not change.
+- Makes automated testing part of governed software implementation rather than an optional post-code validation activity.
+- Adds a compact Session Scope automated-testing posture that also governs lightweight no-IU implementation, with per-IU refinement in sealed IU contracts when IU mode applies.
+- Establishes unit tests as the default automated evidence for material new/changed isolated deterministic logic when practical, while preserving component/integration/runtime evidence where those layers are stronger or required.
+- Preserves repository-native test frameworks/conventions and explicitly avoids a universal HIRMOS coverage percentage or new default `TEST_PLAN.md` / `TEST_REPORT.md` artifacts.
+- Strengthens the existing Test / Fixture / Validator Change Rationale with test-delta classification, behavioral-authority traceability, targeted pre-change baseline evidence, orphan-test cleanup, and weakening-risk review.
+- Forbids weakening still-valid behavioral tests merely to obtain PASS; changed/removed behavior must update/remove obsolete tests, while invalid-test corrections require explicit evidence that behavioral coverage is preserved or improved.
+- Makes practical regression tests the default for reproducible software defects and adds aggregate session review of testing obligations/test lifecycle integrity.
+- Projects the compact test-integrity rule through the `hirmos continue` command capsule and adds focused validator/regression protection without attempting to statically judge arbitrary source-code assertion quality.
+- Removes maintainer project-plan identifiers from public README, changelog, upgrade, methodology, and reference documentation while preserving stable descriptive behavior names.
+- Adds package-time and public-repository guards so internal project-plan identifiers cannot re-enter the public documentation surface.
+
 ## 1.2.4 — Safe installed-framework update and state-preserving merge
 
 - Bumps framework metadata and validator expected version from 1.2.3 to 1.2.4 and bumps the terminal CLI from 1.3.7 to 1.3.8 because this release adds new terminal update behavior.
@@ -15,7 +29,7 @@
 - Parallelizes the isolated validator regression runner by default so the canonical 60-case maintainer check remains practical as the validator suite grows; worker count can be overridden with `HIRMOS_VALIDATOR_FIXTURE_WORKERS`.
 - Ships the terminal updater in CLI 1.3.8 alongside framework 1.2.4.
 
-## PROD-L8.33K — Safe Installed-Framework Update and State-Preserving CLI Upgrade
+## Safe Installed-Framework Update and State-Preserving CLI Upgrade
 
 - Introduces `hirmos update` as the regular-user framework upgrade command rather than overloading `hirmos init`.
 - Treats framework upgrade as a transaction over framework-owned surfaces while preserving project-owned HIRMOS state and project-local config.
@@ -32,14 +46,14 @@
 - Adds focused validator/regression coverage for first-contact identity, status/bootstrap concordance, quiz preservation, report-template ownership, and command-pointer deduplication.
 
 
-## PROD-L8.33J — Bootstrap Front-Door Simplification and Authority Deduplication
+## Bootstrap Front-Door Simplification and Authority Deduplication
 
 - Returns `AGENTS.md` to a compact first-contact role while preserving the original orientation/identity material and later governance/pre-edit safety boundaries that remain operationally necessary.
-- Removes historical PROD-L hardening sections and detailed command-specific behavior from `AGENTS.md`; canonical command/capability/protocol surfaces retain that behavioral authority.
+- Removes historical hardening sections and detailed command-specific behavior from `AGENTS.md`; canonical command/capability/protocol surfaces retain that behavioral authority.
 - Preserves bootstrap Steps 3–11, all required core reads, and the complete 16-question open-book quiz pending dedicated weak/strong-model validation of any deeper bootstrap compression.
 - Aligns bootstrap and `COMMANDS.md` with the existing read-only `hirmos status` bootstrap fast path while retaining full bootstrap for advancing commands.
 - Fixes duplicate/malformed command pointers and makes the canonical `BOOTSTRAP_REPORT.md` template the sole report-structure authority instead of duplicating a drifting schema inside `bootstrap.md`.
-- Adds validator and focused regression coverage for first-contact identity, status/bootstrap concordance, quiz preservation, report-template ownership, command-pointer deduplication, and removal of historical PROD-L labels from the two front-door files.
+- Adds validator and focused regression coverage for first-contact identity, status/bootstrap concordance, quiz preservation, report-template ownership, command-pointer deduplication, and removal of historical implementation-plan labels from the two front-door files.
 
 
 ## 1.2.2 — Carry-forward, implementation-convergence, and distribution-boundary hardening
@@ -50,14 +64,14 @@
 - Adds purposeful recovery/routing for post-execution `hirmos continue` so stranded implementation sessions converge toward close readiness instead of acting as open-ended implementation.
 - Removes maintainer-only CLI development instructions from shipping framework docs and adds package verification that rejects maintainer-workspace path leakage before publication, while preserving the independent public-repository verifier.
 
-## PROD-L8.33I — Install-Payload Maintainer-Path Boundary Hardening
+## Install-Payload Maintainer-Path Boundary Hardening
 
 - Removes maintainer-only local CLI smoke-test instructions from the shipping CLI reference; maintainer development/install procedures remain owned by `playbook.md`.
 - Adds install-package verification that rejects public-facing packaged docs/integration material referencing maintainer-only workspace surfaces.
 - Keeps the existing public-repository maintainer-path verifier as an independent downstream guard.
 
 
-## PROD-L8.33H — Implementation Completion Convergence and Purposeful Continue Routing
+## Implementation Completion Convergence and Purposeful Continue Routing
 
 - Clarifies that IU execution authorization is not a mandatory terminal pause after project-file edits finish.
 - Requires authorized Implementation to converge through applicable validation, IU review, unresolved-item review, session implementation review, and the implementation-completion decision in the same continuation when evidence is available.
@@ -67,7 +81,7 @@
 - Projects the convergence rule through the canonical continue capsule for generated command and per-command skill surfaces.
 
 
-## PROD-L8.33G — Carry-Forward Lifecycle Consolidation and Projected Command Updates
+## Carry-Forward Lifecycle Consolidation and Projected Command Updates
 
 - Consolidated active and resolved carry-forward lifecycle inside `CARRY_FORWARD.md`; no new carry-forward command or resolution artifact was added.
 - Added global carry-forward IDs using `CF-YYYYMMDD-NNN` plus separate source refs for close-time local IDs.
@@ -100,13 +114,13 @@
 - Simplifies duplicated mutable delivery/phase status by deriving completion and roadmap posture from source artifacts instead of asking the model to maintain multiple narrative status mirrors.
 - Aligns onboarding documentation around the four onboarding principles, refreshes the first-real-run tutorial with clear example-project credit, simplifies the root README for first-time visitors, and separates the GitHub `_hirmos/README.md` folder guide from the packaged installed-project onboarding README.
 - Keeps CLI package version at 1.3.4 because terminal CLI command behavior did not change.
-- Adds PROD-L8.32X continue-pass delta hardening: every `hirmos continue` must be classified as a governed pass, recorded in `SESSION_LEDGER.md`, reconciled with `SESSION_STATE.json.continuation_pass`, and reflected in `SESSION_SCOPE.md` only when accepted authority changes.
-- Adds PROD-L8.32Y governance-first methodology documentation reframe: README and methodology docs now lead with permanent governed-execution requirements before current AI-agent reliability context.
+- Adds continue-pass delta hardening: every `hirmos continue` must be classified as a governed pass, recorded in `SESSION_LEDGER.md`, reconciled with `SESSION_STATE.json.continuation_pass`, and reflected in `SESSION_SCOPE.md` only when accepted authority changes.
+- Adds a governance-first methodology documentation reframe: README and methodology docs now lead with permanent governed-execution requirements before current AI-agent reliability context.
 
 ## 1.1.9 — Token-efficient runtime boundary and derived-state stabilization
 
 - Bumped framework metadata and validator expected version to 1.1.9.
-- Consolidates the L8.32C–L simplification wave: `SESSION_EXECUTION.md` was replaced by compact `SESSION_LEDGER.md`, `SESSION_SCOPE.md` now carries compact IU planning pointers only, bootstrap/session ledger/evidence/current-state/delivery/phase artifacts were compressed, and normal command execution now starts from compact command files.
+- Consolidates the runtime simplification wave: `SESSION_EXECUTION.md` was replaced by compact `SESSION_LEDGER.md`, `SESSION_SCOPE.md` now carries compact IU planning pointers only, bootstrap/session ledger/evidence/current-state/delivery/phase artifacts were compressed, and normal command execution now starts from compact command files.
 - Restores the explicit IU Planning → governed pause → IU Execution boundary: accepting a session baseline in IU mode authorizes IU planning/materialization only; material project-file edits require separate `IU_EXECUTION_AUTHORIZED` after IU plan review.
 - Adds focused runtime-boundary fixtures proving material edits and lifecycle transition claims fail before `IU_EXECUTION_AUTHORIZED`.
 - Adds just-in-time artifact creation and derived pointer-index support so optional artifacts are not pre-created as empty future synchronization obligations and pointer indexes are treated as derived navigation caches, not independent truth.
@@ -162,7 +176,7 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 ## Unreleased
 
-### PROD-L8.32Z — Start command non-implementation boundary
+### Start command non-implementation boundary
 
 - Strengthened `hirmos start` as a non-implementation command: detailed implementation instructions are scope input, not implementation authorization.
 - Added a baseline acceptance pre-edit gate across command surfaces, session templates, and all current AI-tool integration templates.
@@ -412,7 +426,7 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 - Terminal CLI scope is limited to installation/bootstrap concerns. The terminal CLI command is `hirmos init`; workflow commands are used inside the AI-tool conversation.
 - Framework versioning is tracked in `_hirmos/hirmos.config.json`; HIRMOS does not use a separate `_hirmos/VERSION` file.
 
-## Unreleased — PROD-L8.15
+## Unreleased — Current-State Source Reading and Runtime Freshness
 
 - Hardened current-state-first source reading discipline: `CURRENT_SYSTEM_STATE.md` is mandatory first read, followed by scoped reads of active and materially relevant source artifacts.
 - Added runtime freshness expectations for session ledger, phase lifecycle, session scope previews, evidence reconciliation, and active current-state pointers.
@@ -420,27 +434,27 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 - Made `DECISION_LOG.md` conditional rather than a default accepted-state root artifact; `CARRY_FORWARD.md` remains active-only support.
 - Added reuse-first complexity-control doctrine before adding new governance surfaces.
 
-## PROD-L8.19 command legality / IU authority / correction ledger hardening
+## Command legality / IU authority / correction ledger hardening
 
 - Hardened idle-state `hirmos continue` semantics: no direct project-file mutation while no active governed session exists.
 - Hardened IU pre-execution authority: when IU mode is active, IU artifacts must exist before material code changes; retrospective IU creation is a governance deviation unless lightweight/no-IU mode was declared before edits.
 - Hardened correction-ledger expectations so material correction commands are recorded individually in `SESSION_LEDGER.md`.
 - Hardened close-time chronology, delivery-plan freshness, and later carry-forward resolution concordance.
 
-## PROD-L8.21 IU set authority and close-time concordance hardening
+## IU set authority and close-time concordance hardening
 
 - Added an IU Set Authority Checkpoint in `SESSION_LEDGER.md` to prove IU authority before material edits.
 - Added minimum IU content requirements so thin stubs cannot authorize implementation in IU mode.
 - Added close-time concordance sweeps for phase files, delivery plan pointers, current-state source indexes, carry-forward invariants, and evidence semantics.
 - Clarified evidence levels: implementation accepted, runtime verified, and production verified.
 
-## PROD-L8.22 phase and delivery review gate hardening
+## Phase and delivery review gate hardening
 
 - Added evidence-backed session, phase, and delivery review gate discipline using existing artifacts.
 - Required review gates to distinguish implementation accepted, runtime verified, and production verified claims.
 - Added actual-codebase-reviewed expectations for implementation review boundaries.
 - Hardened close so higher-level acceptance cannot overclaim beyond the evidence level proven.
-## PROD-L8.23 — Generated-Run IU Enforcement and Runtime Artifact Validator Hardening
+## Generated-Run IU Enforcement and Runtime Artifact Validator Hardening
 
 - Added generated-run validation for IU-mode sessions, not just static framework templates.
 - Validator now fails generated sessions with IU files but no IU Set Authority Checkpoint, no authorization decision, no IU Set Coverage Map, or no proof that IU files existed before material edits.
@@ -450,7 +464,7 @@ The framework version source of truth is `_hirmos/hirmos.config.json` under `fra
 
 
 
-## PROD-L8.24 — Pre-Execution Ledger Enforcement and Generated Review Gate Validation
+## Pre-Execution Ledger Enforcement and Generated Review Gate Validation
 - Requires generated IU-mode sessions to record a Pre-Material-Edit Ledger Row before material implementation begins.
 - Rejects retrospective IU checkpoint / IU expansion during close as clean governance.
 - Validates generated phase and delivery review gates for concrete evidence-backed acceptance fields.

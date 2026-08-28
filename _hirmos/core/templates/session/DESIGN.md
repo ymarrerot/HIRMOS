@@ -102,7 +102,8 @@ Required for implementation-capable software sessions before implementation auth
 | Provider APIs / external services | | Provider boundary, env validation, failure posture | | | | |
 | File or object storage | | Validation, safe paths, retention/handoff hygiene | | | | |
 | Secrets and environment configuration | | `.env.example`; no secrets/runtime data in handoff/release | | | | |
-| Critical-flow tests / smoke evidence | | Test/smoke/runtime evidence plan for critical paths | | | | |
+| Automated testing posture | | Repository-native unit/component/integration strategy for material software behavior; no universal HIRMOS coverage threshold | | | | |
+| Critical-flow / runtime smoke evidence | | Runtime/smoke/user-flow evidence plan for critical paths; automated tests do not substitute for required runtime evidence | | | | |
 
 Implementation is not authorized while any material area is `Blocks implementation = YES`, unless `SESSION_SCOPE.md` explicitly changes scope to exclude that area.
 

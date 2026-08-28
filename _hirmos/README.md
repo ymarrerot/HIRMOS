@@ -59,6 +59,15 @@ Read:
 - [Artifact model](./docs/reference/artifact-model.md)
 - [Glossary](./docs/reference/glossary.md)
 
+### I am trying to understand implementation evidence and automated testing
+
+Read:
+
+- [Implementation evidence and claim reconciliation](./docs/2-methodology/implementation-evidence-and-claim-reconciliation.md)
+- [Evidence-backed review](./docs/2-methodology/evidence-backed-review.md)
+
+These explain how HIRMOS binds automated-testing expectations to governed behavior, preserves valid tests, cleans up obsolete tests when behavior changes, and keeps runtime/integration evidence distinct from unit-test evidence.
+
 ### I am inspecting how HIRMOS controls AI-agent execution
 
 Start with:

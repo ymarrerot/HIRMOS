@@ -34,6 +34,6 @@ Review gates should answer:
 If review finds a problem, HIRMOS may correct it under the active authority. The correction should be recorded honestly with evidence. It should not erase the fact that a correction was needed.
 
 
-## PROD-L8.22 Review Gate Salvage
+## Review Gate Salvage
 
 A passing static check is not a delivery review. Review must compare requested scope, implementation result, evidence, runtime posture, and remaining limitations.

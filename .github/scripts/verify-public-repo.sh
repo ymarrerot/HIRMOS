@@ -61,4 +61,19 @@ if grep -RInE '(^|[^[:alnum:]_])(playbook\.md|_internal/|ops/|tools/cli)([^[:aln
 fi
 rm -f /tmp/hirmos-public-local-paths.txt
 
+# Public documentation must use released behavior names rather than maintainer project-plan identifiers.
+# Runtime authority/validator diagnostics may retain internal provenance, but READMEs and docs may not.
+: >/tmp/hirmos-public-internal-identifiers.txt
+grep -RInE 'PROD-L[0-9]+([.][[:alnum:].-]+)?|(^|[^[:alnum:]_])L[0-9]+[.][0-9]+' \
+  _hirmos/docs --include='*.md' >>/tmp/hirmos-public-internal-identifiers.txt 2>/dev/null || true
+grep -RInE 'PROD-L[0-9]+([.][[:alnum:].-]+)?|(^|[^[:alnum:]_])L[0-9]+[.][0-9]+' \
+  _hirmos --include='README.md' >>/tmp/hirmos-public-internal-identifiers.txt 2>/dev/null || true
+grep -nE 'PROD-L[0-9]+([.][[:alnum:].-]+)?|(^|[^[:alnum:]_])L[0-9]+[.][0-9]+' \
+  README.md _hirmos/CHANGELOG.md _hirmos/UPGRADE_GUIDE.md >>/tmp/hirmos-public-internal-identifiers.txt 2>/dev/null || true
+if [ -s /tmp/hirmos-public-internal-identifiers.txt ]; then
+  cat /tmp/hirmos-public-internal-identifiers.txt >&2
+  fail "public documentation contains maintainer project-plan identifiers"
+fi
+rm -f /tmp/hirmos-public-internal-identifiers.txt
+
 echo "PASS: public repository surface is ready"

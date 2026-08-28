@@ -73,6 +73,124 @@ Boundary reviews include, when applicable:
 Static validation should check concrete framework and artifact properties first: required files exist, config values are valid, referenced installed stacks exist, session artifacts exist before being referenced, required controls are not unsatisfied at terminal boundaries, and archive paths preserve session evidence.
 
 
+## Governed automated testing and test integrity
+
+Automated tests are governed evidence of behavioral authority. HIRMOS must plan, implement, and review appropriate automated tests as part of software implementation rather than treating tests as optional cleanup after code changes.
+
+### Automated-testing posture
+
+For implementation-capable software work, determine the lowest useful automated test layer that proves the behavior honestly.
+
+```text
+isolated deterministic behavior
+  → unit test by default when practical and valuable
+
+component / module interaction
+  → component or focused integration test
+
+shared contract / persistence / provider boundary
+  → integration or contract evidence as appropriate
+
+critical user/runtime flow
+  → runtime / smoke / end-to-end evidence where the claim requires it
+```
+
+New or materially changed isolated deterministic application/domain logic should normally receive unit-test coverage. HIRMOS must not force unit tests where they add little value, such as purely visual styling changes or behavior that can only be proven honestly at another layer. In those cases, record `NOT_APPLICABLE` or `COVERED_ELSEWHERE` with a concrete rationale and the stronger applicable verification layer.
+
+Repository evidence governs test tooling. Reuse the project's existing test framework, scripts, fixture conventions, mocking strategy, and coverage policy when they exist. Do not introduce a second test framework merely because an agent prefers it. When a greenfield or currently untested codebase introduces material testable logic, establish the smallest appropriate automated-test harness as part of implementation authority.
+
+HIRMOS has no universal numeric coverage threshold. Preserve repository-defined thresholds when present; otherwise judge whether governed behavior is meaningfully covered rather than optimizing for a percentage.
+
+### Test integrity rule
+
+Tests are evidence of governed behavior, not obstacles to make green.
+
+> **Existing tests that cover behavior which remains authoritative must not be removed, relaxed, bypassed, skipped, trivialized, or replaced with materially weaker evidence merely to make implementation pass.**
+
+When a valid test fails because implementation contradicts unchanged authority, fix the implementation. If the behavioral authority itself must change, route back/amend/reseal through the normal authority boundary before using that change to justify a weaker or different test expectation.
+
+Heightened review is required when implementation changes include:
+
+- deleted or disabled tests;
+- `.skip`, `xit`, `xdescribe`, `@Disabled`, `pytest.mark.skip`, or equivalents;
+- removed assertions or materially widened assertions/ranges;
+- error/edge-case removal;
+- substantially increased mocking or fixture simplification;
+- blind snapshot regeneration;
+- expected-output or golden-file rewrites;
+- reduced parameter/data cases;
+- validator or regression-fixture relaxation.
+
+These changes are not automatically forbidden. They require evidence that the resulting suite still proves the behavioral authority that remains applicable.
+
+### Test lifecycle consistency
+
+The test suite must evolve with behavioral authority instead of accumulating logically orphaned tests.
+
+```text
+NEW behavior
+  → add appropriate automated tests
+
+UNCHANGED behavior
+  → preserve existing test strength
+
+CHANGED behavior
+  → update tests to the newly authorized behavior
+
+REMOVED behavior
+  → remove obsolete tests and stale fixtures/assertions
+
+INVALID test
+  → correct the test with explicit integrity rationale and replacement evidence
+
+FAILING implementation
+  → do not weaken a valid test merely to obtain PASS
+```
+
+When implementation materially changes or removes behavior already covered by tests, inspect affected tests for stale assumptions, obsolete fixtures, superseded expectations, and orphan tests. Update or delete obsolete tests in the same governed implementation scope when practical; do not preserve old business semantics through weakened assertions solely to keep the suite passing.
+
+### Test delta accountability
+
+When tests, fixtures, mocks, snapshots, validators, expected outputs, regression fixtures, or generated expected-output artifacts change, classify the material test delta using one or more of:
+
+```text
+NEW_BEHAVIOR
+CHANGED_BEHAVIOR
+REMOVED_BEHAVIOR
+BUG_REGRESSION
+INVALID_TEST_CORRECTION
+TEST_INFRASTRUCTURE_ONLY
+FIXTURE_REALISM_CHANGE
+REDUNDANT_TEST_CLEANUP
+```
+
+The execution record must connect the test delta to one of:
+
+- the sealed behavioral authority already requiring the test;
+- an explicit behavioral-authority delta/reopened contract;
+- a demonstrably invalid test/fixture correction;
+- test infrastructure or realism maintenance that does not weaken behavioral evidence.
+
+The governing invariant is:
+
+> **The test delta must be explainable by the behavioral-authority delta, or by a demonstrably valid test-quality correction.**
+
+For `CHANGED_BEHAVIOR` and `REMOVED_BEHAVIOR`, point to the authority that changed or removed the behavior. For `INVALID_TEST_CORRECTION`, explain why the prior test was invalid, what behavior remains authoritative, what replaces the old evidence, and why behavioral coverage is preserved or improved.
+
+### Relevant pre-change baseline
+
+Before materially changing behavior that already has relevant automated tests, run the smallest useful targeted existing test set when practical and record the result. The purpose is not to require a full-suite run before every IU; it is to preserve a comparison point for test additions, removals, and weakening risk.
+
+If the relevant baseline cannot be run, record `NOT_RUN` with reason and risk. A final green suite with fewer or materially weaker tests must not hide unexplained test removal.
+
+### Reproducible defect regression
+
+For a reproducible software defect, when an automated isolated or focused regression test is practical, the fix should include a test that would fail for the defect and pass for the corrected behavior. If that test is not practical or valuable, record the alternative evidence and rationale.
+
+### Testing evidence is not runtime evidence
+
+Automated unit/component/integration tests prove only the behavior and boundary they exercise. They do not replace local runtime, user-workflow, provider, migration, deployment, or production evidence required by the active claim.
+
 ## Runtime integration evidence
 
 When implementation, readiness, or close claims involve runtime integrations, evidence must identify the actual integration level delivered.

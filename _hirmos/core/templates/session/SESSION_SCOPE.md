@@ -141,6 +141,23 @@ Phase merge pressure check: every proposed phase after phase 2 must answer wheth
 - Runtime/provider evidence required before close:
 - Production evidence explicitly not claimed:
 
+### Automated Testing Posture
+
+Required for implementation-capable software sessions; use `NOT_APPLICABLE` for non-software or genuinely non-testable work. Detailed per-IU obligations belong in `implementation-units/IU-xx.md` when IU mode applies.
+
+- Software behavior in scope: YES | NO | PARTIAL
+- Existing repository test architecture / commands:
+- Unit-test posture: REQUIRED | NOT_APPLICABLE | COVERED_ELSEWHERE
+- New or materially changed isolated deterministic logic expected: YES | NO | UNKNOWN
+- Material behaviors requiring unit tests / isolated automated tests:
+- Relevant existing tests / targeted baseline:
+- Reproducible defect regression test expected: YES | NO | NOT_APPLICABLE
+- Other required test layers:
+- If `NOT_APPLICABLE` or `COVERED_ELSEWHERE`, rationale:
+- Repository coverage policy, if any:
+
+HIRMOS does not impose a universal coverage percentage. Existing valid behavioral tests remain protected behavioral evidence unless the governed behavior changes or the test is demonstrably invalid.
+
 ## 8. Focus-Aware Capability Routing Evidence and Adoption
 
 - Active command:

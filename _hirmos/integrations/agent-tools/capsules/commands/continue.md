@@ -19,6 +19,13 @@ IU planning rules:
 
 If implementation units are not required, record a concise no-IU rationale in the existing session governance artifacts before implementation begins.
 
+Governed automated testing and test integrity:
+- Before software implementation, use the accepted Session Scope / sealed IU testing posture; reuse repository-native test tooling.
+- Material isolated deterministic behavior normally requires meaningful unit tests when practical; use stronger component/integration/runtime evidence where appropriate.
+- Do not weaken, skip, delete, trivialize, over-mock, or loosen still-valid behavioral tests merely to obtain PASS.
+- When behavior changes or disappears, update/remove obsolete tests and trace the test delta to the changed authority; clean stale/orphan tests in the same governed scope when practical.
+- For reproducible defects, add a focused regression test when practical; HIRMOS has no universal numeric coverage threshold.
+
 Implementation completion convergence:
 - IU execution authorization is not a mandatory stop after edits finish.
 - After all authorized implementation work/IUs execute, continue through applicable validation, IU review, unresolved-item review, and session implementation review in the same pass when inputs are available.

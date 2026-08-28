@@ -68,6 +68,10 @@ For any project type, require delivery-baseline governance when one bounded sess
 When stack contexts are active, carry in-scope/out-of-scope contexts into the active authority and Implementation Readiness decision when implementation is being authorized.
 
 
+## Automated testing scope responsibility
+
+For implementation-capable software scope, apply the governed automated-testing and test-integrity rules in `_hirmos/core/protocol/VALIDATION_AND_EVIDENCE.md`. Populate the compact `SESSION_SCOPE.md` Automated Testing Posture before Implementation begins. The posture must preserve repository-native tooling, identify whether unit tests are required for material isolated deterministic logic, and name the stronger applicable layer when unit tests are not appropriate. Do not add per-IU test detail here when IU mode applies.
+
 ## Runtime integration responsibilities
 
 Apply the shared runtime-integration responsibilities in `_hirmos/core/authority/SHARED_CAPABILITY_CONTROLS.md` and `_hirmos/core/protocol/RUNTIME_INTEGRATION_AND_PRODUCTION_READINESS.md`. Keep detailed evidence in the owning IU, `EVIDENCE.md`, or accepted-state/archive source; this entrypoint should point rather than duplicate.

@@ -30,6 +30,26 @@ When implementation units are used, each IU should record:
 
 `SESSION_LEDGER.md` should point to IU/evidence records instead of duplicating all evidence detail.
 
+## Governed automated testing and test integrity
+
+HIRMOS treats automated tests as implementation evidence tied to behavioral authority.
+
+For material software work:
+
+- inspect and reuse the repository's existing test architecture;
+- prefer unit tests for new or changed isolated deterministic logic when practical;
+- bind the testing posture into `SESSION_SCOPE.md` and, when IU mode applies, each sealed IU contract;
+- use relevant targeted existing tests as a pre-change comparison point when practical;
+- write practical regression tests for reproducible defects;
+- preserve the strength of valid tests when their governing behavior remains unchanged;
+- update or remove tests/fixtures when the governed behavior changes or disappears so orphan tests do not accumulate;
+- classify material test deltas and explain changes that could weaken validation;
+- use component/integration/runtime evidence where those layers are necessary to prove the claim.
+
+A failing implementation must not be made green by weakening a still-valid test. Conversely, an obsolete test must not be preserved artificially after its business rule disappears. The test suite should describe current governed behavior, not historical requirements and not whatever output the current implementation happens to produce.
+
+HIRMOS does not impose a universal coverage percentage and does not create `TEST_PLAN.md` or `TEST_REPORT.md` by default. Testing obligations live in the existing scope/IU/evidence/review surfaces.
+
 ## Claim reconciliation
 
 Before completion or close claims, HIRMOS must reconcile:
@@ -67,14 +87,14 @@ Material project-file edits require IU execution authorization.
 
 A claim should say whether the logged command passed, failed, was not run, or was user environment verified. User environment verified evidence is useful, but it should be labeled separately from commands the agent actually ran.
 
-## PROD-L8.23 Generated-Run Validation Boundary
+## Generated-Run Validation Boundary
 
 Generated session archives are part of the evidence record. HIRMOS must validate active and archived generated artifacts before claiming a clean generated-run result.
 
-## PROD-L8.24 Retrospective Compliance Boundary
+## Retrospective Compliance Boundary
 
 The active ledger must prove pre-execution authorization. Backfilled artifacts can document a correction honestly, but they cannot convert unauthorized implementation into a clean pre-execution gate pass.
 
-## PROD-L8.31 Generated-Run Mechanical Gates
+## Generated-Run Mechanical Gates
 
 HIRMOS must report all generated-run gate failures instead of hiding failures behind a generic completion claim.

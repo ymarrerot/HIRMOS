@@ -111,11 +111,28 @@ def activate_session(root: Path, stage: str = "implementation_readiness", recomm
     (root / "session" / "implementation-units").mkdir(exist_ok=True)
 
 
+def _l834_fixture_testing_posture() -> str:
+    return """
+## Automated Testing Posture
+
+- Software behavior in scope: NO
+- Existing repository test architecture / commands: fixture validator only
+- Unit-test posture: NOT_APPLICABLE
+- New or materially changed isolated deterministic logic expected: NO
+- Material behaviors requiring unit tests / isolated automated tests: NOT_APPLICABLE
+- Relevant existing tests / targeted baseline: NOT_APPLICABLE
+- Reproducible defect regression test expected: NOT_APPLICABLE
+- Other required test layers: framework validator regression
+- If NOT_APPLICABLE or COVERED_ELSEWHERE, rationale: fixture exercises HIRMOS governance rather than product software behavior
+- Repository coverage policy, if any: NOT_APPLICABLE
+"""
+
+
 def write_basic_active_artifacts(root: Path) -> None:
     session = root / "session"
     (session / "bootstrap").mkdir(exist_ok=True)
     (session / "bootstrap" / "BOOTSTRAP_REPORT.md").write_text(_l831a_full_bootstrap())
-    (session / "SESSION_SCOPE.md").write_text("# SESSION_SCOPE.md\n")
+    (session / "SESSION_SCOPE.md").write_text("# SESSION_SCOPE.md\n" + _l834_fixture_testing_posture())
     (session / "SESSION_LEDGER.md").write_text("# SESSION_LEDGER.md\n")
     (session / "unresolved-items.md").write_text("# unresolved-items.md\n")
     (session / "SESSION_SCOPE.md close verification").write_text("# SESSION_SCOPE.md close verification\n")
@@ -255,7 +272,7 @@ Entry criteria satisfied: YES
 Type-specific entry controls satisfied: YES
 Pointer concordance satisfied: YES
 Blocking open items absent or resolved: YES
-""")
+""" + _l834_fixture_testing_posture())
     cf_review_answer = "YES" if carry_forward_recorded or resulting_phase_status == "ACCEPTED" else "NO"
     if include_status_report:
         status_report = f"""
@@ -513,7 +530,7 @@ def mutate_single_session_not_applicable_readiness(root: Path) -> None:
 Delivery governance active: NOT_APPLICABLE
 Selected delivery shape: SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS
 Single-session safety justification: fixture bounded scope.
-""")
+""" + _l834_fixture_testing_posture())
     (session / "SESSION_LEDGER.md").write_text("# SESSION_LEDGER.md\n\n## Runtime Route Record\nSelected route: SINGLE_SESSION_WITH_IMPLEMENTATION_UNITS\n\n## Continuation Pass Register\n\n| Pass | Command | Type | Result |\n|---:|---|---|---|\n| 1 | hirmos continue | VALIDATION_ONLY | PASS |\n")
     (session / "unresolved-items.md").write_text("# unresolved-items.md\n")
 
@@ -813,6 +830,10 @@ Fixture context.
 - Preserve fixture boundaries.
 ### Implementation Requirements
 - Implement the requested fixture behavior.
+### Automated Testing Posture
+- Unit-test posture: NOT_APPLICABLE
+- Existing repository test framework / conventions: fixture-only validator regression
+- If NOT_APPLICABLE or COVERED_ELSEWHERE, rationale: framework validator fixture has no product behavior
 ### Verification Commands / Checks
 - fixture check
 ### Evidence Requirements
@@ -968,6 +989,11 @@ def _l832k_full_iu() -> str:
         "## Implementation Requirements",
         "- Implement fixture behavior exactly.",
         "- Preserve route-back conditions.",
+        "",
+        "## Automated Testing Posture",
+        "- Unit-test posture: NOT_APPLICABLE",
+        "- Existing repository test framework / conventions: fixture-only validator regression",
+        "- If NOT_APPLICABLE or COVERED_ELSEWHERE, rationale: framework validator fixture has no product behavior",
         "",
         "## Verification Commands / Checks",
         "- fixture verification check",

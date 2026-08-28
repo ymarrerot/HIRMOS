@@ -99,11 +99,11 @@ hirmos <command>[:entrypoint] [arguments]
 
 Workflow commands resolve through installed extension manifests using `hirmos_commands`.
 
-## PROD-L8.32Z pre-edit gate propagation
+## Pre-edit gate propagation
 
 All registry integrations, including shared-target integrations, must carry the same HIRMOS pre-edit gate through their generated guidance. The current registry targets are `agents`, `claude`, `cursor`, `copilot`, `codex`, `opencode`, `gemini`, `windsurf`, and `kiro`. Shared templates still count for every integration that uses them.
 
-## PROD-L8.33A continue/status command capsule propagation
+## Continue/status command capsule propagation
 
 All registry integrations must carry the same compact, project-agnostic command capsules for `hirmos start`, `hirmos continue`, `hirmos status`, and `hirmos close`.
 
@@ -114,7 +114,7 @@ The `hirmos status` capsule must state that `hirmos status` is read-only, report
 This propagation applies to all current registry integrations: `agents`, `claude`, `cursor`, `copilot`, `codex`, `opencode`, `gemini`, `windsurf`, and `kiro`.
 
 
-## PROD-L8.33C-2 generated projection model
+## Generated projection model
 
 HIRMOS integration surfaces are generated projections of canonical command capsules. The source authority remains `_hirmos/core/*` and `_hirmos/AGENTS.md`; generated tool surfaces repeat the minimum command gates where the agent is most likely to ingest them.
 

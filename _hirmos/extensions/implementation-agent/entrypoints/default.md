@@ -70,6 +70,12 @@ Implementation execution performs only the work authorized by the target `IU-xx.
 
 Implementation is incomplete without evidence. Record validation commands, outcomes, not-run/not-applicable checks, limitations, and runtime posture. Do not convert a passing claim into completion unless the evidence supports the exact unit/session scope.
 
+### Governed Automated Testing and Test Integrity
+
+Apply `_hirmos/core/protocol/VALIDATION_AND_EVIDENCE.md` for both IU-governed and lightweight no-IU software implementation. Treat tests as implementation deliverables when the accepted Session Scope/IU testing posture requires them. Reuse repository-native test tooling, prefer unit tests for material isolated deterministic logic when practical, and use the lowest useful layer that proves the behavior honestly.
+
+Do not weaken a valid existing test merely to make a failing implementation pass. When behavioral authority changes or disappears, update/remove affected tests and stale fixtures in the same governed scope when practical. Material test changes require test-delta accountability and review; test cleanup is part of implementing the behavioral change, not a routine later cleanup pass.
+
 ### Unit Review and Session Implementation Review
 
 Unit review is local, specific, and evidence-based. Session implementation review aggregates unit results against the Session Scope, validation evidence, unresolved items, and scope coverage before Update System State readiness is claimed.

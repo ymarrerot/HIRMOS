@@ -68,6 +68,8 @@ Session Baseline accepted
 
 IU Planning creates/validates the IU files and pauses. It is not material implementation authorization.
 
+For software implementation, `SESSION_SCOPE.md` carries the session-level automated-testing posture. When IU mode applies, each sealed IU refines that posture into concrete behavioral test obligations, relevant existing-test baselines when practical, and any higher-level validation still required. Test execution and test-delta review remain part of Implementation rather than a separate testing phase.
+
 ## Integration surface
 
 AI-tool integration templates live in the framework payload under:

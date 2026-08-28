@@ -44,6 +44,7 @@ Current AI-agent reliability issues are useful context, but they should not be t
 - [Evidence-Backed Review](evidence-backed-review.md)
 - [Runtime Integration and Production Readiness](runtime-integration-and-production-readiness.md)
 - [Implementation Evidence and Claim Reconciliation](implementation-evidence-and-claim-reconciliation.md)
+  - includes governed automated-testing posture, test lifecycle consistency, and anti-weakening review
 
 ## Simplification doctrine
 

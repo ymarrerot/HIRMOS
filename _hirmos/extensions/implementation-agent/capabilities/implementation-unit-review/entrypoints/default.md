@@ -60,9 +60,28 @@ The review must compare:
 - in-scope / out-of-scope conformance;
 - validation requirements to actual evidence;
 - requested runtime posture to delivered posture;
-- claims to concrete file/log/runtime evidence.
+- claims to concrete file/log/runtime evidence;
+- Automated Testing Posture to the actual test delta and results;
+- changed/removed behavioral tests to the governing authority delta or valid test-correction rationale.
 
 Retry decisions must be appended in the same `IU-xx.md` artifact under `## 6. Retries`. Do not create standalone retry-request artifacts. Retry within the sealed scope may proceed by append-only retry records; scope, authority, or acceptance-criteria changes require route-back and a new/reopened sealed contract version.
+
+### Test integrity and lifecycle review
+
+Apply `_hirmos/core/protocol/VALIDATION_AND_EVIDENCE.md` and review tests as evidence of the sealed behavioral contract.
+
+The reviewer must determine:
+
+- whether required unit/component/integration tests were actually added or updated;
+- whether tests exercise the governed behavior and meaningful failure/edge cases rather than only implementation detail or existence checks;
+- whether relevant pre-change tests/baseline were considered when practical;
+- whether existing valid tests for unchanged behavior retained equivalent or stronger behavioral assertions;
+- whether changed/removed tests trace to `CHANGED_BEHAVIOR`, `REMOVED_BEHAVIOR`, another valid classification, or a demonstrably invalid prior test;
+- whether logically orphaned tests/fixtures were cleaned up when behavior changed/disappeared;
+- whether any test was skipped, deleted, loosened, trivialized, over-mocked, snapshot-regenerated, or expected-output-rewritten merely to obtain PASS;
+- whether a practical regression test was added for a reproducible defect, or a concrete alternative rationale/evidence exists.
+
+If a valid test was weakened while its behavioral authority remained unchanged, the unit cannot receive a clean PASS. Fix the implementation or route back; do not normalize the weakening in review.
 
 
 
@@ -81,7 +100,7 @@ Apply the shared unresolved-item producer obligation in `_hirmos/core/authority/
 
 ## PROD-L8.25 Sealed IU Review Guard
 
-During review, compare the final implementation against the sealed contract as it existed before material edits. Do not improve contract wording, scope mapping, acceptance criteria, verification commands, or evidence requirements during review. If tests, fixtures, mocks, snapshots, validators, expected-output files, or regression fixtures changed, the review must check that the Execution Record includes a Test / Fixture / Validator Change Rationale and must judge whether realism/coverage was preserved or improved rather than weakened.
+During review, compare the final implementation against the sealed contract as it existed before material edits. Do not improve contract wording, scope mapping, acceptance criteria, verification commands, or evidence requirements during review. If tests, fixtures, mocks, snapshots, validators, expected-output files, or regression fixtures changed, the review must check that the Execution Record includes a Test / Fixture / Validator Change Rationale, valid test-delta classification/authority trace where applicable, and must judge whether behavioral realism/coverage was preserved or improved rather than weakened. Deletion, skips, materially loosened assertions, fixture simplification, snapshot/expected-output regeneration, reduced cases, and increased mocking require heightened scrutiny.
 
 ## PROD-L8.28 Active Close Unit Review Gate
 

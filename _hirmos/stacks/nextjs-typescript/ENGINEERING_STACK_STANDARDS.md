@@ -64,7 +64,8 @@ Production-shaped does not require deployment, cloud services, or enterprise arc
 For material Next.js work, evidence should include the strongest available repository-backed checks, such as:
 
 - install/build/typecheck/lint commands;
-- unit/integration tests where present or added;
+- repository-native unit tests for new or materially changed isolated deterministic logic when practical, plus focused integration tests where boundaries require them;
+- preservation of still-valid behavioral tests when implementation changes; test removals/relaxations must trace to changed behavior or a valid test-quality correction;
 - smoke evidence for critical user flows;
 - database migration/schema validation when persistence changed;
 - provider-boundary/mock/sandbox/production posture evidence when integrations changed;

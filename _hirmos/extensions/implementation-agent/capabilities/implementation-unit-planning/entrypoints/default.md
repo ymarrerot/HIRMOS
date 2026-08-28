@@ -50,13 +50,29 @@ Planning must:
 1. Read the Session Scope directly.
 2. Read `unresolved-items.md` directly and fail closed if a gated item blocks implementation planning.
 3. Create one self-contained `implementation-units/IU-xx.md` artifact per unit from `_hirmos/core/templates/session/implementation-units/IU.md`.
-4. Fill each IU artifact's Unit Identity / Contract Metadata, Unit Scope / Authority, Pre-Execution Checks, Verification Commands / Checks, Evidence Requirements, and Binary Acceptance Criteria before execution begins.
+4. Fill each IU artifact's Unit Identity / Contract Metadata, Unit Scope / Authority, Pre-Execution Checks, Automated Testing Posture, Verification Commands / Checks, Evidence Requirements, and Binary Acceptance Criteria before execution begins.
 5. Mark the contract sections with explicit `LLM Write Permission:` lines and seal the contract before material implementation begins.
 6. Update the Session Scope Implementation Unit Plan table with the unit list and coverage mapping.
 7. Literally answer in `SESSION_SCOPE.md`: `Do all planned implementation units collectively cover 100% of SESSION_SCOPE.md?`
 8. Record the capability decision and evidence in `SESSION_LEDGER.md`.
 
 Do not create standalone `SESSION_SCOPE.md Implementation Unit Plan`, duplicate IU request files, duplicate IU execution files, duplicate IU review files, or duplicate IU retry files. Unit contract, execution, review, retry, and handoff content live inside each `IU-xx.md` artifact, but the IU Contract sections are sealed authority and later execution/review/retry sections are append-only records.
+
+### Governed automated-testing planning
+
+For software IUs, apply `_hirmos/core/protocol/VALIDATION_AND_EVIDENCE.md` before sealing the contract.
+
+Planning must:
+
+1. Inspect the repository's existing test framework, scripts, test locations, fixtures/mocks, and coverage policy when relevant.
+2. Decide whether material new/changed isolated deterministic logic requires unit tests. Use `NOT_APPLICABLE` or `COVERED_ELSEWHERE` only with a concrete rationale and the stronger applicable verification layer.
+3. Identify relevant existing tests and a targeted pre-change baseline command when practical so later test removal/weakening cannot be hidden by a final green suite.
+4. For a reproducible defect, require a regression test when an automated focused test is practical and valuable; otherwise name the alternative evidence.
+5. Anticipate cleanup of obsolete tests/fixtures when authorized behavior changes or disappears.
+6. Reuse repository-native tooling. Do not introduce a second test framework without project/repository justification.
+7. Do not impose a universal HIRMOS coverage percentage; preserve repository-defined thresholds when present.
+
+The sealed IU testing posture is execution authority. If implementation later discovers that the behavioral authority or required test posture itself is wrong, route back instead of weakening the tests or rewriting the sealed contract during execution.
 
 ## Required behavior
 
@@ -119,6 +135,7 @@ Required generated IU contract areas before execution:
 - Unit Scope / Authority;
 - Objective, Context, In Scope, Out of Scope, Files / Areas, Preservation Rules;
 - Implementation Requirements;
+- Automated Testing Posture;
 - Verification Commands / Checks;
 - Evidence Requirements;
 - Runtime Integration Posture;

@@ -50,12 +50,25 @@ Execution must:
 2. Confirm the Unit Scope / Authority is non-placeholder and the contract status is `SEALED` before material edits.
 3. Confirm the Session Scope still authorizes the unit.
 4. Confirm `unresolved-items.md` has no gated blocker for the unit.
-5. Inspect current project files before editing.
-6. Modify only files/areas authorized by the sealed IU contract.
-7. Append actions, files changed, validation, runtime posture, evidence, limitations, test/fixture/validator change rationale when applicable, and execution result to the `Execution Record` section only.
-8. Record route-back or blocker conditions in `SESSION_LEDGER.md` and `unresolved-items.md` when applicable.
+5. Inspect current project files and the relevant existing tests/test tooling before editing.
+6. When the sealed Automated Testing Posture identifies relevant existing tests, run the targeted pre-change baseline when practical and record `NOT_RUN` with reason/risk when it cannot be run.
+7. Modify only files/areas authorized by the sealed IU contract, including required test additions/updates/cleanup.
+8. Append actions, files changed, validation, runtime posture, evidence, limitations, test/fixture/validator change rationale when applicable, and execution result to the `Execution Record` section only.
+9. Record route-back or blocker conditions in `SESSION_LEDGER.md` and `unresolved-items.md` when applicable.
 
 Do not execute from prose, checkpoint summaries, or old split artifacts. The sealed IU Contract sections are the execution authority. The executor must not edit sealed contract sections after material implementation starts; if contract authority is wrong or incomplete, stop and route back instead of repairing the contract during execution.
+
+### Governed automated-testing execution
+
+Apply `_hirmos/core/protocol/VALIDATION_AND_EVIDENCE.md`. Required tests are implementation deliverables, not optional validation cleanup.
+
+- Add meaningful unit tests for material isolated deterministic behavior when the sealed posture requires them.
+- Extend existing tests when governed behavior changes and preserve still-valid assertions for unchanged behavior.
+- Remove/update logically orphaned tests and stale fixtures when the governed behavior they represent was explicitly changed or removed.
+- Do not respond to a failing valid test by deleting it, skipping it, loosening assertions, trivializing fixtures, regenerating expected outputs, increasing mocks, or otherwise weakening evidence merely to obtain PASS.
+- If an existing test appears invalid while its governing behavior remains authoritative, record `INVALID_TEST_CORRECTION` with why the test was invalid and what replacement evidence preserves/improves behavioral coverage.
+- If behavior authority must change to make the intended implementation correct, route back/amend/reseal before using that change to justify a different test expectation.
+- For material test/fixture/validator deltas, complete the IU Test / Fixture / Validator Change Rationale before review.
 
 
 
@@ -99,13 +112,13 @@ Before the first material project-file edit, confirm that `_hirmos/session/SESSI
 
 ## PROD-L8.25 Sealed IU Contract Mutation Guard
 
-After `Contract status: SEALED` and before the first material project-file edit, the executor must treat Unit Identity / Contract Metadata, Unit Scope / Authority, Pre-Execution Checks, Verification Commands / Checks, Evidence Requirements, Runtime Integration Posture, and Binary Acceptance Criteria as immutable contract authority. Execution may append only to Execution Record, applicable retry evidence, and external evidence surfaces. If implementation reality requires changing sealed contract authority, record `ROUTE_BACK_REQUIRED` and stop before further project-file mutation.
+After `Contract status: SEALED` and before the first material project-file edit, the executor must treat Unit Identity / Contract Metadata, Unit Scope / Authority, Pre-Execution Checks, Automated Testing Posture, Verification Commands / Checks, Evidence Requirements, Runtime Integration Posture, and Binary Acceptance Criteria as immutable contract authority. Execution may append only to Execution Record, applicable retry evidence, and external evidence surfaces. If implementation reality requires changing sealed contract authority, record `ROUTE_BACK_REQUIRED` and stop before further project-file mutation.
 
 ## PROD-L8.28 Execution-Time Full-IU Guard
 
 Before material edits, implementation execution must reject thin generated IU stubs. `Contract status: SEALED` is not sufficient unless the IU also contains the full non-placeholder sealed contract areas, `LLM Write Permission:` lines, verification/evidence requirements, binary acceptance criteria, and failure/route-back condition.
 
-During execution, append concrete execution evidence to the Execution Record. Before claiming unit execution complete, the IU must show `Execution status: COMPLETED`, changed files/actions, validation/check outcomes, claim evidence, limitations, and execution result. If tests, fixtures, mocks, snapshots, validators, expected-output files, or regression fixtures changed, the Test / Fixture / Validator Change Rationale must be completed before review.
+During execution, append concrete execution evidence to the Execution Record. Before claiming unit execution complete, the IU must show `Execution status: COMPLETED`, changed files/actions, validation/check outcomes, claim evidence, limitations, and execution result. If tests, fixtures, mocks, snapshots, validators, expected-output files, or regression fixtures changed, the Test / Fixture / Validator Change Rationale must classify the test delta, trace behavioral-authority changes when applicable, identify weakening risk, and be completed before review.
 
 ## PROD-L8.31 Mechanical Execution Block
 

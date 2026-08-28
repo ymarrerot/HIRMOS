@@ -65,6 +65,12 @@ If implementation units are not required, record a concise no-IU rationale in th
 - L8.32K negative fixture rule: if baseline acceptance creates IU files but no `IU_EXECUTION_AUTHORIZED` gate exists, any project-file diff, Material Edit Start Record, or implementation-complete claim must fail validation.
 
 
+## PROD-L8.34 Governed Automated Testing and Test Integrity
+
+When `hirmos continue` reaches implementation, apply `_hirmos/core/protocol/VALIDATION_AND_EVIDENCE.md` testing rules before edits and completion claims. `SESSION_SCOPE.md` must carry a compact automated-testing posture; IU mode must refine it in each sealed IU. Material isolated deterministic logic normally requires meaningful unit tests when practical, while stronger component/integration/runtime layers remain required where unit tests cannot prove the claim.
+
+A green suite is not sufficient if the agent weakened valid tests. Existing behavioral tests for unchanged authority must not be deleted, skipped, loosened, trivialized, over-mocked, or rewritten merely to obtain PASS. When behavior changes/disappears, update or remove obsolete tests and classify/trace the test delta. Reproducible defects should receive practical regression tests. Do not impose a universal HIRMOS coverage percentage or create a separate test-report artifact by default.
+
 ## PROD-L8.33H Implementation Completion Convergence
 
 `IU_EXECUTION_AUTHORIZATION` is an authorization gate, not a mandatory terminal pause after the authorized edits finish. Once implementation execution is authorized, `hirmos continue` must keep advancing through the remaining Implementation-stage controls that can be completed safely in the same pass.

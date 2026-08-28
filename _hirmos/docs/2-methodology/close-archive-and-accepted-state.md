@@ -44,7 +44,7 @@ Do not create separate close checklist, claim reconciliation, local-runtime evid
 A normal close must archive all active session artifacts, normalize the archived session state, update accepted state, and reset `_hirmos/session/` to idle scaffolding only. If stale active artifacts remain after reset, the correct result is `Close Blocked`, not close success.
 
 
-## PROD-L6 archive concordance
+## Archive concordance
 
 Normal close writes `_hirmos/system/history/sessions/<session-id>/ARCHIVE_MANIFEST.md` as a history-only archive manifest. The manifest records archived artifacts, accepted-state application, delivery pointer refresh, archived `SESSION_STATE.json` normalization, active-session reset, and post-close concordance. It supports accepted-state concordance but does not replace `CURRENT_SYSTEM_STATE.md`, `CARRY_FORWARD.md`, or conditional `DECISION_LOG.md` when active.
 

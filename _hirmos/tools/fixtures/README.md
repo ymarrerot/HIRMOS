@@ -86,7 +86,7 @@ These fixtures protect the phase lifecycle stack from regressions in phase type 
 
 The fixture suite verifies that legacy capability-level `entrypoint.md` redirect wrappers fail validation. Canonical runnable capability entrypoints must live only at `entrypoints/default.md`.
 
-## PROD-L8.12 Phase/Session Baseline Freshness Fixtures
+## Phase/Session Baseline Freshness Fixtures
 
 The regression suite also verifies post-delivery-baseline continuation concordance:
 
@@ -98,9 +98,9 @@ The regression suite also verifies post-delivery-baseline continuation concordan
 - delivery baseline active wording fails — protects status-aware delivery wording before baseline acceptance.
 
 
-## PROD-L8.31 Generated-Run Mechanical Gate Fixtures
+## Generated-Run Mechanical Gate Fixtures
 
-The regression suite now includes negative generated-run fixtures for the L8.31 mechanical gates:
+The regression suite now includes negative generated-run fixtures for the mechanical gates:
 
 - incomplete bootstrap answers fail the generated-session start gate;
 - planned implementation units with no IU files fail closed;
@@ -113,28 +113,32 @@ The regression suite now includes negative generated-run fixtures for the L8.31 
 These fixtures protect the rule that generated-run compliance must be mechanically evidenced in artifacts, not merely narrated in the transcript.
 
 
-## PROD-L8.32K Runtime Boundary Fixtures
+## Runtime Boundary Fixtures
 
 Focused fixtures prove that IU planning and IU execution remain separate. A generated IU-mode session that creates IU files but records material project-file edits or lifecycle transition claims before `IU_EXECUTION_AUTHORIZED` must fail validation. Packet-first runtime and active gate validator invocation are protected as static/runtime surfaces.
 
 
-## PROD-L8.32L JIT / Derived Pointer Fixtures
+## JIT / Derived Pointer Fixtures
 
 Focused fixtures verify that optional active artifacts are absent-valid until applicable, delivery/phase/archive pointers can be derived from filesystem source artifacts, and implementation-unit file lists are derived only after IU materialization.
 
 
-## PROD-L8.32S Runtime Command Surface Unification Fixtures
+## Runtime Command Surface Unification Fixtures
 
 Focused fixtures verify that the obsolete packet wrapper layer has been removed, `_hirmos/core/commands/*.md` is the canonical compact command runtime authority, and active framework files do not route through the obsolete packet wrapper layer.
 
-## PROD-L8.32Z Start Non-Implementation Boundary Fixtures
+## Start Non-Implementation Boundary Fixtures
 
 Focused fixtures verify that the start command cannot edit project/source files before accepted baseline authority. They also verify that baseline acceptance does not weaken IU mode: when implementation units are required, material edits still require IU plan review and `IU_EXECUTION_AUTHORIZED`.
 
-## PROD-L8.33A Continue Command Integration Gate Fixtures
+## Continue Command Integration Gate Fixtures
 
 Focused fixtures protect that `hirmos continue` must classify and gate before coding, must stop at IU plan review when IUs are requested or required and no accepted IU plan exists, and must treat `hirmos status` as read-only. Integration templates for all nine supported tools must include direct continue/status command capsules.
 
-## PROD-L8.33J Bootstrap Front-Door Simplification Fixtures
+## Bootstrap Front-Door Simplification Fixtures
 
 Focused checks protect the compact first-contact role of `AGENTS.md`, preserve bootstrap Steps 3–11 and the complete 16-question open-book quiz, keep the canonical bootstrap-report template as the structural authority, and require the `hirmos status` read-only bootstrap fast path to remain aligned across first-contact, bootstrap, command protocol, and status command surfaces. Historical PROD-L hardening labels are not allowed to accumulate in `AGENTS.md` or `core/bootstrap.md`.
+
+## Governed Automated Testing and Test Integrity Fixtures
+
+Focused coverage verifies that current templates/capabilities require an explicit automated-testing posture, preserve repository-native tooling, bind unit-test obligations before execution, classify material test deltas, clean orphan tests when behavior changes, and block weakening valid tests merely to obtain PASS. The fixture intentionally protects structural/governance invariants rather than trying to parse arbitrary product test assertions.

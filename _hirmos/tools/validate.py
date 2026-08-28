@@ -227,7 +227,7 @@ for phrase in ['_hirmos/inputs/', '_hirmos/inputs/uploads/', 'DESIGN.md source m
         sys.exit(1)
 
 cfg = json.loads((root/'hirmos.config.json').read_text())
-expected_version = '1.2.4'
+expected_version = '1.2.5'
 if cfg.get('framework',{}).get('version') != expected_version:
     print('FAIL: framework.version must match expected framework version')
     sys.exit(1)
@@ -2704,7 +2704,7 @@ _l832z_required = {
         'Do not edit project/source files during `hirmos start`',
     ],
     'integrations/agent-tools/README.md': [
-        'PROD-L8.32Z pre-edit gate propagation',
+        '## Pre-edit gate propagation',
         'agents`, `claude`, `cursor`, `copilot`, `codex`, `opencode`, `gemini`, `windsurf`, and `kiro`',
     ],
     'tools/test_l832z_start_boundary_gate.py': [
@@ -2712,7 +2712,7 @@ _l832z_required = {
         'expected at least 3 L8.32Z focused cases',
     ],
     'tools/fixtures/README.md': [
-        'PROD-L8.32Z Start Non-Implementation Boundary Fixtures',
+        '## Start Non-Implementation Boundary Fixtures',
         'start command cannot edit project/source files before accepted baseline authority',
     ],
 }
@@ -2833,7 +2833,7 @@ _l833a_required = {
         'Material project/source edit authority',
     ],
     'integrations/agent-tools/README.md': [
-        'PROD-L8.33A continue/status command capsule propagation',
+        '## Continue/status command capsule propagation',
         'The `hirmos continue` capsule must state that `hirmos continue` must classify and gate before it codes',
         'The `hirmos status` capsule must state that `hirmos status` is read-only',
         '`agents`, `claude`, `cursor`, `copilot`, `codex`, `opencode`, `gemini`, `windsurf`, and `kiro`',
@@ -2843,7 +2843,7 @@ _l833a_required = {
         'expected at least 3 L8.33A focused cases',
     ],
     'tools/fixtures/README.md': [
-        'PROD-L8.33A Continue Command Integration Gate Fixtures',
+        '## Continue Command Integration Gate Fixtures',
         '`hirmos continue` must classify and gate before coding',
         '`hirmos status` as read-only',
     ],
@@ -3128,6 +3128,131 @@ for _phrase in [
     if _phrase not in _l833k_install:
         fail(f'PROD-L8.33K installation guide missing safe-update phrase: {_phrase}')
 print('PASS: HIRMOS PROD-L8.33K safe installed-framework update user-surface static check')
+
+
+# PROD-L8.34 governed automated testing and test integrity
+_l834_required = {
+    'core/protocol/VALIDATION_AND_EVIDENCE.md': [
+        'Governed automated testing and test integrity',
+        'Tests are evidence of governed behavior, not obstacles to make green',
+        'The test delta must be explainable by the behavioral-authority delta',
+        'Relevant pre-change baseline',
+        'Reproducible defect regression',
+        'no universal numeric coverage threshold',
+    ],
+    'core/templates/session/SESSION_SCOPE.md': [
+        'Automated Testing Posture',
+        'Unit-test posture: REQUIRED | NOT_APPLICABLE | COVERED_ELSEWHERE',
+        'Material behaviors requiring unit tests / isolated automated tests',
+        'Relevant existing tests / targeted baseline',
+        'Reproducible defect regression test expected',
+    ],
+    'core/templates/session/implementation-units/IU.md': [
+        'Automated Testing Posture',
+        'Test delta classification(s)',
+        'Governing behavioral-authority delta / pointer',
+        'Orphan/stale tests or fixtures removed',
+        'Weakening-to-pass risk',
+    ],
+    'extensions/design-agent/entrypoints/default.md': [
+        'Automated testing design discipline',
+        'existing test framework, scripts, test locations',
+        'Do not introduce a second test framework',
+    ],
+    'extensions/design-agent/capabilities/session-scope/entrypoints/default.md': [
+        'Automated testing scope responsibility',
+        'compact `SESSION_SCOPE.md` Automated Testing Posture',
+    ],
+    'extensions/implementation-agent/entrypoints/default.md': [
+        'Governed Automated Testing and Test Integrity',
+        'both IU-governed and lightweight no-IU software implementation',
+        'Do not weaken a valid existing test merely to make a failing implementation pass',
+    ],
+    'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': [
+        'Governed automated-testing planning',
+        'targeted pre-change baseline command',
+        'regression test when an automated focused test is practical',
+    ],
+    'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': [
+        'Governed automated-testing execution',
+        'Do not respond to a failing valid test',
+        'INVALID_TEST_CORRECTION',
+    ],
+    'extensions/implementation-agent/capabilities/implementation-unit-review/entrypoints/default.md': [
+        'Test integrity and lifecycle review',
+        'logically orphaned tests/fixtures',
+        'weakened while its behavioral authority remained unchanged',
+    ],
+    'extensions/implementation-agent/capabilities/session-implementation-review/entrypoints/default.md': [
+        'Reconcile the Session Scope Automated Testing Posture',
+        'valid existing tests for unchanged behavior were not weakened',
+    ],
+    'core/commands/continue.md': [
+        'PROD-L8.34 Governed Automated Testing and Test Integrity',
+        'A green suite is not sufficient if the agent weakened valid tests',
+        'universal HIRMOS coverage percentage',
+    ],
+    'integrations/agent-tools/capsules/commands/continue.md': [
+        'Governed automated testing and test integrity',
+        'Do not weaken, skip, delete, trivialize, over-mock, or loosen still-valid behavioral tests merely to obtain PASS',
+    ],
+    'docs/2-methodology/implementation-evidence-and-claim-reconciliation.md': [
+        'Governed automated testing and test integrity',
+        'A failing implementation must not be made green by weakening a still-valid test',
+        'does not impose a universal coverage percentage',
+    ],
+    'tools/test_l834_governed_automated_testing.py': [
+        'Focused fixtures for PROD-L8.34 governed automated testing and test integrity',
+        'test_cursor_projection_contains_test_integrity_rule',
+        'test_validator_rejects_missing_testing_contract_surface',
+    ],
+}
+for _rel, _phrases in _l834_required.items():
+    _path = root / _rel
+    if not _path.exists():
+        fail(f'PROD-L8.34 missing automated-testing surface: {_rel}')
+    _body = _path.read_text(errors='ignore')
+    for _phrase in _phrases:
+        if _phrase.lower() not in _body.lower():
+            fail(f'PROD-L8.34 {_rel} missing test-integrity phrase: {_phrase}')
+
+# New testing requirements apply to the active working session only. Historical archives are immutable
+# and may predate L8.34; do not retrofit them merely to satisfy a newer framework validator.
+_l834_active_state = root / 'session/SESSION_STATE.json'
+_l834_active_status = None
+if _l834_active_state.exists():
+    try:
+        _l834_active_status = str(json.loads(_l834_active_state.read_text(errors='ignore')).get('status', '')).lower()
+    except Exception:
+        _l834_active_status = None
+
+if _l834_active_status and _l834_active_status != 'idle':
+    _scope_path = root / 'session/SESSION_SCOPE.md'
+    if _scope_path.exists():
+        _scope_body = _scope_path.read_text(errors='ignore')
+        if 'Automated Testing Posture' not in _scope_body:
+            fail('PROD-L8.34 active SESSION_SCOPE.md missing Automated Testing Posture')
+        _scope_posture = re.search(r'(?im)^-?\s*Unit-test posture\s*:\s*(REQUIRED|NOT_APPLICABLE|COVERED_ELSEWHERE)\b', _scope_body)
+        if not _scope_posture:
+            fail('PROD-L8.34 active SESSION_SCOPE.md missing concrete Unit-test posture')
+        elif _scope_posture.group(1).upper() in {'NOT_APPLICABLE', 'COVERED_ELSEWHERE'}:
+            _rationale = re.search(r'(?im)^-?\s*If `?NOT_APPLICABLE`? or `?COVERED_ELSEWHERE`?, rationale\s*:\s*(.+)$', _scope_body)
+            if not _rationale or not _rationale.group(1).strip():
+                fail('PROD-L8.34 active SESSION_SCOPE.md non-required unit-test posture lacks rationale')
+
+    for _iu_path in sorted((root / 'session/implementation-units').glob('IU-*.md')) if (root / 'session/implementation-units').exists() else []:
+        _iu_body = _iu_path.read_text(errors='ignore')
+        if 'Automated Testing Posture' not in _iu_body:
+            fail(f'PROD-L8.34 active IU missing Automated Testing Posture: {_iu_path.relative_to(root)}')
+        _iu_posture = re.search(r'(?im)^-?\s*Unit-test posture\s*:\s*(REQUIRED|NOT_APPLICABLE|COVERED_ELSEWHERE)\b', _iu_body)
+        if not _iu_posture:
+            fail(f'PROD-L8.34 active IU missing concrete Unit-test posture: {_iu_path.relative_to(root)}')
+        elif _iu_posture.group(1).upper() in {'NOT_APPLICABLE', 'COVERED_ELSEWHERE'}:
+            _iu_rationale = re.search(r'(?im)^-?\s*If `?NOT_APPLICABLE`? or `?COVERED_ELSEWHERE`?, rationale\s*:\s*(.+)$', _iu_body)
+            if not _iu_rationale or not _iu_rationale.group(1).strip():
+                fail(f'PROD-L8.34 active IU non-required unit-test posture lacks rationale: {_iu_path.relative_to(root)}')
+
+print('PASS: HIRMOS PROD-L8.34 governed automated testing and test integrity static/runtime check')
 
 # PROD-L8.33G carry-forward lifecycle consolidation checks
 for _rel, _phrases in {
@@ -3758,7 +3883,7 @@ for rel, phrases in {
     'core/protocol/CLOSE_ARCHIVE_AND_ACCEPTED_STATE.md': ['PROD-L8.22 phase and delivery evidence-backed review gates', 'Phase review gate', 'Delivery review gate'],
     'extensions/implementation-agent/capabilities/session-implementation-review/entrypoints/default.md': ['PROD-L8.22 Session Implementation Review Gate', 'actual final codebase reviewed', 'what is not claimed'],
     'extensions/implementation-agent/capabilities/validation-review/entrypoints/default.md': ['PROD-L8.22 Validation Review Gate Discipline', 'claims not supported'],
-    'docs/2-methodology/evidence-backed-review.md': ['PROD-L8.22 Review Gate Salvage', 'A passing static check is not a delivery review'],
+    'docs/2-methodology/evidence-backed-review.md': ['## Review Gate Salvage', 'A passing static check is not a delivery review'],
 }.items():
     body = (root/rel).read_text(errors='ignore')
     for phrase in phrases:
@@ -3778,7 +3903,7 @@ for rel, phrases in {
     'core/templates/system/CURRENT_SYSTEM_STATE.md': ['PROD-L8.23 Generated Source Index Concordance', 'Blank requirement/design/evidence source rows'],
     'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': ['PROD-L8.23 Generated-Run Enforcement Duty', 'Thin generated IU stubs'],
     'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['PROD-L8.23 Runtime Authority Enforcement', 'must not proceed on transcript claims'],
-    'docs/2-methodology/implementation-evidence-and-claim-reconciliation.md': ['PROD-L8.23 Generated-Run Validation Boundary', 'generated session archives'],
+    'docs/2-methodology/implementation-evidence-and-claim-reconciliation.md': ['## Generated-Run Validation Boundary', 'generated session archives'],
 }.items():
     body = (root/rel).read_text(errors='ignore')
     for phrase in phrases:
@@ -3903,7 +4028,7 @@ for rel, phrases in {
     'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': ['PROD-L8.24 Pre-Execution Ledger Duty', 'Retrospective checkpoint or IU expansion: NO'],
     'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['PROD-L8.24 Material Edit Start Gate', 'Material Edit Start Record'],
     'extensions/implementation-agent/capabilities/session-implementation-review/entrypoints/default.md': ['PROD-L8.24 Generated Review Gate Validation', 'what is not claimed'],
-    'docs/2-methodology/implementation-evidence-and-claim-reconciliation.md': ['PROD-L8.24 Retrospective Compliance Boundary', 'active ledger must prove pre-execution authorization'],
+    'docs/2-methodology/implementation-evidence-and-claim-reconciliation.md': ['## Retrospective Compliance Boundary', 'active ledger must prove pre-execution authorization'],
 }.items():
     body = (root/rel).read_text(errors='ignore')
     for phrase in phrases:
@@ -4507,7 +4632,7 @@ l831_required = {
     'system/accepted-state/CARRY_FORWARD.md': ['PROD-L8.31 Carry-Forward Approval Source Gate', 'explicit approval/deferral source'],
     'extensions/implementation-agent/capabilities/implementation-unit-planning/entrypoints/default.md': ['PROD-L8.31 Planned-IU Materialization Gate', 'planned IU count', 'actual full IU files'],
     'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['PROD-L8.31 Mechanical Execution Block', 'planned IU count does not match actual full IU files'],
-    'docs/2-methodology/implementation-evidence-and-claim-reconciliation.md': ['PROD-L8.31 Generated-Run Mechanical Gates', 'report all generated-run gate failures'],
+    'docs/2-methodology/implementation-evidence-and-claim-reconciliation.md': ['## Generated-Run Mechanical Gates', 'report all generated-run gate failures'],
 }
 for rel, phrases in l831_required.items():
     body = (root / rel).read_text(errors='ignore')
@@ -4651,13 +4776,13 @@ else:
     for phrase in ['Focused fixtures for PROD-L8.31 generated-run mechanical gates', 'expected at least 7 L8.31 focused cases']:
         if phrase not in runner_body:
             fail(f'PROD-L8.31A focused fixture runner missing phrase: {phrase}')
-if 'PROD-L8.31 Generated-Run Mechanical Gate Fixtures' not in l831a_fixture_readme.read_text(errors='ignore'):
+if '## Generated-Run Mechanical Gate Fixtures' not in l831a_fixture_readme.read_text(errors='ignore'):
     fail('PROD-L8.31A fixtures README missing generated-run mechanical gate fixture section')
 print('PASS: HIRMOS PROD-L8.31A generated-run mechanical gate fixture coverage static check')
 
 # PROD-L8.32K runtime boundary and validator invocation fixture hardening
 l832k_required = {
-    'core/commands/README.md': ['PROD-L8.32K Command-First Runtime Boundary', 'command file first', 'active gate validator result'],
+    'core/commands/README.md': ['## Command-First Runtime Boundary', 'command file first', 'active gate validator result'],
     'core/commands/start.md': ['PROD-L8.32K start boundary clarity', 'next governed boundary', 'validation before any later transition claim'],
     'core/commands/continue.md': ['PROD-L8.32K Runtime Boundary and Validator Invocation Fixture Hardening', 'IU_EXECUTION_AUTHORIZED', 'Material Edit Start Record'],
     'core/commands/close.md': ['PROD-L8.32K close validator invocation', 'active gate validator result recorded before the claim'],
@@ -4667,7 +4792,7 @@ l832k_required = {
     'core/protocol/VALIDATION_AND_EVIDENCE.md': ['PROD-L8.32K Runtime Boundary Validation', 'lifecycle transition claim', 'retrospective IU files are not substitutes'],
     'extensions/implementation-agent/capabilities/implementation-execution/entrypoints/default.md': ['PROD-L8.32K Runtime Boundary Execution Block', 'active gate validator result allows execution'],
     'tools/test_l832k_runtime_boundary_gates.py': ['Focused fixtures for PROD-L8.32K runtime boundary gates', 'expected at least 3 L8.32K focused cases'],
-    'tools/fixtures/README.md': ['PROD-L8.32K Runtime Boundary Fixtures', 'IU planning and IU execution remain separate'],
+    'tools/fixtures/README.md': ['## Runtime Boundary Fixtures', 'IU planning and IU execution remain separate'],
 }
 for rel, phrases in l832k_required.items():
     p = root / rel
@@ -4706,7 +4831,7 @@ print('PASS: HIRMOS PROD-L8.32K runtime boundary and validator invocation fixtur
 
 # PROD-L8.32L just-in-time artifact creation and derived pointer indexes
 _l832l_required = {
-    'core/commands/README.md': ['PROD-L8.32L Just-in-Time Artifact Creation', 'Pointer indexes', 'derived navigation caches'],
+    'core/commands/README.md': ['## Just-in-Time Artifact Creation and Derived Pointer Indexes', 'Pointer indexes', 'derived navigation caches'],
     'core/commands/start.md': ['PROD-L8.32L Just-in-Time Artifact Creation', 'Optional artifacts are not created to satisfy a template checklist', 'Pointer indexes'],
     'core/commands/continue.md': ['PROD-L8.32L Just-in-Time Artifact Creation', 'source artifacts win', 'fail closed'],
     'core/commands/close.md': ['PROD-L8.32L Just-in-Time Artifact Creation', 'archive manifests', 'stale pointer row'],
@@ -5105,7 +5230,7 @@ print('PASS: HIRMOS PROD-L8.32R installed-project fixture isolation and residual
 # PROD-L8.32S runtime command surface unification
 _l832s_required = {
     'core/commands/README.md': [
-        'PROD-L8.32S Runtime Command Surface Unification',
+        '## Runtime Command Surface Unification',
         'single compact runtime command surface',
         'former `_hirmos/core/runtime/*.packet.md` layer is removed',
     ],
@@ -5137,7 +5262,7 @@ _l832s_required = {
         'test_no_active_packet_references',
     ],
     'tools/fixtures/README.md': [
-        'PROD-L8.32S Runtime Command Surface Unification Fixtures',
+        '## Runtime Command Surface Unification Fixtures',
         'canonical compact command runtime authority',
     ],
 }
